@@ -11,7 +11,6 @@
     mediumAi1: 'https://medium.com/@caisandra/oscar-should-be-given-to-ai-b3821f3bfc91',
     mediumAi2: 'https://medium.com/@caisandra/hawkish-v-s-dovish-its-the-ones-you-can-t-see-you-need-to-worry-about-8f90740bda65',
     dukeScoreboard: 'https://fintechtradingcompetition.com/articles/scoreboard.html',
-    resume: 'https://www.sandracai.com/Sandra-Cai-Resume.pdf',
   };
 
   const KNOWLEDGE = [
@@ -71,7 +70,7 @@
     {
       keys: ['who', 'yourself', 'about you', 'introduce', 'background', 'who are you'],
       reply:
-        "I'm Sandra Cai — NYU CS with minors in Math and BEMT. Quant research at Vigil Markets (Nuveaux), MSRA, JD.com; builds (Plurall AI, PennApps); open research on AVAV, Jane Street/India, Bayes, and AI macro. Résumé on this site.",
+        "I'm Sandra Cai — NYU CS with minors in Math and BEMT. Quant research at Vigil Markets (Nuveaux), MSRA, JD.com; builds (Plurall AI, PennApps); open research on AVAV, Jane Street/India, Bayes, and AI macro.",
     },
     {
       keys: ['plurall', 'deepfake', 'founder', 'startup'],
@@ -101,17 +100,18 @@
     {
       keys: ['contact', 'email', 'reach', 'hire', 'collaborat', 'internship'],
       reply:
-        "Email: hello@sandracai.com. LinkedIn for professional context. Include scope and links for roles or projects.",
+        "Best way to reach me is LinkedIn — include scope and links for roles or projects. (I don't list a public email on this site.)",
     },
     {
       keys: ['resume', 'cv', 'résumé'],
-      reply: `Résumé PDF (this site): ${typeof location !== 'undefined' ? location.origin : ''}${LINKS.resume}`,
+      reply:
+        "I don't share my resume publicly online for privacy. If you're recruiting or collaborating, message me on LinkedIn with context and I can share a CV when appropriate.",
     },
   ];
 
   const DEFAULT_REPLIES = [
-    "Try NYU, Vigil/MSRA/JD, Duke scoreboard, AVAV thesis, Jane Street India paper, Bayes paper, Medium, Plurall AI, or GitHub — or email hello@sandracai.com.",
-    "Ask about quant work, open-source research, trading comps, or how to reach me — or email hello@sandracai.com.",
+    "Try NYU, Vigil/MSRA/JD, Duke scoreboard, AVAV thesis, Jane Street India paper, Bayes paper, Medium, Plurall AI, or GitHub — or message me on LinkedIn.",
+    "Ask about quant work, open-source research, trading comps, or how to reach me on LinkedIn.",
   ];
 
   function normalize(s) {
@@ -130,7 +130,7 @@
     if (!q) return 'Type a question above.';
 
     if (greetingReply(q)) {
-      return `Hey — I'm Sandra. Ask about NYU, Vigil Markets, MSRA, JD.com, Duke (${LINKS.dukeScoreboard}), AVAV (${LINKS.avav}), Jane Street India (${LINKS.janeStreet}), Bayes (${LINKS.bayes}), Medium (${LINKS.medium}), Plurall AI, or GitHub — or email hello@sandracai.com.`;
+      return `Hey — I'm Sandra. Ask about NYU, Vigil Markets, MSRA, JD.com, Duke (${LINKS.dukeScoreboard}), AVAV (${LINKS.avav}), Jane Street India (${LINKS.janeStreet}), Bayes (${LINKS.bayes}), Medium (${LINKS.medium}), Plurall AI, or GitHub — or reach out on LinkedIn.`;
     }
 
     let best = null;
