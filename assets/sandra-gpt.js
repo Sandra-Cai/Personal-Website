@@ -1,26 +1,15 @@
 /**
  * SandraGPT: answers from local notes (keyword + greeting rules).
- * Bot replies linkify https://, mailto:, and plain email addresses.
+ * Bot replies are plain text only (no URLs or links in the chat log).
  */
 (function () {
   const EMAIL = 'sandraxcyj@gmail.com';
   /** Must match the SandraGPT subtitle on the page (set on load). */
   const TAGLINE = 'Work, school, internships, trading comps, research, or say hi.';
 
-  const LINKS = {
-    avav: 'https://www.perplexity.ai/computer/a/avav-investment-thesis-aerovir-GMIeCIF9SFiwIvgsL9DZAA',
-    janeStreet: 'https://www.linkedin.com/posts/yijia-sandra-cai_quantfinance-derivatives-marketmicrostructure-activity-7439474320273276929-iD9X/',
-    bayes: 'https://www.linkedin.com/posts/yijia-sandra-cai_bayesian-decisionmaking-opensource-activity-7439051968083300352--K94',
-    medium: 'https://medium.com/@caisandra',
-    mediumAi1: 'https://medium.com/@caisandra/oscar-should-be-given-to-ai-b3821f3bfc91',
-    mediumAi2: 'https://medium.com/@caisandra/hawkish-v-s-dovish-its-the-ones-you-can-t-see-you-need-to-worry-about-8f90740bda65',
-    dukeScoreboard: 'https://fintechtradingcompetition.com/articles/scoreboard.html',
-    mailto: `mailto:${EMAIL}`,
-  };
-
   const KNOWLEDGE = [
     {
-      keys: ['four years', '4 years', 'experience', 'work experience', 'years of', 'intern', 'internship', 'career', 'track record', 'professional'],
+      keys: ['four years', '4 years', 'experience', 'work experience', 'years of', 'internship', 'internships', 'career', 'track record', 'professional'],
       reply:
         "I have about four years of work experience across roles: industry and internships (e.g. quantitative research at Vigil Markets / Nuveaux), research labs (Microsoft Research Asia), engineering at scale (JD.com), founding work (Plurall AI), plus independent research and competitions. I am also a CS student at NYU in parallel (see the Academic section on this site).",
     },
@@ -41,7 +30,8 @@
     },
     {
       keys: ['duke fintech', 'duke', 'fintech trading competition', 'scoreboard'],
-      reply: `I'm ranked #1 on the Duke Fintech Trading Competition scoreboard (risk-adjusted / Sharpe-style rules). Live rankings: ${LINKS.dukeScoreboard}`,
+      reply:
+        "I am ranked #1 on the Duke Fintech Trading Competition scoreboard under their risk-adjusted / Sharpe-style rules. The live scoreboard is linked from the Research section on this page.",
     },
     {
       keys: ['phoenix', 'new york tech week', 'crypto strateg'],
@@ -50,27 +40,33 @@
     },
     {
       keys: ['trade', 'trading', 'trader', 'paper trade'],
-      reply: `I pursue markets seriously. Duke Fintech scoreboard: ${LINKS.dukeScoreboard}. Phoenix Trading Competition winner (crypto, NY Tech Week 2023). Equity and macro writing: LinkedIn and Medium (${LINKS.medium}).`,
+      reply:
+        "I pursue markets seriously: Duke Fintech scoreboard, Phoenix Trading Competition (crypto, NY Tech Week 2023), plus equity and macro writing on LinkedIn and Medium (see this page for pointers).",
     },
     {
       keys: ['aerovironment', 'avav', 'equity pitch', 'pe-backed'],
-      reply: `My AeroVironment (AVAV) investment thesis (12-month): ${LINKS.avav}`,
+      reply:
+        "My AeroVironment (AVAV) investment thesis (12 months) is listed in the Research section on this page.",
     },
     {
       keys: ['jane street', 'india ban', 'sebi', 'microstructure', 'inside the ban'],
-      reply: `I open-sourced "Inside the Ban: A Quantitative Autopsy of Jane Street's Trading Tactics in India," a forensic breakdown of the two-legged strategy and SEBI's July 2025 action. Announcement and repo pointer: ${LINKS.janeStreet}`,
+      reply:
+        'I open-sourced "Inside the Ban: A Quantitative Autopsy of Jane Street\'s Trading Tactics in India," a forensic breakdown of the two-legged strategy and SEBI\'s July 2025 action. Announcement and repo details are on my LinkedIn (linked from this site).',
     },
     {
       keys: ['bayes', 'bayesian', 'decision-making', 'theorem of wisdom', 'urc'],
-      reply: `White paper "Theorem of Wisdom: Bayes' Theorem As the Most Rational Way of Making Decisions," open on GitHub; I announced it here: ${LINKS.bayes}. I also presented related Bayesian work at NYU URC to 1,000+ attendees.`,
+      reply:
+        'White paper "Theorem of Wisdom: Bayes\' Theorem As the Most Rational Way of Making Decisions," open on GitHub; I announced it on LinkedIn. I also presented related Bayesian work at NYU URC to 1,000+ attendees.',
     },
     {
       keys: ['chip war', 'ai performance', 'supply chain', 'geopolitical', 'oscar', 'hawkish', 'dovish'],
-      reply: `Two Medium pieces on AI and macro: ${LINKS.mediumAi1} and ${LINKS.mediumAi2}. Profile: ${LINKS.medium}`,
+      reply:
+        "I have two Medium pieces on AI and macro; my Medium profile is linked from this page.",
     },
     {
       keys: ['medium', 'linkedin', 'macro', 'macroeconomic'],
-      reply: `Longer research: LinkedIn (posts) and Medium ${LINKS.medium}, plus Substack @caisandra for essays.`,
+      reply:
+        "Longer research lives on LinkedIn (posts) and Medium, plus Substack @caisandra for essays. Links are in the header and strips on this page.",
     },
     {
       keys: ['school', 'nyu', 'major', 'minor', 'degree', 'bemet', 'bemt', 'mathematics minor'],
@@ -108,7 +104,7 @@
         "I write on Substack (@caisandra) for essays and notes; deeper quant and macro threads on LinkedIn and Medium.",
     },
     {
-      keys: ['contact', 'email', 'reach', 'hire', 'collaborat', 'internship'],
+      keys: ['contact', 'email', 'reach', 'hire', 'collaborat'],
       reply: `${EMAIL} or LinkedIn. Include scope and links for roles or projects.`,
     },
     {
@@ -118,8 +114,8 @@
   ];
 
   const DEFAULT_REPLIES = [
-    `Try NYU, Vigil/MSRA/JD, Duke scoreboard, AVAV thesis, Jane Street India paper, Bayes paper, Medium, Plurall AI, GitHub, or ${EMAIL}.`,
-    `Ask about quant work, open-source research, trading comps, or ${EMAIL}.`,
+    'Ask about something from the tagline above, or a topic from the page (work, research, school). I answer from short notes here.',
+    `If you need a real conversation outside this box, write to ${EMAIL}.`,
   ];
 
   function normalize(s) {
@@ -138,7 +134,7 @@
     if (!q) return 'Type a question above.';
 
     if (greetingReply(q)) {
-      return `Hey, I'm Sandra. I've got ~4 years across quant roles, labs, and founding. Ask about Vigil Markets, MSRA, JD.com, Duke (${LINKS.dukeScoreboard}), research, Plurall AI, GitHub, or ${EMAIL}.`;
+      return `Hey! Ask something in the box when you are ready. If you want a real conversation outside this tool, write to ${EMAIL}.`;
     }
 
     let best = null;
@@ -170,39 +166,6 @@
     return DEFAULT_REPLIES[Math.floor(Math.random() * DEFAULT_REPLIES.length)];
   }
 
-  function appendParagraphWithLinks(container, text) {
-    const p = document.createElement('p');
-    const linkRe =
-      /(https?:\/\/[^\s<]+[^<.,:;"')\]\s]|mailto:[^\s<]+[^<.,:;"')\]\s]|\b[\w.+-]+@[\w.-]+\.[a-z]{2,}\b)/gi;
-    let last = 0;
-    let m;
-    while ((m = linkRe.exec(text)) !== null) {
-      if (m.index > last) {
-        p.appendChild(document.createTextNode(text.slice(last, m.index)));
-      }
-      const raw = m[1];
-      const a = document.createElement('a');
-      if (/^https?:\/\//i.test(raw)) {
-        a.href = raw;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        a.textContent = raw;
-      } else if (/^mailto:/i.test(raw)) {
-        a.href = raw;
-        a.textContent = raw.replace(/^mailto:/i, '');
-      } else {
-        a.href = 'mailto:' + raw;
-        a.textContent = raw;
-      }
-      p.appendChild(a);
-      last = m.index + raw.length;
-    }
-    if (last < text.length) {
-      p.appendChild(document.createTextNode(text.slice(last)));
-    }
-    container.appendChild(p);
-  }
-
   const form = document.getElementById('gpt-form');
   const input = document.getElementById('gpt-input');
   const logEl = document.getElementById('gpt-log');
@@ -210,14 +173,9 @@
   function appendMsg(role, text) {
     const div = document.createElement('div');
     div.className = `gpt-msg gpt-msg--${role}`;
-    const hasLink = /https?:\/\/|mailto:|\S+@\S+\.\S+/.test(text);
-    if (role === 'bot' && hasLink) {
-      appendParagraphWithLinks(div, text);
-    } else {
-      const p = document.createElement('p');
-      p.textContent = text;
-      div.appendChild(p);
-    }
+    const p = document.createElement('p');
+    p.textContent = text;
+    div.appendChild(p);
     logEl.appendChild(div);
     div.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
