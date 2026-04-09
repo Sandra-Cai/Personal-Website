@@ -1,14 +1,16 @@
-/* Minimal light layout — inspired by amansanger.com + Bridge-style ask bar */
+/* Inspired by b.ai — dark canvas, display type, section rhythm, split headlines */
 :root {
-  --bg: #f6f5f2;
-  --bg-paper: #faf9f6;
-  --text: #111;
-  --muted: #5c5c5c;
-  --line: rgba(0, 0, 0, 0.1);
-  --accent: #111;
-  --max: 38rem;
-  --font-serif: "Newsreader", "Georgia", serif;
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --bg: #030304;
+  --bg2: #0a0b0f;
+  --text: #e8eaef;
+  --muted: #8b919d;
+  --line: rgba(255, 255, 255, 0.08);
+  --glow: #66d4ff;
+  --glow2: #a78bfa;
+  --max: 1120px;
+  --narrow: 40rem;
+  --font-display: "Syne", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
 }
 
 *,
@@ -23,129 +25,185 @@ html {
 
 body {
   margin: 0;
-  min-height: 100vh;
   color: var(--text);
   background: var(--bg);
-  background-image:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.5) 0%, transparent 45%),
-    linear-gradient(320deg, rgba(0, 0, 0, 0.02) 0%, transparent 40%);
-  font-family: var(--font-sans);
-  font-size: 1.05rem;
-  line-height: 1.6;
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
 }
 
 a {
-  color: var(--accent);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-}
-
-a:hover {
-  opacity: 0.75;
-}
-
-.shell {
-  width: min(100%, var(--max));
-  margin: 0 auto;
-  padding: 4.5rem 1.5rem 3rem;
-}
-
-/* —— Masthead (Aman-style) —— */
-.masthead {
-  margin-bottom: 2.25rem;
-}
-
-.name {
-  font-family: var(--font-serif);
-  font-weight: 500;
-  font-size: clamp(1.75rem, 5vw, 2.25rem);
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  margin: 0 0 1rem;
-}
-
-.site-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem 1.25rem;
-  font-size: 0.95rem;
-}
-
-.site-nav a {
-  color: var(--muted);
+  color: var(--glow);
   text-decoration: none;
 }
 
-.site-nav a:hover {
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ba-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 900px 500px at 75% -15%, rgba(102, 212, 255, 0.14), transparent 55%),
+    radial-gradient(ellipse 600px 400px at 5% 40%, rgba(167, 139, 250, 0.1), transparent 50%),
+    linear-gradient(180deg, #05060a 0%, var(--bg) 40%, #06070c 100%);
+  pointer-events: none;
+}
+
+/* —— Header —— */
+.ba-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid var(--line);
+  background: rgba(3, 3, 4, 0.75);
+  backdrop-filter: blur(12px);
+}
+
+.ba-header-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ba-logo {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--glow), #3b9fff);
+  color: #020508;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 14px;
+  text-decoration: none;
+  box-shadow: 0 0 32px rgba(102, 212, 255, 0.35);
+}
+
+.ba-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.ba-nav a {
+  color: var(--muted);
+}
+
+.ba-nav a:hover {
   color: var(--text);
-  opacity: 1;
+  text-decoration: none;
 }
 
-.lede {
-  margin: 0 0 3rem;
-  color: #222;
-  font-size: 1.05rem;
-  line-height: 1.65;
+/* —— Hero —— */
+.ba-hero {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 72px 24px 56px;
 }
 
-/* —— Sandra GPT (Bridge-style bar) —— */
-.gpt {
-  margin-bottom: 3.5rem;
-  padding: 2rem 0 0;
+.ba-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 24px;
+}
+
+.ba-display {
+  margin: 0 0 28px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3rem, 11vw, 6.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.ba-display-line {
+  display: block;
+}
+
+.ba-display-accent {
+  background: linear-gradient(120deg, #fff 0%, var(--glow) 45%, var(--glow2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ba-lead {
+  max-width: 36ch;
+  margin: 0;
+  font-size: clamp(1.05rem, 2.2vw, 1.2rem);
+  color: #b8bec8;
+  line-height: 1.6;
+}
+
+/* —— Sandra GPT (agent block) —— */
+.ba-agent {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 48px 24px 72px;
   border-top: 1px solid var(--line);
 }
 
-.gpt-title {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: 1.25rem;
-  margin: 0 0 0.5rem;
-  letter-spacing: -0.02em;
+.ba-agent-head {
+  margin-bottom: 28px;
 }
 
-.gpt-mark-title {
-  display: inline-grid;
-  place-items: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 50%;
-  background: var(--text);
-  color: var(--bg);
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1;
-}
-
-.gpt-sub {
-  margin: 0 0 1.25rem;
-  font-size: 0.9rem;
+.ba-kicker {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   color: var(--muted);
-  line-height: 1.5;
+  margin: 0 0 10px;
+}
+
+.ba-agent-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  letter-spacing: -0.03em;
+  margin: 0 0 8px;
+  line-height: 1.1;
+}
+
+.ba-agent-sub {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
 }
 
 .gpt-form {
-  margin: 0 0 1rem;
+  max-width: 640px;
+  margin: 0 0 14px;
 }
 
 .gpt-field {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0.35rem 0.35rem 0.35rem 1.15rem;
-  background: var(--bg-paper);
+  gap: 8px;
+  padding: 6px 6px 6px 20px;
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--line);
   border-radius: 999px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .gpt-field:focus-within {
-  border-color: rgba(0, 0, 0, 0.22);
+  border-color: rgba(102, 212, 255, 0.45);
+  box-shadow: 0 0 0 1px rgba(102, 212, 255, 0.12), 0 12px 40px rgba(0, 0, 0, 0.35);
 }
 
 .gpt-field input {
@@ -153,33 +211,33 @@ a:hover {
   min-width: 0;
   border: 0;
   background: transparent;
-  font-family: var(--font-sans);
+  font-family: var(--font-body);
   font-size: 1rem;
-  padding: 0.65rem 0;
+  padding: 14px 0;
   outline: none;
   color: var(--text);
 }
 
 .gpt-field input::placeholder {
-  color: #9a9a9a;
+  color: #6a707c;
 }
 
 .gpt-send {
   flex-shrink: 0;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 48px;
+  height: 48px;
   border: 0;
   border-radius: 50%;
-  background: var(--text);
-  color: var(--bg);
+  background: linear-gradient(135deg, var(--glow), #3b9fff);
+  color: #020508;
   cursor: pointer;
   display: grid;
   place-items: center;
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition: transform 0.15s ease, filter 0.15s ease;
 }
 
 .gpt-send:hover {
-  opacity: 0.88;
+  filter: brightness(1.08);
 }
 
 .gpt-send:active {
@@ -187,28 +245,28 @@ a:hover {
 }
 
 .gpt-send-icon {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1.15rem;
+  font-weight: 700;
   line-height: 1;
 }
 
 .gpt-note {
-  font-size: 0.8rem;
+  max-width: 640px;
+  font-size: 13px;
   color: var(--muted);
-  margin: 0 0 1.5rem;
-  line-height: 1.45;
+  margin: 0 0 24px;
+  line-height: 1.5;
 }
 
 .gpt-note a {
-  color: var(--muted);
+  color: #b8c4d4;
 }
 
-/* —— Chat log —— */
 .gpt-log {
+  max-width: 640px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.1rem;
 }
 
 .gpt-log:empty {
@@ -216,73 +274,229 @@ a:hover {
 }
 
 .gpt-msg {
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   line-height: 1.55;
 }
 
 .gpt-msg--user {
   color: var(--muted);
-  padding-left: 0.75rem;
+  padding-left: 14px;
   border-left: 2px solid var(--line);
 }
 
 .gpt-msg--user p::before {
   content: "You · ";
-  font-weight: 500;
-  color: #888;
+  font-weight: 600;
+  color: #6a707c;
 }
 
 .gpt-msg--bot {
-  color: #1a1a1a;
+  color: #d2d6de;
 }
 
 .gpt-msg--bot::before {
   content: "Sandra GPT · ";
-  font-weight: 600;
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
   display: block;
-  margin-bottom: 0.35rem;
+  margin-bottom: 6px;
 }
 
 .gpt-msg p {
-  margin: 0.35rem 0 0;
+  margin: 6px 0 0;
 }
 
 .gpt-msg p:first-child {
   margin-top: 0;
 }
 
-/* —— Footer —— */
-.foot {
-  padding-top: 2rem;
+/* —— Tagline strip —— */
+.ba-strip {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 40px 24px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.ba-strip--dim {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.ba-strip-text {
+  max-width: var(--max);
+  margin: 0 auto;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+  letter-spacing: -0.02em;
+  line-height: 1.45;
+  text-align: center;
+  color: #c5cad3;
+}
+
+.ba-strip-text strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.ba-strip-text a {
+  color: var(--glow);
+}
+
+/* —— Sections —— */
+.ba-section {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 80px 24px;
+}
+
+.ba-section--repeat {
   border-top: 1px solid var(--line);
 }
 
-.foot-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem 1.25rem;
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
+.ba-h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin: 0 0 16px;
 }
 
-.foot-links a {
+.ba-deck {
+  max-width: 48ch;
+  margin: 0 0 40px;
   color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.ba-grid {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 800px) {
+  .ba-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.ba-grid--tight {
+  gap: 12px;
+}
+
+.ba-card {
+  padding: 28px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+}
+
+.ba-card--bare {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.ba-h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 10px;
+  letter-spacing: -0.02em;
+}
+
+.ba-card p {
+  margin: 0;
+  font-size: 15px;
+  color: #a8b0bd;
+  line-height: 1.6;
+}
+
+/* —— Split headline (AGI as / a Human style) —— */
+.ba-split {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 72px 24px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+
+.ba-split-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 24px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.25rem, 7vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.ba-split-a {
+  color: var(--text);
+}
+
+.ba-split-b {
+  background: linear-gradient(90deg, var(--glow), var(--glow2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ba-split-copy {
+  max-width: var(--narrow);
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+/* —— Footer —— */
+.ba-footer {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 48px 24px 64px;
+  border-top: 1px solid var(--line);
+}
+
+.ba-footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.ba-footer-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.ba-footer-links {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+}
+
+.ba-footer-links a {
+  color: var(--muted);
+}
+
+.ba-footer-links a:hover {
+  color: var(--text);
   text-decoration: none;
 }
 
-.foot-links a:hover {
-  color: var(--text);
-  opacity: 1;
-}
-
-.foot-copy {
+.ba-footer-copy {
   margin: 0;
-  font-size: 0.85rem;
-  color: #888;
+  font-size: 13px;
+  color: #5c6470;
 }
 
 .visually-hidden {
