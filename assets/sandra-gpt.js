@@ -20,7 +20,7 @@
     {
       keys: ['four years', '4 years', 'experience', 'work experience', 'years of', 'intern', 'internship', 'career', 'track record', 'professional'],
       reply:
-        "I have about four years of working experience across roles: industry and internships (e.g. quantitative research at Vigil Markets / Nuveaux), research labs (Microsoft Research Asia), engineering at scale (JD.com), founding work (Plurall AI), plus independent research and competitions. I am also a CS student at NYU in parallel (see the Academic section on this site).",
+        "I have about four years of work experience across roles: industry and internships (e.g. quantitative research at Vigil Markets / Nuveaux), research labs (Microsoft Research Asia), engineering at scale (JD.com), founding work (Plurall AI), plus independent research and competitions. I am also a CS student at NYU in parallel (see the Academic section on this site).",
     },
     {
       keys: ['vigil', 'nuveaux', 'quantitative researcher', 'clearinghouse', 'counterparty', 'underwriting', 'crypto trading volume'],
@@ -107,16 +107,16 @@
     },
     {
       keys: ['contact', 'email', 'reach', 'hire', 'collaborat', 'internship'],
-      reply: `Email me at ${EMAIL}, or message me on LinkedIn. Include scope and links for roles or projects.`,
+      reply: `You can reach me at ${EMAIL} or on LinkedIn. Include scope and links for roles or projects.`,
     },
     {
       keys: ['resume', 'cv', 'résumé'],
-      reply: `I don't share my resume publicly online for privacy. For recruiting or collaboration, email ${EMAIL} or message me on LinkedIn.",
+      reply: `I don't share my resume publicly online for privacy. For recruiting or collaboration, use ${EMAIL} or message me on LinkedIn.`,
     },
   ];
 
   const DEFAULT_REPLIES = [
-    `Try NYU, Vigil/MSRA/JD, Duke scoreboard, AVAV thesis, Jane Street India paper, Bayes paper, Medium, Plurall AI, or GitHub, or email ${EMAIL}.`,
+    `Try NYU, Vigil/MSRA/JD, Duke scoreboard, AVAV thesis, Jane Street India paper, Bayes paper, Medium, Plurall AI, or GitHub, or ${EMAIL}.`,
     `Ask about quant work, open-source research, trading comps, or how to reach me: ${EMAIL}.`,
   ];
 
@@ -136,7 +136,7 @@
     if (!q) return 'Type a question above.';
 
     if (greetingReply(q)) {
-      return `Hey, I'm Sandra. I've got ~4 years across quant roles, labs, and founding; ask about that, Vigil Markets, MSRA, JD.com, Duke (${LINKS.dukeScoreboard}), research, Plurall AI, or GitHub, or email ${EMAIL}.`;
+      return `Hey, I'm Sandra. I've got ~4 years across quant roles, labs, and founding; ask about that, Vigil Markets, MSRA, JD.com, Duke (${LINKS.dukeScoreboard}), research, Plurall AI, or GitHub, or ${EMAIL}.`;
     }
 
     let best = null;
