@@ -1,202 +1,279 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- Essentials -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sandra Cai — Portfolio</title>
-  <meta name="description" content="Sandra Cai — CS @ NYU. Projects in AI, security, and product. Writing, talks, and contact." />
+  <title>Sandra Cai</title>
+  <meta name="description" content="Sandra Cai — Computer Science @ NYU. AI, security, product. Founder of Plurall AI. Writing, projects, and contact." />
 
-  <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="Sandra Cai — Portfolio" />
-  <meta property="og:description" content="CS @ NYU. Projects in AI, security, and product. Writing, talks, and contact." />
+  <meta property="og:title" content="Sandra Cai" />
+  <meta property="og:description" content="Computer Science @ NYU. Building in AI, security, and product." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.sandracai.com/" />
-  <meta property="og:image" content="https://www.sandracai.com/assets/avatar.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Canonical -->
   <link rel="canonical" href="https://www.sandracai.com/" />
-
-  <!-- Icons -->
   <link rel="icon" href="/assets/favicon.ico" />
 
-  <!-- Fonts (system stack by default; uncomment if you want Inter) -->
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet" />
 
-  <!-- Styles -->
   <link rel="stylesheet" href="/assets/styles.css" />
 
-  <!-- Structured Data (Organization/Person) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Sandra Cai",
     "url": "https://www.sandracai.com",
-    "image": "https://www.sandracai.com/assets/avatar.jpg",
     "sameAs": [
       "https://github.com/Sandra-Cai",
-      "https://www.linkedin.com/in/REPLACE-LINK"
+      "https://www.linkedin.com/in/yijia-sandra-cai",
+      "https://substack.com/@caisandra"
     ],
     "jobTitle": "Student, Computer Science",
-    "affiliation": "New York University"
+    "affiliation": { "@type": "CollegeOrUniversity", "name": "New York University" }
   }
   </script>
 </head>
 
 <body>
-  <!-- ======= Header / Nav ======= -->
   <header class="site-header">
     <div class="container nav">
-      <a class="brand" href="#top">SC</a>
-      <nav class="menu" aria-label="Primary">
+      <a class="brand" href="#top" aria-label="Home">SC</a>
+      <nav class="menu" id="primary-nav" aria-label="Primary">
+        <a href="#statement">Focus</a>
+        <a href="#skills">Skills</a>
+        <a href="#coursework">Coursework</a>
         <a href="#work">Work</a>
         <a href="#writing">Writing</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
         <a class="btn btn-small" href="/Sandra-Cai-Resume.pdf" target="_blank" rel="noopener">Résumé</a>
       </nav>
-      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+      <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="primary-nav">☰</button>
     </div>
   </header>
 
-  <!-- ======= Hero ======= -->
   <main id="top">
-    <section class="hero container">
-      <div class="hero-text">
-        <h1 class="fade-in">Sandra Cai</h1>
-        <p class="lead">Computer Science @ NYU • Building things in <strong>AI</strong>, <strong>security</strong>, and <strong>product</strong>.</p>
-        <p>Previously: research & internships; founder of <em>Plurall AI</em>. I enjoy dancing, skiing, filmmaking, and writing.</p>
-        <div class="cta-row">
-          <a class="btn" href="#work">View Projects</a>
-          <a class="btn btn-secondary" href="#contact">Get in Touch</a>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Computer Science @ NYU · Business Studies minor</p>
+          <h1 id="hero-title" class="display">Sandra <span class="display-accent">Cai</span></h1>
+          <p class="hero-lead">
+            I build at the intersection of <strong>AI</strong>, <strong>security</strong>, and <strong>product</strong> — from deepfake detection to detection engineering and AI-native media.
+          </p>
+          <div class="hero-cta">
+            <a class="btn" href="#work">View projects</a>
+            <a class="btn btn-secondary" href="#about">About me</a>
+          </div>
+          <a class="scroll-hint" href="#statement">Scroll <span aria-hidden="true">↓</span></a>
         </div>
-      </div>
-      <div class="hero-media">
-        <img src="/assets/avatar.jpg" alt="Portrait of Sandra Cai" loading="lazy" />
-      </div>
-    </section>
-
-    <!-- ======= Work / Projects ======= -->
-    <section id="work" class="section container">
-      <h2>Selected Work</h2>
-      <p class="section-sub">A few projects spanning AI, security, and data products.</p>
-
-      <div class="grid cards">
-        <!-- Project Card -->
-        <article class="card">
-          <div class="card-body">
-            <h3>Plurall AI — Deepfake Detection</h3>
-            <p>Lightweight deepfake detection & generation toolkit. Serving first paid customer package ($500). Built model evaluation harness and minimal inference API.</p>
-            <ul class="meta">
-              <li>Python, PyTorch, FastAPI</li>
-              <li>2024–2025</li>
-            </ul>
+        <div class="hero-visual">
+          <div class="avatar" role="img" aria-label="Sandra Cai initials">
+            <span class="avatar-initials">SC</span>
           </div>
-          <div class="card-actions">
-            <a class="btn btn-ghost" href="https://github.com/REPO_OR_DEMO" target="_blank" rel="noopener">Code/Demo →</a>
-          </div>
-        </article>
-
-        <!-- Project Card -->
-        <article class="card">
-          <div class="card-body">
-            <h3>Point72 — Security Internship Prep</h3>
-            <p>Hands-on labs in appsec & detection engineering. Built small red/blue lab, log pipelines, and alert rules; wrote postmortems on attack chains.</p>
-            <ul class="meta">
-              <li>Python, Sigma, Elastic</li>
-              <li>2025</li>
-            </ul>
-          </div>
-          <div class="card-actions">
-            <a class="btn btn-ghost" href="https://github.com/REPO" target="_blank" rel="noopener">Notes →</a>
-          </div>
-        </article>
-
-        <!-- Project Card -->
-        <article class="card">
-          <div class="card-body">
-            <h3>AI Video Ads — Beauty Training School</h3>
-            <p>Prompt engineering and shot planning for high-conversion AI ads. Iterative scripts, A/B hooks, and call-to-action testing.</p>
-            <ul class="meta">
-              <li>GenAI, Prompting</li>
-              <li>2025</li>
-            </ul>
-          </div>
-          <div class="card-actions">
-            <a class="btn btn-ghost" href="https://REPLACE-VIDEO-LINK" target="_blank" rel="noopener">Watch →</a>
-          </div>
-        </article>
-
-        <!-- Add more cards as needed -->
-      </div>
-    </section>
-
-    <!-- ======= Writing ======= -->
-    <section id="writing" class="section container">
-      <h2>Writing</h2>
-      <p class="section-sub">Notes, analysis, and essays.</p>
-
-      <ul class="list">
-        <li>
-          <a href="https://substack.com/@caisandra" target="_blank" rel="noopener">
-            Follow-The-Sun Model — ship across timezones
-          </a>
-          <span class="list-meta">2025 • Essay</span>
-        </li>
-        <li>
-          <a href="https://REPLACE-LINK" target="_blank" rel="noopener">
-            Quant breakdown: SEBI ban on Jane Street trading in India
-          </a>
-          <span class="list-meta">2025 • Research</span>
-        </li>
-        <li>
-          <a href="https://REPLACE-LINK" target="_blank" rel="noopener">
-            Language switching: cognition in English vs. Mandarin
-          </a>
-          <span class="list-meta">2024 • Notes</span>
-        </li>
-      </ul>
-    </section>
-
-    <!-- ======= About ======= -->
-    <section id="about" class="section container">
-      <h2>About</h2>
-      <div class="about">
-        <div>
-          <p>I’m a junior studying <strong>Computer Science</strong> at <strong>NYU</strong> with a minor in Business Studies. Interests include AI safety & detection, security engineering, data products, and media tech.</p>
-          <p>Outside work, I enjoy dancing, EUC riding, skiing, filmmaking, acting, and trying new food spots in NYC.</p>
-          <div class="inline-list">
-            <a href="mailto:hello@sandracai.com" class="chip">hello@sandracai.com</a>
-            <a href="https://github.com/Sandra-Cai" class="chip" target="_blank" rel="noopener">GitHub</a>
-            <a href="https://www.linkedin.com/in/REPLACE-LINK" class="chip" target="_blank" rel="noopener">LinkedIn</a>
-          </div>
+          <p class="avatar-caption">Founder, <em>Plurall AI</em> · NYC</p>
         </div>
       </div>
     </section>
 
-    <!-- ======= Contact ======= -->
-    <section id="contact" class="section container">
-      <h2>Contact</h2>
-      <p class="section-sub">Best way to reach me is email. For speaking/projects, include scope, timeline, and links.</p>
-      <div class="card contact">
-        <div>
-          <h3>Email</h3>
-          <a href="mailto:hello@sandracai.com">hello@sandracai.com</a>
+    <section id="statement" class="section statement" aria-labelledby="statement-title">
+      <div class="container">
+        <p class="section-label">01 — Focus</p>
+        <h2 id="statement-title" class="statement-headline">
+          <span class="line">AI that people</span>
+          <span class="line accent">can trust</span>
+        </h2>
+        <div class="statement-grid">
+          <article class="statement-card">
+            <h3>Detection &amp; safety</h3>
+            <p>Deepfake and synthetic media tooling — evaluation harnesses, inference APIs, and shipping real customer value in anti-fraud and integrity.</p>
+          </article>
+          <article class="statement-card">
+            <h3>Security engineering</h3>
+            <p>AppSec and detection engineering: labs, log pipelines, alert rules, and writing clearly about attack chains and defenses.</p>
+          </article>
+          <article class="statement-card">
+            <h3>Product &amp; media</h3>
+            <p>Prompting, shot planning, and iteration for high-conversion AI video — scripts, hooks, and measurable creative loops.</p>
+          </article>
         </div>
-        <div>
-          <h3>Calendly</h3>
-          <a href="https://calendly.com/REPLACE" target="_blank" rel="noopener">Book a 15-min intro →</a>
+      </div>
+    </section>
+
+    <section id="skills" class="section" aria-labelledby="skills-title">
+      <div class="container">
+        <p class="section-label">02 — Technical competencies</p>
+        <h2 id="skills-title" class="section-title">Tools &amp; languages</h2>
+        <p class="section-sub">What I use most often in coursework, research, and shipping software.</p>
+        <ul class="pill-grid" role="list">
+          <li>Python</li>
+          <li>PyTorch</li>
+          <li>TypeScript / JavaScript</li>
+          <li>SQL</li>
+          <li>C / C++</li>
+          <li>FastAPI</li>
+          <li>Git / GitHub</li>
+          <li>Elastic &amp; log pipelines</li>
+          <li>Sigma rules</li>
+          <li>LaTeX</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="coursework" class="section section-tint" aria-labelledby="coursework-title">
+      <div class="container">
+        <p class="section-label">03 — Relevant coursework</p>
+        <h2 id="coursework-title" class="section-title">NYU Tandon &amp; CAS</h2>
+        <p class="section-sub">A snapshot of formal training that backs my project work.</p>
+        <ul class="course-list" role="list">
+          <li>Data Structures &amp; Algorithms</li>
+          <li>Object-Oriented Programming</li>
+          <li>Discrete Mathematics</li>
+          <li>Design &amp; Analysis of Algorithms</li>
+          <li>Introduction to Databases</li>
+          <li>Linear Algebra</li>
+          <li>Computer Architecture &amp; Organization</li>
+          <li>Calculus I–III</li>
+          <li>Probability &amp; Statistics</li>
+          <li>Machine Learning</li>
+          <li>Deep Learning</li>
+          <li>Natural Language Processing</li>
+          <li>Operating Systems</li>
+          <li>Software Engineering</li>
+          <li>Computer Security</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="work" class="section" aria-labelledby="work-title">
+      <div class="container">
+        <p class="section-label">04 — Selected work</p>
+        <h2 id="work-title" class="section-title">Projects</h2>
+        <p class="section-sub">Research, internships, and products — AI, security, and creative tech.</p>
+
+        <div class="grid cards">
+          <article class="card">
+            <div class="card-body">
+              <h3>Plurall AI — Deepfake detection</h3>
+              <p>Lightweight detection &amp; generation toolkit: evaluation harness, minimal inference API, and first paid customer package. Building next-generation anti–deep fake tooling.</p>
+              <ul class="meta">
+                <li>Python · PyTorch · FastAPI</li>
+                <li>2024–2025</li>
+              </ul>
+            </div>
+            <div class="card-actions">
+              <a class="btn btn-ghost" href="https://github.com/Sandra-Cai" target="_blank" rel="noopener">GitHub →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-body">
+              <h3>Point72 — Security internship prep</h3>
+              <p>AppSec and detection engineering labs: small red/blue exercises, log pipelines, alert rules, and postmortems on realistic attack chains.</p>
+              <ul class="meta">
+                <li>Python · Sigma · Elastic</li>
+                <li>2025</li>
+              </ul>
+            </div>
+            <div class="card-actions">
+              <a class="btn btn-ghost" href="https://github.com/Sandra-Cai" target="_blank" rel="noopener">Notes &amp; labs →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-body">
+              <h3>AI video ads — Beauty training school</h3>
+              <p>Prompt engineering and shot planning for conversion-focused AI ads: iterative scripts, A/B hooks, and CTA testing.</p>
+              <ul class="meta">
+                <li>GenAI · Prompting</li>
+                <li>2025</li>
+              </ul>
+            </div>
+            <div class="card-actions">
+              <a class="btn btn-ghost" href="mailto:hello@sandracai.com?subject=AI%20video%20ads%20sample">Request sample →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="writing" class="section section-tint" aria-labelledby="writing-title">
+      <div class="container">
+        <p class="section-label">05 — Writing</p>
+        <h2 id="writing-title" class="section-title">Essays &amp; notes</h2>
+        <p class="section-sub">Business, AI, markets, and language — mostly on Substack.</p>
+        <ul class="list">
+          <li>
+            <a href="https://substack.com/@caisandra" target="_blank" rel="noopener">Follow-The-Sun Model — ship across timezones</a>
+            <span class="list-meta">2025 · Essay</span>
+          </li>
+          <li>
+            <a href="https://substack.com/@caisandra" target="_blank" rel="noopener">Quant breakdown: SEBI ban on Jane Street trading in India</a>
+            <span class="list-meta">2025 · Research</span>
+          </li>
+          <li>
+            <a href="https://substack.com/@caisandra" target="_blank" rel="noopener">Language switching: cognition in English vs. Mandarin</a>
+            <span class="list-meta">2024 · Notes</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="about" class="section" aria-labelledby="about-title">
+      <div class="container">
+        <p class="section-label">06 — About</p>
+        <h2 id="about-title" class="section-title">Background</h2>
+        <div class="about-split">
+          <div class="about-prose">
+            <p>
+              I’m a junior studying <strong>Computer Science</strong> at <strong>NYU</strong> with a minor in <strong>Business Studies</strong>. I care about AI safety and integrity, security engineering, data products, and media technology.
+            </p>
+            <p>
+              I’ve done research and internships; I’m the founder of <em>Plurall AI</em>. Outside of class and builds, I dance, ride EUC, ski, make films, act, and hunt for good food in New York.
+            </p>
+            <blockquote class="pull-quote">
+              I grew up in private schools and I want to share what I’ve learned — and how I learned — from that education openly.
+            </blockquote>
+            <div class="inline-list">
+              <a href="mailto:hello@sandracai.com" class="chip">hello@sandracai.com</a>
+              <a href="https://github.com/Sandra-Cai" class="chip" target="_blank" rel="noopener">GitHub</a>
+              <a href="https://www.linkedin.com/in/yijia-sandra-cai" class="chip" target="_blank" rel="noopener">LinkedIn</a>
+              <a href="https://substack.com/@caisandra" class="chip" target="_blank" rel="noopener">Substack</a>
+            </div>
+          </div>
+          <aside class="about-aside">
+            <h3 class="aside-title">Now</h3>
+            <ul class="aside-list">
+              <li>CS + business @ NYU</li>
+              <li>Plurall AI — anti–deep fake</li>
+              <li>Writing on Substack</li>
+              <li>Open to internships &amp; collaborations</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section cta-band" aria-labelledby="contact-title">
+      <div class="container cta-inner">
+        <h2 id="contact-title" class="cta-title">Ready to collaborate?</h2>
+        <p class="cta-lead">I’m open to research, internships, and interesting product work. For speaking or projects, send scope, timeline, and links.</p>
+        <div class="cta-actions">
+          <a class="btn" href="mailto:hello@sandracai.com">Email me</a>
+          <a class="btn btn-secondary" href="https://www.linkedin.com/in/yijia-sandra-cai" target="_blank" rel="noopener">LinkedIn</a>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- ======= Footer ======= -->
   <footer class="site-footer">
-    <div class="container">
-      <p>© <span id="year"></span> Sandra Cai. Built with HTML/CSS, deployed on Vercel.</p>
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Sandra Cai. Built with HTML/CSS; deploy anywhere static.</p>
     </div>
   </footer>
 
