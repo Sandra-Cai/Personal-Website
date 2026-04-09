@@ -1,77 +1,137 @@
 /**
- * Sandra GPT — answers from local "notes" (keyword matching).
- * Swap in an API call later if you add a backend.
+ * Sandra GPT — answers from local notes (keyword + greeting rules).
+ * Bot replies linkify https:// URLs for clickability.
  */
 (function () {
+  const LINKS = {
+    avav: 'https://www.perplexity.ai/computer/a/avav-investment-thesis-aerovir-GMIeCIF9SFiwIvgsL9DZAA',
+    janeStreet: 'https://www.linkedin.com/posts/yijia-sandra-cai_quantfinance-derivatives-marketmicrostructure-activity-7439474320273276929-iD9X/',
+    bayes: 'https://www.linkedin.com/posts/yijia-sandra-cai_bayesian-decisionmaking-opensource-activity-7439051968083300352--K94',
+    medium: 'https://medium.com/@caisandra',
+    mediumAi1: 'https://medium.com/@caisandra/oscar-should-be-given-to-ai-b3821f3bfc91',
+    mediumAi2: 'https://medium.com/@caisandra/hawkish-v-s-dovish-its-the-ones-you-can-t-see-you-need-to-worry-about-8f90740bda65',
+    dukeScoreboard: 'https://fintechtradingcompetition.com/articles/scoreboard.html',
+    resume: 'https://www.sandracai.com/Sandra-Cai-Resume.pdf',
+  };
+
   const KNOWLEDGE = [
+    {
+      keys: ['vigil', 'nuveaux', 'quantitative researcher', 'clearinghouse', 'counterparty', 'underwriting', 'crypto trading volume'],
+      reply:
+        "My most recent role was a Quantitative Researcher internship at Vigil Markets (Nuveaux Trading). I architected Python-based crypto trading volume analysis to reduce counterparty risk, cut underwriting cost per trade via assembly-level optimizations, and mapped risk analysis for an on-blockchain clearinghouse.",
+    },
+    {
+      keys: ['microsoft research', 'msra', 'microsoft research asia'],
+      reply:
+        "At Microsoft Research Asia I did blockchain financial research — bridging protocol-level ideas with market and institutional questions.",
+    },
+    {
+      keys: ['jd.com', 'jdcom', 'private cloud'],
+      reply:
+        "At JD.com I built private cloud infrastructure — a full-stack line from low-level systems up toward how applications run at scale.",
+    },
+    {
+      keys: ['duke fintech', 'duke', 'fintech trading competition', 'scoreboard'],
+      reply: `I'm ranked #1 on the Duke Fintech Trading Competition scoreboard (risk-adjusted / Sharpe-style rules). Live rankings: ${LINKS.dukeScoreboard}`,
+    },
+    {
+      keys: ['phoenix', 'new york tech week', 'crypto strateg'],
+      reply:
+        "I won the Phoenix Trading Competition focused on crypto strategies during New York Tech Week in 2023.",
+    },
+    {
+      keys: ['trade', 'trading', 'trader', 'paper trade'],
+      reply: `I pursue markets seriously — Duke Fintech scoreboard: ${LINKS.dukeScoreboard} · Phoenix Trading Competition winner (crypto, NY Tech Week 2023). Equity and macro writing: LinkedIn & Medium (${LINKS.medium}).`,
+    },
+    {
+      keys: ['aerovironment', 'avav', 'equity pitch', 'pe-backed'],
+      reply: `My AeroVironment (AVAV) investment thesis (12-month): ${LINKS.avav}`,
+    },
+    {
+      keys: ['jane street', 'india ban', 'sebi', 'microstructure', 'inside the ban'],
+      reply: `I open-sourced "Inside the Ban: A Quantitative Autopsy of Jane Street's Trading Tactics in India" — forensic breakdown of the two-legged strategy and SEBI's July 2025 action. Announcement + repo pointer: ${LINKS.janeStreet}`,
+    },
+    {
+      keys: ['bayes', 'bayesian', 'decision-making', 'theorem of wisdom', 'urc'],
+      reply: `White paper "Theorem of Wisdom: Bayes' Theorem As the Most Rational Way of Making Decisions" — open on GitHub; I announced it here: ${LINKS.bayes} I also presented related Bayesian work at NYU URC to 1,000+ attendees.`,
+    },
+    {
+      keys: ['chip war', 'ai performance', 'supply chain', 'geopolitical', 'oscar', 'hawkish', 'dovish'],
+      reply: `Two Medium pieces on AI and macro: ${LINKS.mediumAi1} and ${LINKS.mediumAi2} — profile: ${LINKS.medium}`,
+    },
+    {
+      keys: ['medium', 'linkedin', 'macro', 'macroeconomic'],
+      reply: `Longer research: LinkedIn (posts) and Medium ${LINKS.medium} — plus Substack @caisandra for essays.`,
+    },
+    {
+      keys: ['school', 'nyu', 'major', 'minor', 'degree', 'bemet', 'bemt', 'mathematics minor'],
+      reply:
+        "I'm at NYU studying Computer Science with minors in Mathematics and BEMT (Business of Entertainment, Media and Technology). I'm focused on where rigorous financial analysis meets technology-driven execution.",
+    },
     {
       keys: ['who', 'yourself', 'about you', 'introduce', 'background', 'who are you'],
       reply:
-        "I'm Sandra Cai. I'm a junior at NYU studying Computer Science with a minor in Business Studies. I care about AI integrity, security engineering, and products that ship. I'm also the founder of Plurall AI (deepfake detection and related tooling).",
+        "I'm Sandra Cai — NYU CS with minors in Math and BEMT. Quant research at Vigil Markets (Nuveaux), MSRA, JD.com; builds (Plurall AI, PennApps); open research on AVAV, Jane Street/India, Bayes, and AI macro. Résumé on this site.",
     },
     {
-      keys: ['school', 'nyu', 'study', 'degree', 'major', 'minor', 'college', 'university'],
+      keys: ['plurall', 'deepfake', 'founder', 'startup'],
       reply:
-        "I study Computer Science at NYU with a minor in Business Studies. Coursework spans algorithms, ML, deep learning, NLP, operating systems, software engineering, and computer security.",
+        "Plurall AI is my deepfake-detection platform — part of my entrepreneurial engineering work alongside other builds documented on GitHub.",
     },
     {
-      keys: ['plurall', 'deepfake', 'startup', 'founder', 'company', 'product'],
+      keys: ['pennapps', 'blockchain project', 'best blockchain'],
       reply:
-        "Plurall AI is my company focused on deepfake detection and synthetic-media tooling — evaluation harnesses, inference APIs, and shipping for real customers. I'm building next-generation anti-deepfake and integrity tech.",
+        "At PennApps I shipped an AI–blockchain application that won Best Blockchain Project — code and other engineering work are on my GitHub.",
     },
     {
-      keys: ['security', 'point72', 'intern', 'appsec', 'detection engineering', 'sigma', 'elastic'],
+      keys: ['github', 'code', 'engineering', 'build'],
       reply:
-        "I've done security-focused work including Point72-oriented prep: appsec and detection engineering labs, log pipelines, Sigma-style rules, Elastic, and writing up attack chains and defenses.",
+        "Engineering work — Plurall AI, the PennApps blockchain project, Jane Street India paper repo, Bayes paper repo, and more — lives on my GitHub (Sandra-Cai).",
     },
     {
-      keys: ['project', 'work', 'build', 'github', 'code'],
+      keys: ['passion', 'interest', 'focus', 'why finance'],
       reply:
-        "Highlights: Plurall AI (PyTorch, FastAPI, Python), security labs (Python, Sigma, Elastic), and AI video ad work (prompting, scripts, iteration for conversion). Code and activity are on my GitHub.",
+        "I'm passionate about the intersection of rigorous financial analysis and technology-driven execution — from on-chain clearing and volume analytics to independent equity and macro research.",
     },
     {
-      keys: ['skill', 'stack', 'python', 'typescript', 'language', 'tech'],
+      keys: ['substack', 'writing', 'essay'],
       reply:
-        "I work most in Python, PyTorch, TypeScript/JavaScript, SQL, and C/C++. For shipping: FastAPI, Git, and security tooling like Elastic and Sigma. LaTeX when writing has to look sharp.",
+        "I write on Substack (@caisandra) for essays and notes; deeper quant and macro threads on LinkedIn and Medium.",
     },
     {
-      keys: ['write', 'writing', 'substack', 'essay', 'blog'],
+      keys: ['contact', 'email', 'reach', 'hire', 'collaborat', 'internship'],
       reply:
-        "I write on Substack (@caisandra) — essays and notes on business, markets, AI, and language (e.g. follow-the-sun collaboration, quant/markets topics, bilingual cognition).",
-    },
-    {
-      keys: ['contact', 'email', 'reach', 'hire', 'collaborat', 'internship', 'job', 'opportunity'],
-      reply:
-        "Best way to reach me is email: hello@sandracai.com. I'm open to internships and collaborations — include scope, timeline, and links. I'm also on LinkedIn and GitHub from this page.",
-    },
-    {
-      keys: ['hobby', 'dance', 'ski', 'film', 'euc', 'food', 'outside', 'fun'],
-      reply:
-        "Outside CS: I dance, ride EUC, ski, make films, act, and explore food in NYC. I also care about sharing what I've learned from my education openly.",
+        "Email: hello@sandracai.com. LinkedIn for professional context. Include scope and links for roles or projects.",
     },
     {
       keys: ['resume', 'cv', 'résumé'],
-      reply: "Download my résumé from the Résumé link in the header (PDF on this site).",
-    },
-    {
-      keys: ['education', 'learn', 'teach', 'share', 'private school'],
-      reply:
-        "I grew up in private schools and I want to share what I've learned — and how I learned — openly. That's part of why I write and build in public.",
+      reply: `Résumé PDF (this site): ${typeof location !== 'undefined' ? location.origin : ''}${LINKS.resume}`,
     },
   ];
 
   const DEFAULT_REPLIES = [
-    "I don't have a specific note for that. Try asking about NYU, Plurall AI, security work, writing on Substack, skills, or how to reach me — or email hello@sandracai.com.",
-    "Not sure I covered that in my notes. Ask about school, projects, Plurall AI, security, Substack, or hobbies — or email me for a real conversation.",
+    "Try NYU, Vigil/MSRA/JD, Duke scoreboard, AVAV thesis, Jane Street India paper, Bayes paper, Medium, Plurall AI, or GitHub — or email hello@sandracai.com.",
+    "Ask about quant work, open-source research, trading comps, or how to reach me — or email hello@sandracai.com.",
   ];
 
   function normalize(s) {
     return s.toLowerCase().trim().replace(/\s+/g, ' ');
   }
 
+  function greetingReply(q) {
+    const t = q.trim();
+    if (/^(hi|hey|hello|yo|sup)[!?.]*$/i.test(t)) return true;
+    if (/^good (morning|afternoon|evening)[!?.]*$/i.test(t)) return true;
+    return false;
+  }
+
   function answerFor(question) {
     const q = normalize(question);
-    if (!q) return "Type a question above.";
+    if (!q) return 'Type a question above.';
+
+    if (greetingReply(q)) {
+      return `Hey — I'm Sandra. Ask about NYU, Vigil Markets, MSRA, JD.com, Duke (${LINKS.dukeScoreboard}), AVAV (${LINKS.avav}), Jane Street India (${LINKS.janeStreet}), Bayes (${LINKS.bayes}), Medium (${LINKS.medium}), Plurall AI, or GitHub — or email hello@sandracai.com.`;
+    }
 
     let best = null;
     let bestScore = 0;
@@ -87,7 +147,6 @@
     }
     if (best && bestScore > 0) return best;
 
-    /* Light fuzzy: word overlap */
     const words = q.split(/\W+/).filter((w) => w.length > 2);
     for (const row of KNOWLEDGE) {
       for (const key of row.keys) {
@@ -103,6 +162,29 @@
     return DEFAULT_REPLIES[Math.floor(Math.random() * DEFAULT_REPLIES.length)];
   }
 
+  function appendParagraphWithLinks(container, text) {
+    const p = document.createElement('p');
+    const urlRe = /(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/g;
+    let last = 0;
+    let m;
+    while ((m = urlRe.exec(text)) !== null) {
+      if (m.index > last) {
+        p.appendChild(document.createTextNode(text.slice(last, m.index)));
+      }
+      const a = document.createElement('a');
+      a.href = m[1];
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = m[1];
+      p.appendChild(a);
+      last = m.index + m[1].length;
+    }
+    if (last < text.length) {
+      p.appendChild(document.createTextNode(text.slice(last)));
+    }
+    container.appendChild(p);
+  }
+
   const form = document.getElementById('gpt-form');
   const input = document.getElementById('gpt-input');
   const logEl = document.getElementById('gpt-log');
@@ -110,9 +192,13 @@
   function appendMsg(role, text) {
     const div = document.createElement('div');
     div.className = `gpt-msg gpt-msg--${role}`;
-    const p = document.createElement('p');
-    p.textContent = text;
-    div.appendChild(p);
+    if (role === 'bot' && /https?:\/\//.test(text)) {
+      appendParagraphWithLinks(div, text);
+    } else {
+      const p = document.createElement('p');
+      p.textContent = text;
+      div.appendChild(p);
+    }
     logEl.appendChild(div);
     div.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
@@ -123,8 +209,7 @@
     if (!q) return;
     appendMsg('user', q);
     input.value = '';
-    const a = answerFor(q);
-    appendMsg('bot', a);
+    appendMsg('bot', answerFor(q));
   }
 
   if (form && input && logEl) {

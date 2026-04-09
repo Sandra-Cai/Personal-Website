@@ -313,6 +313,15 @@ a:hover {
   margin-top: 0;
 }
 
+.gpt-msg--bot a {
+  color: var(--glow);
+  word-break: break-all;
+}
+
+.gpt-msg--bot a:hover {
+  text-decoration: underline;
+}
+
 /* —— Tagline strip —— */
 .ba-strip {
   border-top: 1px solid var(--line);
@@ -412,6 +421,46 @@ a:hover {
   font-size: 15px;
   color: #a8b0bd;
   line-height: 1.6;
+}
+
+.ba-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ba-list li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 15px;
+  color: #a8b0bd;
+  line-height: 1.6;
+}
+
+.ba-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--glow), var(--glow2));
+}
+
+.ba-list strong {
+  color: #d2d6de;
+  font-weight: 600;
+}
+
+.ba-list a {
+  display: inline-block;
+  margin-top: 0.35rem;
+  font-size: 0.92rem;
+  font-weight: 500;
 }
 
 /* —— Split headline (AGI as / a Human style) —— */
