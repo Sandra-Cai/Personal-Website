@@ -7,7 +7,23 @@
   /** Must match the SandraGPT subtitle on the page (set on load). */
   const TAGLINE = 'Work, school, internships, trading comps, research, or say hi.';
 
+  const REPLY_INDEPENDENT_RESEARCH =
+    "Outside my day jobs I do my own markets and quant research: long-form equity work (for example AeroVironment), open quant writeups (including the Jane Street India piece), a Bayes decision-making paper, AI and macro pieces on Medium, and competition work like Duke Fintech. The Research section on this page lists the main threads.";
+
   const KNOWLEDGE = [
+    {
+      keys: [
+        'personal research',
+        'independent research',
+        'your own research',
+        'what research',
+        'research do you',
+        'type of research',
+        'research outside',
+        'research on your',
+      ],
+      reply: REPLY_INDEPENDENT_RESEARCH,
+    },
     {
       keys: ['four years', '4 years', 'experience', 'work experience', 'years of', 'internship', 'internships', 'career', 'track record', 'professional'],
       reply:
@@ -151,16 +167,9 @@
     }
     if (best && bestScore > 0) return best;
 
-    const words = q.split(/\W+/).filter((w) => w.length > 2);
-    for (const row of KNOWLEDGE) {
-      for (const key of row.keys) {
-        const parts = key.split(/\s+/);
-        for (const w of words) {
-          if (parts.some((p) => p.startsWith(w) || w.startsWith(p))) {
-            return row.reply;
-          }
-        }
-      }
+    // Single-word or bare "research" (whole word only; "researcher" is different)
+    if (/\bresearch\b/.test(q) && !/\bresearcher\b/.test(q)) {
+      return REPLY_INDEPENDENT_RESEARCH;
     }
 
     return DEFAULT_REPLIES[Math.floor(Math.random() * DEFAULT_REPLIES.length)];
