@@ -1,9 +1,11 @@
 /**
  * SandraGPT: answers from local notes (keyword + greeting rules).
- * Bot replies linkify https:// and mailto: URLs.
+ * Bot replies linkify https://, mailto:, and plain email addresses.
  */
 (function () {
   const EMAIL = 'sandraxcyj@gmail.com';
+  /** Must match the SandraGPT subtitle on the page (set on load). */
+  const TAGLINE = 'Work, school, internships, trading comps, research, or say hi.';
 
   const LINKS = {
     avav: 'https://www.perplexity.ai/computer/a/avav-investment-thesis-aerovir-GMIeCIF9SFiwIvgsL9DZAA',
@@ -107,17 +109,17 @@
     },
     {
       keys: ['contact', 'email', 'reach', 'hire', 'collaborat', 'internship'],
-      reply: `You can reach me at ${EMAIL} or on LinkedIn. Include scope and links for roles or projects.`,
+      reply: `${EMAIL} or LinkedIn. Include scope and links for roles or projects.`,
     },
     {
       keys: ['resume', 'cv', 'résumé'],
-      reply: `I don't share my resume publicly online for privacy. For recruiting or collaboration, use ${EMAIL} or message me on LinkedIn.`,
+      reply: `I don't share my resume publicly online for privacy. For recruiting or collaboration: ${EMAIL} or LinkedIn.`,
     },
   ];
 
   const DEFAULT_REPLIES = [
-    `Try NYU, Vigil/MSRA/JD, Duke scoreboard, AVAV thesis, Jane Street India paper, Bayes paper, Medium, Plurall AI, or GitHub, or ${EMAIL}.`,
-    `Ask about quant work, open-source research, trading comps, or how to reach me: ${EMAIL}.`,
+    `Try NYU, Vigil/MSRA/JD, Duke scoreboard, AVAV thesis, Jane Street India paper, Bayes paper, Medium, Plurall AI, GitHub, or ${EMAIL}.`,
+    `Ask about quant work, open-source research, trading comps, or ${EMAIL}.`,
   ];
 
   function normalize(s) {
@@ -136,7 +138,7 @@
     if (!q) return 'Type a question above.';
 
     if (greetingReply(q)) {
-      return `Hey, I'm Sandra. I've got ~4 years across quant roles, labs, and founding; ask about that, Vigil Markets, MSRA, JD.com, Duke (${LINKS.dukeScoreboard}), research, Plurall AI, or GitHub, or ${EMAIL}.`;
+      return `Hey, I'm Sandra. I've got ~4 years across quant roles, labs, and founding. Ask about Vigil Markets, MSRA, JD.com, Duke (${LINKS.dukeScoreboard}), research, Plurall AI, GitHub, or ${EMAIL}.`;
     }
 
     let best = null;
@@ -170,23 +172,30 @@
 
   function appendParagraphWithLinks(container, text) {
     const p = document.createElement('p');
-    const urlRe = /(https?:\/\/[^\s<]+[^<.,:;"')\]\s]|mailto:[^\s<]+[^<.,:;"')\]\s])/g;
+    const linkRe =
+      /(https?:\/\/[^\s<]+[^<.,:;"')\]\s]|mailto:[^\s<]+[^<.,:;"')\]\s]|\b[\w.+-]+@[\w.-]+\.[a-z]{2,}\b)/gi;
     let last = 0;
     let m;
-    while ((m = urlRe.exec(text)) !== null) {
+    while ((m = linkRe.exec(text)) !== null) {
       if (m.index > last) {
         p.appendChild(document.createTextNode(text.slice(last, m.index)));
       }
-      const href = m[1];
+      const raw = m[1];
       const a = document.createElement('a');
-      a.href = href;
-      if (href.startsWith('http')) {
+      if (/^https?:\/\//i.test(raw)) {
+        a.href = raw;
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
+        a.textContent = raw;
+      } else if (/^mailto:/i.test(raw)) {
+        a.href = raw;
+        a.textContent = raw.replace(/^mailto:/i, '');
+      } else {
+        a.href = 'mailto:' + raw;
+        a.textContent = raw;
       }
-      a.textContent = href;
       p.appendChild(a);
-      last = m.index + m[1].length;
+      last = m.index + raw.length;
     }
     if (last < text.length) {
       p.appendChild(document.createTextNode(text.slice(last)));
@@ -201,7 +210,7 @@
   function appendMsg(role, text) {
     const div = document.createElement('div');
     div.className = `gpt-msg gpt-msg--${role}`;
-    const hasLink = /https?:\/\/|mailto:/.test(text);
+    const hasLink = /https?:\/\/|mailto:|\S+@\S+\.\S+/.test(text);
     if (role === 'bot' && hasLink) {
       appendParagraphWithLinks(div, text);
     } else {
@@ -220,6 +229,11 @@
     appendMsg('user', q);
     input.value = '';
     appendMsg('bot', answerFor(q));
+  }
+
+  const taglineEl = document.getElementById('gpt-tagline');
+  if (taglineEl) {
+    taglineEl.textContent = TAGLINE;
   }
 
   if (form && input && logEl) {
