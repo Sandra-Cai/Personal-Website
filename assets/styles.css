@@ -62,6 +62,12 @@ a:hover {
   text-underline-offset: 3px;
 }
 
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 /* Flat: one soft top glow only (b.ai-style vignette) */
 .ba-bg {
   position: fixed;
@@ -140,6 +146,10 @@ a:hover {
 .ba-nav a:hover {
   color: var(--text);
   text-decoration: none;
+}
+
+.ba-nav a:focus-visible {
+  outline-offset: 4px;
 }
 
 /* Hero */
@@ -361,6 +371,15 @@ a:hover {
 
 .gpt-send:active {
   transform: scale(0.96);
+}
+
+.gpt-send:focus-visible {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: 3px;
+}
+
+.gpt-field input:focus-visible {
+  outline: none;
 }
 
 .gpt-send-icon {
@@ -709,5 +728,9 @@ a:hover {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .gpt-send:active {
+    transform: none;
   }
 }

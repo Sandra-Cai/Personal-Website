@@ -49,7 +49,7 @@
     {
       keys: ['four years', '4 years', 'experience', 'work experience', 'years of', 'career', 'track record', 'professional'],
       reply:
-        'About four years across quant and markets work, research labs, large-scale engineering, founding, and independent research. I also study CS at NYU—see Academic on this page.',
+        'About four years across quant and markets work, institutional research, large-scale engineering, founding, and independent research. I also study CS at NYU—see Academic on this page.',
     },
     {
       keys: ['vigil', 'nuveaux', 'quantitative researcher', 'clearinghouse', 'counterparty', 'underwriting', 'crypto trading volume'],
@@ -211,7 +211,8 @@
     p.textContent = text;
     div.appendChild(p);
     logEl.appendChild(div);
-    div.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    div.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
   }
 
   function handleSubmit(e) {
