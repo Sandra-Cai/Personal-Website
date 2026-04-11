@@ -246,22 +246,22 @@ a:hover {
   background: var(--accent);
 }
 
-/* SandraGPT: flat panel, b.ai agent block */
+/* SandraGPT: same card surface + chrome as .ba-card (b.ai system) */
 .ba-agent {
   max-width: var(--max);
   margin: 0 auto;
-  padding: 3rem 24px 4rem;
+  padding: clamp(3.5rem, 9vw, 5.5rem) 24px;
   border-top: 1px solid var(--line);
 }
 
 .ba-agent-card {
   max-width: 42rem;
   margin: 0 auto;
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
   padding: clamp(1.5rem, 4vw, 2rem);
-  box-shadow: none;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  /* matches .ba-card */
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .ba-agent-head {
@@ -314,7 +314,7 @@ a:hover {
   align-items: center;
   gap: 10px;
   padding: 5px 5px 5px 16px;
-  background: var(--bg);
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -338,7 +338,7 @@ a:hover {
 }
 
 .gpt-field input::placeholder {
-  color: #52525b;
+  color: var(--text-faint);
 }
 
 .gpt-send {
@@ -370,10 +370,10 @@ a:hover {
 }
 
 .gpt-note {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   color: var(--text-faint);
   margin: 0 0 1.25rem;
-  line-height: 1.55;
+  line-height: 1.65;
 }
 
 .gpt-log {
@@ -398,11 +398,11 @@ a:hover {
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #52525b;
+  color: var(--text-faint);
 }
 
 .gpt-msg--bot {
-  color: #d4d4d8;
+  color: var(--text-dim);
   padding: 0.875rem 1rem;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--line);
