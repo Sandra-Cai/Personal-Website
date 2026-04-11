@@ -13,6 +13,12 @@ This repo is a static personal site. There is no build step.
 | `assets/fonts/` | Geist (self-hosted, OFL) |
 | `robots.txt` | Crawler hints |
 | `sitemap.xml` | Canonical URL list for search engines |
+| `scripts/validate-jsonld.cjs` | CI: parses the first `application/ld+json` block in `index.html` |
+
+## Quality checks
+
+- **CI** (`.github/workflows/ci.yml`): required files exist, `node --check` on JS, JSON-LD parse check.
+- **SandraGPT** is deterministic keyword scoring over `KNOWLEDGE`; greetings and short thanks are handled before matching.
 
 ## Edit workflows
 

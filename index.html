@@ -7,19 +7,26 @@
   <meta name="color-scheme" content="dark" />
   <title>Sandra Cai</title>
   <meta name="description" content="Sandra Cai: quant research, markets, AI and systems. Four years across industry, research, and founding. NYU CS." />
+  <meta name="author" content="Sandra Cai" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
 
   <meta property="og:title" content="Sandra Cai" />
   <meta property="og:description" content="Quant research, independent analysis, AI &amp; infrastructure. Four years of professional experience." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.sandracai.com/" />
+  <meta property="og:site_name" content="Sandra Cai" />
+  <meta property="og:locale" content="en_US" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Sandra Cai" />
+  <meta name="twitter:description" content="Quant research, markets, AI &amp; systems. Independent analysis and engineering." />
 
   <link rel="canonical" href="https://www.sandracai.com/" />
   <link rel="icon" href="/assets/favicon.ico" />
 
   <link rel="preload" href="/assets/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="/assets/styles.css?v=9" />
+  <link rel="stylesheet" href="/assets/styles.css?v=10" />
 
   <script type="application/ld+json">
   {
@@ -27,11 +34,23 @@
     "@type": "Person",
     "name": "Sandra Cai",
     "url": "https://www.sandracai.com",
+    "description": "Quant research, markets, AI and systems. Four years across industry, research, and founding; Computer Science at NYU.",
     "sameAs": [
       "https://github.com/Sandra-Cai",
       "https://www.linkedin.com/in/yijia-sandra-cai",
       "https://substack.com/@caisandra",
       "https://medium.com/@caisandra"
+    ],
+    "alumniOf": {
+      "@type": "CollegeOrUniversity",
+      "name": "New York University"
+    },
+    "knowsAbout": [
+      "Quantitative finance",
+      "Market microstructure",
+      "Machine learning",
+      "Blockchain",
+      "Systems engineering"
     ]
   }
   </script>
@@ -94,6 +113,8 @@
               placeholder="What do you want to know?"
               maxlength="500"
               enterkeyhint="send"
+              autocomplete="off"
+              aria-describedby="gpt-disclaimer"
             />
             <button type="submit" class="gpt-send" aria-label="Send question">
               <span class="gpt-send-icon" aria-hidden="true">→</span>
@@ -101,7 +122,7 @@
           </label>
         </form>
 
-        <p class="gpt-note">Answers are generated from notes on this site. For a real conversation outside this box, write to sandraxcyj@gmail.com (also in the footer).</p>
+        <p class="gpt-note" id="gpt-disclaimer">Answers are generated from notes on this site. For a real conversation outside this box, write to sandraxcyj@gmail.com (also in the footer).</p>
 
         <div class="gpt-log" id="gpt-log" role="log" aria-live="polite" aria-relevant="additions"></div>
       </div>
@@ -195,9 +216,9 @@
       </p>
     </section>
 
-    <section class="ba-section ba-section--repeat">
+    <section class="ba-section ba-section--repeat" aria-labelledby="beliefs-title">
       <p class="ba-kicker">04</p>
-      <h2 class="ba-h2">Three things I believe</h2>
+      <h2 id="beliefs-title" class="ba-h2">Three things I believe</h2>
       <div class="ba-grid ba-grid--tight">
         <article class="ba-card ba-card--bare">
           <h3 class="ba-h3">Show the work</h3>
@@ -224,7 +245,7 @@
       </p>
     </section>
 
-    <footer class="ba-footer">
+    <footer class="ba-footer" role="contentinfo">
       <div class="ba-footer-row">
         <span class="ba-footer-name">Sandra Cai</span>
         <div class="ba-footer-links">
@@ -237,7 +258,7 @@
     </footer>
   </main>
 
-  <script src="/assets/sandra-gpt.js?v=11" defer></script>
-  <script src="/assets/script.js?v=8" defer></script>
+  <script src="/assets/sandra-gpt.js?v=12" defer></script>
+  <script src="/assets/script.js?v=9" defer></script>
 </body>
 </html>

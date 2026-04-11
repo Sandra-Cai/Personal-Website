@@ -52,6 +52,16 @@
         'About four years across quant and markets work, institutional research, large-scale engineering, founding, and independent research. I also study CS at NYU—see Academic on this page.',
     },
     {
+      keys: ['institutional', 'research & cloud', 'research and cloud'],
+      reply:
+        'That card is MSRA (blockchain finance research) and JD.com (private cloud)—details are in Track record on this page.',
+    },
+    {
+      keys: ['sandragpt', 'sandra gpt', 'this chat', 'this box'],
+      reply:
+        'SandraGPT is a small on-page helper: keyword matches against notes from this site, not a live LLM. For details, read the line under the input box.',
+    },
+    {
       keys: ['vigil', 'nuveaux', 'quantitative researcher', 'clearinghouse', 'counterparty', 'underwriting', 'crypto trading volume'],
       reply:
         'At Vigil Markets (Nuveaux Trading) I focused on Python-based crypto volume analysis, counterparty risk, and clearinghouse-related analytics.',
@@ -142,6 +152,8 @@
 
   const DEFAULT_REPLIES = [
     'Try a topic from the tagline or ask about something on the page.',
+    'Pick work, research, school, or a specific phrase from the page—I match against what is written here.',
+    'Ask about a section (Track record, Research, Academic) or a company or project name you see above.',
   ];
 
   function normalize(s) {
@@ -155,12 +167,22 @@
     return false;
   }
 
+  function thanksReply(q) {
+    const t = q.trim();
+    if (/^(thanks|thank you|thx|ty|appreciate it)[!?.]*$/i.test(t)) return true;
+    return false;
+  }
+
   function answerFor(question) {
     const q = normalize(question);
     if (!q) return 'Type a question above.';
 
     if (greetingReply(q)) {
       return 'Hello. Ask a question whenever you are ready.';
+    }
+
+    if (thanksReply(q)) {
+      return 'You are welcome. Ask another question whenever you like.';
     }
 
     if (/^(what is this|what's this)\??$/.test(q)) {
