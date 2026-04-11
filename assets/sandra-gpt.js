@@ -236,28 +236,136 @@
     return DEFAULT_REPLIES[Math.floor(Math.random() * DEFAULT_REPLIES.length)];
   }
 
+  const STORAGE_KEY = 'sandra-gpt-history-v1';
+  const MAX_TURNS = 80;
+
   const form = document.getElementById('gpt-form');
   const input = document.getElementById('gpt-input');
   const logEl = document.getElementById('gpt-log');
+  const sidebarList = document.getElementById('gpt-sidebar-list');
+  const clearBtn = document.getElementById('gpt-clear-history');
 
-  function appendMsg(role, text) {
-    const div = document.createElement('div');
-    div.className = `gpt-msg gpt-msg--${role}`;
-    const p = document.createElement('p');
-    p.textContent = text;
-    div.appendChild(p);
-    logEl.appendChild(div);
+  function loadHistory() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      const data = JSON.parse(raw);
+      return Array.isArray(data) ? data : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveHistory(entries) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries.slice(-MAX_TURNS)));
+    } catch {
+      /* quota or private mode */
+    }
+  }
+
+  function newTurnId() {
+    return `t-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  }
+
+  function scrollToTurn(turnId) {
+    const el = document.getElementById(`gpt-turn-${turnId}`);
+    if (!el) return;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    div.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+    el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+  }
+
+  function renderTurn(turnId, q, answerText, doScroll) {
+    const wrap = document.createElement('section');
+    wrap.className = 'gpt-turn';
+    wrap.id = `gpt-turn-${turnId}`;
+
+    const userDiv = document.createElement('div');
+    userDiv.className = 'gpt-msg gpt-msg--user';
+    const pu = document.createElement('p');
+    pu.textContent = q;
+    userDiv.appendChild(pu);
+
+    const botDiv = document.createElement('div');
+    botDiv.className = 'gpt-msg gpt-msg--bot';
+    const pb = document.createElement('p');
+    pb.textContent = answerText;
+    botDiv.appendChild(pb);
+
+    wrap.appendChild(userDiv);
+    wrap.appendChild(botDiv);
+    logEl.appendChild(wrap);
+
+    if (doScroll !== false) {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      wrap.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+    }
+  }
+
+  function addSidebarEntry(turnId, questionText) {
+    if (!sidebarList) return;
+
+    const li = document.createElement('li');
+    li.className = 'gpt-sidebar-item-wrap';
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'gpt-sidebar-item';
+    btn.dataset.turnId = turnId;
+    const label = questionText.length > 52 ? `${questionText.slice(0, 51)}…` : questionText;
+    btn.textContent = label;
+    btn.title = questionText;
+    btn.addEventListener('click', () => {
+      sidebarList.querySelectorAll('.gpt-sidebar-item--active').forEach((n) => {
+        n.classList.remove('gpt-sidebar-item--active');
+      });
+      btn.classList.add('gpt-sidebar-item--active');
+      scrollToTurn(turnId);
+    });
+
+    li.appendChild(btn);
+    sidebarList.appendChild(li);
+  }
+
+  function clearAllHistory() {
+    if (!window.confirm('Clear all questions and answers from this browser?')) return;
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
+    if (logEl) logEl.innerHTML = '';
+    if (sidebarList) sidebarList.innerHTML = '';
+  }
+
+  function restoreHistory() {
+    if (!logEl || !sidebarList) return;
+    const entries = loadHistory();
+    logEl.innerHTML = '';
+    sidebarList.innerHTML = '';
+    for (const row of entries) {
+      if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
+      const a = typeof row.a === 'string' ? row.a : '';
+      renderTurn(row.id, row.q, a, false);
+      addSidebarEntry(row.id, row.q);
+    }
   }
 
   function handleSubmit(e) {
     e.preventDefault();
     const q = input.value.trim();
     if (!q) return;
-    appendMsg('user', q);
+
+    const turnId = newTurnId();
+    const answerText = answerFor(q);
     input.value = '';
-    appendMsg('bot', answerFor(q));
+
+    renderTurn(turnId, q, answerText);
+    addSidebarEntry(turnId, q);
+
+    const entries = loadHistory();
+    entries.push({ id: turnId, q, a: answerText, t: Date.now() });
+    saveHistory(entries);
   }
 
   const taglineEl = document.getElementById('gpt-tagline');
@@ -266,6 +374,11 @@
   }
 
   if (form && input && logEl) {
+    restoreHistory();
     form.addEventListener('submit', handleSubmit);
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', clearAllHistory);
   }
 })();

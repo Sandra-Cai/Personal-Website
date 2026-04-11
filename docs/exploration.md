@@ -19,6 +19,7 @@ This repo is a static personal site. There is no build step.
 
 - **CI** (`.github/workflows/ci.yml`): required files exist, `node --check` on JS, JSON-LD parse check.
 - **SandraGPT** is deterministic keyword scoring over `KNOWLEDGE`; greetings and short thanks are handled before matching.
+- **Question history** (left rail): stored in `localStorage` under `sandra-gpt-history-v1` (this browser only; cap 80 turns). **Clear** removes it.
 
 ## Edit workflows
 
