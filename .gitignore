@@ -3,3 +3,9 @@
 *-resume.pdf
 Sandra-Cai-Resume.pdf
 *_Resume*.pdf
+
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*

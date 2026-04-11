@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify static assets
+        run: |
+          test -f index.html
+          test -f assets/styles.css
+          test -f assets/sandra-gpt.js
+          test -f assets/script.js
+          test -f robots.txt
+          test -f sitemap.xml
+
+      - name: Syntax-check JavaScript
+        run: |
+          node --check assets/sandra-gpt.js
+          node --check assets/script.js
