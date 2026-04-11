@@ -173,6 +173,21 @@
     return false;
   }
 
+  /** Matches "what do you do?" and close variants (keyboard typos like dp for do, u for you). */
+  function looksLikeWhatDoYouDo(q) {
+    return (
+      /\bwhat do you (do|dp|od)\b/.test(q) ||
+      /\bwhat do u (do|dp|od)\b/.test(q) ||
+      /\bwhat you do\b/.test(q) ||
+      /\bwhat's your job\b/.test(q) ||
+      /\bwhat is your job\b/.test(q) ||
+      /\bwhat is your role\b/.test(q) ||
+      /\bwhat work do you do\b/.test(q) ||
+      /\bwhat do you work on\b/.test(q) ||
+      /\bdescribe your work\b/.test(q)
+    );
+  }
+
   function answerFor(question) {
     const q = normalize(question);
     if (!q) return 'Type a question above.';
@@ -195,9 +210,8 @@
       return 'Reading, writing on markets and tech, and trading-style competitions when time allows.';
     }
 
-    if (
-      /\bwhat do you do\b|\bwhat's your job\b|\bwhat is your job\b|\bwhat is your role\b|\bwhat work do you do\b/.test(q)
-    ) {
+    // "What do you do?" — include common typos (e.g. dp for do) and casual phrasing; not a live model so no spellcheck
+    if (looksLikeWhatDoYouDo(q)) {
       return "I'm the founder of Plurall AI. I also study CS at NYU; markets, research, and other engineering work are in Work and Research on this page.";
     }
 
