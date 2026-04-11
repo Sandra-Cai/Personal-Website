@@ -237,6 +237,7 @@
   }
 
   const STORAGE_KEY = 'sandra-gpt-history-v1';
+  const SESSION_KEY = 'sandra-gpt-session';
   const MAX_TURNS = 80;
 
   const form = document.getElementById('gpt-form');
@@ -244,6 +245,19 @@
   const logEl = document.getElementById('gpt-log');
   const sidebarList = document.getElementById('gpt-sidebar-list');
   const clearBtn = document.getElementById('gpt-clear-history');
+
+  function getOrCreateSessionId() {
+    try {
+      let sid = localStorage.getItem(SESSION_KEY);
+      if (!sid) {
+        sid = crypto.randomUUID();
+        localStorage.setItem(SESSION_KEY, sid);
+      }
+      return sid;
+    } catch {
+      return `anon-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+    }
+  }
 
   function loadHistory() {
     try {
@@ -261,6 +275,43 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(entries.slice(-MAX_TURNS)));
     } catch {
       /* quota or private mode */
+    }
+  }
+
+  async function fetchRemoteHistory(sessionId) {
+    try {
+      const r = await fetch(`/api/sandra-gpt?sessionId=${encodeURIComponent(sessionId)}`);
+      if (r.status === 503 || r.status === 404) return null;
+      const ct = r.headers.get('content-type') || '';
+      if (!ct.includes('application/json')) return null;
+      const j = await r.json();
+      if (!j.ok || !Array.isArray(j.turns)) return null;
+      return j.turns;
+    } catch {
+      return null;
+    }
+  }
+
+  async function postTurnRemote(sessionId, id, q, a) {
+    const r = await fetch('/api/sandra-gpt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId, id, q, a }),
+    });
+    if (r.status === 503) return;
+    if (!r.ok) throw new Error('post_failed');
+  }
+
+  async function clearRemote(sessionId) {
+    try {
+      const r = await fetch('/api/sandra-gpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'clear', sessionId }),
+      });
+      if (r.status === 503) return;
+    } catch {
+      /* offline or static host */
     }
   }
 
@@ -327,8 +378,14 @@
     sidebarList.appendChild(li);
   }
 
-  function clearAllHistory() {
-    if (!window.confirm('Clear all questions and answers from this browser?')) return;
+  async function clearAllHistory() {
+    if (
+      !window.confirm(
+        'Clear all questions and answers from this browser and from the server (for this session), if the database API is enabled?'
+      )
+    ) {
+      return;
+    }
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch {
@@ -336,13 +393,36 @@
     }
     if (logEl) logEl.innerHTML = '';
     if (sidebarList) sidebarList.innerHTML = '';
+    await clearRemote(getOrCreateSessionId());
   }
 
-  function restoreHistory() {
+  async function restoreHistory() {
     if (!logEl || !sidebarList) return;
-    const entries = loadHistory();
+    const sessionId = getOrCreateSessionId();
+    const remote = await fetchRemoteHistory(sessionId);
+
     logEl.innerHTML = '';
     sidebarList.innerHTML = '';
+
+    if (remote && remote.length > 0) {
+      for (const row of remote) {
+        if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
+        const a = typeof row.a === 'string' ? row.a : '';
+        renderTurn(row.id, row.q, a, false);
+        addSidebarEntry(row.id, row.q);
+      }
+      saveHistory(
+        remote.map((r) => ({
+          id: r.id,
+          q: r.q,
+          a: r.a,
+          t: typeof r.t === 'number' ? r.t : Date.now(),
+        }))
+      );
+      return;
+    }
+
+    const entries = loadHistory();
     for (const row of entries) {
       if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
       const a = typeof row.a === 'string' ? row.a : '';
@@ -366,6 +446,11 @@
     const entries = loadHistory();
     entries.push({ id: turnId, q, a: answerText, t: Date.now() });
     saveHistory(entries);
+
+    const sid = getOrCreateSessionId();
+    postTurnRemote(sid, turnId, q, answerText).catch(() => {
+      /* static host or offline; local cache already saved */
+    });
   }
 
   const taglineEl = document.getElementById('gpt-tagline');
@@ -374,11 +459,13 @@
   }
 
   if (form && input && logEl) {
-    restoreHistory();
+    void restoreHistory();
     form.addEventListener('submit', handleSubmit);
   }
 
   if (clearBtn) {
-    clearBtn.addEventListener('click', clearAllHistory);
+    clearBtn.addEventListener('click', () => {
+      void clearAllHistory();
+    });
   }
 })();

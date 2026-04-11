@@ -21,11 +21,17 @@ jobs:
           test -f robots.txt
           test -f sitemap.xml
           test -f scripts/validate-jsonld.cjs
+          test -f api/sandra-gpt.js
+          test -f package.json
+
+      - name: Install npm dependencies
+        run: npm ci
 
       - name: Syntax-check JavaScript
         run: |
           node --check assets/sandra-gpt.js
           node --check assets/script.js
+          node --check api/sandra-gpt.js
 
       - name: Validate JSON-LD in index.html
         run: node scripts/validate-jsonld.cjs

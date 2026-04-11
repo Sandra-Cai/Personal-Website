@@ -1,0 +1,8 @@
+{
+  "name": "personal-website",
+  "private": true,
+  "description": "Static site + optional Vercel API for SandraGPT logging",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1"
+  }
+}

@@ -8,4 +8,7 @@ Sandra-Cai-Resume.pdf
 Thumbs.db
 *.log
 .env
-.env.*
+.env.local
+.env.production.local
+.env.development.local
+node_modules/
