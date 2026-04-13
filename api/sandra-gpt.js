@@ -38,6 +38,46 @@ function sanitize(s, max) {
   return t.length > max ? t.slice(0, max) : t;
 }
 
+/** UUID, anon-*, or t-* client ids; blocks garbage / injection in session keys. */
+function isValidSessionId(s) {
+  return typeof s === 'string' && /^[a-zA-Z0-9._:-]{8,80}$/.test(s);
+}
+
+function isValidClientTurnId(s) {
+  return typeof s === 'string' && /^[a-zA-Z0-9._:-]{4,120}$/.test(s);
+}
+
+function getClientIp(req) {
+  const xff = req.headers['x-forwarded-for'];
+  if (typeof xff === 'string' && xff.length) {
+    return xff.split(',')[0].trim().slice(0, 64) || 'unknown';
+  }
+  return (req.socket && req.socket.remoteAddress) || 'unknown';
+}
+
+const postBuckets = new Map();
+const getBuckets = new Map();
+
+function allowRate(map, ip, max, windowMs) {
+  const now = Date.now();
+  let e = map.get(ip);
+  if (!e || now > e.reset) {
+    e = { n: 0, reset: now + windowMs };
+  }
+  if (e.n >= max) {
+    map.set(ip, e);
+    return false;
+  }
+  e.n += 1;
+  map.set(ip, e);
+  if (map.size > 20000) {
+    for (const [k, v] of map) {
+      if (now > v.reset + windowMs) map.delete(k);
+    }
+  }
+  return true;
+}
+
 function json(res, status, body) {
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store');
@@ -63,6 +103,12 @@ module.exports = async (req, res) => {
   });
 
   if (req.method === 'GET') {
+    const ip = getClientIp(req);
+    if (!allowRate(getBuckets, ip, 120, 60_000)) {
+      res.setHeader('Retry-After', '30');
+      return json(res, 429, { ok: false, error: 'rate_limited' });
+    }
+
     let sessionId = '';
     if (req.query && (req.query.sessionId || req.query.session)) {
       sessionId = sanitize(String(req.query.sessionId || req.query.session), 80);
@@ -76,6 +122,9 @@ module.exports = async (req, res) => {
     }
     if (!sessionId) {
       return json(res, 400, { ok: false, error: 'missing_session' });
+    }
+    if (!isValidSessionId(sessionId)) {
+      return json(res, 400, { ok: false, error: 'invalid_session' });
     }
     const { data, error } = await supabase
       .from('sandra_gpt_turns')
@@ -100,6 +149,12 @@ module.exports = async (req, res) => {
   }
 
   if (req.method === 'POST') {
+    const ip = getClientIp(req);
+    if (!allowRate(postBuckets, ip, 45, 60_000)) {
+      res.setHeader('Retry-After', '30');
+      return json(res, 429, { ok: false, error: 'rate_limited' });
+    }
+
     let body;
     if (req.body && typeof req.body === 'object' && !Buffer.isBuffer(req.body)) {
       body = req.body;
@@ -114,6 +169,9 @@ module.exports = async (req, res) => {
     const sessionId = sanitize(body.sessionId, 80);
     if (!sessionId) {
       return json(res, 400, { ok: false, error: 'missing_session' });
+    }
+    if (!isValidSessionId(sessionId)) {
+      return json(res, 400, { ok: false, error: 'invalid_session' });
     }
 
     if (body.action === 'clear') {
@@ -130,6 +188,9 @@ module.exports = async (req, res) => {
     const a = sanitize(body.a, MAX_A);
     if (!id || !q) {
       return json(res, 400, { ok: false, error: 'missing_fields' });
+    }
+    if (!isValidClientTurnId(id)) {
+      return json(res, 400, { ok: false, error: 'invalid_id' });
     }
 
     const { error } = await supabase.from('sandra_gpt_turns').insert({

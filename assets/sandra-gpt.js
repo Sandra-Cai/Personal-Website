@@ -305,15 +305,21 @@
     }
   }
 
-  function setSyncStatus(mode) {
+  function setSyncStatus(mode, detail) {
     if (!syncStatusEl) return;
     syncStatusEl.textContent = '';
-    syncStatusEl.classList.remove('gpt-sync-status--ok');
+    syncStatusEl.classList.remove('gpt-sync-status--ok', 'gpt-sync-status--warn');
     if (mode === 'server') {
       syncStatusEl.textContent = 'Database sync on';
       syncStatusEl.classList.add('gpt-sync-status--ok');
     } else if (mode === 'local') {
       syncStatusEl.textContent = 'Browser only (no API)';
+    } else if (mode === 'warn') {
+      syncStatusEl.textContent =
+        detail === 'rate'
+          ? 'Server busy; saved in browser only'
+          : 'Couldn’t sync; saved in browser only';
+      syncStatusEl.classList.add('gpt-sync-status--warn');
     } else {
       syncStatusEl.textContent = '';
     }
@@ -329,6 +335,9 @@
       });
       if (r.status === 503) return;
       if (r.ok) return;
+      if (r.status === 429) {
+        throw new Error('rate_limited');
+      }
       if (attempt === 0) {
         await new Promise((resolve) => setTimeout(resolve, 450));
       }
@@ -419,11 +428,14 @@
     const label = questionText.length > 52 ? `${questionText.slice(0, 51)}…` : questionText;
     btn.textContent = label;
     btn.title = questionText;
+    btn.setAttribute('aria-current', 'false');
     btn.addEventListener('click', () => {
-      sidebarList.querySelectorAll('.gpt-sidebar-item--active').forEach((n) => {
+      sidebarList.querySelectorAll('.gpt-sidebar-item').forEach((n) => {
         n.classList.remove('gpt-sidebar-item--active');
+        n.setAttribute('aria-current', 'false');
       });
       btn.classList.add('gpt-sidebar-item--active');
+      btn.setAttribute('aria-current', 'true');
       scrollToTurn(turnId);
     });
 
@@ -524,8 +536,12 @@
       .then(() => {
         setSyncStatus('server');
       })
-      .catch(() => {
-        /* static host or offline; local cache already saved */
+      .catch((err) => {
+        if (err && err.message === 'rate_limited') {
+          setSyncStatus('warn', 'rate');
+        } else {
+          setSyncStatus('warn');
+        }
       });
   }
 

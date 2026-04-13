@@ -358,6 +358,10 @@ a:focus-visible {
   color: rgba(34, 211, 238, 0.75);
 }
 
+.gpt-sync-status--warn {
+  color: #fbbf24;
+}
+
 .gpt-form[aria-busy='true'] .gpt-send {
   opacity: 0.55;
   pointer-events: none;

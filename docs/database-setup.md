@@ -34,3 +34,7 @@ Open the local URL and use SandraGPT; check the `sandra_gpt_turns` table in Supa
 ## 5. GitHub Pages only
 
 If you host **only** static files on GitHub Pages, `/api/sandra-gpt` will not exist. The UI falls back to localStorage and **503** responses are ignored.
+
+## 6. API behavior
+
+The serverless handler applies **rate limits** per client IP (roughly: GET and POST budgets per minute) and rejects malformed `session_id` / turn ids with **400**. **429** means slow down; the SandraGPT UI shows a warning and keeps answers in the browser.
