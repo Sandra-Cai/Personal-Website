@@ -38,13 +38,24 @@ function sanitize(s, max) {
   return t.length > max ? t.slice(0, max) : t;
 }
 
+function json(res, status, body) {
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  return res.status(status).json(body);
+}
+
 module.exports = async (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Allow', 'GET, POST, OPTIONS');
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(204).end();
+  }
 
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) {
-    return res.status(503).json({ ok: false, error: 'not_configured' });
+    return json(res, 503, { ok: false, error: 'not_configured' });
   }
 
   const supabase = createClient(url, key, {
@@ -64,7 +75,7 @@ module.exports = async (req, res) => {
       }
     }
     if (!sessionId) {
-      return res.status(400).json({ ok: false, error: 'missing_session' });
+      return json(res, 400, { ok: false, error: 'missing_session' });
     }
     const { data, error } = await supabase
       .from('sandra_gpt_turns')
@@ -75,7 +86,7 @@ module.exports = async (req, res) => {
 
     if (error) {
       console.error('sandra-gpt GET', error);
-      return res.status(500).json({ ok: false, error: 'db_error' });
+      return json(res, 500, { ok: false, error: 'db_error' });
     }
 
     const turns = (data || []).map((row) => ({
@@ -85,7 +96,7 @@ module.exports = async (req, res) => {
       t: row.created_at ? new Date(row.created_at).getTime() : Date.now(),
     }));
 
-    return res.status(200).json({ ok: true, turns });
+    return json(res, 200, { ok: true, turns });
   }
 
   if (req.method === 'POST') {
@@ -96,29 +107,29 @@ module.exports = async (req, res) => {
       try {
         body = await readJsonBody(req);
       } catch (e) {
-        return res.status(400).json({ ok: false, error: 'invalid_json' });
+        return json(res, 400, { ok: false, error: 'invalid_json' });
       }
     }
 
     const sessionId = sanitize(body.sessionId, 80);
     if (!sessionId) {
-      return res.status(400).json({ ok: false, error: 'missing_session' });
+      return json(res, 400, { ok: false, error: 'missing_session' });
     }
 
     if (body.action === 'clear') {
       const { error } = await supabase.from('sandra_gpt_turns').delete().eq('session_id', sessionId);
       if (error) {
         console.error('sandra-gpt clear', error);
-        return res.status(500).json({ ok: false, error: 'db_error' });
+        return json(res, 500, { ok: false, error: 'db_error' });
       }
-      return res.status(200).json({ ok: true });
+      return json(res, 200, { ok: true });
     }
 
     const id = sanitize(body.id, 120);
     const q = sanitize(body.q, MAX_Q);
     const a = sanitize(body.a, MAX_A);
     if (!id || !q) {
-      return res.status(400).json({ ok: false, error: 'missing_fields' });
+      return json(res, 400, { ok: false, error: 'missing_fields' });
     }
 
     const { error } = await supabase.from('sandra_gpt_turns').insert({
@@ -130,15 +141,15 @@ module.exports = async (req, res) => {
 
     if (error) {
       if (error.code === '23505') {
-        return res.status(200).json({ ok: true, duplicate: true });
+        return json(res, 200, { ok: true, duplicate: true });
       }
       console.error('sandra-gpt insert', error);
-      return res.status(500).json({ ok: false, error: 'db_error' });
+      return json(res, 500, { ok: false, error: 'db_error' });
     }
 
-    return res.status(200).json({ ok: true });
+    return json(res, 200, { ok: true });
   }
 
-  res.setHeader('Allow', 'GET, POST');
-  return res.status(405).json({ ok: false, error: 'method_not_allowed' });
+  res.setHeader('Allow', 'GET, POST, OPTIONS');
+  return json(res, 405, { ok: false, error: 'method_not_allowed' });
 };

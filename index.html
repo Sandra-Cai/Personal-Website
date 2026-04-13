@@ -26,7 +26,7 @@
 
   <link rel="preload" href="/assets/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="/assets/styles.css?v=11" />
+  <link rel="stylesheet" href="/assets/styles.css?v=12" />
 
   <script type="application/ld+json">
   {
@@ -99,7 +99,10 @@
       <div class="ba-agent-card gpt-shell">
         <aside class="gpt-sidebar" aria-label="Question history">
           <div class="gpt-sidebar-head">
-            <p class="gpt-sidebar-title">History</p>
+            <div class="gpt-sidebar-head-text">
+              <p class="gpt-sidebar-title">History</p>
+              <p class="gpt-sync-status" id="gpt-sync-status" aria-live="polite"></p>
+            </div>
             <button type="button" class="gpt-sidebar-clear" id="gpt-clear-history" aria-label="Clear question history">
               Clear
             </button>
@@ -117,7 +120,7 @@
             <p class="ba-agent-sub" id="gpt-tagline">Work, startups, trading comps, research, school, or say hi.</p>
           </div>
 
-          <form class="gpt-form" id="gpt-form" autocomplete="off">
+          <form class="gpt-form" id="gpt-form" autocomplete="off" aria-busy="false">
             <label class="gpt-field" for="gpt-input">
               <span class="visually-hidden">Your question</span>
               <input
@@ -273,7 +276,7 @@
     </footer>
   </main>
 
-  <script src="/assets/sandra-gpt.js?v=15" defer></script>
+  <script src="/assets/sandra-gpt.js?v=16" defer></script>
   <script src="/assets/script.js?v=9" defer></script>
 </body>
 </html>

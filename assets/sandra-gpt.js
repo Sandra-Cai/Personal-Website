@@ -245,6 +245,7 @@
   const logEl = document.getElementById('gpt-log');
   const sidebarList = document.getElementById('gpt-sidebar-list');
   const clearBtn = document.getElementById('gpt-clear-history');
+  const syncStatusEl = document.getElementById('gpt-sync-status');
 
   function getOrCreateSessionId() {
     try {
@@ -278,28 +279,79 @@
     }
   }
 
+  /**
+   * @returns {{ apiDisabled: boolean, turns: Array<{id:string,q:string,a:string,t?:number}>|null }}
+   */
   async function fetchRemoteHistory(sessionId) {
     try {
       const r = await fetch(`/api/sandra-gpt?sessionId=${encodeURIComponent(sessionId)}`);
-      if (r.status === 503 || r.status === 404) return null;
+      if (r.status === 503 || r.status === 404) {
+        return { apiDisabled: true, turns: null };
+      }
+      if (!r.ok) {
+        return { apiDisabled: false, turns: null };
+      }
       const ct = r.headers.get('content-type') || '';
-      if (!ct.includes('application/json')) return null;
+      if (!ct.includes('application/json')) {
+        return { apiDisabled: false, turns: null };
+      }
       const j = await r.json();
-      if (!j.ok || !Array.isArray(j.turns)) return null;
-      return j.turns;
+      if (!j.ok || !Array.isArray(j.turns)) {
+        return { apiDisabled: false, turns: null };
+      }
+      return { apiDisabled: false, turns: j.turns };
     } catch {
-      return null;
+      return { apiDisabled: true, turns: null };
+    }
+  }
+
+  function setSyncStatus(mode) {
+    if (!syncStatusEl) return;
+    syncStatusEl.textContent = '';
+    syncStatusEl.classList.remove('gpt-sync-status--ok');
+    if (mode === 'server') {
+      syncStatusEl.textContent = 'Database sync on';
+      syncStatusEl.classList.add('gpt-sync-status--ok');
+    } else if (mode === 'local') {
+      syncStatusEl.textContent = 'Browser only (no API)';
+    } else {
+      syncStatusEl.textContent = '';
     }
   }
 
   async function postTurnRemote(sessionId, id, q, a) {
-    const r = await fetch('/api/sandra-gpt', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId, id, q, a }),
-    });
-    if (r.status === 503) return;
-    if (!r.ok) throw new Error('post_failed');
+    const payload = JSON.stringify({ sessionId, id, q, a });
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const r = await fetch('/api/sandra-gpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload,
+      });
+      if (r.status === 503) return;
+      if (r.ok) return;
+      if (attempt === 0) {
+        await new Promise((resolve) => setTimeout(resolve, 450));
+      }
+    }
+    throw new Error('post_failed');
+  }
+
+  /** Push local-only turns after offline or pre-API use. */
+  async function syncUnsavedTurnsToServer(sessionId) {
+    const snap = loadHistory();
+    if (!snap.length) return;
+    const remote = await fetchRemoteHistory(sessionId);
+    if (remote.apiDisabled || !remote.turns) return;
+    const have = new Set(remote.turns.map((t) => t.id));
+    for (const row of snap) {
+      if (!row || typeof row.id !== 'string') continue;
+      if (have.has(row.id)) continue;
+      try {
+        await postTurnRemote(sessionId, row.id, row.q, row.a);
+      } catch {
+        break;
+      }
+    }
   }
 
   async function clearRemote(sessionId) {
@@ -309,9 +361,10 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'clear', sessionId }),
       });
-      if (r.status === 503) return;
+      if (r.status === 503) return false;
+      return r.ok;
     } catch {
-      /* offline or static host */
+      return false;
     }
   }
 
@@ -393,18 +446,19 @@
     }
     if (logEl) logEl.innerHTML = '';
     if (sidebarList) sidebarList.innerHTML = '';
-    await clearRemote(getOrCreateSessionId());
+    const clearedOnServer = await clearRemote(getOrCreateSessionId());
+    setSyncStatus(clearedOnServer ? 'server' : 'local');
   }
 
   async function restoreHistory() {
     if (!logEl || !sidebarList) return;
     const sessionId = getOrCreateSessionId();
-    const remote = await fetchRemoteHistory(sessionId);
+    const { apiDisabled, turns: remote } = await fetchRemoteHistory(sessionId);
 
     logEl.innerHTML = '';
     sidebarList.innerHTML = '';
 
-    if (remote && remote.length > 0) {
+    if (!apiDisabled && remote && remote.length > 0) {
       for (const row of remote) {
         if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
         const a = typeof row.a === 'string' ? row.a : '';
@@ -419,6 +473,7 @@
           t: typeof r.t === 'number' ? r.t : Date.now(),
         }))
       );
+      setSyncStatus('server');
       return;
     }
 
@@ -428,6 +483,13 @@
       const a = typeof row.a === 'string' ? row.a : '';
       renderTurn(row.id, row.q, a, false);
       addSidebarEntry(row.id, row.q);
+    }
+
+    setSyncStatus(apiDisabled ? 'local' : 'server');
+    if (!apiDisabled && entries.length > 0) {
+      void syncUnsavedTurnsToServer(sessionId).then(() => {
+        setSyncStatus('server');
+      });
     }
   }
 
@@ -440,6 +502,16 @@
     const answerText = answerFor(q);
     input.value = '';
 
+    if (form) {
+      const sendBtn = form.querySelector('.gpt-send');
+      form.setAttribute('aria-busy', 'true');
+      if (sendBtn) sendBtn.disabled = true;
+      window.setTimeout(() => {
+        form.setAttribute('aria-busy', 'false');
+        if (sendBtn) sendBtn.disabled = false;
+      }, 180);
+    }
+
     renderTurn(turnId, q, answerText);
     addSidebarEntry(turnId, q);
 
@@ -448,9 +520,13 @@
     saveHistory(entries);
 
     const sid = getOrCreateSessionId();
-    postTurnRemote(sid, turnId, q, answerText).catch(() => {
-      /* static host or offline; local cache already saved */
-    });
+    postTurnRemote(sid, turnId, q, answerText)
+      .then(() => {
+        setSyncStatus('server');
+      })
+      .catch(() => {
+        /* static host or offline; local cache already saved */
+      });
   }
 
   const taglineEl = document.getElementById('gpt-tagline');
