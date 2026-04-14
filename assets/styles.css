@@ -452,7 +452,8 @@ a:focus-visible {
 
 .gpt-sidebar-item:focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 1px;
+  outline-offset: 2px;
+  border-color: rgba(34, 211, 238, 0.35);
 }
 
 .gpt-sidebar-item--active {

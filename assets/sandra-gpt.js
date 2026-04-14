@@ -345,22 +345,24 @@
     throw new Error('post_failed');
   }
 
-  /** Push local-only turns after offline or pre-API use. */
+  /**
+   * Push local-only turns after offline or pre-API use.
+   * @returns {Promise<boolean>} true if at least one turn was uploaded
+   */
   async function syncUnsavedTurnsToServer(sessionId) {
     const snap = loadHistory();
-    if (!snap.length) return;
+    if (!snap.length) return false;
     const remote = await fetchRemoteHistory(sessionId);
-    if (remote.apiDisabled || !remote.turns) return;
+    if (remote.apiDisabled || !remote.turns) return false;
     const have = new Set(remote.turns.map((t) => t.id));
+    let didAny = false;
     for (const row of snap) {
       if (!row || typeof row.id !== 'string') continue;
       if (have.has(row.id)) continue;
-      try {
-        await postTurnRemote(sessionId, row.id, row.q, row.a);
-      } catch {
-        break;
-      }
+      didAny = true;
+      await postTurnRemote(sessionId, row.id, row.q, row.a);
     }
+    return didAny;
   }
 
   async function clearRemote(sessionId) {
@@ -392,6 +394,7 @@
     const wrap = document.createElement('section');
     wrap.className = 'gpt-turn';
     wrap.id = `gpt-turn-${turnId}`;
+    wrap.setAttribute('aria-label', 'Question and reply');
 
     const userDiv = document.createElement('div');
     userDiv.className = 'gpt-msg gpt-msg--user';
@@ -499,9 +502,13 @@
 
     setSyncStatus(apiDisabled ? 'local' : 'server');
     if (!apiDisabled && entries.length > 0) {
-      void syncUnsavedTurnsToServer(sessionId).then(() => {
-        setSyncStatus('server');
-      });
+      void syncUnsavedTurnsToServer(sessionId)
+        .then((did) => {
+          if (did) setSyncStatus('server');
+        })
+        .catch(() => {
+          setSyncStatus('warn');
+        });
     }
   }
 
@@ -558,6 +565,32 @@
   if (clearBtn) {
     clearBtn.addEventListener('click', () => {
       void clearAllHistory();
+    });
+  }
+
+  /** When the network comes back, try to upload any turns still only in the browser. */
+  let onlineDebounce;
+  window.addEventListener('online', () => {
+    window.clearTimeout(onlineDebounce);
+    onlineDebounce = window.setTimeout(() => {
+      const sid = getOrCreateSessionId();
+      void syncUnsavedTurnsToServer(sid)
+        .then((did) => {
+          if (did) setSyncStatus('server');
+        })
+        .catch(() => {
+          setSyncStatus('warn');
+        });
+    }, 450);
+  });
+
+  const agentSection = document.getElementById('sandra-gpt');
+  if (agentSection && input) {
+    agentSection.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      if (document.activeElement !== input) return;
+      e.preventDefault();
+      input.blur();
     });
   }
 })();

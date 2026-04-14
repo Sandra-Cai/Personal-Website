@@ -22,6 +22,7 @@ This repo is a static personal site. There is no build step.
 - **Question history** (left rail): cached in `localStorage` (`sandra-gpt-history-v1`; cap 80). Optional **Postgres** via Vercel `/api/sandra-gpt` + Supabase (see [`docs/database-setup.md`](database-setup.md)). **Clear** removes browser data and server rows for the current `sandra-gpt-session` when the API is live.
 - **Sync status** line under “History”: shows whether the database API responded (`Database sync on`), static/offline (`Browser only`), or a warning (`Couldn’t sync` / `Server busy`) when the API exists but a write failed. After local-only history, the client **backfills** missing turns to the server when the API is available. **POST** retries once on failure.
 - **API** (`api/sandra-gpt.js`): per-IP **rate limits** (GET/POST), validates `session_id` / turn `id` shape; **429** returns `Retry-After`. Sidebar history buttons use **`aria-current`** for the active item.
+- **Reconnect**: `window` **`online`** event (debounced) re-runs backfill sync; **`Escape`** blurs the question field when focused. Each chat **turn** `<section>` has **`aria-label="Question and reply"`**.
 
 ## Edit workflows
 
