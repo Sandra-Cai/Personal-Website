@@ -6,3 +6,5 @@ I've been in private schools my whole life. Now I want to share my ~$600,000 edu
 Static site: open `index.html` or serve the repo root. For where to edit copy vs styles vs SandraGPT, see [`docs/exploration.md`](docs/exploration.md).
 
 Optional **database** for SandraGPT (Supabase + Vercel API): [`docs/database-setup.md`](docs/database-setup.md).
+
+`404.html` matches the site style for hosts that serve it for unknown paths (e.g. GitHub Pages).

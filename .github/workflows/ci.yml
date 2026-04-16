@@ -20,6 +20,7 @@ jobs:
           test -f assets/script.js
           test -f robots.txt
           test -f sitemap.xml
+          test -f 404.html
           test -f scripts/validate-jsonld.cjs
           test -f api/sandra-gpt.js
           test -f package.json

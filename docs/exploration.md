@@ -13,6 +13,7 @@ This repo is a static personal site. There is no build step.
 | `assets/fonts/` | Geist (self-hosted, OFL) |
 | `robots.txt` | Crawler hints |
 | `sitemap.xml` | Canonical URL list for search engines |
+| `404.html` | Branded not-found page (many static hosts use it automatically) |
 | `scripts/validate-jsonld.cjs` | CI: parses the first `application/ld+json` block in `index.html` |
 
 ## Quality checks

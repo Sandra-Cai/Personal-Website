@@ -942,6 +942,40 @@ a:focus-visible {
   color: #52525b;
 }
 
+/* Static 404 (GitHub Pages / generic hosts) */
+.ba-404 {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: clamp(5rem, 18vw, 10rem) 24px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+
+.ba-404-kicker {
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 1rem;
+  font-weight: 600;
+}
+
+.ba-404-title {
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  letter-spacing: -0.03em;
+  margin: 0 0 1.25rem;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.ba-404-lead {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--text-dim);
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

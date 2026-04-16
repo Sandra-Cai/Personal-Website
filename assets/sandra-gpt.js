@@ -246,6 +246,7 @@
   const sidebarList = document.getElementById('gpt-sidebar-list');
   const clearBtn = document.getElementById('gpt-clear-history');
   const syncStatusEl = document.getElementById('gpt-sync-status');
+  let submitBusy = false;
 
   function getOrCreateSessionId() {
     try {
@@ -514,8 +515,14 @@
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (submitBusy) return;
     const q = input.value.trim();
     if (!q) return;
+
+    submitBusy = true;
+    window.setTimeout(() => {
+      submitBusy = false;
+    }, 260);
 
     const turnId = newTurnId();
     const answerText = answerFor(q);
