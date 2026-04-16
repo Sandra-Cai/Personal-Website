@@ -464,6 +464,7 @@
     if (sidebarList) sidebarList.innerHTML = '';
     const clearedOnServer = await clearRemote(getOrCreateSessionId());
     setSyncStatus(clearedOnServer ? 'server' : 'local');
+    if (input) input.focus();
   }
 
   async function restoreHistory() {
@@ -557,6 +558,10 @@
           setSyncStatus('warn');
         }
       });
+
+    window.requestAnimationFrame(() => {
+      input.focus();
+    });
   }
 
   const taglineEl = document.getElementById('gpt-tagline');

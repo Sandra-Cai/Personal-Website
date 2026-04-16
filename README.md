@@ -8,3 +8,5 @@ Static site: open `index.html` or serve the repo root. For where to edit copy vs
 Optional **database** for SandraGPT (Supabase + Vercel API): [`docs/database-setup.md`](docs/database-setup.md).
 
 `404.html` matches the site style for hosts that serve it for unknown paths (e.g. GitHub Pages).
+
+Run **`npm run verify`** locally to match CI (JSON-LD + JS syntax checks). **`vercel.json`** adds security headers when you deploy on Vercel.

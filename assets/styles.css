@@ -399,6 +399,7 @@ a:focus-visible {
   overflow-x: hidden;
   padding-right: 4px;
   margin-right: -4px;
+  scrollbar-gutter: stable;
 }
 
 .gpt-sidebar-list {
