@@ -12,6 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
       - name: Verify static assets
         run: |
           test -f index.html
@@ -26,6 +31,7 @@ jobs:
           test -f api/sandra-gpt.js
           test -f vercel.json
           test -f package.json
+          test -f .well-known/security.txt
 
       - name: Install npm dependencies
         run: npm ci

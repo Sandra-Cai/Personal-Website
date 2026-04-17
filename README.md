@@ -10,3 +10,5 @@ Optional **database** for SandraGPT (Supabase + Vercel API): [`docs/database-set
 `404.html` matches the site style for hosts that serve it for unknown paths (e.g. GitHub Pages).
 
 Run **`npm run verify`** locally to match CI (JSON-LD + JS syntax checks). **`vercel.json`** adds security headers when you deploy on Vercel.
+
+**`.well-known/security.txt`** lists a contact for responsible disclosure (see [RFC 9116](https://www.rfc-editor.org/rfc/rfc9116.html)).

@@ -17,6 +17,7 @@ This repo is a static personal site. There is no build step.
 | `scripts/validate-jsonld.cjs` | Parses the first `application/ld+json` block in `index.html` |
 | `scripts/verify-all.cjs` | **`npm run verify`** — JSON-LD + `node --check` on all JS |
 | `vercel.json` | Optional **security headers** on Vercel (frame, nosniff, referrer, permissions-policy) |
+| `.well-known/security.txt` | [RFC 9116](https://www.rfc-editor.org/rfc/rfc9116.html) contact for security reports |
 
 ## Quality checks
 
@@ -26,6 +27,7 @@ This repo is a static personal site. There is no build step.
 - **Sync status** line under “History”: shows whether the database API responded (`Database sync on`), static/offline (`Browser only`), or a warning (`Couldn’t sync` / `Server busy`) when the API exists but a write failed. After local-only history, the client **backfills** missing turns to the server when the API is available. **POST** retries once on failure.
 - **API** (`api/sandra-gpt.js`): per-IP **rate limits** (GET/POST), validates `session_id` / turn `id` shape; **429** returns `Retry-After`. Sidebar history buttons use **`aria-current`** for the active item.
 - **Reconnect**: `window` **`online`** event (debounced) re-runs backfill sync; **`Escape`** blurs the question field when focused. Each chat **turn** `<section>` has **`aria-label="Question and reply"`**.
+- **SandraGPT input**: **Ctrl+Enter** (Windows/Linux) or **⌘+Enter** (macOS) submits the form. Sync line uses **`role="status"`** for announcements. History sidebar has **thin scrollbars** (Firefox + WebKit).
 
 ## Edit workflows
 

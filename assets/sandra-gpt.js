@@ -572,6 +572,11 @@
   if (form && input && logEl) {
     void restoreHistory();
     form.addEventListener('submit', handleSubmit);
+    input.addEventListener('keydown', (e) => {
+      if (!(e.ctrlKey || e.metaKey) || e.key !== 'Enter') return;
+      e.preventDefault();
+      form.requestSubmit();
+    });
   }
 
   if (clearBtn) {

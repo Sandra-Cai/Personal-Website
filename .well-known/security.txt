@@ -1,0 +1,3 @@
+Contact: mailto:sandraxcyj@gmail.com
+Preferred-Languages: en
+Canonical: https://www.sandracai.com/.well-known/security.txt
