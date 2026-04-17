@@ -10,6 +10,22 @@
   const REPLY_INDEPENDENT_RESEARCH =
     'Independent work includes equity research, macro and AI writing, and open quant pieces. See Research on this page for the list.';
 
+  /**
+   * Multi-word keys use substring match; single-token keys use word boundaries to avoid
+   * false positives (e.g. "code" inside "decode", "who" inside "somehow").
+   */
+  function escapeRegExp(s) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function keyMatches(q, key) {
+    const k = key.toLowerCase();
+    if (/\s/.test(k) || /[^\x00-\x7F]/.test(k)) {
+      return q.includes(k);
+    }
+    return new RegExp('\\b' + escapeRegExp(k) + '\\b', 'i').test(q);
+  }
+
   const KNOWLEDGE = [
     {
       keys: [
@@ -19,12 +35,21 @@
         'what is this box',
         'purpose of this',
         'why is this here',
+        'how does this work',
+        'how does sandragpt',
+        'is this chatgpt',
+        'is this ai',
+        'are you chatgpt',
+        'are you an ai',
+        'are you a bot',
       ],
+      priority: 35,
       reply:
         'Short answers from notes on this site—not a live model. Ask about a topic from the tagline or something on the page.',
     },
     {
       keys: ['what should i ask', 'what can i ask', 'what to ask', 'how do i use this'],
+      priority: 20,
       reply:
         'Anything that fits the tagline—work, startups, trading, research, school—or a specific question about something on the page.',
     },
@@ -39,113 +64,158 @@
         'research outside',
         'research on your',
       ],
+      priority: 12,
       reply: REPLY_INDEPENDENT_RESEARCH,
     },
     {
       keys: ['internship', 'internships'],
+      priority: 22,
       reply:
         'Roles have included quantitative research (Vigil Markets / Nuveaux), research at Microsoft Research Asia, engineering at JD.com, and founding work (Plurall AI). More context is in the Work and Research sections.',
     },
     {
-      keys: ['four years', '4 years', 'experience', 'work experience', 'years of', 'career', 'track record', 'professional'],
+      keys: ['four years', '4 years', 'work experience', 'years of experience', 'years of', 'career', 'track record'],
+      priority: 15,
       reply:
         'About four years across quant and markets work, institutional research, large-scale engineering, founding, and independent research. I also study CS at NYU—see Academic on this page.',
     },
     {
       keys: ['institutional', 'research & cloud', 'research and cloud'],
+      priority: 28,
       reply:
         'That card is MSRA (blockchain finance research) and JD.com (private cloud)—details are in Track record on this page.',
     },
     {
       keys: ['sandragpt', 'sandra gpt', 'this chat', 'this box'],
+      priority: 32,
       reply:
         'SandraGPT is a small on-page helper: keyword matches against notes from this site, not a live LLM. For details, read the line under the input box.',
     },
     {
       keys: ['vigil', 'nuveaux', 'quantitative researcher', 'clearinghouse', 'counterparty', 'underwriting', 'crypto trading volume'],
+      priority: 40,
       reply:
         'At Vigil Markets (Nuveaux Trading) I focused on Python-based crypto volume analysis, counterparty risk, and clearinghouse-related analytics.',
     },
     {
       keys: ['microsoft research', 'msra', 'microsoft research asia'],
+      priority: 40,
       reply: 'At Microsoft Research Asia I worked on blockchain-related financial research connecting protocols to market and institutional questions.',
     },
     {
       keys: ['jd.com', 'jdcom', 'private cloud'],
+      priority: 35,
       reply: 'At JD.com I built private cloud infrastructure across low-level systems through application-scale concerns.',
     },
     {
       keys: ['duke fintech', 'duke', 'fintech trading competition', 'scoreboard'],
+      priority: 30,
       reply:
         'I am first on the Duke Fintech Trading Competition scoreboard under their risk-adjusted rules. The Research section links the live board.',
     },
     {
       keys: ['phoenix', 'new york tech week', 'crypto strateg'],
+      priority: 30,
       reply: 'I won the Phoenix Trading Competition (crypto strategies) during New York Tech Week in 2023.',
     },
     {
       keys: ['trade', 'trading', 'trader', 'paper trade'],
+      priority: 10,
       reply:
         'I take structured trading and markets work seriously—competitions, research writing, and related projects; pointers are on this page.',
     },
     {
       keys: ['aerovironment', 'avav', 'equity pitch', 'pe-backed'],
+      priority: 35,
       reply: 'The AeroVironment (AVAV) thesis is listed under Research on this page.',
     },
     {
       keys: ['jane street', 'india ban', 'sebi', 'microstructure', 'inside the ban'],
+      priority: 45,
       reply:
         'I published “Inside the Ban: A Quantitative Autopsy of Jane Street’s Trading Tactics in India” (open repo; announcement on LinkedIn from this site).',
     },
     {
       keys: ['bayes', 'bayesian', 'decision-making', 'theorem of wisdom', 'urc'],
+      priority: 35,
       reply:
         '“Theorem of Wisdom” (Bayesian decision-making) is on GitHub; related work was presented at NYU URC.',
     },
     {
       keys: ['chip war', 'ai performance', 'supply chain', 'geopolitical', 'oscar', 'hawkish', 'dovish'],
+      priority: 12,
       reply: 'I have Medium pieces on AI and macro; the profile is linked from this page.',
     },
     {
       keys: ['medium', 'linkedin', 'macro', 'macroeconomic'],
+      priority: 8,
       reply: 'Longer threads are on LinkedIn and Medium; Substack is @caisandra. Links are in the header and strips.',
     },
     {
       keys: ['school', 'nyu', 'major', 'minor', 'degree', 'bemet', 'bemt', 'mathematics minor'],
+      priority: 25,
       reply:
         'NYU: Computer Science major, minors in Mathematics and BEMT (Business of Entertainment, Media and Technology).',
     },
     {
-      keys: ['who', 'yourself', 'about you', 'introduce', 'background', 'who are you'],
+      keys: [
+        'who are you',
+        'who you are',
+        'who r u',
+        'who are u',
+        'tell me about yourself',
+        'tell me about u',
+        'describe yourself',
+        'yourself',
+        'about you',
+        'introduce yourself',
+        'introduce',
+        'your background',
+        'background',
+      ],
+      priority: 20,
       reply:
         'Sandra Cai—markets and engineering background, independent research, and CS at NYU. Work and Research on this page are the overview.',
     },
     {
       keys: ['plurall', 'deepfake', 'founder', 'startup'],
+      priority: 25,
       reply: 'Plurall AI is a deepfake-detection product I built; more engineering work is on GitHub.',
     },
     {
       keys: ['pennapps', 'blockchain project', 'best blockchain'],
+      priority: 25,
       reply: 'At PennApps I shipped an AI + blockchain app that won Best Blockchain Project; code is on GitHub.',
     },
     {
+      keys: ['skills', 'tech stack', 'languages do you', 'python', 'typescript'],
+      priority: 15,
+      reply:
+        'Python is central to quant and research work (e.g. Vigil/Nuveaux); full-stack and systems work spans what is listed under Work and GitHub on this page.',
+    },
+    {
       keys: ['github', 'code', 'engineering', 'build'],
+      priority: 8,
       reply: 'Repos (papers, projects, tooling) are under Sandra-Cai on GitHub.',
     },
     {
       keys: ['passion', 'interest', 'focus', 'why finance'],
+      priority: 5,
       reply: 'I focus on where careful financial analysis meets solid engineering—in markets, research, and product.',
     },
     {
       keys: ['substack', 'writing', 'essay'],
+      priority: 5,
       reply: 'Essays on Substack (@caisandra); quant and macro threads also on LinkedIn and Medium.',
     },
     {
       keys: ['contact', 'email', 'reach', 'hire', 'collaborat'],
+      priority: 5,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,
     },
     {
       keys: ['resume', 'cv', 'résumé'],
+      priority: 10,
       reply: `I do not post a resume publicly. For recruiting or collaboration: ${EMAIL} or LinkedIn.`,
     },
   ];
@@ -155,6 +225,13 @@
     'Pick work, research, school, or a specific phrase from the page—I match against what is written here.',
     'Ask about a section (Track record, Research, Academic) or a company or project name you see above.',
   ];
+
+  /** Stable default so the same question always gets the same generic reply (not random). */
+  function defaultReplyIndex(q) {
+    let h = 0;
+    for (let i = 0; i < q.length; i++) h = (h * 31 + q.charCodeAt(i)) | 0;
+    return Math.abs(h) % DEFAULT_REPLIES.length;
+  }
 
   function normalize(s) {
     return s.toLowerCase().trim().replace(/\s+/g, ' ');
@@ -216,24 +293,36 @@
     }
 
     let best = null;
-    let bestScore = 0;
+    let bestTuple = [-1, -1, -1]; // score, maxKeyLen, priority — lexicographic tie-break
     for (const row of KNOWLEDGE) {
-      let score = 0;
+      let maxKeyLen = 0;
+      let matchCount = 0;
       for (const key of row.keys) {
-        if (q.includes(key)) score += key.length;
+        if (keyMatches(q, key)) {
+          matchCount++;
+          maxKeyLen = Math.max(maxKeyLen, key.length);
+        }
       }
-      if (score > bestScore) {
-        bestScore = score;
+      if (matchCount === 0) continue;
+      const pri = row.priority || 0;
+      const score = maxKeyLen * 1000 + pri * 10 + matchCount;
+      const tuple = [score, maxKeyLen, pri];
+      if (
+        tuple[0] > bestTuple[0] ||
+        (tuple[0] === bestTuple[0] && tuple[1] > bestTuple[1]) ||
+        (tuple[0] === bestTuple[0] && tuple[1] === bestTuple[1] && tuple[2] > bestTuple[2])
+      ) {
+        bestTuple = tuple;
         best = row.reply;
       }
     }
-    if (best && bestScore > 0) return best;
+    if (best) return best;
 
     if (/\bresearch\b/.test(q) && !/\bresearcher\b/.test(q)) {
       return REPLY_INDEPENDENT_RESEARCH;
     }
 
-    return DEFAULT_REPLIES[Math.floor(Math.random() * DEFAULT_REPLIES.length)];
+    return DEFAULT_REPLIES[defaultReplyIndex(q)];
   }
 
   const STORAGE_KEY = 'sandra-gpt-history-v1';
