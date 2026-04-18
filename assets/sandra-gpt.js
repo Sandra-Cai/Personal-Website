@@ -18,12 +18,20 @@
     return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
+  /** Cache word-boundary regexes (keys are static; avoids allocating on every question). */
+  const keyWordRegCache = new Map();
+
   function keyMatches(q, key) {
     const k = key.toLowerCase();
     if (/\s/.test(k) || /[^\x00-\x7F]/.test(k)) {
       return q.includes(k);
     }
-    return new RegExp('\\b' + escapeRegExp(k) + '\\b', 'i').test(q);
+    let re = keyWordRegCache.get(k);
+    if (!re) {
+      re = new RegExp('\\b' + escapeRegExp(k) + '\\b', 'i');
+      keyWordRegCache.set(k, re);
+    }
+    return re.test(q);
   }
 
   const KNOWLEDGE = [
@@ -123,6 +131,12 @@
       priority: 10,
       reply:
         'I take structured trading and markets work seriously—competitions, research writing, and related projects; pointers are on this page.',
+    },
+    {
+      keys: ['quantitative finance', 'quant finance', 'quant research', 'quant'],
+      priority: 18,
+      reply:
+        'Quant-style work shows up at Vigil/Nuveaux, in trading competitions, and in independent research—see Work and Research on this page.',
     },
     {
       keys: ['aerovironment', 'avav', 'equity pitch', 'pe-backed'],
@@ -234,12 +248,19 @@
   }
 
   function normalize(s) {
-    return s.toLowerCase().trim().replace(/\s+/g, ' ');
+    return s
+      .normalize('NFKC')
+      .replace(/[\u2018\u2019\u2032\u0060\u00B4]/g, "'")
+      .replace(/\u2013|\u2014/g, '-')
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, ' ');
   }
 
   function greetingReply(q) {
     const t = q.trim();
     if (/^(hi|hey|hello|yo|sup)[!?.]*$/i.test(t)) return true;
+    if (/^(hi|hey|hello)\s+there[!?.]*$/i.test(t)) return true;
     if (/^good (morning|afternoon|evening)[!?.]*$/i.test(t)) return true;
     return false;
   }
@@ -247,6 +268,16 @@
   function thanksReply(q) {
     const t = q.trim();
     if (/^(thanks|thank you|thx|ty|appreciate it)[!?.]*$/i.test(t)) return true;
+    return false;
+  }
+
+  function goodbyeReply(q) {
+    const t = q.trim();
+    if (
+      /^(bye|goodbye|good bye|see you|see ya|cya|later|goodnight|good night)[!?.]*$/i.test(t)
+    ) {
+      return true;
+    }
     return false;
   }
 
@@ -275,6 +306,10 @@
 
     if (thanksReply(q)) {
       return 'You are welcome. Ask another question whenever you like.';
+    }
+
+    if (goodbyeReply(q)) {
+      return 'Take care. You can come back to this box anytime.';
     }
 
     if (/^(what is this|what's this)\??$/.test(q)) {
