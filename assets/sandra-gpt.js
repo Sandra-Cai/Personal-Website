@@ -8,7 +8,7 @@
   const TAGLINE = 'Work, startups, trading comps, research, school, or say hi.';
 
   const REPLY_INDEPENDENT_RESEARCH =
-    'Independent work includes equity research, macro and AI writing, and open quant pieces. See Research on this page for the list.';
+    'Independent work spans equity research, macro and AI writing, and open quant work. The Research section on this page lists pieces and links.';
 
   /**
    * Multi-word keys use substring match; single-token keys use word boundaries to avoid
@@ -53,13 +53,13 @@
       ],
       priority: 35,
       reply:
-        'Short answers from notes on this site—not a live model. Ask about a topic from the tagline or something on the page.',
+        'Short answers from notes on this site—not a live language model. Ask about a topic from the tagline or something on the page.',
     },
     {
       keys: ['what should i ask', 'what can i ask', 'what to ask', 'how do i use this'],
       priority: 20,
       reply:
-        'Anything that fits the tagline—work, startups, trading, research, school—or a specific question about something on the page.',
+        'Anything that fits the tagline—work, startups, trading, research, school—or a pointed question about a section or project on the page.',
     },
     {
       keys: [
@@ -79,13 +79,13 @@
       keys: ['internship', 'internships'],
       priority: 22,
       reply:
-        'Roles have included quantitative research (Vigil Markets / Nuveaux), research at Microsoft Research Asia, engineering at JD.com, and founding work (Plurall AI). More context is in the Work and Research sections.',
+        'Roles have included quantitative research (Vigil Markets / Nuveaux), research at Microsoft Research Asia, engineering at JD.com, and founding work (Plurall AI). Work and Research on this page have the fuller story.',
     },
     {
       keys: ['four years', '4 years', 'work experience', 'years of experience', 'years of', 'career', 'track record'],
       priority: 15,
       reply:
-        'About four years across quant and markets work, institutional research, large-scale engineering, founding, and independent research. I also study CS at NYU—see Academic on this page.',
+        'Roughly four years across quant and markets work, institutional research, large-scale engineering, founding, and independent research. I also study CS at NYU—Academic on this page has the coursework detail.',
     },
     {
       keys: ['institutional', 'research & cloud', 'research and cloud'],
@@ -97,7 +97,7 @@
       keys: ['sandragpt', 'sandra gpt', 'this chat', 'this box'],
       priority: 32,
       reply:
-        'SandraGPT is a small on-page helper: keyword matches against notes from this site, not a live LLM. For details, read the line under the input box.',
+        'SandraGPT is a small on-page helper: it matches your question to notes from this site—no live LLM. The line under the input explains the behavior.',
     },
     {
       keys: ['vigil', 'nuveaux', 'quantitative researcher', 'clearinghouse', 'counterparty', 'underwriting', 'crypto trading volume'],
@@ -122,7 +122,7 @@
         'I am first on the Duke Fintech Trading Competition scoreboard under their risk-adjusted rules. The Research section links the live board.',
     },
     {
-      keys: ['phoenix', 'new york tech week', 'crypto strateg'],
+      keys: ['phoenix', 'new york tech week', 'crypto strateg', 'crypto strategy', 'crypto strategies'],
       priority: 30,
       reply: 'I won the Phoenix Trading Competition (crypto strategies) during New York Tech Week in 2023.',
     },
@@ -130,13 +130,13 @@
       keys: ['trade', 'trading', 'trader', 'paper trade'],
       priority: 10,
       reply:
-        'I take structured trading and markets work seriously—competitions, research writing, and related projects; pointers are on this page.',
+        'I take structured trading and markets work seriously—competitions, research writing, and related projects. Work and Research on this page point to specifics.',
     },
     {
       keys: ['quantitative finance', 'quant finance', 'quant research', 'quant'],
       priority: 18,
       reply:
-        'Quant-style work shows up at Vigil/Nuveaux, in trading competitions, and in independent research—see Work and Research on this page.',
+        'Quant-style work shows up at Vigil/Nuveaux, in trading competitions, and in independent research. Work and Research on this page cover each thread.',
     },
     {
       keys: ['aerovironment', 'avav', 'equity pitch', 'pe-backed'],
@@ -180,7 +180,6 @@
         'tell me about yourself',
         'tell me about u',
         'describe yourself',
-        'yourself',
         'about you',
         'introduce yourself',
         'introduce',
@@ -190,6 +189,23 @@
       priority: 20,
       reply:
         'Sandra Cai—markets and engineering background, independent research, and CS at NYU. Work and Research on this page are the overview.',
+    },
+    {
+      keys: [
+        'what is your name',
+        "what's your name",
+        'what is ur name',
+        'whats your name',
+        'your full name',
+        'call you',
+      ],
+      priority: 24,
+      reply: 'Sandra Cai. Work, Academic, and Research on this page fill in projects and school.',
+    },
+    {
+      keys: ['where are you', 'where do you live', 'where are you based', 'based in', 'which city', 'location'],
+      priority: 18,
+      reply: 'I study at NYU in New York. Academic on this page has the program detail.',
     },
     {
       keys: ['plurall', 'deepfake', 'founder', 'startup'],
@@ -202,15 +218,20 @@
       reply: 'At PennApps I shipped an AI + blockchain app that won Best Blockchain Project; code is on GitHub.',
     },
     {
-      keys: ['skills', 'tech stack', 'languages do you', 'python', 'typescript'],
+      keys: ['skills', 'tech stack', 'languages do you', 'python', 'typescript', 'machine learning', 'ml'],
       priority: 15,
       reply:
-        'Python is central to quant and research work (e.g. Vigil/Nuveaux); full-stack and systems work spans what is listed under Work and GitHub on this page.',
+        'Python is central to quant and research work (e.g. Vigil/Nuveaux); ML and full-stack work show up in projects listed under Work and GitHub on this page.',
     },
     {
       keys: ['github', 'code', 'engineering', 'build'],
       priority: 8,
       reply: 'Repos (papers, projects, tooling) are under Sandra-Cai on GitHub.',
+    },
+    {
+      keys: ['what projects', 'side project', 'portfolio', 'pet project', 'showcase'],
+      priority: 12,
+      reply: 'Highlighted work is under Work and Research; code and papers are linked from GitHub (Sandra-Cai).',
     },
     {
       keys: ['passion', 'interest', 'focus', 'why finance'],
@@ -238,6 +259,7 @@
     'Try a topic from the tagline or ask about something on the page.',
     'Pick work, research, school, or a specific phrase from the page—I match against what is written here.',
     'Ask about a section (Track record, Research, Academic) or a company or project name you see above.',
+    'Name a company, paper title, or competition from the page and I can usually answer from that note.',
   ];
 
   /** Stable default so the same question always gets the same generic reply (not random). */
@@ -301,11 +323,11 @@
     if (!q) return 'Type a question above.';
 
     if (greetingReply(q)) {
-      return 'Hello. Ask a question whenever you are ready.';
+      return 'Hello—ask a question whenever you are ready.';
     }
 
     if (thanksReply(q)) {
-      return 'You are welcome. Ask another question whenever you like.';
+      return 'You are welcome—ask another whenever you like.';
     }
 
     if (goodbyeReply(q)) {
@@ -313,7 +335,7 @@
     }
 
     if (/^(what is this|what's this)\??$/.test(q)) {
-      return 'Short answers from notes on this site—not a live model. Ask about a topic from the tagline or something on the page.';
+      return 'Short answers from notes on this site—not a live language model. Ask about a topic from the tagline or something on the page.';
     }
 
     if (
