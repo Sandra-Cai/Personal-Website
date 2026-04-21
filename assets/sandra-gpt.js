@@ -208,6 +208,11 @@
       reply: 'I study at NYU in New York. Academic on this page has the program detail.',
     },
     {
+      keys: ['open to work', 'available', 'availability', 'hiring', 'recruiting', 'recruiter'],
+      priority: 16,
+      reply: `For recruiting or collaboration, reach out at ${EMAIL} or LinkedIn with role scope and timing.`,
+    },
+    {
       keys: ['plurall', 'deepfake', 'founder', 'startup'],
       priority: 25,
       reply: 'Plurall AI is a deepfake-detection product I built; more engineering work is on GitHub.',
@@ -303,6 +308,18 @@
     return false;
   }
 
+  /** Matches casual well-being checks like "how are you". */
+  function looksLikeHowAreYou(q) {
+    return (
+      /\bhow are you\b/.test(q) ||
+      /\bhow r u\b/.test(q) ||
+      /\bhow are u\b/.test(q) ||
+      /\bhow are you doing\b/.test(q) ||
+      /\bhow's it going\b/.test(q) ||
+      /\bhow is it going\b/.test(q)
+    );
+  }
+
   /** Matches "what do you do?" and close variants (keyboard typos like dp for do, u for you). */
   function looksLikeWhatDoYouDo(q) {
     return (
@@ -332,6 +349,10 @@
 
     if (goodbyeReply(q)) {
       return 'Take care. You can come back to this box anytime.';
+    }
+
+    if (looksLikeHowAreYou(q)) {
+      return 'Doing well—thanks for asking. Ask about work, research, trading comps, school, or something specific on this page.';
     }
 
     if (/^(what is this|what's this)\??$/.test(q)) {
