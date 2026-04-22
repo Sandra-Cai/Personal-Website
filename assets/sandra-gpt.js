@@ -406,6 +406,7 @@
   const STORAGE_KEY = 'sandra-gpt-history-v1';
   const SESSION_KEY = 'sandra-gpt-session';
   const MAX_TURNS = 80;
+  const MAX_QUESTION_CHARS = 280;
 
   const form = document.getElementById('gpt-form');
   const input = document.getElementById('gpt-input');
@@ -441,10 +442,15 @@
 
   function saveHistory(entries) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries.slice(-MAX_TURNS)));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(trimTurns(entries)));
     } catch {
       /* quota or private mode */
     }
+  }
+
+  function trimTurns(entries) {
+    if (!Array.isArray(entries)) return [];
+    return entries.slice(-MAX_TURNS);
   }
 
   /**
@@ -614,6 +620,20 @@
     sidebarList.appendChild(li);
   }
 
+  function getRecentQuestions(limit) {
+    const out = [];
+    const seen = new Set();
+    const entries = trimTurns(loadHistory());
+    for (let i = entries.length - 1; i >= 0; i--) {
+      const q = entries[i] && typeof entries[i].q === 'string' ? entries[i].q.trim() : '';
+      if (!q || seen.has(q)) continue;
+      seen.add(q);
+      out.push(q);
+      if (out.length >= limit) break;
+    }
+    return out;
+  }
+
   async function clearAllHistory() {
     if (
       !window.confirm(
@@ -643,14 +663,15 @@
     sidebarList.innerHTML = '';
 
     if (!apiDisabled && remote && remote.length > 0) {
-      for (const row of remote) {
+      const recentRemote = trimTurns(remote);
+      for (const row of recentRemote) {
         if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
         const a = typeof row.a === 'string' ? row.a : '';
         renderTurn(row.id, row.q, a, false);
         addSidebarEntry(row.id, row.q);
       }
       saveHistory(
-        remote.map((r) => ({
+        recentRemote.map((r) => ({
           id: r.id,
           q: r.q,
           a: r.a,
@@ -661,7 +682,7 @@
       return;
     }
 
-    const entries = loadHistory();
+    const entries = trimTurns(loadHistory());
     for (const row of entries) {
       if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
       const a = typeof row.a === 'string' ? row.a : '';
@@ -686,6 +707,14 @@
     if (submitBusy) return;
     const q = input.value.trim();
     if (!q) return;
+    if (q.length > MAX_QUESTION_CHARS) {
+      const turnId = newTurnId();
+      const msg = `Please keep questions under ${MAX_QUESTION_CHARS} characters.`;
+      renderTurn(turnId, q, msg);
+      addSidebarEntry(turnId, q);
+      input.value = '';
+      return;
+    }
 
     submitBusy = true;
     window.setTimeout(() => {
@@ -739,10 +768,41 @@
   if (form && input && logEl) {
     void restoreHistory();
     form.addEventListener('submit', handleSubmit);
+    let recallIndex = -1;
+    let draftBeforeRecall = '';
     input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        const questions = getRecentQuestions(20);
+        if (!questions.length) return;
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (recallIndex === -1) {
+            draftBeforeRecall = input.value;
+            recallIndex = 0;
+          } else {
+            recallIndex = Math.min(recallIndex + 1, questions.length - 1);
+          }
+          input.value = questions[recallIndex] || '';
+          return;
+        }
+        e.preventDefault();
+        if (recallIndex <= 0) {
+          recallIndex = -1;
+          input.value = draftBeforeRecall;
+        } else {
+          recallIndex -= 1;
+          input.value = questions[recallIndex] || '';
+        }
+        return;
+      }
       if (!(e.ctrlKey || e.metaKey) || e.key !== 'Enter') return;
       e.preventDefault();
       form.requestSubmit();
+    });
+    input.addEventListener('input', () => {
+      if (recallIndex !== -1) {
+        recallIndex = -1;
+      }
     });
   }
 
