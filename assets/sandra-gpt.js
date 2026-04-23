@@ -434,7 +434,7 @@
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return [];
       const data = JSON.parse(raw);
-      return Array.isArray(data) ? data : [];
+      return normalizeTurns(data);
     } catch {
       return [];
     }
@@ -451,6 +451,21 @@
   function trimTurns(entries) {
     if (!Array.isArray(entries)) return [];
     return entries.slice(-MAX_TURNS);
+  }
+
+  function normalizeTurns(entries) {
+    if (!Array.isArray(entries)) return [];
+    const out = [];
+    for (const row of entries) {
+      if (!row || typeof row !== 'object') continue;
+      const q = typeof row.q === 'string' ? row.q.trim() : '';
+      if (!q) continue;
+      const a = typeof row.a === 'string' ? row.a : '';
+      const id = typeof row.id === 'string' && row.id ? row.id : newTurnId();
+      const t = typeof row.t === 'number' ? row.t : Date.now();
+      out.push({ id, q, a, t });
+    }
+    return trimTurns(out);
   }
 
   /**
@@ -492,6 +507,8 @@
       syncStatusEl.textContent =
         detail === 'rate'
           ? 'Server busy; saved in browser only'
+          : detail === 'partial'
+            ? 'Partially synced; retrying later'
           : 'Couldn’t sync; saved in browser only';
       syncStatusEl.classList.add('gpt-sync-status--warn');
     } else {
@@ -524,19 +541,30 @@
    * @returns {Promise<boolean>} true if at least one turn was uploaded
    */
   async function syncUnsavedTurnsToServer(sessionId) {
-    const snap = loadHistory();
+    const snap = normalizeTurns(loadHistory());
     if (!snap.length) return false;
     const remote = await fetchRemoteHistory(sessionId);
     if (remote.apiDisabled || !remote.turns) return false;
     const have = new Set(remote.turns.map((t) => t.id));
-    let didAny = false;
+    let uploadedAny = false;
+    let pendingFailures = false;
     for (const row of snap) {
       if (!row || typeof row.id !== 'string') continue;
       if (have.has(row.id)) continue;
-      didAny = true;
-      await postTurnRemote(sessionId, row.id, row.q, row.a);
+      try {
+        await postTurnRemote(sessionId, row.id, row.q, row.a);
+        uploadedAny = true;
+      } catch (err) {
+        if (err && err.message === 'rate_limited') {
+          throw err;
+        }
+        pendingFailures = true;
+      }
     }
-    return didAny;
+    if (pendingFailures) {
+      throw new Error('partial_sync_failed');
+    }
+    return uploadedAny;
   }
 
   async function clearRemote(sessionId) {
@@ -620,10 +648,24 @@
     sidebarList.appendChild(li);
   }
 
+  function pruneRenderedHistoryUI() {
+    if (!logEl || !sidebarList) return;
+    while (logEl.children.length > MAX_TURNS) {
+      const oldTurn = logEl.firstElementChild;
+      if (!oldTurn) break;
+      logEl.removeChild(oldTurn);
+    }
+    while (sidebarList.children.length > MAX_TURNS) {
+      const oldSidebar = sidebarList.firstElementChild;
+      if (!oldSidebar) break;
+      sidebarList.removeChild(oldSidebar);
+    }
+  }
+
   function getRecentQuestions(limit) {
     const out = [];
     const seen = new Set();
-    const entries = trimTurns(loadHistory());
+    const entries = normalizeTurns(loadHistory());
     for (let i = entries.length - 1; i >= 0; i--) {
       const q = entries[i] && typeof entries[i].q === 'string' ? entries[i].q.trim() : '';
       if (!q || seen.has(q)) continue;
@@ -663,7 +705,7 @@
     sidebarList.innerHTML = '';
 
     if (!apiDisabled && remote && remote.length > 0) {
-      const recentRemote = trimTurns(remote);
+      const recentRemote = normalizeTurns(remote);
       for (const row of recentRemote) {
         if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
         const a = typeof row.a === 'string' ? row.a : '';
@@ -682,7 +724,7 @@
       return;
     }
 
-    const entries = trimTurns(loadHistory());
+    const entries = normalizeTurns(loadHistory());
     for (const row of entries) {
       if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
       const a = typeof row.a === 'string' ? row.a : '';
@@ -696,8 +738,14 @@
         .then((did) => {
           if (did) setSyncStatus('server');
         })
-        .catch(() => {
-          setSyncStatus('warn');
+        .catch((err) => {
+          if (err && err.message === 'partial_sync_failed') {
+            setSyncStatus('warn', 'partial');
+          } else if (err && err.message === 'rate_limited') {
+            setSyncStatus('warn', 'rate');
+          } else {
+            setSyncStatus('warn');
+          }
         });
     }
   }
@@ -737,8 +785,9 @@
 
     renderTurn(turnId, q, answerText);
     addSidebarEntry(turnId, q);
+    pruneRenderedHistoryUI();
 
-    const entries = loadHistory();
+    const entries = normalizeTurns(loadHistory());
     entries.push({ id: turnId, q, a: answerText, t: Date.now() });
     saveHistory(entries);
 
@@ -766,6 +815,7 @@
   }
 
   if (form && input && logEl) {
+    input.setAttribute('maxlength', String(MAX_QUESTION_CHARS));
     void restoreHistory();
     form.addEventListener('submit', handleSubmit);
     let recallIndex = -1;
@@ -822,8 +872,14 @@
         .then((did) => {
           if (did) setSyncStatus('server');
         })
-        .catch(() => {
-          setSyncStatus('warn');
+        .catch((err) => {
+          if (err && err.message === 'partial_sync_failed') {
+            setSyncStatus('warn', 'partial');
+          } else if (err && err.message === 'rate_limited') {
+            setSyncStatus('warn', 'rate');
+          } else {
+            setSyncStatus('warn');
+          }
         });
     }, 450);
   });
