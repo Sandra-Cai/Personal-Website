@@ -516,6 +516,16 @@
     }
   }
 
+  function handleSyncError(err) {
+    if (err && err.message === 'partial_sync_failed') {
+      setSyncStatus('warn', 'partial');
+    } else if (err && err.message === 'rate_limited') {
+      setSyncStatus('warn', 'rate');
+    } else {
+      setSyncStatus('warn');
+    }
+  }
+
   async function postTurnRemote(sessionId, id, q, a) {
     const payload = JSON.stringify({ sessionId, id, q, a });
     for (let attempt = 0; attempt < 2; attempt++) {
@@ -676,6 +686,18 @@
     return out;
   }
 
+  function shouldHandleRecallKey(e, field) {
+    if (!field) return false;
+    if (typeof field.selectionStart !== 'number' || typeof field.selectionEnd !== 'number') {
+      return true;
+    }
+    // Respect normal caret movement unless the cursor is at the boundary.
+    if (field.selectionStart !== field.selectionEnd) return false;
+    if (e.key === 'ArrowUp') return field.selectionStart === 0;
+    if (e.key === 'ArrowDown') return field.selectionStart === field.value.length;
+    return false;
+  }
+
   async function clearAllHistory() {
     if (
       !window.confirm(
@@ -738,15 +760,7 @@
         .then((did) => {
           if (did) setSyncStatus('server');
         })
-        .catch((err) => {
-          if (err && err.message === 'partial_sync_failed') {
-            setSyncStatus('warn', 'partial');
-          } else if (err && err.message === 'rate_limited') {
-            setSyncStatus('warn', 'rate');
-          } else {
-            setSyncStatus('warn');
-          }
-        });
+        .catch(handleSyncError);
     }
   }
 
@@ -822,6 +836,7 @@
     let draftBeforeRecall = '';
     input.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        if (!shouldHandleRecallKey(e, input)) return;
         const questions = getRecentQuestions(20);
         if (!questions.length) return;
         if (e.key === 'ArrowUp') {
@@ -872,15 +887,7 @@
         .then((did) => {
           if (did) setSyncStatus('server');
         })
-        .catch((err) => {
-          if (err && err.message === 'partial_sync_failed') {
-            setSyncStatus('warn', 'partial');
-          } else if (err && err.message === 'rate_limited') {
-            setSyncStatus('warn', 'rate');
-          } else {
-            setSyncStatus('warn');
-          }
-        });
+        .catch(handleSyncError);
     }, 450);
   });
 
