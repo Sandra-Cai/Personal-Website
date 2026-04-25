@@ -88,6 +88,36 @@
         'Roughly four years across quant and markets work, institutional research, large-scale engineering, founding, and independent research. I also study CS at NYU—Academic on this page has the coursework detail.',
     },
     {
+      keys: [
+        'focus areas',
+        'markets and quant',
+        'ai and systems',
+        'what do you focus on',
+        'what are your focus areas',
+      ],
+      priority: 27,
+      reply:
+        'Core focus areas are markets and quant, research, and AI/systems engineering. The site tracks work where those three overlap.',
+    },
+    {
+      keys: ['standard of proof', 'one standard of proof', 'rigor', 'rigorous', 'show the work'],
+      priority: 34,
+      reply:
+        'The working principle is one standard of proof: claims need data, mechanism, and a path to being wrong, in both markets and engineering.',
+    },
+    {
+      keys: ['systems and incentives', 'microstructure and risk', 'microstructure and infrastructure', 'incentives'],
+      priority: 29,
+      reply:
+        'A key theme is systems and incentives: microstructure, risk, and infrastructure should be reasoned about with the same clarity in research and code.',
+    },
+    {
+      keys: ['ship and iterate', 'iterate', 'shipping philosophy', 'build philosophy', 'research informs builds'],
+      priority: 24,
+      reply:
+        'Research should inform builds, and builds should stress-test research; publishing work in public keeps that loop honest.',
+    },
+    {
       keys: ['institutional', 'research & cloud', 'research and cloud'],
       priority: 28,
       reply:
@@ -227,6 +257,19 @@
       priority: 42,
       reply:
         'I am building Plurall AI, a deepfake-detection company focused on trust and verification for AI-generated media.',
+    },
+    {
+      keys: [
+        'why this website',
+        'why this site',
+        'purpose of this website',
+        'why did you build this',
+        'private school',
+        '600,000 education',
+      ],
+      priority: 28,
+      reply:
+        'The site is meant to share what I learned from a high-cost private-school path in a public, practical way through projects, research, and operating experience.',
     },
     {
       keys: ['pennapps', 'blockchain project', 'best blockchain'],
@@ -378,7 +421,7 @@
 
     // "What do you do?" — include common typos (e.g. dp for do) and casual phrasing; not a live model so no spellcheck
     if (looksLikeWhatDoYouDo(q)) {
-      return "I'm the founder of Plurall AI. I also study CS at NYU; markets, research, and other engineering work are in Work and Research on this page.";
+      return "I am building Plurall AI and I work across quant research, markets, and systems engineering while studying CS at NYU; Work, Research, and Academic on this page break that down.";
     }
 
     let best = null;
@@ -419,6 +462,7 @@
   const MAX_TURNS = 80;
   const MAX_QUESTION_CHARS = 280;
   const DUPLICATE_SUBMIT_WINDOW_MS = 1500;
+  const RESET_HISTORY_ON_LOAD = true;
 
   const form = document.getElementById('gpt-form');
   const input = document.getElementById('gpt-input');
@@ -853,6 +897,14 @@
   }
 
   if (form && input && logEl) {
+    if (RESET_HISTORY_ON_LOAD) {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(SESSION_KEY);
+      } catch {
+        /* ignore */
+      }
+    }
     input.setAttribute('maxlength', String(MAX_QUESTION_CHARS));
     void restoreHistory();
     form.addEventListener('submit', handleSubmit);
