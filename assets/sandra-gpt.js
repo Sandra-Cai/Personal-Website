@@ -213,9 +213,20 @@
       reply: `For recruiting or collaboration, reach out at ${EMAIL} or LinkedIn with role scope and timing.`,
     },
     {
-      keys: ['plurall', 'deepfake', 'founder', 'startup'],
-      priority: 25,
-      reply: 'Plurall AI is a deepfake-detection product I built; more engineering work is on GitHub.',
+      keys: [
+        'plurall',
+        'plurall ai',
+        'deepfake',
+        'founder',
+        'founding',
+        'what are you founding',
+        'what are you building',
+        'what are you working on',
+        'startup',
+      ],
+      priority: 42,
+      reply:
+        'I am building Plurall AI, a deepfake-detection company focused on trust and verification for AI-generated media.',
     },
     {
       keys: ['pennapps', 'blockchain project', 'best blockchain'],
