@@ -714,10 +714,10 @@ a:focus-visible {
   max-width: var(--max);
   margin: 0 auto;
   font-family: var(--font);
-  font-weight: 600;
-  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
-  letter-spacing: -0.03em;
-  line-height: 1.35;
+  font-weight: 500;
+  font-size: clamp(0.9375rem, 1.8vw, 1.125rem);
+  letter-spacing: -0.015em;
+  line-height: 1.45;
   text-align: center;
   color: var(--text-dim);
 }
@@ -729,6 +729,49 @@ a:focus-visible {
 
 .ba-strip-text a {
   color: var(--accent);
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  background: rgba(34, 211, 238, 0.08);
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.ba-strip-text a:hover {
+  color: #9befff;
+  border-color: rgba(34, 211, 238, 0.4);
+  background: rgba(34, 211, 238, 0.14);
+  text-decoration: none;
+}
+
+.ba-strip-text a:focus-visible {
+  outline: 2px solid rgba(34, 211, 238, 0.75);
+  outline-offset: 2px;
+}
+
+.ba-strip--dim .ba-strip-text {
+  max-width: 64rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem 0.375rem;
+  color: var(--text-faint);
+}
+
+.ba-strip--dim .ba-strip-text a {
+  font-size: 0.95em;
+}
+
+@media (max-width: 640px) {
+  .ba-strip--dim {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .ba-strip--dim .ba-strip-text {
+    gap: 0.4rem 0.3rem;
+  }
 }
 
 /* Sections */
