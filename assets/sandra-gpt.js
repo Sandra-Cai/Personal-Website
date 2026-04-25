@@ -407,6 +407,7 @@
   const SESSION_KEY = 'sandra-gpt-session';
   const MAX_TURNS = 80;
   const MAX_QUESTION_CHARS = 280;
+  const DUPLICATE_SUBMIT_WINDOW_MS = 1500;
 
   const form = document.getElementById('gpt-form');
   const input = document.getElementById('gpt-input');
@@ -415,6 +416,8 @@
   const clearBtn = document.getElementById('gpt-clear-history');
   const syncStatusEl = document.getElementById('gpt-sync-status');
   let submitBusy = false;
+  let lastSubmittedCanonical = '';
+  let lastSubmittedAt = 0;
 
   function getOrCreateSessionId() {
     try {
@@ -678,8 +681,10 @@
     const entries = normalizeTurns(loadHistory());
     for (let i = entries.length - 1; i >= 0; i--) {
       const q = entries[i] && typeof entries[i].q === 'string' ? entries[i].q.trim() : '';
-      if (!q || seen.has(q)) continue;
-      seen.add(q);
+      if (!q) continue;
+      const canonical = normalize(q);
+      if (!canonical || seen.has(canonical)) continue;
+      seen.add(canonical);
       out.push(q);
       if (out.length >= limit) break;
     }
@@ -769,6 +774,12 @@
     if (submitBusy) return;
     const q = input.value.trim();
     if (!q) return;
+    const canonicalQ = normalize(q);
+    const now = Date.now();
+    if (canonicalQ === lastSubmittedCanonical && now - lastSubmittedAt < DUPLICATE_SUBMIT_WINDOW_MS) {
+      input.focus();
+      return;
+    }
     if (q.length > MAX_QUESTION_CHARS) {
       const turnId = newTurnId();
       const msg = `Please keep questions under ${MAX_QUESTION_CHARS} characters.`;
@@ -785,6 +796,8 @@
 
     const turnId = newTurnId();
     const answerText = answerFor(q);
+    lastSubmittedCanonical = canonicalQ;
+    lastSubmittedAt = now;
     input.value = '';
 
     if (form) {
