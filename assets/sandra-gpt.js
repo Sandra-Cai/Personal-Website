@@ -97,25 +97,25 @@
       ],
       priority: 27,
       reply:
-        'Core focus areas are markets and quant, research, and AI/systems engineering. The site tracks work where those three overlap.',
+        'Core focus areas are markets/quant, independent research, and AI/systems engineering. This site highlights projects where those three overlap.',
     },
     {
       keys: ['standard of proof', 'one standard of proof', 'rigor', 'rigorous', 'show the work'],
       priority: 34,
       reply:
-        'The working principle is one standard of proof: claims need data, mechanism, and a path to being wrong, in both markets and engineering.',
+        'The principle is one standard of proof: every claim should include data, a mechanism, and a way to falsify it, in both markets and engineering.',
     },
     {
       keys: ['systems and incentives', 'microstructure and risk', 'microstructure and infrastructure', 'incentives'],
       priority: 29,
       reply:
-        'A key theme is systems and incentives: microstructure, risk, and infrastructure should be reasoned about with the same clarity in research and code.',
+        'A core theme is systems and incentives: microstructure, risk, and infrastructure should be reasoned about with the same precision in research and in code.',
     },
     {
       keys: ['ship and iterate', 'iterate', 'shipping philosophy', 'build philosophy', 'research informs builds'],
       priority: 24,
       reply:
-        'Research should inform builds, and builds should stress-test research; publishing work in public keeps that loop honest.',
+        'Research should inform builds, and builds should stress-test research; shipping in public keeps that loop honest.',
     },
     {
       keys: ['institutional', 'research & cloud', 'research and cloud'],
@@ -127,29 +127,29 @@
       keys: ['sandragpt', 'sandra gpt', 'this chat', 'this box'],
       priority: 32,
       reply:
-        'SandraGPT is a small on-page helper: it matches your question to notes from this site—no live LLM. The line under the input explains the behavior.',
+        'SandraGPT is a lightweight on-page helper that matches your question to notes from this site; it is not a live LLM.',
     },
     {
       keys: ['vigil', 'nuveaux', 'quantitative researcher', 'clearinghouse', 'counterparty', 'underwriting', 'crypto trading volume'],
       priority: 40,
       reply:
-        'At Vigil Markets (Nuveaux Trading) I focused on Python-based crypto volume analysis, counterparty risk, and clearinghouse-related analytics.',
+        'At Vigil Markets (Nuveaux Trading), I focused on Python-based crypto volume analysis, counterparty risk, and clearinghouse analytics.',
     },
     {
       keys: ['microsoft research', 'msra', 'microsoft research asia'],
       priority: 40,
-      reply: 'At Microsoft Research Asia I worked on blockchain-related financial research connecting protocols to market and institutional questions.',
+      reply: 'At Microsoft Research Asia, I worked on blockchain-finance research connecting protocol design to market and institutional questions.',
     },
     {
       keys: ['jd.com', 'jdcom', 'private cloud'],
       priority: 35,
-      reply: 'At JD.com I built private cloud infrastructure across low-level systems through application-scale concerns.',
+      reply: 'At JD.com, I built private-cloud infrastructure from low-level systems work through application-scale concerns.',
     },
     {
       keys: ['duke fintech', 'duke', 'fintech trading competition', 'scoreboard'],
       priority: 30,
       reply:
-        'I am first on the Duke Fintech Trading Competition scoreboard under their risk-adjusted rules. The Research section links the live board.',
+        'I am ranked first on the Duke Fintech Trading Competition scoreboard under their risk-adjusted rules; the Research section links the live board.',
     },
     {
       keys: ['phoenix', 'new york tech week', 'crypto strateg', 'crypto strategy', 'crypto strategies'],
@@ -188,12 +188,12 @@
     {
       keys: ['chip war', 'ai performance', 'supply chain', 'geopolitical', 'oscar', 'hawkish', 'dovish'],
       priority: 12,
-      reply: 'I have Medium pieces on AI and macro; the profile is linked from this page.',
+      reply: 'I have Medium pieces on AI and macro themes; the profile is linked from this page.',
     },
     {
       keys: ['medium', 'linkedin', 'macro', 'macroeconomic'],
       priority: 8,
-      reply: 'Longer threads are on LinkedIn and Medium; Substack is @caisandra. Links are in the header and strips.',
+      reply: 'Longer threads are on LinkedIn and Medium; Substack is @caisandra. Links are in the header and social strips.',
     },
     {
       keys: ['school', 'nyu', 'major', 'minor', 'degree', 'bemet', 'bemt', 'mathematics minor'],
@@ -240,7 +240,7 @@
     {
       keys: ['open to work', 'available', 'availability', 'hiring', 'recruiting', 'recruiter'],
       priority: 16,
-      reply: `For recruiting or collaboration, reach out at ${EMAIL} or LinkedIn with role scope and timing.`,
+      reply: `For recruiting or collaboration, reach out at ${EMAIL} or LinkedIn with role scope, timeline, and context.`,
     },
     {
       keys: [
@@ -249,9 +249,12 @@
         'deepfake',
         'founder',
         'founding',
+        'found',
         'what are you founding',
         'what are you building',
         'what are you working on',
+        'what do you found',
+        'what did you found',
         'startup',
       ],
       priority: 42,
@@ -315,9 +318,9 @@
   ];
 
   const DEFAULT_REPLIES = [
-    'Try a topic from the tagline or ask about something on the page.',
-    'Pick work, research, school, or a specific phrase from the page—I match against what is written here.',
-    'Ask about a section (Track record, Research, Academic) or a company or project name you see above.',
+    'Try a topic from the tagline, or ask about something specific on the page.',
+    'Ask about Work, Research, or Academic, or use a specific phrase you see on the site.',
+    'Try a section name (Track record, Research, Academic) or a company/project listed above.',
     'Name a company, paper title, or competition from the page and I can usually answer from that note.',
   ];
 
@@ -379,6 +382,9 @@
     return (
       /\bwhat do you (do|dp|od)\b/.test(q) ||
       /\bwhat do u (do|dp|od)\b/.test(q) ||
+      /\bwhat do you found\b/.test(q) ||
+      /\bwhat do u found\b/.test(q) ||
+      /\bwhat did you found\b/.test(q) ||
       /\bwhat you do\b/.test(q) ||
       /\bwhat's your job\b/.test(q) ||
       /\bwhat is your job\b/.test(q) ||
@@ -394,11 +400,11 @@
     if (!q) return 'Type a question above.';
 
     if (greetingReply(q)) {
-      return 'Hello—ask a question whenever you are ready.';
+      return 'Hi - ask a question whenever you are ready.';
     }
 
     if (thanksReply(q)) {
-      return 'You are welcome—ask another whenever you like.';
+      return 'You are welcome - ask another whenever you like.';
     }
 
     if (goodbyeReply(q)) {
@@ -406,22 +412,22 @@
     }
 
     if (looksLikeHowAreYou(q)) {
-      return 'Doing well—thanks for asking. Ask about work, research, trading comps, school, or something specific on this page.';
+      return 'Doing well, thanks for asking. Ask about work, research, trading competitions, school, or anything specific on this page.';
     }
 
     if (/^(what is this|what's this)\??$/.test(q)) {
-      return 'Short answers from notes on this site—not a live language model. Ask about a topic from the tagline or something on the page.';
+      return 'Short answers from notes on this site - not a live language model. Ask about a topic from the tagline or anything listed on the page.';
     }
 
     if (
       /\bwhat do you do for fun\b|\bfor fun\b|\bhobbies\b|\bwhat do you do in your (free|spare) time\b/.test(q)
     ) {
-      return 'Reading, writing on markets and tech, and trading-style competitions when time allows.';
+      return 'Reading, writing about markets and tech, and joining trading-style competitions when time allows.';
     }
 
     // "What do you do?" — include common typos (e.g. dp for do) and casual phrasing; not a live model so no spellcheck
     if (looksLikeWhatDoYouDo(q)) {
-      return "I am building Plurall AI and I work across quant research, markets, and systems engineering while studying CS at NYU; Work, Research, and Academic on this page break that down.";
+      return 'I am building Plurall AI while working across quant research, markets, and systems engineering, and studying CS at NYU; the Work, Research, and Academic sections break this down.';
     }
 
     let best = null;
