@@ -323,6 +323,17 @@
     'Try a section name (Track record, Research, Academic) or a company/project listed above.',
     'Name a company, paper title, or competition from the page and I can usually answer from that note.',
   ];
+  const SUGGESTED_TOPICS = [
+    'Plurall AI',
+    'Vigil Markets / Nuveaux',
+    'Microsoft Research Asia',
+    'JD.com private cloud',
+    'Duke Fintech competition',
+    'Phoenix trading competition',
+    'AeroVironment thesis',
+    'Jane Street India ban autopsy',
+    'NYU academics',
+  ];
 
   /** Stable default so the same question always gets the same generic reply (not random). */
   function defaultReplyIndex(q) {
@@ -339,6 +350,38 @@
       .toLowerCase()
       .trim()
       .replace(/\s+/g, ' ');
+  }
+
+  function normalizeToTokens(s) {
+    return normalize(s)
+      .replace(/[^a-z0-9\s]/g, ' ')
+      .split(' ')
+      .filter(Boolean);
+  }
+
+  /**
+   * Pick a few relevant site topics for unmatched questions using token overlap.
+   * This keeps fallback answers specific without pretending to know unknown facts.
+   */
+  function suggestTopicsFor(q) {
+    const qTokens = new Set(normalizeToTokens(q));
+    if (!qTokens.size) return [];
+
+    const scored = SUGGESTED_TOPICS.map((topic) => {
+      const topicTokens = normalizeToTokens(topic);
+      let overlap = 0;
+      for (const token of topicTokens) {
+        if (qTokens.has(token)) overlap++;
+      }
+      return { topic, score: overlap };
+    })
+      .filter((row) => row.score > 0)
+      .sort((a, b) => b.score - a.score || a.topic.localeCompare(b.topic))
+      .slice(0, 3)
+      .map((row) => row.topic);
+
+    if (scored.length) return scored;
+    return SUGGESTED_TOPICS.slice(0, 3);
   }
 
   function greetingReply(q) {
@@ -460,7 +503,10 @@
       return REPLY_INDEPENDENT_RESEARCH;
     }
 
-    return DEFAULT_REPLIES[defaultReplyIndex(q)];
+    const fallback = DEFAULT_REPLIES[defaultReplyIndex(q)];
+    const suggestions = suggestTopicsFor(q);
+    if (!suggestions.length) return fallback;
+    return `${fallback} Try asking about: ${suggestions.join(', ')}.`;
   }
 
   const STORAGE_KEY = 'sandra-gpt-history-v1';
