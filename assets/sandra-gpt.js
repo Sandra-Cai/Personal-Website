@@ -386,7 +386,16 @@ return Math.abs(h) % SUGGESTED_TOPICS.length;
       .slice(0, 3)
       .map((row) => row.topic);
 
-    if (scored.length) return scored;
+if (scored.length >= 3) return scored;
+if (scored.length > 0) {
+const start = topicStartIndexFor(q);
+const extra = [];
+for (let i = 0; i < SUGGESTED_TOPICS.length && scored.length + extra.length < 3; i++) {
+const topic = SUGGESTED_TOPICS[(start + i) % SUGGESTED_TOPICS.length];
+if (!scored.includes(topic) && !extra.includes(topic)) extra.push(topic);
+}
+return scored.concat(extra);
+}
 const start = topicStartIndexFor(q);
 return Array.from({ length: 3 }, (_, i) => SUGGESTED_TOPICS[(start + i) % SUGGESTED_TOPICS.length]);
   }
