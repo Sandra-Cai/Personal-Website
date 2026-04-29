@@ -359,6 +359,12 @@
       .filter(Boolean);
   }
 
+function topicStartIndexFor(q) {
+let h = 0;
+for (let i = 0; i < q.length; i++) h = (h * 33 + q.charCodeAt(i)) | 0;
+return Math.abs(h) % SUGGESTED_TOPICS.length;
+}
+
   /**
    * Pick a few relevant site topics for unmatched questions using token overlap.
    * This keeps fallback answers specific without pretending to know unknown facts.
@@ -381,7 +387,8 @@
       .map((row) => row.topic);
 
     if (scored.length) return scored;
-    return SUGGESTED_TOPICS.slice(0, 3);
+const start = topicStartIndexFor(q);
+return Array.from({ length: 3 }, (_, i) => SUGGESTED_TOPICS[(start + i) % SUGGESTED_TOPICS.length]);
   }
 
   function greetingReply(q) {
