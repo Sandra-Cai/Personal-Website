@@ -203,6 +203,23 @@
     },
     {
       keys: [
+        'coursework',
+        'what classes',
+        'classes do you',
+        'courses you take',
+        'studying what',
+        'nlp',
+        'operating systems',
+        'computer security',
+        'deep learning class',
+        'software engineering class',
+      ],
+      priority: 14,
+      reply:
+        'NYU CS includes algorithms, ML, deep learning, NLP, operating systems, software engineering, and computer security; Academic on this page summarizes the program.',
+    },
+    {
+      keys: [
         'who are you',
         'who you are',
         'who r u',
@@ -359,11 +376,11 @@
       .filter(Boolean);
   }
 
-function topicStartIndexFor(q) {
-let h = 0;
-for (let i = 0; i < q.length; i++) h = (h * 33 + q.charCodeAt(i)) | 0;
-return Math.abs(h) % SUGGESTED_TOPICS.length;
-}
+  function topicStartIndexFor(q) {
+    let h = 0;
+    for (let i = 0; i < q.length; i++) h = (h * 33 + q.charCodeAt(i)) | 0;
+    return Math.abs(h) % SUGGESTED_TOPICS.length;
+  }
 
   /**
    * Pick a few relevant site topics for unmatched questions using token overlap.
@@ -386,18 +403,18 @@ return Math.abs(h) % SUGGESTED_TOPICS.length;
       .slice(0, 3)
       .map((row) => row.topic);
 
-if (scored.length >= 3) return scored;
-if (scored.length > 0) {
-const start = topicStartIndexFor(q);
-const extra = [];
-for (let i = 0; i < SUGGESTED_TOPICS.length && scored.length + extra.length < 3; i++) {
-const topic = SUGGESTED_TOPICS[(start + i) % SUGGESTED_TOPICS.length];
-if (!scored.includes(topic) && !extra.includes(topic)) extra.push(topic);
-}
-return scored.concat(extra);
-}
-const start = topicStartIndexFor(q);
-return Array.from({ length: 3 }, (_, i) => SUGGESTED_TOPICS[(start + i) % SUGGESTED_TOPICS.length]);
+    if (scored.length >= 3) return scored;
+    if (scored.length > 0) {
+      const start = topicStartIndexFor(q);
+      const extra = [];
+      for (let i = 0; i < SUGGESTED_TOPICS.length && scored.length + extra.length < 3; i++) {
+        const topic = SUGGESTED_TOPICS[(start + i) % SUGGESTED_TOPICS.length];
+        if (!scored.includes(topic) && !extra.includes(topic)) extra.push(topic);
+      }
+      return scored.concat(extra);
+    }
+    const start = topicStartIndexFor(q);
+    return Array.from({ length: 3 }, (_, i) => SUGGESTED_TOPICS[(start + i) % SUGGESTED_TOPICS.length]);
   }
 
   function greetingReply(q) {
@@ -530,7 +547,8 @@ return Array.from({ length: 3 }, (_, i) => SUGGESTED_TOPICS[(start + i) % SUGGES
   const MAX_TURNS = 80;
   const MAX_QUESTION_CHARS = 280;
   const DUPLICATE_SUBMIT_WINDOW_MS = 1500;
-  const RESET_HISTORY_ON_LOAD = true;
+  /** When true, wipes local session and history on every full page load (fresh demo). */
+  const RESET_HISTORY_ON_LOAD = false;
 
   const form = document.getElementById('gpt-form');
   const input = document.getElementById('gpt-input');
