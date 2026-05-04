@@ -6,15 +6,54 @@
   <meta name="theme-color" content="#000000" />
   <meta name="color-scheme" content="dark" />
   <title>Page not found · Sandra Cai</title>
+  <meta name="description" content="This URL is not on sandracai.com. Return to the home page." />
   <meta name="robots" content="noindex" />
-  <link rel="stylesheet" href="/assets/styles.css?v=17" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+  <link rel="preload" href="/assets/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/styles.css?v=18" />
 </head>
 <body class="bai-site">
+  <a class="ba-skip" href="#main">Skip to content</a>
   <div class="ba-bg" aria-hidden="true"></div>
-  <main class="ba-404">
-    <p class="ba-404-kicker">404</p>
-    <h1 class="ba-404-title">This page doesn’t exist</h1>
-    <p class="ba-404-lead"><a href="/">Back to home</a></p>
+
+  <header class="ba-header">
+    <div class="ba-header-inner">
+      <a class="ba-logo" href="/"><span class="ba-logo-mark">Sandra</span><span class="ba-logo-accent">Cai</span></a>
+      <nav class="ba-nav" aria-label="Primary">
+        <a href="/#sandra-gpt">SandraGPT</a>
+        <a href="/#work">Track record</a>
+        <a href="/#research">Research</a>
+        <a href="/#education">Academic</a>
+        <a href="https://substack.com/@caisandra" target="_blank" rel="noopener noreferrer">Writing</a>
+        <a href="https://github.com/Sandra-Cai" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="ba-404 ba-404--with-nav">
+      <p class="ba-404-kicker">404</p>
+      <h1 class="ba-404-title">This page doesn’t exist</h1>
+      <p class="ba-404-lead">
+        <a href="/">Back to home</a>
+        ·
+        <a href="mailto:sandraxcyj@gmail.com">Email</a>
+      </p>
+    </div>
   </main>
+
+  <footer class="ba-footer" role="contentinfo">
+    <div class="ba-footer-row">
+      <span class="ba-footer-name">Sandra Cai</span>
+      <div class="ba-footer-links">
+        <a href="/">Home</a>
+        <a href="mailto:sandraxcyj@gmail.com">sandraxcyj@gmail.com</a>
+      </div>
+    </div>
+    <p class="ba-footer-copy">© <span id="year"></span> Sandra Cai</p>
+  </footer>
+
+  <script src="/assets/script.js?v=12" defer></script>
 </body>
 </html>

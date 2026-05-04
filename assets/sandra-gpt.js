@@ -323,7 +323,7 @@
       reply: 'Essays on Substack (@caisandra); quant and macro threads also on LinkedIn and Medium.',
     },
     {
-      keys: ['contact', 'email', 'reach', 'hire', 'collaborat'],
+      keys: ['contact', 'email', 'reach', 'hire', 'collaborat', 'get in touch', 'ping me'],
       priority: 5,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,
     },

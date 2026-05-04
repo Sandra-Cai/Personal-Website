@@ -1061,6 +1061,12 @@ a:focus-visible {
   color: var(--text-dim);
 }
 
+/* Tighter vertical rhythm when the global header + footer are present */
+.ba-404--with-nav {
+  padding-top: clamp(3.5rem, 12vw, 7rem);
+  padding-bottom: clamp(2.5rem, 8vw, 4rem);
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
