@@ -12,4 +12,5 @@ for (const f of ['assets/sandra-gpt.js', 'assets/script.js', 'api/sandra-gpt.js'
   execSync(`node --check ${f}`, { stdio: 'inherit' });
 }
 execSync('node scripts/validate-basic-html.cjs', { stdio: 'inherit' });
+execSync('node scripts/validate-metadata-files.cjs', { stdio: 'inherit' });
 console.log('verify-all: OK');
