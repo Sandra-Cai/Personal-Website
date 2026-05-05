@@ -297,7 +297,18 @@
       reply: 'At PennApps I shipped an AI + blockchain app that won Best Blockchain Project; code is on GitHub.',
     },
     {
-      keys: ['skills', 'tech stack', 'languages do you', 'python', 'typescript', 'machine learning', 'ml'],
+      keys: [
+        'skills',
+        'tech stack',
+        'languages do you',
+        'what languages',
+        'programming languages',
+        'languages do you know',
+        'python',
+        'typescript',
+        'machine learning',
+        'ml',
+      ],
       priority: 15,
       reply:
         'Python is central to quant and research work (e.g. Vigil/Nuveaux); ML and full-stack work show up in projects listed under Work and GitHub on this page.',
@@ -648,12 +659,13 @@
     } else if (mode === 'local') {
       syncStatusEl.textContent = 'Browser only (no API)';
     } else if (mode === 'warn') {
-      syncStatusEl.textContent =
-        detail === 'rate'
-          ? 'Server busy; saved in browser only'
-          : detail === 'partial'
-            ? 'Partially synced; retrying later'
-          : 'Couldn’t sync; saved in browser only';
+      if (detail === 'rate') {
+        syncStatusEl.textContent = 'Server busy; saved in browser only';
+      } else if (detail === 'partial') {
+        syncStatusEl.textContent = 'Partially synced; retrying later';
+      } else {
+        syncStatusEl.textContent = 'Couldn’t sync; saved in browser only';
+      }
       syncStatusEl.classList.add('gpt-sync-status--warn');
     } else {
       syncStatusEl.textContent = '';
@@ -739,11 +751,18 @@
     return `t-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
   }
 
+  function prefersReducedMotion() {
+    try {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch {
+      return false;
+    }
+  }
+
   function scrollToTurn(turnId) {
     const el = document.getElementById(`gpt-turn-${turnId}`);
     if (!el) return;
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+    el.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
   }
 
   function renderTurn(turnId, q, answerText, doScroll) {
@@ -769,8 +788,7 @@
     logEl.appendChild(wrap);
 
     if (doScroll !== false) {
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      wrap.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+      wrap.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
     }
   }
 
