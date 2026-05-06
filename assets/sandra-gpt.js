@@ -85,7 +85,7 @@
       keys: ['four years', '4 years', 'work experience', 'years of experience', 'years of', 'career', 'track record'],
       priority: 15,
       reply:
-        'Roughly four years across quant and markets work, institutional research, large-scale engineering, founding, and independent research. I also study CS at NYU—Academic on this page has the coursework detail.',
+        '4+ years across quant and markets work, institutional research, large-scale engineering, founding, and independent research. I also study CS at NYU—Academic on this page has the coursework detail.',
     },
     {
       keys: [
@@ -149,7 +149,7 @@
       keys: ['duke fintech', 'duke', 'fintech trading competition', 'scoreboard'],
       priority: 30,
       reply:
-        'I am ranked first on the Duke Fintech Trading Competition scoreboard under their risk-adjusted rules; the Research section links the live board.',
+        'The site notes a #1 Duke Fintech Trading Competition result under risk-adjusted rules; the Research section links the live scoreboard.',
     },
     {
       keys: ['phoenix', 'new york tech week', 'crypto strateg', 'crypto strategy', 'crypto strategies'],
@@ -194,6 +194,12 @@
       keys: ['medium', 'linkedin', 'macro', 'macroeconomic'],
       priority: 8,
       reply: 'Longer threads are on LinkedIn and Medium; Substack is @caisandra. Links are in the header and social strips.',
+    },
+    {
+      keys: ['yijia', 'yijia sandra cai', 'linkedin profile', 'which linkedin', 'linkedin handle'],
+      priority: 17,
+      reply:
+        'For this site, the LinkedIn profile is Yijia Sandra Cai (shown in the Writing section). SandraGPT answers are based on this site content, not other people with similar names.',
     },
     {
       keys: ['school', 'nyu', 'major', 'minor', 'degree', 'bemet', 'bemt', 'mathematics minor'],
