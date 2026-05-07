@@ -154,7 +154,7 @@
     {
       keys: ['phoenix', 'new york tech week', 'crypto strateg', 'crypto strategy', 'crypto strategies'],
       priority: 30,
-      reply: 'I won the Phoenix Trading Competition (crypto strategies) during New York Tech Week in 2023.',
+      reply: 'The site notes a Phoenix Trading Competition win (crypto strategies) during New York Tech Week 2023.',
     },
     {
       keys: ['trade', 'trading', 'trader', 'paper trade'],
