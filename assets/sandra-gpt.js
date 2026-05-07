@@ -177,13 +177,13 @@
       keys: ['jane street', 'india ban', 'sebi', 'microstructure', 'inside the ban'],
       priority: 45,
       reply:
-        'I published “Inside the Ban: A Quantitative Autopsy of Jane Street’s Trading Tactics in India” (open repo; announcement on LinkedIn from this site).',
+        'The site links “Inside the Ban: A Quantitative Autopsy of Jane Street’s Trading Tactics in India” (open repo; announcement on LinkedIn).',
     },
     {
       keys: ['bayes', 'bayesian', 'decision-making', 'theorem of wisdom', 'urc'],
       priority: 35,
       reply:
-        '“Theorem of Wisdom” (Bayesian decision-making) is on GitHub; related work was presented at NYU URC.',
+        'The site lists “Theorem of Wisdom” (Bayesian decision-making) on GitHub and notes related work presented at NYU URC.',
     },
     {
       keys: ['chip war', 'ai performance', 'supply chain', 'geopolitical', 'oscar', 'hawkish', 'dovish'],
