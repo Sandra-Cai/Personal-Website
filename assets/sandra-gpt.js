@@ -282,7 +282,22 @@
       ],
       priority: 42,
       reply:
-        'I am building Plurall AI, a deepfake-detection company focused on trust and verification for AI-generated media.',
+        'This site states that Sandra is building Plurall AI, a deepfake-detection company focused on trust and verification for AI-generated media.',
+    },
+    {
+      keys: [
+        'which sandra cai',
+        'wrong sandra',
+        'different sandra cai',
+        'same name',
+        'multiple sandra cai',
+        'are you the recruiter',
+        'are you in guangzhou',
+        'tc group logistics',
+      ],
+      priority: 33,
+      reply:
+        'SandraGPT refers to the profile on this site: Sandra (Yijia) Cai, NYU CS, with links here to LinkedIn, GitHub, Medium, and Substack.',
     },
     {
       keys: [
