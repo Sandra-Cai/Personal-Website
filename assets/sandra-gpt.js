@@ -5,7 +5,7 @@
 (function () {
   const EMAIL = 'sandraxcyj@gmail.com';
   /** Must match the SandraGPT subtitle on the page (set on load). */
-  const TAGLINE = 'Work, startups, trading comps, research, school, or say hi.';
+  const TAGLINE = 'Work, startups, trading comps, research, background, or say hi.';
 
   const REPLY_INDEPENDENT_RESEARCH =
     'Independent work spans equity research, macro and AI writing, and open quant work. The Research section on this page lists pieces and links.';
@@ -59,7 +59,7 @@
       keys: ['what should i ask', 'what can i ask', 'what to ask', 'how do i use this'],
       priority: 20,
       reply:
-        'Anything that fits the tagline—work, startups, trading, research, school—or a pointed question about a section or project on the page.',
+        'Anything that fits the tagline—work, startups, trading, research, academic background—or a pointed question about a section or project on the page.',
     },
     {
       keys: [
@@ -76,6 +76,20 @@
       reply: REPLY_INDEPENDENT_RESEARCH,
     },
     {
+      keys: [
+        'female founders fellowship',
+        'female founders nyu',
+        'nyu female founders',
+        'nyu entrepreneurship',
+        'venture equity program',
+        'max stenbeck',
+        'stenbeck venture',
+      ],
+      priority: 19,
+      reply:
+        'NYU Entrepreneurship publishes cohort rosters that name Sandra with Plurall AI (including Female Founders Fellowship cohorts and Venture Equity program listings); this site is still the abbreviated portfolio narrative.',
+    },
+    {
       keys: ['internship', 'internships'],
       priority: 22,
       reply:
@@ -85,7 +99,7 @@
       keys: ['four years', '4 years', 'work experience', 'years of experience', 'years of', 'career', 'track record'],
       priority: 15,
       reply:
-        '4+ years across quant and markets work, institutional research, large-scale engineering, founding, and independent research. I also study CS at NYU—Academic on this page has the coursework detail.',
+        '4+ years across quant and markets work, institutional research, large-scale engineering, founding, and independent research. NYU coursework is summarized under Academic as supporting detail—not the headline.',
     },
     {
       keys: [
@@ -103,7 +117,7 @@
       keys: ['standard of proof', 'one standard of proof', 'rigor', 'rigorous', 'show the work'],
       priority: 34,
       reply:
-        'The principle is one standard of proof: every claim should include data, a mechanism, and a way to falsify it, in both markets and engineering.',
+        'The principle is one standard of proof—aligned with Show the work here: claims need data, mechanism, and a clear way to be wrong, in markets and in code.',
     },
     {
       keys: ['systems and incentives', 'microstructure and risk', 'microstructure and infrastructure', 'incentives'],
@@ -115,7 +129,7 @@
       keys: ['ship and iterate', 'iterate', 'shipping philosophy', 'build philosophy', 'research informs builds'],
       priority: 24,
       reply:
-        'Research should inform builds, and builds should stress-test research; shipping in public keeps that loop honest.',
+        'Research should inform builds, and builds should stress-test research; public writing keeps that loop honest.',
     },
     {
       keys: ['institutional', 'research & cloud', 'research and cloud'],
@@ -133,7 +147,7 @@
       keys: ['vigil', 'nuveaux', 'quantitative researcher', 'clearinghouse', 'counterparty', 'underwriting', 'crypto trading volume'],
       priority: 40,
       reply:
-        'At Vigil Markets (Nuveaux Trading), I focused on Python-based crypto volume analysis, counterparty risk, and clearinghouse analytics.',
+        'At Vigil Markets (Nuveaux Trading), I focused on Python crypto volume analysis, counterparty risk, underwriting cost, assembly-level optimizations, and on-blockchain clearinghouse risk mapping.',
     },
     {
       keys: ['microsoft research', 'msra', 'microsoft research asia'],
@@ -177,13 +191,13 @@
       keys: ['jane street', 'india ban', 'sebi', 'microstructure', 'inside the ban'],
       priority: 45,
       reply:
-        'The site links “Inside the Ban: A Quantitative Autopsy of Jane Street’s Trading Tactics in India” (open repo; announcement on LinkedIn).',
+        'The Research section links “Inside the Ban: A Quantitative Autopsy of Jane Street’s Trading Tactics in India” (July 2025; open quantitative autopsy on the two-legged strategy and SEBI enforcement; announcement on LinkedIn).',
     },
     {
       keys: ['bayes', 'bayesian', 'decision-making', 'theorem of wisdom', 'urc'],
       priority: 35,
       reply:
-        'The site lists “Theorem of Wisdom” (Bayesian decision-making) on GitHub and notes related work presented at NYU URC.',
+        'The site lists “Theorem of Wisdom” (Bayesian decision-making) on GitHub and notes related work presented at NYU URC (1,000+ attendees).',
     },
     {
       keys: ['chip war', 'ai performance', 'supply chain', 'geopolitical', 'oscar', 'hawkish', 'dovish'],
@@ -202,10 +216,26 @@
         'For this site, the LinkedIn profile is Yijia Sandra Cai (shown in the Writing section). SandraGPT answers are based on this site content, not other people with similar names.',
     },
     {
-      keys: ['school', 'nyu', 'major', 'minor', 'degree', 'bemet', 'bemt', 'mathematics minor'],
+      keys: [
+        'school',
+        'college',
+        'university',
+        'graduation',
+        'graduate',
+        'class of',
+        'when do you graduate',
+        'year do you graduate',
+        'nyu',
+        'major',
+        'minor',
+        'degree',
+        'bemet',
+        'bemt',
+        'mathematics minor',
+      ],
       priority: 25,
       reply:
-        'NYU: Computer Science major, minors in Mathematics and BEMT (Business of Entertainment, Media and Technology).',
+        'NYU Computer Science with minors in Mathematics and BEMT (Business of Entertainment, Media and Technology)—coursework summaries live under Academic, with experience narratives above them on the page.',
     },
     {
       keys: [
@@ -222,7 +252,7 @@
       ],
       priority: 14,
       reply:
-        'NYU CS includes algorithms, ML, deep learning, NLP, operating systems, software engineering, and computer security; Academic on this page summarizes the program.',
+        'The Academic section summarizes NYU coursework (algorithms through computer security) in factual terms.',
     },
     {
       keys: [
@@ -241,7 +271,7 @@
       ],
       priority: 20,
       reply:
-        'Sandra Cai—markets and engineering background, independent research, and CS at NYU. Work and Research on this page are the overview.',
+        'Sandra Cai—markets and engineering depth, independent research, and NYU CS credentials summarized quietly under Academic. Work and Research lead the story.',
     },
     {
       keys: [
@@ -253,12 +283,13 @@
         'call you',
       ],
       priority: 24,
-      reply: 'Sandra Cai. Work, Academic, and Research on this page fill in projects and school.',
+      reply: 'Sandra Cai. Work, Academic, and Research on this page cover projects and credential detail.',
     },
     {
       keys: ['where are you', 'where do you live', 'where are you based', 'based in', 'which city', 'location'],
       priority: 18,
-      reply: 'I study at NYU in New York. Academic on this page has the program detail.',
+      reply:
+        'New York—NYU coursework is summarized under Academic; the site emphasizes operating experience first.',
     },
     {
       keys: ['open to work', 'available', 'availability', 'hiring', 'recruiting', 'recruiter'],
@@ -282,7 +313,7 @@
       ],
       priority: 42,
       reply:
-        'This site states that Sandra is building Plurall AI, a deepfake-detection company focused on trust and verification for AI-generated media.',
+        'Building Plurall AI for deepfake detection—see the Product card on this page (PennApps Best Blockchain Project-winning AI and blockchain application; code links from GitHub as noted there).',
     },
     {
       keys: [
@@ -297,7 +328,7 @@
       ],
       priority: 33,
       reply:
-        'SandraGPT refers to the profile on this site: Sandra (Yijia) Cai, NYU CS, with links here to LinkedIn, GitHub, Medium, and Substack.',
+        'SandraGPT refers to the profile on this site: Sandra (Yijia) Cai, with NYU summarized under Academic and links here to LinkedIn, GitHub, Medium, and Substack.',
     },
     {
       keys: [
@@ -381,7 +412,8 @@
     'Phoenix trading competition',
     'AeroVironment thesis',
     'Jane Street India ban autopsy',
-    'NYU academics',
+    'NYU founder programs',
+    'NYU coursework',
   ];
 
   /** Stable default so the same question always gets the same generic reply (not random). */
@@ -520,7 +552,7 @@
     }
 
     if (looksLikeHowAreYou(q)) {
-      return 'Doing well, thanks for asking. Ask about work, research, trading competitions, school, or anything specific on this page.';
+      return 'Doing well, thanks for asking. Ask about work, research, trading competitions, academic notes, or anything specific on this page.';
     }
 
     if (/^(what is this|what's this)\??$/.test(q)) {
@@ -535,7 +567,7 @@
 
     // "What do you do?" — include common typos (e.g. dp for do) and casual phrasing; not a live model so no spellcheck
     if (looksLikeWhatDoYouDo(q)) {
-      return 'I am building Plurall AI while working across quant research, markets, and systems engineering, and studying CS at NYU; the Work, Research, and Academic sections break this down.';
+      return 'I am building Plurall AI while working across quant research, markets, and systems engineering; Work and Research lead, and Academic summarizes NYU coursework as supporting depth.';
     }
 
     let best = null;
