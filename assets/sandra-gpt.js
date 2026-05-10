@@ -623,6 +623,10 @@
   let submitBusy = false;
   let lastSubmittedCanonical = '';
   let lastSubmittedAt = 0;
+  // Hoisted so handleSubmit can reset recall after a submission (programmatic
+  // input.value = '' does not fire the input event that would otherwise reset it).
+  let recallIndex = -1;
+  let draftBeforeRecall = '';
 
   function getOrCreateSessionId() {
     try {
@@ -998,6 +1002,8 @@
       renderTurn(turnId, q, msg);
       addSidebarEntry(turnId, q);
       input.value = '';
+      recallIndex = -1;
+      draftBeforeRecall = '';
       return;
     }
 
@@ -1011,6 +1017,8 @@
     lastSubmittedCanonical = canonicalQ;
     lastSubmittedAt = now;
     input.value = '';
+    recallIndex = -1;
+    draftBeforeRecall = '';
 
     if (form) {
       const sendBtn = form.querySelector('.gpt-send');
@@ -1065,8 +1073,6 @@
     input.setAttribute('maxlength', String(MAX_QUESTION_CHARS));
     void restoreHistory();
     form.addEventListener('submit', handleSubmit);
-    let recallIndex = -1;
-    let draftBeforeRecall = '';
     input.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
         if (!shouldHandleRecallKey(e, input)) return;
