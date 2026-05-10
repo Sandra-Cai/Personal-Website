@@ -977,7 +977,7 @@
   async function clearAllHistory() {
     if (
       !window.confirm(
-        'Clear all questions and answers from this browser and from the server (for this session), if the database API is enabled?'
+        'Clear this session’s questions and answers from this browser (and from the server, if database sync is on)?'
       )
     ) {
       return;
