@@ -531,6 +531,11 @@
       /\bwhat is your role\b/.test(q) ||
       /\bwhat work do you do\b/.test(q) ||
       /\bwhat do you work on\b/.test(q) ||
+      /\bwhat are you working on( these days| right now| now| currently)?\b/.test(q) ||
+      /\bwhat are you up to\b/.test(q) ||
+      /\bwhat are u up to\b/.test(q) ||
+      /\bwhat'?s? on your plate\b/.test(q) ||
+      /\bday job\b/.test(q) ||
       /\bdescribe your work\b/.test(q)
     );
   }
