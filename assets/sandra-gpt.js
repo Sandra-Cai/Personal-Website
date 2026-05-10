@@ -877,12 +877,16 @@
 
     const userDiv = document.createElement('div');
     userDiv.className = 'gpt-msg gpt-msg--user';
+    userDiv.setAttribute('role', 'group');
+    userDiv.setAttribute('aria-label', 'You asked');
     const pu = document.createElement('p');
     pu.textContent = q;
     userDiv.appendChild(pu);
 
     const botDiv = document.createElement('div');
     botDiv.className = 'gpt-msg gpt-msg--bot';
+    botDiv.setAttribute('role', 'group');
+    botDiv.setAttribute('aria-label', 'SandraGPT replied');
     const pb = document.createElement('p');
     pb.textContent = answerText;
     botDiv.appendChild(pb);
@@ -894,6 +898,15 @@
     if (doScroll !== false) {
       wrap.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
     }
+  }
+
+  function setSidebarItemActive(turnId) {
+    if (!sidebarList) return;
+    sidebarList.querySelectorAll('.gpt-sidebar-item').forEach((n) => {
+      const isMatch = n.dataset.turnId === turnId;
+      n.classList.toggle('gpt-sidebar-item--active', isMatch);
+      n.setAttribute('aria-current', isMatch ? 'true' : 'false');
+    });
   }
 
   function addSidebarEntry(turnId, questionText) {
@@ -911,12 +924,7 @@
     btn.title = questionText;
     btn.setAttribute('aria-current', 'false');
     btn.addEventListener('click', () => {
-      sidebarList.querySelectorAll('.gpt-sidebar-item').forEach((n) => {
-        n.classList.remove('gpt-sidebar-item--active');
-        n.setAttribute('aria-current', 'false');
-      });
-      btn.classList.add('gpt-sidebar-item--active');
-      btn.setAttribute('aria-current', 'true');
+      setSidebarItemActive(turnId);
       scrollToTurn(turnId);
     });
 
@@ -1079,6 +1087,7 @@
 
     renderTurn(turnId, q, answerText);
     addSidebarEntry(turnId, q);
+    setSidebarItemActive(turnId);
     pruneRenderedHistoryUI();
 
     const entries = normalizeTurns(loadHistory());
