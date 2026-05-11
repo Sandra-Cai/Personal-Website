@@ -1,5 +1,5 @@
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
-/* Visual system matched to b.ai: flat black canvas, single cyan accent, minimal chrome */
+/* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent. */
 
 @font-face {
   font-family: Geist;
@@ -10,17 +10,22 @@
 }
 
 :root {
-  --bg: #000000;
-  --text: #fafafa;
-  --text-dim: #a1a1aa;
+  /* b.ai cream/ink palette. Background hex sampled from b.ai's own CSS (#FFFDF7). */
+  --bg: #FFFDF7;
+  --bg-warm: #FEFBF3;
+  --text: #111111;
+  --text-dim: #3F3F46;
   --text-faint: #71717a;
-  --line: rgba(255, 255, 255, 0.06);
-  --line-hover: rgba(255, 255, 255, 0.12);
-  /* b.ai-style single accent (cyan) */
-  --accent: #22d3ee;
-  --accent-bright: #67e8f9;
-  --accent-dim: rgba(34, 211, 238, 0.12);
-  --accent-glow: rgba(34, 211, 238, 0.25);
+  --line: rgba(0, 0, 0, 0.08);
+  --line-hover: rgba(0, 0, 0, 0.18);
+  /* Editorial: links read as ink, distinguished by underline; warm goldenrod
+     reserved for the wordmark accent and a couple of feature highlights. */
+  --accent: #111111;
+  --accent-bright: #000000;
+  --accent-dim: rgba(0, 0, 0, 0.06);
+  --accent-glow: rgba(0, 0, 0, 0.10);
+  --warm: #B8860B;
+  --warm-dim: rgba(184, 134, 11, 0.12);
   --max: min(1080px, calc(100% - 48px));
   --narrow: 36rem;
   --radius: 12px;
@@ -36,11 +41,11 @@
 
 html {
   scroll-behavior: smooth;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 ::selection {
-  background: rgba(34, 211, 238, 0.35);
+  background: rgba(0, 0, 0, 0.14);
   color: var(--text);
 }
 
@@ -68,7 +73,7 @@ body.bai-site {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #000;
+  color: var(--bg);
   background: var(--accent);
   border-radius: var(--radius);
   text-decoration: none;
@@ -78,21 +83,23 @@ body.bai-site {
 
 .ba-skip:focus {
   transform: translateY(0);
-  outline: 2px solid var(--accent-bright);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
 a {
   color: var(--accent);
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-color: var(--line-hover);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
   font-weight: 500;
-  transition: color 0.15s ease;
+  transition: text-decoration-color 0.15s ease, color 0.15s ease;
 }
 
 a:hover {
   color: var(--accent-bright);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration-color: var(--accent);
 }
 
 a:focus-visible {
@@ -101,14 +108,15 @@ a:focus-visible {
   border-radius: 2px;
 }
 
-/* Flat: one soft top glow only (b.ai-style vignette) */
+/* Flat cream canvas with soft warm gradients in the corners (b.ai social-card vibe). */
 .ba-bg {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 900px 420px at 50% -20%, rgba(34, 211, 238, 0.07), transparent 55%),
+    radial-gradient(ellipse 70vw 50vh at 80% 10%, rgba(184, 134, 11, 0.05), transparent 60%),
+    radial-gradient(ellipse 60vw 40vh at 15% 85%, rgba(0, 0, 0, 0.035), transparent 65%),
     var(--bg);
 }
 
@@ -118,7 +126,7 @@ a:focus-visible {
   top: 0;
   z-index: 50;
   border-bottom: 1px solid var(--line);
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(255, 253, 247, 0.85);
   backdrop-filter: blur(20px) saturate(180%);
 }
 
@@ -156,7 +164,7 @@ a:focus-visible {
 }
 
 .ba-logo-accent {
-  color: var(--accent);
+  color: var(--warm);
   font-weight: 700;
 }
 
@@ -216,9 +224,9 @@ a:focus-visible {
   display: block;
 }
 
-/* b.ai: one word in brand accent */
+/* b.ai-style: a single warm wordmark accent, not a glow. */
 .ba-display-accent {
-  color: var(--accent);
+  color: var(--warm);
   font-weight: 700;
 }
 
@@ -280,7 +288,7 @@ a:focus-visible {
   border-radius: var(--radius);
   border: 1px solid var(--line);
   /* matches .ba-card */
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(0, 0, 0, 0.025);
 }
 
 /* Claude-style: history rail + main chat */
@@ -327,16 +335,16 @@ a:focus-visible {
   margin: 6px 0 0;
   font-size: 10px;
   line-height: 1.35;
-  color: #52525b;
+  color: var(--text-faint);
   letter-spacing: 0.02em;
 }
 
 .gpt-sync-status--ok {
-  color: rgba(34, 211, 238, 0.75);
+  color: var(--warm);
 }
 
 .gpt-sync-status--warn {
-  color: #fbbf24;
+  color: #92400e;
 }
 
 .gpt-form[aria-busy='true'] .gpt-send {
@@ -378,7 +386,7 @@ a:focus-visible {
   margin-right: -4px;
   scrollbar-gutter: stable;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
 }
 
 .gpt-sidebar-scroll::-webkit-scrollbar {
@@ -386,7 +394,7 @@ a:focus-visible {
 }
 
 .gpt-sidebar-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.22);
   border-radius: 3px;
 }
 
@@ -431,7 +439,7 @@ a:focus-visible {
   font-weight: 500;
   line-height: 1.35;
   color: var(--text-dim);
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(0, 0, 0, 0.025);
   border: 1px solid transparent;
   border-radius: 8px;
   cursor: pointer;
@@ -439,19 +447,19 @@ a:focus-visible {
 }
 
 .gpt-sidebar-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.055);
   color: var(--text);
 }
 
 .gpt-sidebar-item:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
-  border-color: rgba(34, 211, 238, 0.35);
+  border-color: var(--accent);
 }
 
 .gpt-sidebar-item--active {
-  border-color: rgba(34, 211, 238, 0.35);
-  background: rgba(34, 211, 238, 0.06);
+  border-color: var(--accent);
+  background: rgba(0, 0, 0, 0.05);
   color: var(--text);
 }
 
@@ -512,7 +520,7 @@ a:focus-visible {
   font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--warm);
   margin: 0 0 0.75rem;
   font-weight: 600;
 }
@@ -545,14 +553,14 @@ a:focus-visible {
   align-items: center;
   gap: 10px;
   padding: 5px 5px 5px 16px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(0, 0, 0, 0.03);
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .gpt-field:focus-within {
-  border-color: rgba(34, 211, 238, 0.35);
+  border-color: var(--accent);
   box-shadow: 0 0 0 1px var(--accent-dim);
 }
 
@@ -579,15 +587,15 @@ a:focus-visible {
   border: 0;
   border-radius: 50%;
   background: var(--accent);
-  color: #000;
+  color: var(--bg);
   cursor: pointer;
   display: grid;
   place-items: center;
-  transition: transform 0.15s ease, filter 0.15s ease;
+  transition: transform 0.15s ease, background-color 0.15s ease;
 }
 
 .gpt-send:hover {
-  filter: brightness(1.1);
+  background: var(--accent-bright);
 }
 
 .gpt-send:active {
@@ -644,7 +652,7 @@ a:focus-visible {
 .gpt-msg--bot {
   color: var(--text-dim);
   padding: 0.875rem 1rem;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(0, 0, 0, 0.025);
   border: 1px solid var(--line);
   border-radius: var(--radius);
 }
@@ -684,7 +692,7 @@ a:focus-visible {
 }
 
 .ba-strip--dim {
-  background: rgba(255, 255, 255, 0.015);
+  background: rgba(0, 0, 0, 0.022);
 }
 
 .ba-strip-text {
@@ -709,20 +717,21 @@ a:focus-visible {
   display: inline-block;
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
-  border: 1px solid rgba(34, 211, 238, 0.18);
-  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.035);
+  text-decoration: none;
   transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
 }
 
 .ba-strip-text a:hover {
-  color: #9befff;
-  border-color: rgba(34, 211, 238, 0.4);
-  background: rgba(34, 211, 238, 0.14);
+  color: var(--bg);
+  border-color: var(--accent);
+  background: var(--accent);
   text-decoration: none;
 }
 
 .ba-strip-text a:focus-visible {
-  outline: 2px solid rgba(34, 211, 238, 0.75);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -837,19 +846,19 @@ a:focus-visible {
   padding: 1.35rem 1.25rem 1.25rem;
   border-radius: var(--radius);
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(0, 0, 0, 0.025);
   transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 }
 
 .ba-card:hover {
   border-color: var(--line-hover);
-  background: rgba(255, 255, 255, 0.035);
+  background: rgba(0, 0, 0, 0.045);
   transform: translateY(-1px);
 }
 
 .ba-card--lead {
   padding: 1.65rem 1.5rem 1.45rem;
-  background: rgba(255, 255, 255, 0.035);
+  background: rgba(0, 0, 0, 0.045);
 }
 
 .ba-card--lead .ba-h3 {
@@ -861,7 +870,7 @@ a:focus-visible {
 }
 
 .ba-card--bare:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(0, 0, 0, 0.025);
 }
 
 .ba-phase {
@@ -905,7 +914,7 @@ a:focus-visible {
   font-size: 0.875rem;
   color: var(--text-dim);
   line-height: 1.65;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(0, 0, 0, 0.025);
   border: 1px solid var(--line);
   border-radius: var(--radius);
 }
@@ -915,7 +924,7 @@ a:focus-visible {
 }
 
 .ba-list strong {
-  color: #e4e4e7;
+  color: var(--text);
   font-weight: 600;
 }
 
@@ -951,7 +960,7 @@ a:focus-visible {
 }
 
 .ba-split-b {
-  color: var(--accent);
+  color: var(--warm);
 }
 
 .ba-split-copy {
@@ -1007,7 +1016,7 @@ a:focus-visible {
   margin: 0;
   font-size: 11px;
   letter-spacing: 0.06em;
-  color: #52525b;
+  color: var(--text-faint);
 }
 
 /* Static 404 (GitHub Pages / generic hosts) */
@@ -1064,9 +1073,9 @@ a:focus-visible {
 
 @media (prefers-contrast: more) {
   :root {
-    --text-dim: #d4d4d8;
-    --text-faint: #a1a1aa;
-    --line: rgba(255, 255, 255, 0.14);
+    --text-dim: #18181b;
+    --text-faint: #3f3f46;
+    --line: rgba(0, 0, 0, 0.22);
   }
 }
 
