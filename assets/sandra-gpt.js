@@ -343,6 +343,8 @@
         'plurall',
         'plurall ai',
         'deepfake',
+        'deep fake',
+        'synthetic media',
         'founder',
         'founding',
         'found',
@@ -355,7 +357,111 @@
       ],
       priority: 42,
       reply:
-        'Building Plurall AI for deepfake detection—see the Product card on this page (PennApps Best Blockchain Project-winning AI and blockchain application; code links from GitHub as noted there).',
+        'Plurall AI is a deepfake-detection company building a proprietary multimodal system from first principles—sub-two-second inference at high accuracy, designed for enterprise deployment as a trust layer for an increasingly synthetic world. The Product card on this page links the site and code.',
+    },
+    {
+      keys: [
+        'how does plurall',
+        'how plurall works',
+        'how does it detect',
+        'multimodal',
+        'detection model',
+        'detection accuracy',
+        'detection speed',
+        'two seconds',
+        '2 seconds',
+        'sub-two-second',
+        'first principles',
+        'proprietary model',
+        'plurall tech',
+        'plurall stack',
+      ],
+      priority: 38,
+      reply:
+        'Plurall AI runs a proprietary multimodal detection system built from first principles (not a wrapper on existing models)—sub-two-second inference at high accuracy, tuned for enterprise and real-world deployment where speed and reliability matter.',
+    },
+    {
+      keys: [
+        'traction',
+        'customers',
+        'enterprise customer',
+        'enterprise customers',
+        'b2b leads',
+        'pipeline of leads',
+        'letter of intent',
+        'loi',
+        'paying customer',
+        'paying customers',
+        'plurall traction',
+        'plurall customers',
+      ],
+      priority: 37,
+      reply:
+        'Plurall AI has secured its first enterprise customer, signed a letter of intent with another, and built a pipeline of 100+ B2B leads alongside organic consumer interest.',
+    },
+    {
+      keys: [
+        'acquisition',
+        'acquired',
+        'acquire',
+        'buyout',
+        'exit offer',
+        'sell the company',
+        'seven figure',
+        'seven-figure',
+        'turn down offer',
+        'turned down offer',
+        'declined offer',
+        'offer to buy',
+      ],
+      priority: 36,
+      reply:
+        'Plurall AI received and declined a seven-figure acquisition offer early on. The intent is to build the foundational standard for digital trust at scale, not a fast exit.',
+    },
+    {
+      keys: [
+        'techcrunch',
+        'tech crunch',
+        'startup battlefield',
+        'battlefield',
+        'top 32',
+        'enterprise tech startups',
+      ],
+      priority: 36,
+      reply:
+        'Plurall AI was named by TechCrunch as one of the Top 32 Enterprise Tech Startups at Startup Battlefield.',
+    },
+    {
+      keys: [
+        'nvidia',
+        'ibm',
+        'aws',
+        'plurall partners',
+        'plurall partnerships',
+        'partner ecosystem',
+        'who backs plurall',
+        'who supports plurall',
+        'backed by',
+      ],
+      priority: 35,
+      reply:
+        "Plurall AI is backed by partners across NVIDIA, IBM, AWS, and NYU's entrepreneurial ecosystem.",
+    },
+    {
+      keys: [
+        'trust layer',
+        'digital trust',
+        'why deepfake',
+        'why deepfakes',
+        'why this problem',
+        'why this matters',
+        'plurall mission',
+        'plurall vision',
+        'plurall thesis',
+      ],
+      priority: 34,
+      reply:
+        'The thesis: synthetic media is a structural threat to trust, not a novelty. Plurall AI is building the trust layer that determines whether the broader AI ecosystem can function—reliable verification for enterprises and individuals as fraud attempts scale and human judgment falls short.',
     },
     {
       keys: [
@@ -447,6 +553,9 @@
   ];
   const SUGGESTED_TOPICS = [
     'Plurall AI',
+    'Plurall AI traction',
+    'Plurall AI partners',
+    'Plurall AI multimodal detection',
     'Vigil Markets / Nuveaux',
     'Microsoft Research Asia',
     'JD.com private cloud',
@@ -614,7 +723,7 @@
 
     // "What do you do?" — include common typos (e.g. dp for do) and casual phrasing; not a live model so no spellcheck
     if (looksLikeWhatDoYouDo(q)) {
-      return 'I am building Plurall AI while working across quant research, markets, and systems engineering; Work and Research lead, and Academic summarizes NYU coursework as supporting depth.';
+      return 'Building Plurall AI, a deepfake-detection company shipping a proprietary multimodal system for enterprise (sub-two-second inference, built from first principles). Earlier work spans quant research, markets, and systems engineering; Work and Research lead, with NYU coursework as supporting depth.';
     }
 
     let best = null;
