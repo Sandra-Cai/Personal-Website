@@ -291,8 +291,10 @@ a:focus-visible {
   padding: clamp(1.5rem, 4vw, 2rem);
   border-radius: var(--radius);
   border: 1px solid var(--line);
-  /* matches .ba-card */
-  background: rgba(0, 0, 0, 0.025);
+  /* Slightly warmer paper than .ba-card so the SandraGPT shell reads as
+     the page's primary product surface and nested inputs/items can sit
+     visibly on top of it. */
+  background: var(--bg-warm);
 }
 
 /* Claude-style: history rail + main chat */
@@ -443,7 +445,8 @@ a:focus-visible {
   font-weight: 500;
   line-height: 1.35;
   color: var(--text-dim);
-  background: rgba(0, 0, 0, 0.025);
+  /* Stand out from the warmer card paper. */
+  background: rgba(0, 0, 0, 0.045);
   border: 1px solid transparent;
   border-radius: 8px;
   cursor: pointer;
@@ -451,7 +454,7 @@ a:focus-visible {
 }
 
 .gpt-sidebar-item:hover {
-  background: rgba(0, 0, 0, 0.055);
+  background: rgba(0, 0, 0, 0.08);
   color: var(--text);
 }
 
@@ -463,7 +466,7 @@ a:focus-visible {
 
 .gpt-sidebar-item--active {
   border-color: var(--accent);
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.09);
   color: var(--text);
 }
 
@@ -557,7 +560,9 @@ a:focus-visible {
   align-items: center;
   gap: 10px;
   padding: 5px 5px 5px 16px;
-  background: rgba(0, 0, 0, 0.03);
+  /* Slightly darker than the SandraGPT card so the input pill reads as an
+     interactive object on top of the surface, not flush with it. */
+  background: rgba(0, 0, 0, 0.06);
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -656,7 +661,9 @@ a:focus-visible {
 .gpt-msg--bot {
   color: var(--text-dim);
   padding: 0.875rem 1rem;
-  background: rgba(0, 0, 0, 0.025);
+  /* Sits inside the warmer .ba-agent-card; needs a slightly stronger ink
+     wash to read as its own bubble. */
+  background: rgba(0, 0, 0, 0.05);
   border: 1px solid var(--line);
   border-radius: var(--radius);
 }
