@@ -354,7 +354,9 @@ a:focus-visible {
 }
 
 .gpt-form[aria-busy='true'] .gpt-send {
-  opacity: 0.55;
+  /* Blanket opacity dimmed the cream arrow into mud on the cream page;
+     dim the background only and keep the icon legible. */
+  background: var(--text-faint);
   pointer-events: none;
 }
 
