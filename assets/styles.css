@@ -818,6 +818,11 @@ a:focus-visible {
 
 @media (min-width: 800px) {
   .ba-grid {
+    /* Asymmetric: lead card breathes wider; supporting cards keep parity. */
+    grid-template-columns: 1.35fr 1fr 1fr;
+  }
+
+  .ba-grid--tight {
     grid-template-columns: repeat(3, 1fr);
   }
 }
@@ -831,10 +836,30 @@ a:focus-visible {
   border-radius: var(--radius);
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.02);
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.ba-card:hover {
+  border-color: var(--line-hover);
+  background: rgba(255, 255, 255, 0.035);
+  transform: translateY(-1px);
+}
+
+.ba-card--lead {
+  padding: 1.65rem 1.5rem 1.45rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.ba-card--lead .ba-h3 {
+  font-size: 1.0625rem;
 }
 
 .ba-card--bare {
   background: transparent;
+}
+
+.ba-card--bare:hover {
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .ba-phase {
