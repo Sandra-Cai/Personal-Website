@@ -891,22 +891,6 @@ a:focus-visible {
   line-height: 1.65;
 }
 
-.ba-progress {
-  margin-top: 0.875rem;
-  height: 2px;
-  border-radius: 1px;
-  background: rgba(255, 255, 255, 0.06);
-  overflow: hidden;
-}
-
-.ba-progress span {
-  display: block;
-  height: 100%;
-  border-radius: 1px;
-  background: var(--accent);
-  box-shadow: 0 0 12px var(--accent-glow);
-}
-
 /* Research list */
 .ba-list {
   margin: 0;
