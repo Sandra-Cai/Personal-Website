@@ -53,6 +53,8 @@ body.bai-site {
   line-height: 1.6;
   letter-spacing: -0.011em;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* Skip link: keyboard / screen reader first stop */
@@ -187,7 +189,7 @@ a:focus-visible {
 .ba-hero {
   max-width: var(--max);
   margin: 0 auto;
-  padding: clamp(4rem, 12vw, 7rem) 24px 3rem;
+  padding: clamp(4.5rem, 13vw, 8rem) 24px clamp(3rem, 6vw, 4rem);
 }
 
 .ba-eyebrow {
@@ -200,12 +202,12 @@ a:focus-visible {
 }
 
 .ba-display {
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.75rem;
   font-family: var(--font);
   font-weight: 700;
-  font-size: clamp(2.75rem, 12vw, 5.5rem);
-  line-height: 0.98;
-  letter-spacing: -0.045em;
+  font-size: clamp(2.75rem, 12.5vw, 6.25rem);
+  line-height: 0.96;
+  letter-spacing: -0.05em;
   color: var(--text);
   text-wrap: balance;
 }
@@ -779,7 +781,7 @@ a:focus-visible {
 .ba-section {
   max-width: var(--max);
   margin: 0 auto;
-  padding: clamp(3.5rem, 9vw, 5.5rem) 24px;
+  padding: clamp(4rem, 10vw, 6.5rem) 24px;
 }
 
 .ba-section--repeat {
@@ -795,10 +797,10 @@ a:focus-visible {
 .ba-h2 {
   font-family: var(--font);
   font-weight: 600;
-  font-size: clamp(1.75rem, 4.5vw, 2.75rem);
-  letter-spacing: -0.04em;
-  line-height: 1.08;
-  margin: 0 0 0.75rem;
+  font-size: clamp(1.875rem, 4.8vw, 3rem);
+  letter-spacing: -0.045em;
+  line-height: 1.06;
+  margin: 0 0 1rem;
   color: var(--text);
   text-wrap: balance;
 }
