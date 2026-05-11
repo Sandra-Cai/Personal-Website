@@ -62,12 +62,16 @@ body.bai-site {
   text-rendering: optimizeLegibility;
 }
 
-/* Skip link: keyboard / screen reader first stop */
+/* Skip link: keyboard / screen reader first stop.
+   Must stay fully off-screen until focus — translateY(-120%) on an inline
+   <a> can resolve badly (near-zero height), leaving a black pill visible
+   under the browser chrome on mobile Safari. */
 .ba-skip {
   position: absolute;
-  left: 12px;
-  top: 12px;
+  left: max(12px, env(safe-area-inset-left, 0px));
+  top: -120px;
   z-index: 100;
+  display: inline-block;
   padding: 10px 14px;
   font-size: 12px;
   font-weight: 600;
@@ -77,12 +81,12 @@ body.bai-site {
   background: var(--accent);
   border-radius: var(--radius);
   text-decoration: none;
-  transform: translateY(-120%);
-  transition: transform 0.2s ease;
+  transition: top 0.2s ease;
 }
 
-.ba-skip:focus {
-  transform: translateY(0);
+.ba-skip:focus,
+.ba-skip:focus-visible {
+  top: max(12px, env(safe-area-inset-top, 0px));
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
