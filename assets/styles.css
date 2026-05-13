@@ -635,6 +635,17 @@ a:focus-visible {
   line-height: 1.65;
 }
 
+.gpt-noscript {
+  font-size: 0.875rem;
+  color: var(--text-dim);
+  margin: 0 0 1.25rem;
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  line-height: 1.6;
+}
+
 .gpt-log {
   display: flex;
   flex-direction: column;
@@ -1115,12 +1126,17 @@ a:focus-visible {
     scroll-behavior: auto;
   }
 
-  .ba-skip {
-    transition: none;
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
   }
 
-  a {
-    transition: none;
+  .ba-card:hover,
+  .ba-card--bare:hover {
+    transform: none;
   }
 
   .gpt-send:active {
