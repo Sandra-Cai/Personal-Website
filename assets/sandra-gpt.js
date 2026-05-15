@@ -59,7 +59,7 @@
       keys: ['what should i ask', 'what can i ask', 'what to ask', 'how do i use this'],
       priority: 20,
       reply:
-        'Anything that fits the tagline—work, startups, trading, research, academic background—or a pointed question about a section or project on the page.',
+        'Anything that fits the tagline—Plurall AI, work, research, trading, academic background—or a pointed question about a section or project on the page.',
     },
     {
       keys: [
@@ -114,10 +114,18 @@
         'Core focus areas are markets/quant, independent research, and AI/systems engineering. This site highlights projects where those three overlap.',
     },
     {
-      keys: ['standard of proof', 'one standard of proof', 'rigor', 'rigorous', 'show the work'],
+      keys: [
+        'standard of proof',
+        'one standard of proof',
+        'rigor',
+        'rigorous',
+        'show the work',
+        'trustworthy media',
+        'ai-native world',
+      ],
       priority: 34,
       reply:
-        'The principle is one standard of proof—aligned with Show the work here: claims need data, mechanism, and a clear way to be wrong, in markets and in code.',
+        'One standard of proof—from Plurall AI (trustworthy media in a synthetic world) through markets, infrastructure, and public research. Same as Show the work on this page: claims need data, mechanism, and a clear way to be wrong.',
     },
     {
       keys: ['systems and incentives', 'microstructure and risk', 'microstructure and infrastructure', 'incentives'],
@@ -271,7 +279,7 @@
       ],
       priority: 20,
       reply:
-        'Sandra Cai—markets and engineering depth, independent research, and NYU CS credentials summarized quietly under Academic. Work and Research lead the story.',
+        'Sandra Cai—founding Plurall AI for enterprise deepfake detection, with 4+ years across quant markets, institutional research, and systems engineering. Work and Research on this page; NYU coursework under Academic.',
     },
     {
       keys: [
@@ -336,7 +344,7 @@
       ],
       priority: 11,
       reply:
-        'Recent work is summarized in Research (latest publications) and on Substack (@caisandra) and LinkedIn; this site updates as projects move forward.',
+        'Plurall AI traction (enterprise customers, LOI, B2B pipeline) plus independent research—see Research, Substack (@caisandra), and LinkedIn for the latest threads.',
     },
     {
       keys: [

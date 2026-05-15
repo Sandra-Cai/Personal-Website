@@ -10,6 +10,15 @@ function read(name) {
   return fs.readFileSync(path.join(root, name), 'utf8');
 }
 
+function assertChecks(file, html, checks) {
+  for (const [label, re] of checks) {
+    if (!re.test(html)) {
+      console.error(`validate-basic-html: ${file} missing expected: ${label}`);
+      process.exit(1);
+    }
+  }
+}
+
 const checks404 = [
   ['doctype', /<!doctype html>/i],
   ['skip link', /class="ba-skip"/],
@@ -18,12 +27,18 @@ const checks404 = [
   ['site stylesheet', /href="\/assets\/styles\.css\?v=/],
 ];
 
-const html404 = read('404.html');
-for (const [label, re] of checks404) {
-  if (!re.test(html404)) {
-    console.error(`validate-basic-html: 404.html missing expected: ${label}`);
-    process.exit(1);
-  }
-}
+const checksIndex = [
+  ['doctype', /<!doctype html>/i],
+  ['skip link', /class="ba-skip"/],
+  ['main landmark', /\bid="top"/],
+  ['SandraGPT section', /\bid="sandra-gpt"/],
+  ['JSON-LD Person', /"@type":\s*"Person"/],
+  ['noscript fallback', /<noscript>/],
+  ['site stylesheet', /href="\/assets\/styles\.css\?v=/],
+  ['SandraGPT script', /src="\/assets\/sandra-gpt\.js\?v=/],
+];
+
+assertChecks('404.html', read('404.html'), checks404);
+assertChecks('index.html', read('index.html'), checksIndex);
 
 console.log('validate-basic-html: OK');
