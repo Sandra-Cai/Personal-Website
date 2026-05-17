@@ -39,6 +39,21 @@ const checksIndex = [
 ];
 
 assertChecks('404.html', read('404.html'), checks404);
-assertChecks('index.html', read('index.html'), checksIndex);
+const indexHtml = read('index.html');
+assertChecks('index.html', indexHtml, checksIndex);
+
+const gptJs = read('assets/sandra-gpt.js');
+const taglineJs = gptJs.match(/const TAGLINE = '([^']+)';/);
+const taglineHtml = indexHtml.match(/id="gpt-tagline"[^>]*>([^<]+)</);
+if (!taglineJs || !taglineHtml) {
+  console.error('validate-basic-html: could not parse SandraGPT tagline in JS or index.html');
+  process.exit(1);
+}
+if (taglineJs[1] !== taglineHtml[1].trim()) {
+  console.error('validate-basic-html: gpt-tagline in index.html must match TAGLINE in sandra-gpt.js');
+  console.error(`  index: ${taglineHtml[1].trim()}`);
+  console.error(`  JS:    ${taglineJs[1]}`);
+  process.exit(1);
+}
 
 console.log('validate-basic-html: OK');

@@ -980,6 +980,21 @@
     }
   }
 
+  /** Prefill from ?q= (e.g. shared links to sandracai.com/?q=Plurall+AI). */
+  function applyDeepLinkQuestion() {
+    if (!input) return;
+    try {
+      const q = new URLSearchParams(window.location.search).get('q');
+      if (!q) return;
+      const trimmed = q.trim().slice(0, MAX_QUESTION_CHARS);
+      if (!trimmed) return;
+      input.value = trimmed;
+      input.focus({ preventScroll: true });
+    } catch {
+      /* ignore malformed URLs */
+    }
+  }
+
   function scrollToTurn(turnId) {
     const el = document.getElementById(`gpt-turn-${turnId}`);
     if (!el) return;
@@ -1245,6 +1260,7 @@
     }
     input.setAttribute('maxlength', String(MAX_QUESTION_CHARS));
     void restoreHistory();
+    applyDeepLinkQuestion();
     form.addEventListener('submit', handleSubmit);
     input.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {

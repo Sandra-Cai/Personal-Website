@@ -198,6 +198,10 @@ a:focus-visible {
   outline-offset: 4px;
 }
 
+.ba-nav a[aria-current='location'] {
+  color: var(--text);
+}
+
 /* Hero */
 .ba-hero {
   max-width: var(--max);
@@ -634,6 +638,19 @@ a:focus-visible {
   color: var(--text-faint);
   margin: 0 0 1.25rem;
   line-height: 1.65;
+}
+
+.gpt-kbd {
+  display: inline-block;
+  padding: 0.1em 0.45em;
+  font-family: var(--font);
+  font-size: 0.85em;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text-dim);
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--line);
+  border-radius: 4px;
 }
 
 .gpt-noscript {
