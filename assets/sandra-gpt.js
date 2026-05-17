@@ -5,7 +5,7 @@
 (function () {
   const EMAIL = 'sandraxcyj@gmail.com';
   /** Must match the SandraGPT subtitle on the page (set on load). */
-  const TAGLINE = 'Work, startups, trading comps, research, background, or say hi.';
+  const TAGLINE = 'Plurall AI, work, research, trading comps, background, or say hi.';
 
   const REPLY_INDEPENDENT_RESEARCH =
     'Independent work spans equity research, macro and AI writing, and open quant work. The Research section on this page lists pieces and links.';
@@ -243,7 +243,7 @@
       ],
       priority: 25,
       reply:
-        'NYU Computer Science with minors in Mathematics and BEMT (Business of Entertainment, Media and Technology)—coursework summaries live under Academic, with experience narratives above them on the page.',
+        'NYU Computer Science with minors in Mathematics and BEMT—coursework under Academic; operating experience leads on this page.',
     },
     {
       keys: [
@@ -260,7 +260,7 @@
       ],
       priority: 14,
       reply:
-        'The Academic section summarizes NYU coursework (algorithms through computer security) in factual terms.',
+        'The Academic section summarizes NYU coursework (algorithms through ML, NLP, systems, and security) in factual terms.',
     },
     {
       keys: [
@@ -1303,6 +1303,13 @@
     }, 450);
   });
 
+  function isTypingInField(el) {
+    if (!el || !(el instanceof HTMLElement)) return false;
+    const tag = el.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return true;
+    return el.isContentEditable;
+  }
+
   const agentSection = document.getElementById('sandra-gpt');
   if (agentSection && input) {
     agentSection.addEventListener('keydown', (e) => {
@@ -1310,6 +1317,21 @@
       if (document.activeElement !== input) return;
       e.preventDefault();
       input.blur();
+    });
+  }
+
+  if (input) {
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+      if (isTypingInField(document.activeElement)) return;
+      e.preventDefault();
+      if (agentSection) {
+        agentSection.scrollIntoView({
+          behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+          block: 'start',
+        });
+      }
+      input.focus();
     });
   }
 })();
