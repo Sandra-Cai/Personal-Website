@@ -103,6 +103,18 @@
     },
     {
       keys: [
+        'accelerating work',
+        'work that ships',
+        'work section',
+        'track record section',
+        'professional experience section',
+      ],
+      priority: 26,
+      reply:
+        'Track record on this page covers quant (Vigil Markets), institutional research (MSRA, JD.com), and product/founding (Plurall AI).',
+    },
+    {
+      keys: [
         'focus areas',
         'markets and quant',
         'ai and systems',
@@ -984,15 +996,40 @@
   function applyDeepLinkQuestion() {
     if (!input) return;
     try {
-      const q = new URLSearchParams(window.location.search).get('q');
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('q');
       if (!q) return;
       const trimmed = q.trim().slice(0, MAX_QUESTION_CHARS);
       if (!trimmed) return;
       input.value = trimmed;
+      const section = document.getElementById('sandra-gpt');
+      if (section) {
+        section.scrollIntoView({
+          behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+          block: 'start',
+        });
+      }
       input.focus({ preventScroll: true });
+      params.delete('q');
+      const rest = params.toString();
+      const nextUrl = window.location.pathname + (rest ? `?${rest}` : '') + window.location.hash;
+      window.history.replaceState(null, '', nextUrl);
     } catch {
       /* ignore malformed URLs */
     }
+  }
+
+  function initStarterPrompts() {
+    document.querySelectorAll('.gpt-starter[data-q]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const q = btn.getAttribute('data-q');
+        if (!q || !input) return;
+        input.value = q.slice(0, MAX_QUESTION_CHARS);
+        recallIndex = -1;
+        draftBeforeRecall = '';
+        input.focus();
+      });
+    });
   }
 
   function scrollToTurn(turnId) {
@@ -1261,6 +1298,7 @@
     input.setAttribute('maxlength', String(MAX_QUESTION_CHARS));
     void restoreHistory();
     applyDeepLinkQuestion();
+    initStarterPrompts();
     form.addEventListener('submit', handleSubmit);
     input.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
