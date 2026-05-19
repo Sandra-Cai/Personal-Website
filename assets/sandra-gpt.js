@@ -123,7 +123,25 @@
       ],
       priority: 27,
       reply:
-        'Core focus areas are markets/quant, independent research, and AI/systems engineering. This site highlights projects where those three overlap.',
+        'Core focus areas are markets/quant, independent research, and AI/trust engineering (including Plurall AI for synthetic-media verification). This site highlights where those overlap.',
+    },
+    {
+      keys: [
+        'three things i believe',
+        'things you believe',
+        'what do you believe',
+        'beliefs section',
+        'show the work section',
+      ],
+      priority: 28,
+      reply:
+        'Three things on this page: Show the work (data, mechanism, falsifiability); Systems and incentives (microstructure, risk, infrastructure); Ship and iterate (research informs builds; public writing keeps both honest).',
+    },
+    {
+      keys: ['rigor as infrastructure', 'perspective section', 'split section', 'rigor as'],
+      priority: 27,
+      reply:
+        'The perspective block—Rigor as infrastructure—means the same bar for clearinghouse models, synthetic-media checks, and stock pitches: defensible assumptions and engineering to test them.',
     },
     {
       keys: [

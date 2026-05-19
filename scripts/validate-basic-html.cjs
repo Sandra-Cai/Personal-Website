@@ -74,4 +74,15 @@ if (metaDesc[1] !== personDesc) {
   process.exit(1);
 }
 
+const ogDesc = indexHtml.match(/<meta property="og:description" content="([^"]+)"/);
+const twDesc = indexHtml.match(/<meta name="twitter:description" content="([^"]+)"/);
+if (!ogDesc || !twDesc) {
+  console.error('validate-basic-html: could not parse og:description or twitter:description');
+  process.exit(1);
+}
+if (metaDesc[1] !== ogDesc[1] || metaDesc[1] !== twDesc[1]) {
+  console.error('validate-basic-html: meta, og, and twitter descriptions must match');
+  process.exit(1);
+}
+
 console.log('validate-basic-html: OK');
