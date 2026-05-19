@@ -1019,15 +1019,35 @@
     }
   }
 
+  function updateStartersVisibility() {
+    const starters = document.querySelector('.gpt-starters');
+    if (!starters) return;
+    starters.hidden = Boolean(logEl && logEl.children.length > 0);
+  }
+
+  function updateCharCount() {
+    const el = document.getElementById('gpt-char-count');
+    if (!el || !input) return;
+    const left = MAX_QUESTION_CHARS - input.value.length;
+    if (left <= 40) {
+      el.textContent = `${left} characters left`;
+      el.classList.remove('visually-hidden');
+    } else {
+      el.textContent = '';
+      el.classList.add('visually-hidden');
+    }
+  }
+
   function initStarterPrompts() {
     document.querySelectorAll('.gpt-starter[data-q]').forEach((btn) => {
       btn.addEventListener('click', () => {
         const q = btn.getAttribute('data-q');
-        if (!q || !input) return;
+        if (!q || !input || !form) return;
         input.value = q.slice(0, MAX_QUESTION_CHARS);
         recallIndex = -1;
         draftBeforeRecall = '';
-        input.focus();
+        updateCharCount();
+        form.requestSubmit();
       });
     });
   }
@@ -1067,6 +1087,7 @@
     if (doScroll !== false) {
       wrap.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
     }
+    updateStartersVisibility();
   }
 
   function setSidebarItemActive(turnId) {
@@ -1158,6 +1179,7 @@
     }
     if (logEl) logEl.innerHTML = '';
     if (sidebarList) sidebarList.innerHTML = '';
+    updateStartersVisibility();
     const clearedOnServer = await clearRemote(getOrCreateSessionId());
     setSyncStatus(clearedOnServer ? 'server' : 'local');
     if (input) input.focus();
@@ -1200,6 +1222,7 @@
     }
 
     setSyncStatus(apiDisabled ? 'local' : 'server');
+    updateStartersVisibility();
     if (!apiDisabled && entries.length > 0) {
       void syncUnsavedTurnsToServer(sessionId)
         .then((did) => {
@@ -1334,6 +1357,7 @@
       if (recallIndex !== -1) {
         recallIndex = -1;
       }
+      updateCharCount();
     });
   }
 

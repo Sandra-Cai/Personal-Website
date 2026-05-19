@@ -56,4 +56,22 @@ if (taglineJs[1] !== taglineHtml[1].trim()) {
   process.exit(1);
 }
 
+const metaDesc = indexHtml.match(/<meta name="description" content="([^"]+)"/);
+const jsonLd = indexHtml.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
+if (!metaDesc || !jsonLd) {
+  console.error('validate-basic-html: could not parse meta description or JSON-LD');
+  process.exit(1);
+}
+let personDesc;
+try {
+  personDesc = JSON.parse(jsonLd[1]).description;
+} catch {
+  console.error('validate-basic-html: could not parse JSON-LD description');
+  process.exit(1);
+}
+if (metaDesc[1] !== personDesc) {
+  console.error('validate-basic-html: meta description must match JSON-LD Person.description');
+  process.exit(1);
+}
+
 console.log('validate-basic-html: OK');
