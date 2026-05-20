@@ -623,6 +623,16 @@ a:focus-visible {
   outline-offset: 3px;
 }
 
+.gpt-send:disabled {
+  background: var(--text-faint);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.gpt-send:disabled:hover {
+  background: var(--text-faint);
+}
+
 .gpt-field input:focus-visible {
   outline: none;
 }

@@ -111,7 +111,7 @@
       ],
       priority: 26,
       reply:
-        'Track record on this page covers quant (Vigil Markets), institutional research (MSRA, JD.com), and product/founding (Plurall AI).',
+        'Track record leads with Plurall AI (founding), then quant (Vigil Markets) and institutional research (MSRA, JD.com).',
     },
     {
       keys: [
@@ -395,7 +395,7 @@
       ],
       priority: 42,
       reply:
-        'Plurall AI is a deepfake-detection company building a proprietary multimodal system from first principles—sub-two-second inference at high accuracy, designed for enterprise deployment as a trust layer for an increasingly synthetic world. The Product card on this page links the site and code.',
+        'Plurall AI is a deepfake-detection company building a proprietary multimodal system from first principles—sub-two-second inference at high accuracy, designed for enterprise deployment as a trust layer for an increasingly synthetic world. The Founding card on this page links GitHub.',
     },
     {
       keys: [
@@ -1043,6 +1043,13 @@
     starters.hidden = Boolean(logEl && logEl.children.length > 0);
   }
 
+  function updateSendState() {
+    const sendBtn = form?.querySelector('.gpt-send');
+    if (!sendBtn || !input) return;
+    const busy = form?.getAttribute('aria-busy') === 'true';
+    sendBtn.disabled = busy || !input.value.trim();
+  }
+
   function updateCharCount() {
     const el = document.getElementById('gpt-char-count');
     if (!el || !input) return;
@@ -1291,7 +1298,7 @@
       if (sendBtn) sendBtn.disabled = true;
       window.setTimeout(() => {
         form.setAttribute('aria-busy', 'false');
-        if (sendBtn) sendBtn.disabled = false;
+        updateSendState();
       }, 180);
     }
 
@@ -1376,7 +1383,9 @@
         recallIndex = -1;
       }
       updateCharCount();
+      updateSendState();
     });
+    updateSendState();
   }
 
   if (clearBtn) {
