@@ -170,10 +170,23 @@
         'Research should inform builds, and builds should stress-test research; public writing keeps that loop honest.',
     },
     {
-      keys: ['institutional', 'research & cloud', 'research and cloud'],
+      keys: ['institutional', 'research & cloud', 'research and cloud', 'jd.com', 'msra card'],
       priority: 28,
       reply:
-        'That card is MSRA (blockchain finance research) and JD.com (private cloud)—details are in Track record on this page.',
+        'The Institutional card is MSRA (blockchain finance research) and JD.com (private cloud)—third on Track record after Plurall AI and quant.',
+    },
+    {
+      keys: [
+        'founding card',
+        'plurall card',
+        'first card',
+        'lead card',
+        'markets systems trust',
+        'one discipline',
+      ],
+      priority: 25,
+      reply:
+        'The connector line on this page—markets, systems, trust as one discipline—shows up across quant work, research, and Plurall AI (the lead Founding card on Track record).',
     },
     {
       keys: ['sandragpt', 'sandra gpt', 'this chat', 'this box'],

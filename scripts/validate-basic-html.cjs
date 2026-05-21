@@ -85,4 +85,16 @@ if (metaDesc[1] !== ogDesc[1] || metaDesc[1] !== twDesc[1]) {
   process.exit(1);
 }
 
+const pageTitle = indexHtml.match(/<title>([^<]+)<\/title>/);
+const ogTitle = indexHtml.match(/<meta property="og:title" content="([^"]+)"/);
+const twTitle = indexHtml.match(/<meta name="twitter:title" content="([^"]+)"/);
+if (!pageTitle || !ogTitle || !twTitle) {
+  console.error('validate-basic-html: could not parse page or social titles');
+  process.exit(1);
+}
+if (pageTitle[1] !== ogTitle[1] || pageTitle[1] !== twTitle[1]) {
+  console.error('validate-basic-html: title, og:title, and twitter:title must match');
+  process.exit(1);
+}
+
 console.log('validate-basic-html: OK');
