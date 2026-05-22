@@ -23,6 +23,10 @@ function initNavScrollSpy() {
   }
   if (!tracked.length) return;
 
+  const clearActive = () => {
+    for (const row of tracked) row.link.removeAttribute('aria-current');
+  };
+
   const setActive = (id) => {
     for (const row of tracked) {
       if (row.id === id) row.link.setAttribute('aria-current', 'location');
@@ -49,6 +53,18 @@ function initNavScrollSpy() {
     const id = location.hash.replace(/^#/, '');
     if (id && tracked.some((r) => r.id === id)) setActive(id);
   });
+
+  let scrollTimer;
+  window.addEventListener(
+    'scroll',
+    () => {
+      window.clearTimeout(scrollTimer);
+      scrollTimer = window.setTimeout(() => {
+        if (window.scrollY < 120) clearActive();
+      }, 80);
+    },
+    { passive: true }
+  );
 }
 
 initNavScrollSpy();

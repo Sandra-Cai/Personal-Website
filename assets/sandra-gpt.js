@@ -1060,7 +1060,12 @@
     const sendBtn = form?.querySelector('.gpt-send');
     if (!sendBtn || !input) return;
     const busy = form?.getAttribute('aria-busy') === 'true';
-    sendBtn.disabled = busy || !input.value.trim();
+    const hasText = Boolean(input.value.trim());
+    sendBtn.disabled = busy || !hasText;
+    sendBtn.setAttribute(
+      'aria-label',
+      hasText && !busy ? 'Send question' : 'Enter a question to send'
+    );
   }
 
   function updateCharCount() {

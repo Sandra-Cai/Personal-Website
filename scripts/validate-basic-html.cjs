@@ -32,7 +32,9 @@ const checksIndex = [
   ['skip link', /class="ba-skip"/],
   ['main landmark', /\bid="top"/],
   ['SandraGPT section', /\bid="sandra-gpt"/],
+  ['JSON-LD graph', /"@graph"/],
   ['JSON-LD Person', /"@type":\s*"Person"/],
+  ['JSON-LD WebSite SearchAction', /"urlTemplate":\s*"https:\/\/www\.sandracai\.com\/\?q=\{search_term_string\}"/],
   ['noscript fallback', /<noscript>/],
   ['site stylesheet', /href="\/assets\/styles\.css\?v=/],
   ['SandraGPT script', /src="\/assets\/sandra-gpt\.js\?v=/],
@@ -62,11 +64,24 @@ if (!metaDesc || !jsonLd) {
   console.error('validate-basic-html: could not parse meta description or JSON-LD');
   process.exit(1);
 }
+function personDescriptionFromLd(ld) {
+  if (ld['@graph']) {
+    const person = ld['@graph'].find((n) => n['@type'] === 'Person');
+    return person?.description;
+  }
+  if (ld['@type'] === 'Person') return ld.description;
+  return undefined;
+}
+
 let personDesc;
 try {
-  personDesc = JSON.parse(jsonLd[1]).description;
+  personDesc = personDescriptionFromLd(JSON.parse(jsonLd[1]));
 } catch {
   console.error('validate-basic-html: could not parse JSON-LD description');
+  process.exit(1);
+}
+if (!personDesc) {
+  console.error('validate-basic-html: JSON-LD Person.description missing');
   process.exit(1);
 }
 if (metaDesc[1] !== personDesc) {
