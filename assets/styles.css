@@ -202,6 +202,16 @@ a:focus-visible {
   color: var(--text);
 }
 
+.ba-nav-sep {
+  color: var(--line-hover);
+  font-weight: 400;
+  user-select: none;
+}
+
+.ba-nav-external {
+  letter-spacing: 0.14em;
+}
+
 /* Hero */
 .ba-hero {
   max-width: var(--max);

@@ -8,7 +8,7 @@
   const TAGLINE = 'Plurall AI, work, research, trading comps, background, or say hi.';
 
   const REPLY_INDEPENDENT_RESEARCH =
-    'Independent work spans equity research, macro and AI writing, and open quant work. The Research section on this page lists pieces and links.';
+    'Independent work spans equity research, macro and AI writing, open quant work, and synthetic-media trust (via Plurall AI). The Research section on this page lists pieces and links.';
 
   /**
    * Multi-word keys use substring match; single-token keys use word boundaries to avoid
@@ -138,7 +138,7 @@
         'Three things on this page: Show the work (data, mechanism, falsifiability); Systems and incentives (microstructure, risk, infrastructure); Ship and iterate (research informs builds; public writing keeps both honest).',
     },
     {
-      keys: ['rigor as infrastructure', 'perspective section', 'split section', 'rigor as'],
+      keys: ['rigor as infrastructure', 'perspective', 'perspective section', 'split section', 'rigor as'],
       priority: 27,
       reply:
         'The perspective block—Rigor as infrastructure—means the same bar for clearinghouse models, synthetic-media checks, and stock pitches: defensible assumptions and engineering to test them.',
@@ -1023,15 +1023,15 @@
     }
   }
 
-  /** Prefill from ?q= (e.g. shared links to sandracai.com/?q=Plurall+AI). */
+  /** Prefill from ?q= (e.g. shared links to sandracai.com/?q=Plurall+AI) and submit. */
   function applyDeepLinkQuestion() {
-    if (!input) return;
+    if (!input) return false;
     try {
       const params = new URLSearchParams(window.location.search);
       const q = params.get('q');
-      if (!q) return;
+      if (!q) return false;
       const trimmed = q.trim().slice(0, MAX_QUESTION_CHARS);
-      if (!trimmed) return;
+      if (!trimmed) return false;
       input.value = trimmed;
       const section = document.getElementById('sandra-gpt');
       if (section) {
@@ -1040,14 +1040,24 @@
           block: 'start',
         });
       }
-      input.focus({ preventScroll: true });
       params.delete('q');
       const rest = params.toString();
       const nextUrl = window.location.pathname + (rest ? `?${rest}` : '') + window.location.hash;
       window.history.replaceState(null, '', nextUrl);
+      updateCharCount();
+      updateSendState();
+      if (form) form.requestSubmit();
+      return true;
     } catch {
-      /* ignore malformed URLs */
+      return false;
     }
+  }
+
+  function focusSandraGptFromHash() {
+    if (location.hash !== '#sandra-gpt' || !input) return;
+    window.requestAnimationFrame(() => {
+      input.focus({ preventScroll: true });
+    });
   }
 
   function updateStartersVisibility() {
@@ -1362,8 +1372,9 @@
       }
     }
     input.setAttribute('maxlength', String(MAX_QUESTION_CHARS));
-    void restoreHistory();
-    applyDeepLinkQuestion();
+    void restoreHistory().then(() => {
+      if (!applyDeepLinkQuestion()) focusSandraGptFromHash();
+    });
     initStarterPrompts();
     form.addEventListener('submit', handleSubmit);
     input.addEventListener('keydown', (e) => {
