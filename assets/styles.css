@@ -1199,7 +1199,10 @@ a:focus-visible {
 @media print {
   .ba-bg,
   .ba-skip,
-  .ba-header {
+  .ba-header,
+  .ba-agent,
+  .ba-strip,
+  .gpt-starters {
     display: none !important;
   }
 
@@ -1211,6 +1214,33 @@ a:focus-visible {
   a {
     color: #0a0a0a;
     text-decoration: underline;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.75em;
+    font-weight: 400;
+    word-break: break-all;
+  }
+
+  a[href^="mailto"]::after {
+    content: none;
+  }
+
+  .ba-card,
+  .ba-card--bare {
+    border-color: #ccc;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .ba-section {
+    padding: 1.5rem 0;
+  }
+
+  .ba-footer {
+    border-top: 1px solid #ccc;
+    padding: 1rem 0;
   }
 }
 
