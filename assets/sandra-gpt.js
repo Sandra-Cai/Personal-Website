@@ -1304,6 +1304,8 @@
       input.value = '';
       recallIndex = -1;
       draftBeforeRecall = '';
+      updateCharCount();
+      updateSendState();
       return;
     }
 
@@ -1319,6 +1321,7 @@
     input.value = '';
     recallIndex = -1;
     draftBeforeRecall = '';
+    updateCharCount();
 
     if (form) {
       const sendBtn = form.querySelector('.gpt-send');
