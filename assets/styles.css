@@ -177,11 +177,22 @@ a:focus-visible {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px 22px;
+  gap: 6px 18px;
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .ba-nav {
+    gap: 4px 12px;
+    font-size: 10px;
+  }
+
+  .ba-nav-sep {
+    display: none;
+  }
 }
 
 .ba-nav a {
@@ -1034,6 +1045,12 @@ a:focus-visible {
   background: rgba(0, 0, 0, 0.025);
   border: 1px solid var(--line);
   border-radius: var(--radius);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.ba-list li:hover {
+  border-color: var(--line-hover);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .ba-list li::before {
