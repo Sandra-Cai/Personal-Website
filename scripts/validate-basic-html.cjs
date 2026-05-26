@@ -25,6 +25,11 @@ const checks404 = [
   ['main landmark', /\bid="main"/],
   ['404 block', /class="ba-404/],
   ['site stylesheet', /href="\/assets\/styles\.css\?v=/],
+  ['nav separator', /class="ba-nav-sep"/],
+  ['nav external class', /class="ba-nav-external"/],
+  ['logo aria-label', /class="ba-logo"[^>]*aria-label=/],
+  ['footer Substack', /ba-footer-links[\s\S]*?substack\.com/i],
+  ['manifest link', /rel="manifest"/],
 ];
 
 const checksIndex = [
