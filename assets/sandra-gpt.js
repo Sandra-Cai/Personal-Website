@@ -1394,6 +1394,8 @@
             recallIndex = Math.min(recallIndex + 1, questions.length - 1);
           }
           input.value = questions[recallIndex] || '';
+          updateCharCount();
+          updateSendState();
           return;
         }
         e.preventDefault();
@@ -1404,6 +1406,8 @@
           recallIndex -= 1;
           input.value = questions[recallIndex] || '';
         }
+        updateCharCount();
+        updateSendState();
         return;
       }
       if (!(e.ctrlKey || e.metaKey) || e.key !== 'Enter') return;
