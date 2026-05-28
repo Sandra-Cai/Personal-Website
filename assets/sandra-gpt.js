@@ -398,7 +398,6 @@
         'synthetic media',
         'founder',
         'founding',
-        'found',
         'what are you founding',
         'what are you building',
         'what are you working on',

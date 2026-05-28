@@ -43,6 +43,9 @@ const checksIndex = [
   ['noscript fallback', /<noscript>/],
   ['site stylesheet', /href="\/assets\/styles\.css\?v=/],
   ['SandraGPT script', /src="\/assets\/sandra-gpt\.js\?v=/],
+  ['manifest link', /rel="manifest"/],
+  ['connector aside', /<aside class="ba-strip" aria-label="Connector">/],
+  ['external links nav', /<nav class="ba-strip ba-strip--dim" aria-label="External links">/],
 ];
 
 assertChecks('404.html', read('404.html'), checks404);

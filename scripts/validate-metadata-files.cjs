@@ -39,4 +39,30 @@ if (!new RegExp(`^\\s*Canonical:\\s*${SITE_ORIGIN.replace(/[.*+?^${}()|[\]\\]/g,
   fail('security.txt canonical URL is missing or incorrect');
 }
 
+const expiresMatch = security.match(/^\s*Expires:\s*(\S+)/im);
+if (!expiresMatch) {
+  fail('security.txt missing Expires');
+}
+const expiresAt = Date.parse(expiresMatch[1]);
+if (!Number.isFinite(expiresAt) || expiresAt <= Date.now()) {
+  fail('security.txt Expires must be a future RFC 3339 timestamp');
+}
+
+const indexHtml = read('index.html');
+const themeMeta = indexHtml.match(/<meta name="theme-color" content="([^"]+)"/);
+if (!themeMeta) fail('index.html missing meta theme-color');
+
+let manifest;
+try {
+  manifest = JSON.parse(read('site.webmanifest'));
+} catch {
+  fail('site.webmanifest is not valid JSON');
+}
+if (manifest.theme_color !== themeMeta[1]) {
+  fail('site.webmanifest theme_color must match index.html meta theme-color');
+}
+if (manifest.background_color !== themeMeta[1]) {
+  fail('site.webmanifest background_color must match index.html meta theme-color');
+}
+
 console.log('validate-metadata-files: OK');

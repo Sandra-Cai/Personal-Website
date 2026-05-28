@@ -138,7 +138,8 @@ a:focus-visible {
 .ba-header-inner {
   max-width: var(--max);
   margin: 0 auto;
-  padding: 16px 24px;
+  padding: max(16px, env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) 16px
+    max(24px, env(safe-area-inset-left, 0px));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1271,7 +1272,8 @@ a:focus-visible {
   }
 
   .ba-card,
-  .ba-card--bare {
+  .ba-card--bare,
+  .ba-list li {
     border-color: #ccc;
     box-shadow: none;
     break-inside: avoid;
