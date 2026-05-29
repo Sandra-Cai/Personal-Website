@@ -120,4 +120,17 @@ if (pageTitle[1] !== ogTitle[1] || pageTitle[1] !== twTitle[1]) {
   process.exit(1);
 }
 
+function assertBlankLinksLabeled(file, html) {
+  const tags = html.match(/<a\b[^>]*\btarget="_blank"[^>]*>/gi) || [];
+  for (const tag of tags) {
+    if (!/\baria-label=/.test(tag)) {
+      console.error(`validate-basic-html: ${file} has target="_blank" without aria-label: ${tag.slice(0, 120)}`);
+      process.exit(1);
+    }
+  }
+}
+
+assertBlankLinksLabeled('index.html', indexHtml);
+assertBlankLinksLabeled('404.html', read('404.html'));
+
 console.log('validate-basic-html: OK');

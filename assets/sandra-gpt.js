@@ -318,7 +318,6 @@
         'introduce yourself',
         'introduce',
         'your background',
-        'background',
       ],
       priority: 20,
       reply:
@@ -1234,7 +1233,10 @@
     updateStartersVisibility();
     const clearedOnServer = await clearRemote(getOrCreateSessionId());
     setSyncStatus(clearedOnServer ? 'server' : 'local');
-    if (input) input.focus();
+    if (input) {
+      input.focus();
+      updateSendState();
+    }
   }
 
   async function restoreHistory() {
