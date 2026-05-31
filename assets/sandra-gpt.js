@@ -563,7 +563,7 @@
         'Python is central to quant and research work (e.g. Vigil/Nuveaux); ML and full-stack work show up in projects listed under Work and GitHub on this page.',
     },
     {
-      keys: ['github', 'code', 'engineering', 'build'],
+      keys: ['github', 'engineering', 'open source repo', 'your repos'],
       priority: 8,
       reply: 'Repos (papers, projects, tooling) are under Sandra-Cai on GitHub.',
     },
@@ -573,7 +573,7 @@
       reply: 'Highlighted work is under Work and Research; code and papers are linked from GitHub (Sandra-Cai).',
     },
     {
-      keys: ['passion', 'interest', 'focus', 'why finance'],
+      keys: ['passion', 'interest', 'why finance', 'why markets'],
       priority: 5,
       reply: 'I focus on where careful financial analysis meets solid engineering—in markets, research, and product.',
     },
@@ -1098,6 +1098,7 @@
         recallIndex = -1;
         draftBeforeRecall = '';
         updateCharCount();
+        updateSendState();
         form.requestSubmit();
       });
     });

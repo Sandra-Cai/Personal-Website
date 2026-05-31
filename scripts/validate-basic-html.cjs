@@ -39,6 +39,7 @@ const checksIndex = [
   ['SandraGPT section', /\bid="sandra-gpt"/],
   ['JSON-LD graph', /"@graph"/],
   ['JSON-LD Person', /"@type":\s*"Person"/],
+  ['JSON-LD email', /"email":\s*"sandraxcyj@gmail.com"/],
   ['JSON-LD WebSite SearchAction', /"urlTemplate":\s*"https:\/\/www\.sandracai\.com\/\?q=\{search_term_string\}"/],
   ['noscript fallback', /<noscript>/],
   ['site stylesheet', /href="\/assets\/styles\.css\?v=/],

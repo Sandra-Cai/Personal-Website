@@ -1110,7 +1110,8 @@ a:focus-visible {
 .ba-footer {
   max-width: var(--max);
   margin: 0 auto;
-  padding: 2.25rem 24px 2.75rem;
+  padding: 2.25rem max(24px, env(safe-area-inset-right, 0px)) max(2.75rem, env(safe-area-inset-bottom, 0px))
+    max(24px, env(safe-area-inset-left, 0px));
   border-top: 1px solid var(--line);
 }
 
