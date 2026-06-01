@@ -164,7 +164,7 @@
         'A core theme is systems and incentives: microstructure, risk, and infrastructure should be reasoned about with the same precision in research and in code.',
     },
     {
-      keys: ['ship and iterate', 'iterate', 'shipping philosophy', 'build philosophy', 'research informs builds'],
+      keys: ['ship and iterate', 'shipping philosophy', 'build philosophy', 'research informs builds'],
       priority: 24,
       reply:
         'Research should inform builds, and builds should stress-test research; public writing keeps that loop honest.',
@@ -195,6 +195,19 @@
         'SandraGPT is a lightweight on-page helper that matches your question to notes from this site; it is not a live LLM.',
     },
     {
+      keys: [
+        'press slash',
+        'keyboard shortcut',
+        'shortcut key',
+        'focus shortcut',
+        'slash key',
+        'slash to focus',
+      ],
+      priority: 31,
+      reply:
+        'Press / anywhere on the page (outside a text field) to jump to SandraGPT and focus the question box.',
+    },
+    {
       keys: ['vigil', 'nuveaux', 'quantitative researcher', 'clearinghouse', 'counterparty', 'underwriting', 'crypto trading volume'],
       priority: 40,
       reply:
@@ -222,7 +235,7 @@
       reply: 'The site notes a Phoenix Trading Competition win (crypto strategies) during New York Tech Week 2023.',
     },
     {
-      keys: ['trade', 'trading', 'trader', 'paper trade'],
+      keys: ['trading', 'trader', 'paper trade', 'trade competition'],
       priority: 10,
       reply:
         'I take structured trading and markets work seriously—competitions, research writing, and related projects. Work and Research on this page point to specifics.',
@@ -583,7 +596,17 @@
       reply: 'Essays on Substack (@caisandra); quant and macro threads also on LinkedIn and Medium.',
     },
     {
-      keys: ['contact', 'email', 'reach', 'hire', 'collaborat', 'get in touch', 'ping me'],
+      keys: [
+        'contact',
+        'email me',
+        'your email',
+        'reach you',
+        'reach out',
+        'collaborat',
+        'get in touch',
+        'ping me',
+        'how to contact',
+      ],
       priority: 5,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,
     },
@@ -1231,6 +1254,8 @@
     }
     if (logEl) logEl.innerHTML = '';
     if (sidebarList) sidebarList.innerHTML = '';
+    recallIndex = -1;
+    draftBeforeRecall = '';
     updateStartersVisibility();
     const clearedOnServer = await clearRemote(getOrCreateSessionId());
     setSyncStatus(clearedOnServer ? 'server' : 'local');
@@ -1265,6 +1290,7 @@
         }))
       );
       setSyncStatus('server');
+      updateStartersVisibility();
       return;
     }
 
@@ -1301,6 +1327,8 @@
     if (q.length > MAX_QUESTION_CHARS) {
       const turnId = newTurnId();
       const msg = `Please keep questions under ${MAX_QUESTION_CHARS} characters.`;
+      lastSubmittedCanonical = canonicalQ;
+      lastSubmittedAt = now;
       renderTurn(turnId, q, msg);
       addSidebarEntry(turnId, q);
       input.value = '';

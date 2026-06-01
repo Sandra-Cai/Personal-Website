@@ -65,4 +65,31 @@ if (manifest.background_color !== themeMeta[1]) {
   fail('site.webmanifest background_color must match index.html meta theme-color');
 }
 
+const metaDesc = indexHtml.match(/<meta name="description" content="([^"]+)"/);
+if (!metaDesc) fail('index.html missing meta description');
+if (!manifest.description || !metaDesc[1].startsWith(manifest.description)) {
+  fail('site.webmanifest description must match the opening of meta description');
+}
+
+const vercel = read('vercel.json');
+let vercelJson;
+try {
+  vercelJson = JSON.parse(vercel);
+} catch {
+  fail('vercel.json is not valid JSON');
+}
+const headerRules = Array.isArray(vercelJson.headers) ? vercelJson.headers : [];
+const assetRule = headerRules.find((r) => r.source === '/assets/(.*)');
+const globalRule = headerRules.find((r) => r.source === '/(.*)');
+if (!assetRule) fail('vercel.json missing /assets/(.*) header rule');
+const assetCache = (assetRule.headers || []).find((h) => h.key === 'Cache-Control');
+if (!assetCache || !/immutable/.test(assetCache.value)) {
+  fail('vercel.json /assets Cache-Control should be long-lived and immutable');
+}
+if (!globalRule) fail('vercel.json missing global header rule');
+const coop = (globalRule.headers || []).find((h) => h.key === 'Cross-Origin-Opener-Policy');
+if (!coop || coop.value !== 'same-origin') {
+  fail('vercel.json missing Cross-Origin-Opener-Policy: same-origin');
+}
+
 console.log('validate-metadata-files: OK');
