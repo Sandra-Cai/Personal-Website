@@ -147,8 +147,8 @@
       keys: [
         'standard of proof',
         'one standard of proof',
-        'rigor',
         'rigorous',
+        'academic rigor',
         'show the work',
         'trustworthy media',
         'ai-native world',
@@ -158,7 +158,11 @@
         'One standard of proof—from Plurall AI (trustworthy media in a synthetic world) through markets, infrastructure, and public research. Same as Show the work on this page: claims need data, mechanism, and a clear way to be wrong.',
     },
     {
-      keys: ['systems and incentives', 'microstructure and risk', 'microstructure and infrastructure', 'incentives'],
+      keys: [
+        'systems and incentives',
+        'microstructure and risk',
+        'microstructure and infrastructure',
+      ],
       priority: 29,
       reply:
         'A core theme is systems and incentives: microstructure, risk, and infrastructure should be reasoned about with the same precision in research and in code.',
@@ -241,7 +245,7 @@
         'I take structured trading and markets work seriously—competitions, research writing, and related projects. Work and Research on this page point to specifics.',
     },
     {
-      keys: ['quantitative finance', 'quant finance', 'quant research', 'quant'],
+      keys: ['quantitative finance', 'quant finance', 'quant research', 'quant work', 'quant role'],
       priority: 18,
       reply:
         'Quant-style work shows up at Vigil/Nuveaux, in trading competitions, and in independent research. Work and Research on this page cover each thread.',
@@ -586,7 +590,7 @@
       reply: 'Highlighted work is under Work and Research; code and papers are linked from GitHub (Sandra-Cai).',
     },
     {
-      keys: ['passion', 'interest', 'why finance', 'why markets'],
+      keys: ['passion', 'areas of interest', 'personal interest', 'why finance', 'why markets'],
       priority: 5,
       reply: 'I focus on where careful financial analysis meets solid engineering—in markets, research, and product.',
     },

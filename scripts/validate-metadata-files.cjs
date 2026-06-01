@@ -91,5 +91,11 @@ const coop = (globalRule.headers || []).find((h) => h.key === 'Cross-Origin-Open
 if (!coop || coop.value !== 'same-origin') {
   fail('vercel.json missing Cross-Origin-Opener-Policy: same-origin');
 }
+const apiRule = headerRules.find((r) => r.source === '/api/(.*)');
+if (!apiRule) fail('vercel.json missing /api/(.*) header rule');
+const apiCache = (apiRule.headers || []).find((h) => h.key === 'Cache-Control');
+if (!apiCache || apiCache.value !== 'no-store') {
+  fail('vercel.json /api Cache-Control must be no-store');
+}
 
 console.log('validate-metadata-files: OK');

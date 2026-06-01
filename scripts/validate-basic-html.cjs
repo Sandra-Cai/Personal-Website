@@ -29,6 +29,7 @@ const checks404 = [
   ['nav external class', /class="ba-nav-external"/],
   ['logo aria-label', /class="ba-logo"[^>]*aria-label=/],
   ['footer Substack', /ba-footer-links[\s\S]*?substack\.com/i],
+  ['footer Medium', /ba-footer-links[\s\S]*?medium\.com/i],
   ['manifest link', /rel="manifest"/],
 ];
 
@@ -47,6 +48,9 @@ const checksIndex = [
   ['manifest link', /rel="manifest"/],
   ['connector aside', /<aside class="ba-strip" aria-label="Connector">/],
   ['external links nav', /<nav class="ba-strip ba-strip--dim" aria-label="External links">/],
+  ['JSON-LD inLanguage', /"inLanguage":\s*"en-US"/],
+  ['gpt maxlength 280', /id="gpt-input"[^>]*maxlength="280"/],
+  ['send disabled by default', /class="gpt-send"[^>]*disabled/],
 ];
 
 assertChecks('404.html', read('404.html'), checks404);
@@ -133,5 +137,11 @@ function assertBlankLinksLabeled(file, html) {
 
 assertBlankLinksLabeled('index.html', indexHtml);
 assertBlankLinksLabeled('404.html', read('404.html'));
+
+const maxQ = gptJs.match(/const MAX_QUESTION_CHARS = (\d+);/);
+if (!maxQ || maxQ[1] !== '280') {
+  console.error('validate-basic-html: MAX_QUESTION_CHARS in sandra-gpt.js must be 280');
+  process.exit(1);
+}
 
 console.log('validate-basic-html: OK');
