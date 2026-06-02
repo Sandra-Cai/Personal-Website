@@ -818,7 +818,8 @@ a:focus-visible {
 .ba-strip {
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  padding: 2.75rem 24px;
+  padding: 2.75rem max(24px, env(safe-area-inset-right, 0px)) 2.75rem
+    max(24px, env(safe-area-inset-left, 0px));
   background: transparent;
 }
 
@@ -1076,9 +1077,11 @@ a:focus-visible {
 .ba-split {
   max-width: var(--max);
   margin: 0 auto;
-  padding: clamp(3rem, 8vw, 5rem) 24px;
+  padding: clamp(3rem, 8vw, 5rem) max(24px, env(safe-area-inset-right, 0px)) clamp(3rem, 8vw, 5rem)
+    max(24px, env(safe-area-inset-left, 0px));
   border-top: 1px solid var(--line);
   text-align: center;
+  scroll-margin-top: 5.5rem;
 }
 
 .ba-split-lines {

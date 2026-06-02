@@ -30,7 +30,9 @@ const checks404 = [
   ['logo aria-label', /class="ba-logo"[^>]*aria-label=/],
   ['footer Substack', /ba-footer-links[\s\S]*?substack\.com/i],
   ['footer Medium', /ba-footer-links[\s\S]*?medium\.com/i],
+  ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
   ['manifest link', /rel="manifest"/],
+  ['404 canonical', /<link rel="canonical" href="https:\/\/www\.sandracai\.com\/"/],
 ];
 
 const checksIndex = [
@@ -51,6 +53,7 @@ const checksIndex = [
   ['JSON-LD inLanguage', /"inLanguage":\s*"en-US"/],
   ['gpt maxlength 280', /id="gpt-input"[^>]*maxlength="280"/],
   ['send disabled by default', /class="gpt-send"[^>]*disabled/],
+  ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
 ];
 
 assertChecks('404.html', read('404.html'), checks404);

@@ -573,7 +573,6 @@
         'python',
         'typescript',
         'machine learning',
-        'ml',
       ],
       priority: 15,
       reply:
@@ -1174,7 +1173,8 @@
     sidebarList.querySelectorAll('.gpt-sidebar-item').forEach((n) => {
       const isMatch = n.dataset.turnId === turnId;
       n.classList.toggle('gpt-sidebar-item--active', isMatch);
-      n.setAttribute('aria-current', isMatch ? 'true' : 'false');
+      if (isMatch) n.setAttribute('aria-current', 'true');
+      else n.removeAttribute('aria-current');
     });
   }
 
@@ -1191,7 +1191,6 @@
     const label = questionText.length > 52 ? `${questionText.slice(0, 51)}…` : questionText;
     btn.textContent = label;
     btn.title = questionText;
-    btn.setAttribute('aria-current', 'false');
     btn.addEventListener('click', () => {
       setSidebarItemActive(turnId);
       scrollToTurn(turnId);

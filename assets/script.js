@@ -52,6 +52,7 @@ function initNavScrollSpy() {
   window.addEventListener('hashchange', () => {
     const id = location.hash.replace(/^#/, '');
     if (id && tracked.some((r) => r.id === id)) setActive(id);
+    else if (!id && window.scrollY < 120) clearActive();
   });
 
   let scrollTimer;
