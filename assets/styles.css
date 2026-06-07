@@ -309,7 +309,8 @@ a:focus-visible {
 .ba-agent {
   max-width: var(--max);
   margin: 0 auto;
-  padding: clamp(3.5rem, 9vw, 5.5rem) max(24px, env(safe-area-inset-right, 0px));
+  padding: clamp(3.5rem, 9vw, 5.5rem) max(24px, env(safe-area-inset-right, 0px)) clamp(3.5rem, 9vw, 5.5rem)
+    max(24px, env(safe-area-inset-left, 0px));
   border-top: 1px solid var(--line);
   scroll-margin-top: 5.5rem;
 }
@@ -922,7 +923,8 @@ a:focus-visible {
 .ba-section {
   max-width: var(--max);
   margin: 0 auto;
-  padding: clamp(4rem, 10vw, 6.5rem) max(24px, env(safe-area-inset-right, 0px));
+  padding: clamp(4rem, 10vw, 6.5rem) max(24px, env(safe-area-inset-right, 0px)) clamp(4rem, 10vw, 6.5rem)
+    max(24px, env(safe-area-inset-left, 0px));
   scroll-margin-top: 5.5rem;
 }
 

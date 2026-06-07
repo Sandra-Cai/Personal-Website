@@ -23,6 +23,7 @@ try {
 const graph = ld['@graph'] || (ld['@type'] ? [ld] : []);
 const person = graph.find((n) => n['@type'] === 'Person');
 const website = graph.find((n) => n['@type'] === 'WebSite');
+const plurall = graph.find((n) => n['@type'] === 'Organization' && n['@id'] === 'https://www.sandracai.com/#plurall');
 
 if (!person) {
   console.error('validate-jsonld: missing Person node');
@@ -32,8 +33,16 @@ if (!person.email || person.email !== 'sandraxcyj@gmail.com') {
   console.error('validate-jsonld: Person.email missing or incorrect');
   process.exit(1);
 }
-if (!person.worksFor || person.worksFor.name !== 'Plurall AI') {
-  console.error('validate-jsonld: Person.worksFor must name Plurall AI');
+if (!person.worksFor || person.worksFor['@id'] !== 'https://www.sandracai.com/#plurall') {
+  console.error('validate-jsonld: Person.worksFor must reference Plurall AI organization');
+  process.exit(1);
+}
+if (!plurall || plurall.name !== 'Plurall AI') {
+  console.error('validate-jsonld: missing Plurall AI Organization node');
+  process.exit(1);
+}
+if (!plurall.founder || plurall.founder['@id'] !== 'https://www.sandracai.com/#person') {
+  console.error('validate-jsonld: Plurall AI Organization.founder must reference Person');
   process.exit(1);
 }
 

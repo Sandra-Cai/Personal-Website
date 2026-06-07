@@ -51,6 +51,8 @@ const checksIndex = [
   ['connector aside', /<aside class="ba-strip" aria-label="Connector">/],
   ['external links nav', /<nav class="ba-strip ba-strip--dim" aria-label="External links">/],
   ['JSON-LD inLanguage', /"inLanguage":\s*"en-US"/],
+  ['JSON-LD Plurall org', /"@id":\s*"https:\/\/www\.sandracai\.com\/#plurall"/],
+  ['meta 4+ years', /4\+ years across industry, research, and founding/],
   ['gpt maxlength 280', /id="gpt-input"[^>]*maxlength="280"/],
   ['send disabled by default', /class="gpt-send"[^>]*disabled/],
   ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
