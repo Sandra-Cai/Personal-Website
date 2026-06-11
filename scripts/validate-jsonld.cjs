@@ -58,5 +58,9 @@ if (!website.potentialAction || website.potentialAction['@type'] !== 'SearchActi
   console.error('validate-jsonld: WebSite.potentialAction SearchAction missing');
   process.exit(1);
 }
+if (!person.description || !website.description || person.description !== website.description) {
+  console.error('validate-jsonld: Person.description and WebSite.description must match');
+  process.exit(1);
+}
 
 console.log('validate-jsonld: OK');

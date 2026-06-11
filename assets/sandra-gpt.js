@@ -96,7 +96,18 @@
         'Roles have included quantitative research (Vigil Markets / Nuveaux), research at Microsoft Research Asia, engineering at JD.com, and founding work (Plurall AI). Work and Research on this page have the fuller story.',
     },
     {
-      keys: ['four years', '4 years', 'work experience', 'years of experience', 'years of', 'career', 'track record'],
+      keys: [
+        'four years',
+        '4 years',
+        '4+ years',
+        'four plus years',
+        'work experience',
+        'years of experience',
+        'career path',
+        'career background',
+        'your career',
+        'track record',
+      ],
       priority: 15,
       reply:
         '4+ years across quant and markets work, institutional research, large-scale engineering, founding, and independent research. NYU coursework is summarized under Academic as supporting detail—not the headline.',
@@ -246,7 +257,7 @@
       reply: 'The site notes a Phoenix Trading Competition win (crypto strategies) during New York Tech Week 2023.',
     },
     {
-      keys: ['trading', 'trader', 'paper trade', 'trade competition'],
+      keys: ['trading comp', 'trading comps', 'your trading', 'trading work', 'paper trade', 'trade competition'],
       priority: 10,
       reply:
         'I take structured trading and markets work seriously—competitions, research writing, and related projects. Work and Research on this page point to specifics.',
@@ -280,7 +291,18 @@
       reply: 'I have Medium pieces on AI and macro themes; the profile is linked from this page.',
     },
     {
-      keys: ['medium', 'linkedin', 'macro', 'macroeconomic'],
+      keys: [
+        'on medium',
+        'your medium',
+        'medium profile',
+        'on linkedin',
+        'your linkedin',
+        'linkedin profile',
+        'macro writing',
+        'macro piece',
+        'ai macro',
+        'macroeconomic',
+      ],
       priority: 8,
       reply: 'Longer threads are on LinkedIn and Medium; Substack is @caisandra. Links are in the header and social strips.',
     },
@@ -366,7 +388,7 @@
         'New York—NYU coursework is summarized under Academic; the site emphasizes operating experience first.',
     },
     {
-      keys: ['open to work', 'available', 'availability', 'hiring', 'recruiting', 'recruiter'],
+      keys: ['open to work', 'availability', 'hiring', 'recruiting', 'recruiter', 'are you hiring'],
       priority: 16,
       reply: `For recruiting or collaboration, reach out at ${EMAIL} or LinkedIn with role scope, timeline, and context.`,
     },
@@ -577,7 +599,9 @@
         'what languages',
         'programming languages',
         'languages do you know',
-        'python',
+        'python experience',
+        'know python',
+        'use python',
         'typescript',
         'machine learning',
       ],
@@ -586,7 +610,7 @@
         'Python is central to quant and research work (e.g. Vigil/Nuveaux); ML and full-stack work show up in projects listed under Work and GitHub on this page.',
     },
     {
-      keys: ['github', 'engineering', 'open source repo', 'your repos'],
+      keys: ['your github', 'on github', 'github repos', 'open source repo', 'your repos'],
       priority: 8,
       reply: 'Repos (papers, projects, tooling) are under Sandra-Cai on GitHub.',
     },
