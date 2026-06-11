@@ -56,11 +56,24 @@ const checksIndex = [
   ['gpt maxlength 280', /id="gpt-input"[^>]*maxlength="280"/],
   ['send disabled by default', /class="gpt-send"[^>]*disabled/],
   ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
+  ['theorem github link', /Theorem of Wisdom[\s\S]*?aria-label="Theorem of Wisdom on GitHub/],
 ];
 
-assertChecks('404.html', read('404.html'), checks404);
+const html404 = read('404.html');
+assertChecks('404.html', html404, checks404);
 const indexHtml = read('index.html');
 assertChecks('index.html', indexHtml, checksIndex);
+
+const indexCssV = indexHtml.match(/href="\/assets\/styles\.css\?v=(\d+)"/);
+const css404V = html404.match(/href="\/assets\/styles\.css\?v=(\d+)"/);
+if (!indexCssV || !css404V) {
+  console.error('validate-basic-html: could not parse styles.css cache version');
+  process.exit(1);
+}
+if (indexCssV[1] !== css404V[1]) {
+  console.error('validate-basic-html: index.html and 404.html styles.css cache versions must match');
+  process.exit(1);
+}
 
 const gptJs = read('assets/sandra-gpt.js');
 const taglineJs = gptJs.match(/const TAGLINE = '([^']+)';/);

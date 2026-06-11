@@ -206,6 +206,11 @@ a:focus-visible {
     display: none;
   }
 
+  .ba-nav {
+    mask-image: linear-gradient(to right, transparent, #000 12px, #000 calc(100% - 12px), transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 12px, #000 calc(100% - 12px), transparent);
+  }
+
   .ba-nav-sep {
     display: none;
   }
