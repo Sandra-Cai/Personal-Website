@@ -57,6 +57,7 @@ const checksIndex = [
   ['send disabled by default', /class="gpt-send"[^>]*disabled/],
   ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
   ['theorem github link', /Theorem of Wisdom[\s\S]*?aria-label="Theorem of Wisdom on GitHub/],
+  ['inside the ban github link', /Inside the Ban[\s\S]*?aria-label="Inside the Ban repo on GitHub/],
 ];
 
 const html404 = read('404.html');
@@ -148,6 +149,10 @@ function assertBlankLinksLabeled(file, html) {
   for (const tag of tags) {
     if (!/\baria-label=/.test(tag)) {
       console.error(`validate-basic-html: ${file} has target="_blank" without aria-label: ${tag.slice(0, 120)}`);
+      process.exit(1);
+    }
+    if (!/\brel="noopener noreferrer"/.test(tag)) {
+      console.error(`validate-basic-html: ${file} has target="_blank" without rel="noopener noreferrer": ${tag.slice(0, 120)}`);
       process.exit(1);
     }
   }

@@ -240,7 +240,7 @@
       reply: 'At JD.com, I built private-cloud infrastructure from low-level systems work through application-scale concerns.',
     },
     {
-      keys: ['duke fintech', 'fintech trading competition', 'scoreboard'],
+      keys: ['duke fintech', 'fintech trading competition', 'duke scoreboard', 'fintech scoreboard', 'live scoreboard'],
       priority: 30,
       reply:
         'The site notes a #1 Duke Fintech Trading Competition result under risk-adjusted rules; the Research section links the live scoreboard.',
@@ -373,7 +373,6 @@
         'describe yourself',
         'about you',
         'introduce yourself',
-        'introduce',
         'your background',
       ],
       priority: 20,
@@ -393,7 +392,15 @@
       reply: 'Sandra Cai. Work, Academic, and Research on this page cover projects and credential detail.',
     },
     {
-      keys: ['where are you', 'where do you live', 'where are you based', 'based in', 'which city', 'location'],
+      keys: [
+        'where are you',
+        'where do you live',
+        'where are you based',
+        'based in',
+        'which city',
+        'your location',
+        'where located',
+      ],
       priority: 18,
       reply:
         'New York—NYU coursework is summarized under Academic; the site emphasizes operating experience first.',
@@ -471,7 +478,8 @@
         'how does plurall',
         'how plurall works',
         'how does it detect',
-        'multimodal',
+        'multimodal detection',
+        'plurall multimodal',
         'detection model',
         'detection accuracy',
         'detection speed',
@@ -507,18 +515,18 @@
     },
     {
       keys: [
-        'acquisition',
-        'acquired',
-        'acquire',
-        'buyout',
+        'acquisition offer',
+        'buyout offer',
         'exit offer',
         'sell the company',
+        'sell plurall',
         'seven figure',
         'seven-figure',
         'turn down offer',
         'turned down offer',
         'declined offer',
         'offer to buy',
+        'offer to acquire',
       ],
       priority: 36,
       reply:
@@ -538,15 +546,17 @@
     },
     {
       keys: [
-        'nvidia',
-        'ibm',
-        'aws',
+        'nvidia partner',
+        'ibm partner',
+        'aws partner',
         'plurall partners',
         'plurall partnerships',
         'partner ecosystem',
         'who backs plurall',
         'who supports plurall',
-        'backed by',
+        'backed by nvidia',
+        'backed by ibm',
+        'backed by aws',
       ],
       priority: 35,
       reply:
@@ -627,7 +637,7 @@
       reply: 'Repos (papers, projects, tooling) are under Sandra-Cai on GitHub.',
     },
     {
-      keys: ['what projects', 'side project', 'portfolio', 'pet project', 'showcase'],
+      keys: ['what projects', 'side project', 'your portfolio', 'work portfolio', 'pet project'],
       priority: 12,
       reply: 'Highlighted work is under Work and Research; code and papers are linked from GitHub (Sandra-Cai).',
     },
