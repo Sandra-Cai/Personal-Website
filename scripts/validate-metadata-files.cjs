@@ -70,6 +70,9 @@ if (!metaDesc) fail('index.html missing meta description');
 if (!manifest.description || !metaDesc[1].startsWith(manifest.description)) {
   fail('site.webmanifest description must match the opening of meta description');
 }
+if (!/4\+ years/.test(manifest.description)) {
+  fail('site.webmanifest description should mention 4+ years');
+}
 
 const vercel = read('vercel.json');
 let vercelJson;

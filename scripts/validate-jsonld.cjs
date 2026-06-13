@@ -45,6 +45,10 @@ if (!plurall.founder || plurall.founder['@id'] !== 'https://www.sandracai.com/#p
   console.error('validate-jsonld: Plurall AI Organization.founder must reference Person');
   process.exit(1);
 }
+if (!plurall.description || !/deepfake detection/i.test(plurall.description)) {
+  console.error('validate-jsonld: Plurall AI Organization.description missing or incorrect');
+  process.exit(1);
+}
 
 if (!website) {
   console.error('validate-jsonld: missing WebSite node');

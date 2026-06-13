@@ -1095,6 +1095,12 @@ a:focus-visible {
   font-size: 0.8125rem;
 }
 
+.ba-list a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 /* Split: b.ai-style stacked headline */
 .ba-split {
   max-width: var(--max);
