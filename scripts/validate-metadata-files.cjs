@@ -73,6 +73,9 @@ if (!manifest.description || !metaDesc[1].startsWith(manifest.description)) {
 if (!/4\+ years/.test(manifest.description)) {
   fail('site.webmanifest description should mention 4+ years');
 }
+if (manifest.lang !== 'en-US') {
+  fail('site.webmanifest lang must be en-US');
+}
 
 const vercel = read('vercel.json');
 let vercelJson;

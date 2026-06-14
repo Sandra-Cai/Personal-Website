@@ -241,7 +241,7 @@
         'At Vigil Markets (Nuveaux Trading), I focused on Python crypto volume analysis, counterparty risk, underwriting cost, assembly-level optimizations, and on-blockchain clearinghouse risk mapping.',
     },
     {
-      keys: ['microsoft research', 'msra', 'microsoft research asia'],
+      keys: ['microsoft research', 'microsoft research asia', 'msra research', 'at msra'],
       priority: 40,
       reply: 'At Microsoft Research Asia, I worked on blockchain-finance research connecting protocol design to market and institutional questions.',
     },
@@ -292,13 +292,29 @@
         'The Research section links “Inside the Ban: A Quantitative Autopsy of Jane Street’s Trading Tactics in India” (July 2025; open quantitative autopsy on the two-legged strategy and SEBI enforcement; announcement on LinkedIn).',
     },
     {
-      keys: ['bayes', 'bayesian', 'decision-making', 'theorem of wisdom', 'urc'],
+      keys: [
+        'theorem of wisdom',
+        'bayes theorem',
+        'bayesian decision',
+        'bayesian reasoning',
+        'nyu urc',
+        'urc presentation',
+      ],
       priority: 35,
       reply:
         'The site lists “Theorem of Wisdom” (Bayesian decision-making) on GitHub and notes related work presented at NYU URC (1,000+ attendees).',
     },
     {
-      keys: ['chip war', 'ai performance', 'supply chain', 'geopolitical', 'oscar', 'hawkish', 'dovish'],
+      keys: [
+        'chip war medium',
+        'ai performance medium',
+        'supply chain macro',
+        'geopolitical macro',
+        'oscar medium',
+        'oscar should be given',
+        'hawkish dovish',
+        'hawkish vs dovish',
+      ],
       priority: 12,
       reply: 'I have Medium pieces on AI and macro themes; the profile is linked from this page.',
     },
@@ -319,7 +335,7 @@
       reply: 'Longer threads are on LinkedIn and Medium; Substack is @caisandra. Links are in the header and social strips.',
     },
     {
-      keys: ['yijia', 'yijia sandra cai', 'linkedin profile', 'which linkedin', 'linkedin handle'],
+      keys: ['yijia', 'yijia sandra cai', 'which linkedin', 'linkedin handle', 'wrong sandra cai'],
       priority: 17,
       reply:
         'For this site, the LinkedIn profile is Yijia Sandra Cai (shown in the Writing section). SandraGPT answers are based on this site content, not other people with similar names.',
