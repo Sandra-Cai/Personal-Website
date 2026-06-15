@@ -87,6 +87,12 @@ if (indexScriptV[1] !== script404V[1]) {
   process.exit(1);
 }
 
+const indexGptV = indexHtml.match(/src="\/assets\/sandra-gpt\.js\?v=(\d+)"/);
+if (!indexGptV) {
+  console.error('validate-basic-html: could not parse sandra-gpt.js cache version');
+  process.exit(1);
+}
+
 const gptJs = read('assets/sandra-gpt.js');
 const taglineJs = gptJs.match(/const TAGLINE = '([^']+)';/);
 const taglineHtml = indexHtml.match(/id="gpt-tagline"[^>]*>([^<]+)</);

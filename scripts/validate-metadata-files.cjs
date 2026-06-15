@@ -76,6 +76,11 @@ if (!/4\+ years/.test(manifest.description)) {
 if (manifest.lang !== 'en-US') {
   fail('site.webmanifest lang must be en-US');
 }
+const inLanguageMatch = indexHtml.match(/"inLanguage":\s*"([^"]+)"/);
+if (!inLanguageMatch) fail('index.html missing JSON-LD inLanguage');
+if (manifest.lang !== inLanguageMatch[1]) {
+  fail('site.webmanifest lang must match JSON-LD WebSite.inLanguage');
+}
 
 const vercel = read('vercel.json');
 let vercelJson;

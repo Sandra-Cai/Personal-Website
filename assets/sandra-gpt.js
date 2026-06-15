@@ -227,8 +227,6 @@
       keys: [
         'vigil markets',
         'nuveaux trading',
-        'vigil',
-        'nuveaux',
         'quantitative researcher',
         'clearinghouse risk',
         'on-chain clearinghouse',
@@ -281,7 +279,7 @@
         'Quant-style work shows up at Vigil/Nuveaux, in trading competitions, and in independent research. Work and Research on this page cover each thread.',
     },
     {
-      keys: ['aerovironment', 'avav', 'equity pitch', 'pe-backed'],
+      keys: ['aerovironment', 'avav', 'avav thesis', 'equity pitch avav', 'your equity pitch', 'pe-backed'],
       priority: 35,
       reply: 'The AeroVironment (AVAV) thesis is listed under Research on this page.',
     },
@@ -507,16 +505,15 @@
       keys: [
         'how does plurall',
         'how plurall works',
-        'how does it detect',
+        'how does plurall detect',
         'multimodal detection',
         'plurall multimodal',
-        'detection model',
-        'detection accuracy',
-        'detection speed',
-        'two seconds',
-        '2 seconds',
+        'plurall detection model',
+        'plurall detection accuracy',
+        'plurall detection speed',
         'sub-two-second',
-        'first principles',
+        'built from first principles',
+        'plurall first principles',
         'proprietary model',
         'plurall tech',
         'plurall stack',
@@ -911,7 +908,12 @@
     }
     if (best) return best;
 
-    if (/\bresearch\b/.test(q) && !/\bresearcher\b/.test(q)) {
+    if (
+      (/\b(independent|personal|your) research\b/.test(q) ||
+        /\btype of research\b/.test(q) ||
+        /^\s*research\s*\??$/.test(q)) &&
+      !/\bresearcher\b/.test(q)
+    ) {
       return REPLY_INDEPENDENT_RESEARCH;
     }
 
