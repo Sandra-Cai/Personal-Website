@@ -37,6 +37,10 @@ if (!person.worksFor || person.worksFor['@id'] !== 'https://www.sandracai.com/#p
   console.error('validate-jsonld: Person.worksFor must reference Plurall AI organization');
   process.exit(1);
 }
+if (!Array.isArray(person.knowsAbout) || person.knowsAbout.length < 3) {
+  console.error('validate-jsonld: Person.knowsAbout must be an array with at least 3 topics');
+  process.exit(1);
+}
 if (!plurall || plurall.name !== 'Plurall AI') {
   console.error('validate-jsonld: missing Plurall AI Organization node');
   process.exit(1);

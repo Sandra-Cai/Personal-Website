@@ -21,6 +21,7 @@ function assertChecks(file, html, checks) {
 
 const checks404 = [
   ['doctype', /<!doctype html>/i],
+  ['html lang en', /<html lang="en">/],
   ['skip link', /class="ba-skip"/],
   ['main landmark', /\bid="main"/],
   ['404 block', /class="ba-404/],
@@ -37,6 +38,7 @@ const checks404 = [
 
 const checksIndex = [
   ['doctype', /<!doctype html>/i],
+  ['html lang en', /<html lang="en">/],
   ['skip link', /class="ba-skip"/],
   ['main landmark', /\bid="top"/],
   ['SandraGPT section', /\bid="sandra-gpt"/],
@@ -53,6 +55,7 @@ const checksIndex = [
   ['JSON-LD inLanguage', /"inLanguage":\s*"en-US"/],
   ['JSON-LD Plurall org', /"@id":\s*"https:\/\/www\.sandracai\.com\/#plurall"/],
   ['meta 4+ years', /4\+ years across industry, research, and founding/],
+  ['og locale', /property="og:locale" content="en_US"/],
   ['gpt maxlength 280', /id="gpt-input"[^>]*maxlength="280"/],
   ['send disabled by default', /class="gpt-send"[^>]*disabled/],
   ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
