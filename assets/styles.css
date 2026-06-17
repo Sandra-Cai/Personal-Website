@@ -1282,6 +1282,12 @@ a:focus-visible {
   .gpt-sidebar-item {
     background: rgba(0, 0, 0, 0.08);
   }
+
+  .ba-strip-items a,
+  .ba-footer-links a {
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
 }
 
 @media print {

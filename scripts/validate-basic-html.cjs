@@ -34,6 +34,8 @@ const checks404 = [
   ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
   ['manifest link', /rel="manifest"/],
   ['404 canonical', /<link rel="canonical" href="https:\/\/www\.sandracai\.com\/"/],
+  ['color-scheme light', /<meta name="color-scheme" content="light"/],
+  ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
 ];
 
 const checksIndex = [
@@ -56,6 +58,8 @@ const checksIndex = [
   ['JSON-LD Plurall org', /"@id":\s*"https:\/\/www\.sandracai\.com\/#plurall"/],
   ['meta 4+ years', /4\+ years across industry, research, and founding/],
   ['og locale', /property="og:locale" content="en_US"/],
+  ['color-scheme light', /<meta name="color-scheme" content="light"/],
+  ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
   ['gpt maxlength 280', /id="gpt-input"[^>]*maxlength="280"/],
   ['send disabled by default', /class="gpt-send"[^>]*disabled/],
   ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
