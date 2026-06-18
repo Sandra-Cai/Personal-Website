@@ -45,6 +45,15 @@ if (!person.alumniOf || person.alumniOf.name !== 'New York University') {
   console.error('validate-jsonld: Person.alumniOf must name New York University');
   process.exit(1);
 }
+const sameAs = Array.isArray(person.sameAs) ? person.sameAs : [];
+if (!sameAs.some((u) => /github\.com\/Sandra-Cai/i.test(u))) {
+  console.error('validate-jsonld: Person.sameAs must include GitHub profile');
+  process.exit(1);
+}
+if (!sameAs.some((u) => /linkedin\.com\/in\/yijia-sandra-cai/i.test(u))) {
+  console.error('validate-jsonld: Person.sameAs must include LinkedIn profile');
+  process.exit(1);
+}
 if (!plurall || plurall.name !== 'Plurall AI') {
   console.error('validate-jsonld: missing Plurall AI Organization node');
   process.exit(1);

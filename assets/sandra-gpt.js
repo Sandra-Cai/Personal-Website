@@ -274,7 +274,7 @@
         'I take structured trading and markets work seriously—competitions, research writing, and related projects. Work and Research on this page point to specifics.',
     },
     {
-      keys: ['quantitative finance', 'quant finance', 'quant research', 'quant work', 'quant role'],
+      keys: ['quantitative finance', 'quant finance', 'your quant research', 'quant work at vigil', 'quant role'],
       priority: 18,
       reply:
         'Quant-style work shows up at Vigil/Nuveaux, in trading competitions, and in independent research. Work and Research on this page cover each thread.',
@@ -534,7 +534,6 @@
         'first enterprise customer',
         'plurall enterprise customers',
         'plurall b2b leads',
-        'pipeline of leads',
         'plurall letter of intent',
         'plurall paying customer',
         'paying enterprise customer',
@@ -598,12 +597,14 @@
     },
     {
       keys: [
-        'trust layer',
-        'digital trust',
+        'plurall trust layer',
+        'digital trust layer',
+        'plurall digital trust',
         'why deepfake',
         'why deepfakes',
         'why this problem',
-        'why this matters',
+        'why plurall matters',
+        'why this problem matters',
         'plurall mission',
         'plurall vision',
         'plurall thesis',
@@ -641,7 +642,7 @@
         'The site is meant to share what I learned from a high-cost private-school path in a public, practical way through projects, research, and operating experience.',
     },
     {
-      keys: ['pennapps', 'blockchain project', 'best blockchain'],
+      keys: ['pennapps', 'pennapps blockchain', 'best blockchain'],
       priority: 25,
       reply: 'At PennApps I shipped an AI + blockchain app that won Best Blockchain Project; code is on GitHub.',
     },

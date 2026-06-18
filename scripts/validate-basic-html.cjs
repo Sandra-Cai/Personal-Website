@@ -34,6 +34,7 @@ const checks404 = [
   ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
   ['manifest link', /rel="manifest"/],
   ['404 canonical', /<link rel="canonical" href="https:\/\/www\.sandracai\.com\/"/],
+  ['referrer policy', /<meta name="referrer" content="strict-origin-when-cross-origin"/],
   ['color-scheme light', /<meta name="color-scheme" content="light"/],
   ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
 ];
@@ -44,6 +45,10 @@ const checksIndex = [
   ['skip link', /class="ba-skip"/],
   ['main landmark', /\bid="top"/],
   ['SandraGPT section', /\bid="sandra-gpt"/],
+  ['canonical', /<link rel="canonical" href="https:\/\/www\.sandracai\.com\/"/],
+  ['rel me github', /<link rel="me" href="https:\/\/github\.com\/Sandra-Cai"/],
+  ['rel me linkedin', /<link rel="me" href="https:\/\/www\.linkedin\.com\/in\/yijia-sandra-cai"/],
+  ['referrer policy', /<meta name="referrer" content="strict-origin-when-cross-origin"/],
   ['JSON-LD graph', /"@graph"/],
   ['JSON-LD Person', /"@type":\s*"Person"/],
   ['JSON-LD email', /"email":\s*"sandraxcyj@gmail.com"/],
