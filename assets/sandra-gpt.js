@@ -285,15 +285,16 @@
       reply: 'The AeroVironment (AVAV) thesis is listed under Research on this page.',
     },
     {
-      keys: ['jane street', 'india ban', 'sebi', 'inside the ban', 'market microstructure', 'jane street microstructure'],
+      keys: ['jane street', 'india ban', 'sebi', 'inside the ban', 'jane street india ban', 'jane street microstructure'],
       priority: 45,
       reply:
-        'The Research section links “Inside the Ban: A Quantitative Autopsy of Jane Street’s Trading Tactics in India” (July 2025; open quantitative autopsy on the two-legged strategy and SEBI enforcement; announcement on LinkedIn).',
+        'The Research section links “Inside the Ban: A Quantitative Autopsy of Jane Street’s Trading Tactics in India” (July 2025; open repo Jane-Street-India-Ban-Analysis on GitHub; announcement on LinkedIn).',
     },
     {
       keys: [
         'theorem of wisdom',
         'bayes theorem',
+        'bayes-theorem',
         'bayesian decision',
         'bayesian reasoning',
         'nyu urc',
@@ -301,7 +302,7 @@
       ],
       priority: 35,
       reply:
-        'The site lists “Theorem of Wisdom” (Bayesian decision-making) on GitHub and notes related work presented at NYU URC (1,000+ attendees).',
+        'The site lists “Theorem of Wisdom” (Bayesian decision-making) in the Bayes-Theorem repo on GitHub and notes related work presented at NYU URC (1,000+ attendees).',
     },
     {
       keys: [
@@ -328,7 +329,7 @@
         'macro writing',
         'macro piece',
         'ai macro',
-        'macroeconomic',
+        'macroeconomic writing',
       ],
       priority: 8,
       reply: 'Longer threads are on LinkedIn and Medium; Substack is @caisandra. Links are in the header and social strips.',
@@ -401,7 +402,6 @@
         'tell me about yourself',
         'tell me about u',
         'describe yourself',
-        'about you',
         'introduce yourself',
         'your background',
       ],
@@ -660,7 +660,8 @@
         'use python',
         'typescript experience',
         'know typescript',
-        'machine learning',
+        'your machine learning',
+        'machine learning work',
       ],
       priority: 15,
       reply:
@@ -727,6 +728,7 @@
     'Phoenix trading competition',
     'AeroVironment thesis',
     'Jane Street India ban autopsy',
+    'Theorem of Wisdom / Bayes',
     'NYU founder programs',
     'NYU coursework',
   ];

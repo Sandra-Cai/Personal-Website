@@ -1284,7 +1284,8 @@ a:focus-visible {
   }
 
   .ba-strip-items a,
-  .ba-footer-links a {
+  .ba-footer-links a,
+  .ba-list a {
     text-decoration: underline;
     text-underline-offset: 0.18em;
   }

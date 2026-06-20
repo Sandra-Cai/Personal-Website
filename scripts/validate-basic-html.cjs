@@ -68,8 +68,8 @@ const checksIndex = [
   ['gpt maxlength 280', /id="gpt-input"[^>]*maxlength="280"/],
   ['send disabled by default', /class="gpt-send"[^>]*disabled/],
   ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
-  ['theorem github link', /Theorem of Wisdom[\s\S]*?aria-label="Theorem of Wisdom on GitHub/],
-  ['inside the ban github link', /Inside the Ban[\s\S]*?aria-label="Inside the Ban repo on GitHub/],
+  ['theorem github link', /Theorem of Wisdom[\s\S]*?href="https:\/\/github\.com\/Sandra-Cai\/Bayes-Theorem"/],
+  ['inside the ban github link', /Inside the Ban[\s\S]*?href="https:\/\/github\.com\/Sandra-Cai\/Jane-Street-India-Ban-Analysis"/],
 ];
 
 const html404 = read('404.html');
