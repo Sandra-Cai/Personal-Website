@@ -150,7 +150,7 @@
         'Three things on this page: Show the work (data, mechanism, falsifiability); Systems and incentives (microstructure, risk, infrastructure); Ship and iterate (research informs builds; public writing keeps both honest).',
     },
     {
-      keys: ['rigor as infrastructure', 'perspective section', 'split section', 'rigor as'],
+      keys: ['rigor as infrastructure', 'perspective section', 'split section'],
       priority: 27,
       reply:
         'The perspective block—Rigor as infrastructure—means the same bar for clearinghouse models, synthetic-media checks, and stock pitches: defensible assumptions and engineering to test them.',
@@ -187,7 +187,7 @@
         'Research should inform builds, and builds should stress-test research; public writing keeps that loop honest.',
     },
     {
-      keys: ['institutional card', 'institutional research', 'research & cloud', 'research and cloud', 'jd.com', 'msra card'],
+      keys: ['institutional card', 'research & cloud', 'research and cloud', 'jd.com', 'msra card'],
       priority: 28,
       reply:
         'The Institutional card is MSRA (blockchain finance research) and JD.com (private cloud)—third on Track record after Plurall AI and quant.',
@@ -250,7 +250,7 @@
       reply: 'At JD.com, I built private-cloud infrastructure from low-level systems work through application-scale concerns.',
     },
     {
-      keys: ['duke fintech', 'fintech trading competition', 'duke scoreboard', 'fintech scoreboard', 'live scoreboard'],
+      keys: ['duke fintech', 'fintech trading competition', 'duke scoreboard', 'fintech scoreboard', 'duke fintech scoreboard'],
       priority: 30,
       reply:
         'The site notes a #1 Duke Fintech Trading Competition result under risk-adjusted rules; the Research section links the live scoreboard.',
@@ -280,12 +280,12 @@
         'Quant-style work shows up at Vigil/Nuveaux, in trading competitions, and in independent research. Work and Research on this page cover each thread.',
     },
     {
-      keys: ['aerovironment', 'avav', 'avav thesis', 'equity pitch avav', 'your equity pitch', 'pe-backed'],
+      keys: ['aerovironment', 'avav', 'avav thesis', 'equity pitch avav', 'your equity pitch', 'avav perplexity', 'perplexity avav'],
       priority: 35,
       reply: 'The AeroVironment (AVAV) thesis is listed under Research on this page.',
     },
     {
-      keys: ['jane street', 'india ban', 'sebi', 'inside the ban', 'jane street india ban', 'jane street microstructure'],
+      keys: ['jane street india', 'inside the ban', 'jane street india ban', 'jane street microstructure', 'jane-street-india-ban', 'sebi enforcement', 'sebi india'],
       priority: 45,
       reply:
         'The Research section links “Inside the Ban: A Quantitative Autopsy of Jane Street’s Trading Tactics in India” (July 2025; open repo Jane-Street-India-Ban-Analysis on GitHub; announcement on LinkedIn).',
@@ -570,7 +570,7 @@
         'techcrunch',
         'tech crunch',
         'startup battlefield',
-        'top 32',
+        'techcrunch top 32',
         'enterprise tech startups',
       ],
       priority: 36,

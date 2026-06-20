@@ -54,6 +54,10 @@ if (!sameAs.some((u) => /linkedin\.com\/in\/yijia-sandra-cai/i.test(u))) {
   console.error('validate-jsonld: Person.sameAs must include LinkedIn profile');
   process.exit(1);
 }
+if (!sameAs.some((u) => /substack\.com\/@caisandra/i.test(u))) {
+  console.error('validate-jsonld: Person.sameAs must include Substack profile');
+  process.exit(1);
+}
 if (!plurall || plurall.name !== 'Plurall AI') {
   console.error('validate-jsonld: missing Plurall AI Organization node');
   process.exit(1);

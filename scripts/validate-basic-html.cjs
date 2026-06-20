@@ -25,6 +25,7 @@ const checks404 = [
   ['skip link', /class="ba-skip"/],
   ['main landmark', /\bid="main"/],
   ['404 block', /class="ba-404/],
+  ['404 sandragpt link', /href="\/#sandra-gpt"/],
   ['site stylesheet', /href="\/assets\/styles\.css\?v=/],
   ['nav separator', /class="ba-nav-sep"/],
   ['nav external class', /class="ba-nav-external"/],
@@ -70,6 +71,8 @@ const checksIndex = [
   ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
   ['theorem github link', /Theorem of Wisdom[\s\S]*?href="https:\/\/github\.com\/Sandra-Cai\/Bayes-Theorem"/],
   ['inside the ban github link', /Inside the Ban[\s\S]*?href="https:\/\/github\.com\/Sandra-Cai\/Jane-Street-India-Ban-Analysis"/],
+  ['avav perplexity link', /AVAV investment thesis[\s\S]*?perplexity\.ai\/computer\/a\/avav-investment-thesis/],
+  ['hero eyebrow 4+ years', /class="ba-eyebrow"[^>]*>[^<]*4\+ years/],
 ];
 
 const html404 = read('404.html');
