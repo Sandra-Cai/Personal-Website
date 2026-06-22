@@ -50,6 +50,7 @@ const checksIndex = [
   ['rel me github', /<link rel="me" href="https:\/\/github\.com\/Sandra-Cai"/],
   ['rel me linkedin', /<link rel="me" href="https:\/\/www\.linkedin\.com\/in\/yijia-sandra-cai"/],
   ['rel me substack', /<link rel="me" href="https:\/\/substack\.com\/@caisandra"/],
+  ['rel me medium', /<link rel="me" href="https:\/\/medium\.com\/@caisandra"/],
   ['referrer policy', /<meta name="referrer" content="strict-origin-when-cross-origin"/],
   ['JSON-LD graph', /"@graph"/],
   ['JSON-LD Person', /"@type":\s*"Person"/],
@@ -76,6 +77,8 @@ const checksIndex = [
   ['hero eyebrow 4+ years', /class="ba-eyebrow"[^>]*>[^<]*4\+ years/],
   ['medium oscar link', /AI &amp; macro \(Medium\)[\s\S]*?medium\.com\/@caisandra\/oscar-should-be-given-to-ai/],
   ['medium hawkish link', /AI &amp; macro \(Medium\)[\s\S]*?medium\.com\/@caisandra\/hawkish-v-s-dovish/],
+  ['duke scoreboard link', /Trading[\s\S]*?fintechtradingcompetition\.com\/articles\/scoreboard\.html/],
+  ['hero lead 4+ years', /class="ba-lead"[^>]*>[\s\S]*?<strong>4\+ years<\/strong>/],
 ];
 
 const html404 = read('404.html');
