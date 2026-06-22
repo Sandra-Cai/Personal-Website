@@ -1287,7 +1287,9 @@ a:focus-visible {
   .ba-footer-links a,
   .ba-list a,
   .ba-deck a,
-  .ba-card a {
+  .ba-card a,
+  .ba-404-lead a,
+  .gpt-note a {
     text-decoration: underline;
     text-underline-offset: 0.18em;
   }

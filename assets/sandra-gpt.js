@@ -477,7 +477,8 @@
         'anything new',
         'any updates',
         'any news',
-        'recent work',
+        'your recent work',
+        'recent work at plurall',
       ],
       priority: 11,
       reply:
@@ -668,9 +669,10 @@
         'Python is central to quant and research work (e.g. Vigil/Nuveaux); ML and full-stack work show up in projects listed under Work and GitHub on this page.',
     },
     {
-      keys: ['your github', 'on github', 'github repos', 'open source repo', 'your repos'],
+      keys: ['your github', 'on github', 'github repos', 'open source repo', 'your repos', 'bayes-theorem repo', 'jane-street-india-ban'],
       priority: 8,
-      reply: 'Repos (papers, projects, tooling) are under Sandra-Cai on GitHub.',
+      reply:
+        'Repos (papers, projects, tooling) are under Sandra-Cai on GitHub—including Bayes-Theorem and Jane-Street-India-Ban-Analysis linked from Research.',
     },
     {
       keys: ['what projects', 'side project', 'your portfolio', 'work portfolio', 'pet project'],
@@ -695,7 +697,9 @@
         'your email',
         'reach you',
         'reach out',
-        'collaborat',
+        'collaborate with you',
+        'collaboration request',
+        'collaborating with you',
         'get in touch',
         'ping me',
         'how to contact',
@@ -882,7 +886,7 @@
     }
 
     if (
-      /\bwhat do you do for fun\b|\bfor fun\b|\bhobbies\b|\bwhat do you do in your (free|spare) time\b/.test(q)
+      /\bwhat do you do for fun\b|\bhobbies\b|\bwhat do you do in your (free|spare) time\b/.test(q)
     ) {
       return 'Reading, writing about markets and tech, and joining trading-style competitions when time allows.';
     }

@@ -49,6 +49,7 @@ const checksIndex = [
   ['canonical', /<link rel="canonical" href="https:\/\/www\.sandracai\.com\/"/],
   ['rel me github', /<link rel="me" href="https:\/\/github\.com\/Sandra-Cai"/],
   ['rel me linkedin', /<link rel="me" href="https:\/\/www\.linkedin\.com\/in\/yijia-sandra-cai"/],
+  ['rel me substack', /<link rel="me" href="https:\/\/substack\.com\/@caisandra"/],
   ['referrer policy', /<meta name="referrer" content="strict-origin-when-cross-origin"/],
   ['JSON-LD graph', /"@graph"/],
   ['JSON-LD Person', /"@type":\s*"Person"/],
@@ -73,6 +74,8 @@ const checksIndex = [
   ['inside the ban github link', /Inside the Ban[\s\S]*?href="https:\/\/github\.com\/Sandra-Cai\/Jane-Street-India-Ban-Analysis"/],
   ['avav perplexity link', /AVAV investment thesis[\s\S]*?perplexity\.ai\/computer\/a\/avav-investment-thesis/],
   ['hero eyebrow 4+ years', /class="ba-eyebrow"[^>]*>[^<]*4\+ years/],
+  ['medium oscar link', /AI &amp; macro \(Medium\)[\s\S]*?medium\.com\/@caisandra\/oscar-should-be-given-to-ai/],
+  ['medium hawkish link', /AI &amp; macro \(Medium\)[\s\S]*?medium\.com\/@caisandra\/hawkish-v-s-dovish/],
 ];
 
 const html404 = read('404.html');
