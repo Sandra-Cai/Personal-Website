@@ -26,6 +26,7 @@ const checks404 = [
   ['main landmark', /\bid="main"/],
   ['404 block', /class="ba-404/],
   ['404 sandragpt link', /href="\/#sandra-gpt"/],
+  ['404 robots noindex', /<meta name="robots" content="noindex"/],
   ['site stylesheet', /href="\/assets\/styles\.css\?v=/],
   ['nav separator', /class="ba-nav-sep"/],
   ['nav external class', /class="ba-nav-external"/],
@@ -51,6 +52,7 @@ const checksIndex = [
   ['rel me linkedin', /<link rel="me" href="https:\/\/www\.linkedin\.com\/in\/yijia-sandra-cai"/],
   ['rel me substack', /<link rel="me" href="https:\/\/substack\.com\/@caisandra"/],
   ['rel me medium', /<link rel="me" href="https:\/\/medium\.com\/@caisandra"/],
+  ['meta author', /<meta name="author" content="Sandra Cai"/],
   ['referrer policy', /<meta name="referrer" content="strict-origin-when-cross-origin"/],
   ['JSON-LD graph', /"@graph"/],
   ['JSON-LD Person', /"@type":\s*"Person"/],
@@ -73,12 +75,16 @@ const checksIndex = [
   ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
   ['theorem github link', /Theorem of Wisdom[\s\S]*?href="https:\/\/github\.com\/Sandra-Cai\/Bayes-Theorem"/],
   ['inside the ban github link', /Inside the Ban[\s\S]*?href="https:\/\/github\.com\/Sandra-Cai\/Jane-Street-India-Ban-Analysis"/],
+  ['inside the ban linkedin', /Inside the Ban[\s\S]*?linkedin\.com\/posts\/yijia-sandra-cai_quantfinance-derivatives-marketmicrostructure/],
+  ['theorem linkedin', /Theorem of Wisdom[\s\S]*?linkedin\.com\/posts\/yijia-sandra-cai_bayesian-decisionmaking-opensource/],
   ['avav perplexity link', /AVAV investment thesis[\s\S]*?perplexity\.ai\/computer\/a\/avav-investment-thesis/],
   ['hero eyebrow 4+ years', /class="ba-eyebrow"[^>]*>[^<]*4\+ years/],
   ['medium oscar link', /AI &amp; macro \(Medium\)[\s\S]*?medium\.com\/@caisandra\/oscar-should-be-given-to-ai/],
   ['medium hawkish link', /AI &amp; macro \(Medium\)[\s\S]*?medium\.com\/@caisandra\/hawkish-v-s-dovish/],
   ['duke scoreboard link', /Trading[\s\S]*?fintechtradingcompetition\.com\/articles\/scoreboard\.html/],
   ['hero lead 4+ years', /class="ba-lead"[^>]*>[\s\S]*?<strong>4\+ years<\/strong>/],
+  ['gpt starter inside the ban', /class="gpt-starter"[^>]*data-q="Inside the Ban"/],
+  ['gpt starter theorem', /class="gpt-starter"[^>]*data-q="Theorem of Wisdom"/],
 ];
 
 const html404 = read('404.html');

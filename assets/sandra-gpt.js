@@ -90,7 +90,7 @@
         'NYU Entrepreneurship publishes cohort rosters that name Sandra with Plurall AI (including Female Founders Fellowship cohorts and Venture Equity program listings); this site is still the abbreviated portfolio narrative.',
     },
     {
-      keys: ['internship', 'internships'],
+      keys: ['internship experience', 'summer internship', 'your internship', 'internships at'],
       priority: 22,
       reply:
         'Roles have included quantitative research (Vigil Markets / Nuveaux), research at Microsoft Research Asia, engineering at JD.com, and founding work (Plurall AI). Work and Research on this page have the fuller story.',
@@ -250,7 +250,7 @@
       reply: 'At JD.com, I built private-cloud infrastructure from low-level systems work through application-scale concerns.',
     },
     {
-      keys: ['duke fintech', 'fintech trading competition', 'duke scoreboard', 'fintech scoreboard', 'duke fintech scoreboard', 'fintechtradingcompetition'],
+      keys: ['duke fintech', 'fintech trading competition', 'duke scoreboard', 'fintech scoreboard', 'duke fintech scoreboard', 'fintechtradingcompetition', 'duke live scoreboard'],
       priority: 30,
       reply:
         'The site notes a #1 Duke Fintech Trading Competition result under risk-adjusted rules; the Research section links the live scoreboard.',
@@ -442,14 +442,13 @@
     },
     {
       keys: [
-        'visa',
         'visa sponsorship',
         'work sponsorship',
         'need sponsorship',
         'work authorization',
         'work auth',
-        'relocation',
-        'relocate',
+        'willing to relocate',
+        'open to relocation',
         'work remote',
         'remote role',
         'hybrid role',
@@ -475,7 +474,8 @@
         'whats the latest',
         'anything new',
         'any updates',
-        'any news',
+        'news about plurall',
+        'any news on plurall',
         'your recent work',
         'recent work at plurall',
       ],
@@ -498,7 +498,6 @@
         'what startup',
         'what are you founding',
         'what are you building',
-        'what are you working on',
         'what do you found',
         'what did you found',
       ],
@@ -699,7 +698,6 @@
         'how to reach out',
         'want to reach out',
         'get in touch with you',
-        'get in touch',
         'collaborate with you',
         'collaboration request',
         'collaborating with you',
