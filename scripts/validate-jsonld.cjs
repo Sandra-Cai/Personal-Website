@@ -33,6 +33,10 @@ if (!person.email || person.email !== 'sandraxcyj@gmail.com') {
   console.error('validate-jsonld: Person.email missing or incorrect');
   process.exit(1);
 }
+if (person.jobTitle !== 'Founder') {
+  console.error('validate-jsonld: Person.jobTitle must be Founder');
+  process.exit(1);
+}
 if (!person.worksFor || person.worksFor['@id'] !== 'https://www.sandracai.com/#plurall') {
   console.error('validate-jsonld: Person.worksFor must reference Plurall AI organization');
   process.exit(1);

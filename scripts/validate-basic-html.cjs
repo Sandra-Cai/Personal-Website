@@ -85,6 +85,10 @@ const checksIndex = [
   ['hero lead 4+ years', /class="ba-lead"[^>]*>[\s\S]*?<strong>4\+ years<\/strong>/],
   ['gpt starter inside the ban', /class="gpt-starter"[^>]*data-q="Inside the Ban"/],
   ['gpt starter theorem', /class="gpt-starter"[^>]*data-q="Theorem of Wisdom"/],
+  ['gpt starter plurall', /class="gpt-starter"[^>]*data-q="What is Plurall AI\?"/],
+  ['academic nyu cs', /id="education"[\s\S]*?<strong>NYU CS<\/strong>/],
+  ['phoenix trading mention', /Phoenix Trading Competition/],
+  ['hero student nyu', /class="ba-student-note"[^>]*>[\s\S]*?NYU CS/],
 ];
 
 const html404 = read('404.html');
