@@ -89,6 +89,12 @@ const checksIndex = [
   ['academic nyu cs', /id="education"[\s\S]*?<strong>NYU CS<\/strong>/],
   ['phoenix trading mention', /Phoenix Trading Competition/],
   ['hero student nyu', /class="ba-student-note"[^>]*>[\s\S]*?NYU CS/],
+  ['gpt starter duke fintech', /class="gpt-starter"[^>]*data-q="Duke Fintech"/],
+  ['work vigil markets', /id="work"[\s\S]*?Vigil Markets/],
+  ['founding pennapps', /Plurall AI &amp; product[\s\S]*?PennApps/],
+  ['beliefs show the work', /id="beliefs"[\s\S]*?Show the work/],
+  ['connector strip', /aria-label="Connector"[\s\S]*?one discipline/],
+  ['JSON-LD alternateName', /"alternateName":\s*"Yijia Sandra Cai"/],
 ];
 
 const html404 = read('404.html');

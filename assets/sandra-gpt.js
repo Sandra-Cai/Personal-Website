@@ -106,7 +106,7 @@
         'career path',
         'career background',
         'your career',
-        'track record',
+        'your track record',
       ],
       priority: 15,
       reply:
@@ -162,7 +162,7 @@
         'rigorous work',
         'rigorous research',
         'academic rigor',
-        'show the work',
+        'show the work belief',
         'trustworthy media',
         'ai-native world',
       ],
@@ -187,7 +187,7 @@
         'Research should inform builds, and builds should stress-test research; public writing keeps that loop honest.',
     },
     {
-      keys: ['institutional card', 'research & cloud', 'research and cloud', 'jd.com', 'msra card'],
+      keys: ['institutional card', 'research & cloud', 'research and cloud', 'msra card'],
       priority: 28,
       reply:
         'The Institutional card is MSRA (blockchain finance research) and JD.com (private cloud)—third on Track record after Plurall AI and quant.',
@@ -260,6 +260,7 @@
         'phoenix trading',
         'phoenix trading competition',
         'new york tech week',
+        'new york tech week 2023',
         'crypto strateg',
         'crypto strategy',
         'crypto strategies',
@@ -321,6 +322,8 @@
     {
       keys: [
         'on medium',
+        'your medium articles',
+        'articles on medium',
         'your medium',
         'medium profile',
         'your linkedin',
@@ -425,7 +428,7 @@
         'where are you',
         'where do you live',
         'where are you based',
-        'based in',
+        'based in new york',
         'which city',
         'your location',
         'where located',
@@ -474,7 +477,8 @@
         'whats the latest',
         'anything new at plurall',
         'anything new with plurall',
-        'any updates',
+        'any updates on plurall',
+        'updates on plurall',
         'news about plurall',
         'any news on plurall',
         'your recent work',

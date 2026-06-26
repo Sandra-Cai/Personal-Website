@@ -37,12 +37,20 @@ if (person.jobTitle !== 'Founder') {
   console.error('validate-jsonld: Person.jobTitle must be Founder');
   process.exit(1);
 }
+if (!person.alternateName || !/yijia/i.test(person.alternateName)) {
+  console.error('validate-jsonld: Person.alternateName must include Yijia Sandra Cai');
+  process.exit(1);
+}
 if (!person.worksFor || person.worksFor['@id'] !== 'https://www.sandracai.com/#plurall') {
   console.error('validate-jsonld: Person.worksFor must reference Plurall AI organization');
   process.exit(1);
 }
 if (!Array.isArray(person.knowsAbout) || person.knowsAbout.length < 3) {
   console.error('validate-jsonld: Person.knowsAbout must be an array with at least 3 topics');
+  process.exit(1);
+}
+if (!person.knowsAbout.some((t) => /deepfake detection/i.test(t))) {
+  console.error('validate-jsonld: Person.knowsAbout must include Deepfake detection');
   process.exit(1);
 }
 if (!person.alumniOf || person.alumniOf.name !== 'New York University') {
