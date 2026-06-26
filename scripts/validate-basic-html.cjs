@@ -27,6 +27,7 @@ const checks404 = [
   ['404 block', /class="ba-404/],
   ['404 sandragpt link', /href="\/#sandra-gpt"/],
   ['404 robots noindex', /<meta name="robots" content="noindex"/],
+  ['404 footer home', /ba-footer-links[\s\S]*?<a href="\/">Home<\/a>/],
   ['site stylesheet', /href="\/assets\/styles\.css\?v=/],
   ['nav separator', /class="ba-nav-sep"/],
   ['nav external class', /class="ba-nav-external"/],
@@ -95,6 +96,11 @@ const checksIndex = [
   ['beliefs show the work', /id="beliefs"[\s\S]*?Show the work/],
   ['connector strip', /aria-label="Connector"[\s\S]*?one discipline/],
   ['JSON-LD alternateName', /"alternateName":\s*"Yijia Sandra Cai"/],
+  ['hero mission plurall', /class="ba-mission"[^>]*>[\s\S]*?Plurall AI/],
+  ['academic bemt minor', /id="education"[\s\S]*?<strong>BEMT<\/strong>/],
+  ['institutional msra jd', /Research &amp; cloud[\s\S]*?Microsoft Research Asia[\s\S]*?JD\.com/],
+  ['gpt starter what do you do', /class="gpt-starter"[^>]*data-q="What do you do\?"/],
+  ['gpt placeholder', /id="gpt-input"[^>]*placeholder="Ask about Plurall, work, research/],
 ];
 
 const html404 = read('404.html');

@@ -53,6 +53,14 @@ if (!person.knowsAbout.some((t) => /deepfake detection/i.test(t))) {
   console.error('validate-jsonld: Person.knowsAbout must include Deepfake detection');
   process.exit(1);
 }
+if (!person.knowsAbout.some((t) => /quantitative finance/i.test(t))) {
+  console.error('validate-jsonld: Person.knowsAbout must include Quantitative finance');
+  process.exit(1);
+}
+if (!person.image || !/sandra-headshot\.jpg/i.test(person.image)) {
+  console.error('validate-jsonld: Person.image must reference sandra-headshot.jpg');
+  process.exit(1);
+}
 if (!person.alumniOf || person.alumniOf.name !== 'New York University') {
   console.error('validate-jsonld: Person.alumniOf must name New York University');
   process.exit(1);
