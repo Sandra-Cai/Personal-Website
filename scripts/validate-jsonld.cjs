@@ -41,6 +41,10 @@ if (!person.alternateName || !/yijia/i.test(person.alternateName)) {
   console.error('validate-jsonld: Person.alternateName must include Yijia Sandra Cai');
   process.exit(1);
 }
+if (person.givenName !== 'Sandra' || person.familyName !== 'Cai') {
+  console.error('validate-jsonld: Person.givenName/familyName must be Sandra Cai');
+  process.exit(1);
+}
 if (!person.worksFor || person.worksFor['@id'] !== 'https://www.sandracai.com/#plurall') {
   console.error('validate-jsonld: Person.worksFor must reference Plurall AI organization');
   process.exit(1);
@@ -112,6 +116,10 @@ if (website.inLanguage !== 'en-US') {
 }
 if (!website.potentialAction || website.potentialAction['@type'] !== 'SearchAction') {
   console.error('validate-jsonld: WebSite.potentialAction SearchAction missing');
+  process.exit(1);
+}
+if (!website.publisher || website.publisher['@id'] !== 'https://www.sandracai.com/#person') {
+  console.error('validate-jsonld: WebSite.publisher must reference Person');
   process.exit(1);
 }
 if (!person.description || !website.description || person.description !== website.description) {

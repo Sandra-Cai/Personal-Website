@@ -101,6 +101,11 @@ const checksIndex = [
   ['institutional msra jd', /Research &amp; cloud[\s\S]*?Microsoft Research Asia[\s\S]*?JD\.com/],
   ['gpt starter what do you do', /class="gpt-starter"[^>]*data-q="What do you do\?"/],
   ['gpt placeholder', /id="gpt-input"[^>]*placeholder="Ask about Plurall, work, research/],
+  ['hero focus areas', /class="ba-focus"[^>]*>[\s\S]*?Markets &amp; quant/],
+  ['academic math minor', /id="education"[\s\S]*?<strong>Mathematics<\/strong>/],
+  ['og image alt plurall', /property="og:image:alt" content="[^"]*Plurall AI/],
+  ['gpt slash shortcut', /id="gpt-input"[^>]*aria-keyshortcuts="\/"/],
+  ['beliefs systems incentives', /id="beliefs"[\s\S]*?Systems and incentives/],
 ];
 
 const html404 = read('404.html');
