@@ -29,6 +29,14 @@ if (!person) {
   console.error('validate-jsonld: missing Person node');
   process.exit(1);
 }
+if (person.name !== 'Sandra Cai') {
+  console.error('validate-jsonld: Person.name must be Sandra Cai');
+  process.exit(1);
+}
+if (person.url !== 'https://www.sandracai.com') {
+  console.error('validate-jsonld: Person.url must be https://www.sandracai.com');
+  process.exit(1);
+}
 if (!person.email || person.email !== 'sandraxcyj@gmail.com') {
   console.error('validate-jsonld: Person.email missing or incorrect');
   process.exit(1);
@@ -59,6 +67,10 @@ if (!person.knowsAbout.some((t) => /deepfake detection/i.test(t))) {
 }
 if (!person.knowsAbout.some((t) => /quantitative finance/i.test(t))) {
   console.error('validate-jsonld: Person.knowsAbout must include Quantitative finance');
+  process.exit(1);
+}
+if (!person.knowsAbout.some((t) => /market microstructure/i.test(t))) {
+  console.error('validate-jsonld: Person.knowsAbout must include Market microstructure');
   process.exit(1);
 }
 if (!person.image || !/sandra-headshot\.jpg/i.test(person.image)) {

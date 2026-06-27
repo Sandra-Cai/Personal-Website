@@ -106,6 +106,9 @@ const checksIndex = [
   ['og image alt plurall', /property="og:image:alt" content="[^"]*Plurall AI/],
   ['gpt slash shortcut', /id="gpt-input"[^>]*aria-keyshortcuts="\/"/],
   ['beliefs systems incentives', /id="beliefs"[\s\S]*?Systems and incentives/],
+  ['beliefs ship iterate', /id="beliefs"[\s\S]*?Ship and iterate/],
+  ['perspective rigor copy', /id="perspective"[\s\S]*?assumptions you can defend/],
+  ['gpt disclaimer not live model', /id="gpt-disclaimer"[^>]*>[\s\S]*?not a live model/],
 ];
 
 const html404 = read('404.html');
@@ -194,6 +197,21 @@ if (!ogDesc || !twDesc) {
 }
 if (metaDesc[1] !== ogDesc[1] || metaDesc[1] !== twDesc[1]) {
   console.error('validate-basic-html: meta, og, and twitter descriptions must match');
+  process.exit(1);
+}
+
+const ogImageAlt = indexHtml.match(/<meta property="og:image:alt" content="([^"]+)"/);
+const twImageAlt = indexHtml.match(/<meta name="twitter:image:alt" content="([^"]+)"/);
+if (!ogImageAlt || !twImageAlt) {
+  console.error('validate-basic-html: could not parse og:image:alt or twitter:image:alt');
+  process.exit(1);
+}
+if (ogImageAlt[1] !== twImageAlt[1]) {
+  console.error('validate-basic-html: og:image:alt and twitter:image:alt must match');
+  process.exit(1);
+}
+if (!/Plurall AI/i.test(ogImageAlt[1])) {
+  console.error('validate-basic-html: og:image:alt must mention Plurall AI');
   process.exit(1);
 }
 

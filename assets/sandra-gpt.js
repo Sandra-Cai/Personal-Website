@@ -65,7 +65,6 @@
         'personal research',
         'independent research',
         'your own research',
-        'what research',
         'research do you',
         'type of research',
         'research outside',
@@ -159,8 +158,6 @@
       keys: [
         'standard of proof',
         'one standard of proof',
-        'rigorous work',
-        'rigorous research',
         'academic rigor',
         'show the work belief',
         'trustworthy media',
@@ -321,13 +318,10 @@
     },
     {
       keys: [
-        'on medium',
         'your medium articles',
         'articles on medium',
         'your medium',
         'medium profile',
-        'your linkedin',
-        'linkedin profile',
         'macro writing',
         'macro piece',
         'ai macro',
@@ -436,7 +430,16 @@
         'New York—NYU coursework is summarized under Academic; the site emphasizes operating experience first.',
     },
     {
-      keys: ['open to work', 'your availability', 'recruiter outreach', 'hiring recruiter', 'are you hiring', 'recruiting role'],
+      keys: [
+        'are you open to work',
+        'open to work opportunities',
+        'open to new roles',
+        'your availability',
+        'recruiter outreach',
+        'hiring recruiter',
+        'are you hiring',
+        'recruiting role',
+      ],
       priority: 16,
       reply: `For recruiting or collaboration, reach out at ${EMAIL} or LinkedIn with role scope, timeline, and context.`,
     },
