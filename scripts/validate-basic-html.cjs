@@ -112,6 +112,11 @@ const checksIndex = [
   ['work accel title', /id="accel-title"[^>]*>Accelerating work that ships/],
   ['JSON-LD person id', /"@id":\s*"https:\/\/www\.sandracai\.com\/#person"/],
   ['research section title', /id="research-title"[^>]*>Independent research/],
+  ['academic title', /id="edu-title"[^>]*>Academic/],
+  ['beliefs title', /id="beliefs-title"[^>]*>Three things I believe/],
+  ['hero mission ai-native', /class="ba-mission"[^>]*>[\s\S]*?AI-native world/],
+  ['JSON-LD website id', /"@id":\s*"https:\/\/www\.sandracai\.com\/#website"/],
+  ['gpt tagline trading comps', /id="gpt-tagline"[^>]*>[\s\S]*?trading comps/],
 ];
 
 const html404 = read('404.html');

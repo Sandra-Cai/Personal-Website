@@ -1297,6 +1297,16 @@ a:focus-visible {
     text-decoration: underline;
     text-underline-offset: 0.18em;
   }
+
+  .gpt-send:not(:disabled) {
+    outline: 2px solid #0a0a0a;
+    outline-offset: 2px;
+  }
+
+  .gpt-sidebar-clear {
+    border-color: rgba(0, 0, 0, 0.45);
+    color: var(--text-dim);
+  }
 }
 
 @media print {

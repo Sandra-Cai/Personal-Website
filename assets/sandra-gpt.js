@@ -68,7 +68,6 @@
         'research do you',
         'type of research',
         'research outside',
-        'research on your',
       ],
       priority: 12,
       reply: REPLY_INDEPENDENT_RESEARCH,
@@ -626,7 +625,6 @@
         'which sandra cai',
         'wrong sandra',
         'different sandra cai',
-        'same name',
         'multiple sandra cai',
         'are you the recruiter',
         'are you in guangzhou',
@@ -676,7 +674,7 @@
         'Python is central to quant and research work (e.g. Vigil/Nuveaux); ML and full-stack work show up in projects listed under Work and GitHub on this page.',
     },
     {
-      keys: ['your github', 'your github profile', 'github repos', 'open source repo', 'your repos', 'bayes-theorem repo', 'jane-street-india-ban'],
+      keys: ['your github', 'your github profile', 'github repos', 'your repos', 'bayes-theorem repo', 'jane-street-india-ban'],
       priority: 8,
       reply:
         'Repos (papers, projects, tooling) are under Sandra-Cai on GitHub—including Bayes-Theorem and Jane-Street-India-Ban-Analysis linked from Research.',

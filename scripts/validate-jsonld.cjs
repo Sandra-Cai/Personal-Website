@@ -81,6 +81,18 @@ if (!person.knowsAbout.some((t) => /synthetic media/i.test(t))) {
   console.error('validate-jsonld: Person.knowsAbout must include Synthetic media');
   process.exit(1);
 }
+if (!person.knowsAbout.some((t) => /machine learning/i.test(t))) {
+  console.error('validate-jsonld: Person.knowsAbout must include Machine learning');
+  process.exit(1);
+}
+if (!person.knowsAbout.some((t) => /blockchain/i.test(t))) {
+  console.error('validate-jsonld: Person.knowsAbout must include Blockchain');
+  process.exit(1);
+}
+if (!person.knowsAbout.some((t) => /systems engineering/i.test(t))) {
+  console.error('validate-jsonld: Person.knowsAbout must include Systems engineering');
+  process.exit(1);
+}
 if (!person.image || !/sandra-headshot\.jpg/i.test(person.image)) {
   console.error('validate-jsonld: Person.image must reference sandra-headshot.jpg');
   process.exit(1);
@@ -128,6 +140,14 @@ if (!plurall.description || !/deepfake detection/i.test(plurall.description)) {
 
 if (!website) {
   console.error('validate-jsonld: missing WebSite node');
+  process.exit(1);
+}
+if (website['@id'] !== 'https://www.sandracai.com/#website') {
+  console.error('validate-jsonld: WebSite.@id must be https://www.sandracai.com/#website');
+  process.exit(1);
+}
+if (website.url !== 'https://www.sandracai.com/') {
+  console.error('validate-jsonld: WebSite.url must be https://www.sandracai.com/');
   process.exit(1);
 }
 if (website.inLanguage !== 'en-US') {
