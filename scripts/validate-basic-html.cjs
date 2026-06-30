@@ -109,6 +109,9 @@ const checksIndex = [
   ['beliefs ship iterate', /id="beliefs"[\s\S]*?Ship and iterate/],
   ['perspective rigor copy', /id="perspective"[\s\S]*?assumptions you can defend/],
   ['gpt disclaimer not live model', /id="gpt-disclaimer"[^>]*>[\s\S]*?not a live model/],
+  ['work accel title', /id="accel-title"[^>]*>Accelerating work that ships/],
+  ['JSON-LD person id', /"@id":\s*"https:\/\/www\.sandracai\.com\/#person"/],
+  ['research section title', /id="research-title"[^>]*>Independent research/],
 ];
 
 const html404 = read('404.html');

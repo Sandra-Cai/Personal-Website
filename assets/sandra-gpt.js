@@ -266,7 +266,7 @@
       reply: 'The site notes a Phoenix Trading Competition win (crypto strategies) during New York Tech Week 2023.',
     },
     {
-      keys: ['trading comp', 'trading comps', 'your trading', 'trading work', 'paper trade', 'trade competition'],
+      keys: ['trading comp', 'trading comps', 'paper trade', 'trade competition'],
       priority: 10,
       reply:
         'I take structured trading and markets work seriously—competitions, research writing, and related projects. Work and Research on this page point to specifics.',
@@ -320,11 +320,9 @@
       keys: [
         'your medium articles',
         'articles on medium',
-        'your medium',
         'medium profile',
         'macro writing',
         'macro piece',
-        'ai macro',
         'macroeconomic writing',
       ],
       priority: 8,
@@ -335,6 +333,12 @@
       priority: 17,
       reply:
         'For this site, the LinkedIn profile is Yijia Sandra Cai (shown in the Writing section). SandraGPT answers are based on this site content, not other people with similar names.',
+    },
+    {
+      keys: ['your linkedin', 'linkedin profile', 'linkedin url', 'linkedin link'],
+      priority: 14,
+      reply:
+        'LinkedIn profile is Yijia Sandra Cai—linked from the Writing strip, Research deck, and footer on this page.',
     },
     {
       keys: [
@@ -482,7 +486,6 @@
         'updates on plurall',
         'news about plurall',
         'any news on plurall',
-        'your recent work',
         'recent work at plurall',
       ],
       priority: 11,
