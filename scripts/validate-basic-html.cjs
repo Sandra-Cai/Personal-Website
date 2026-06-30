@@ -40,6 +40,7 @@ const checks404 = [
   ['referrer policy', /<meta name="referrer" content="strict-origin-when-cross-origin"/],
   ['color-scheme light', /<meta name="color-scheme" content="light"/],
   ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
+  ['404 email lead', /ba-404-lead[\s\S]*?sandraxcyj@gmail\.com/],
 ];
 
 const checksIndex = [
@@ -117,6 +118,9 @@ const checksIndex = [
   ['hero mission ai-native', /class="ba-mission"[^>]*>[\s\S]*?AI-native world/],
   ['JSON-LD website id', /"@id":\s*"https:\/\/www\.sandracai\.com\/#website"/],
   ['gpt tagline trading comps', /id="gpt-tagline"[^>]*>[\s\S]*?trading comps/],
+  ['gpt heading', /id="gpt-heading"[^>]*>Ask what you want to know/],
+  ['perspective rigor split', /id="perspective"[\s\S]*?Rigor as[\s\S]*?infrastructure/],
+  ['quant card title', /id="work"[\s\S]*?Markets &amp; crypto infrastructure/],
 ];
 
 const html404 = read('404.html');

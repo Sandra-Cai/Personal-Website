@@ -66,7 +66,6 @@
         'independent research',
         'your own research',
         'research do you',
-        'type of research',
         'research outside',
       ],
       priority: 12,
@@ -321,7 +320,6 @@
         'articles on medium',
         'medium profile',
         'macro writing',
-        'macro piece',
         'macroeconomic writing',
       ],
       priority: 8,
@@ -693,6 +691,11 @@
       keys: ['your writing', 'essays on substack', 'substack essays', 'where do you write', 'what substack', 'substack handle'],
       priority: 5,
       reply: 'Essays on Substack (@caisandra); quant and macro threads also on LinkedIn and Medium.',
+    },
+    {
+      keys: ['your substack', 'substack profile', 'substack link', 'caisandra substack'],
+      priority: 14,
+      reply: 'Substack is @caisandra—linked from the header Writing nav, external links strip, and footer on this page.',
     },
     {
       keys: [

@@ -30,6 +30,10 @@ if (!/<urlset\b[^>]*xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9"/
 if (!new RegExp(`<loc>\\s*${SITE_ORIGIN.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/\\s*</loc>`, 'i').test(sitemap)) {
   fail('sitemap.xml missing canonical home URL');
 }
+const lastmodMatch = sitemap.match(/<lastmod>\s*([^<]+?)\s*<\/lastmod>/i);
+if (!lastmodMatch || !/^\d{4}-\d{2}-\d{2}$/.test(lastmodMatch[1])) {
+  fail('sitemap.xml lastmod must be YYYY-MM-DD');
+}
 
 const security = read('.well-known/security.txt');
 if (!/^\s*Contact:\s*mailto:[^\s]+@[^\s]+\s*$/im.test(security)) {

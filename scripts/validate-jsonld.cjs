@@ -129,6 +129,10 @@ if (!plurall || plurall.name !== 'Plurall AI') {
   console.error('validate-jsonld: missing Plurall AI Organization node');
   process.exit(1);
 }
+if (plurall['@id'] !== 'https://www.sandracai.com/#plurall') {
+  console.error('validate-jsonld: Plurall AI Organization.@id must be https://www.sandracai.com/#plurall');
+  process.exit(1);
+}
 if (!plurall.founder || plurall.founder['@id'] !== 'https://www.sandracai.com/#person') {
   console.error('validate-jsonld: Plurall AI Organization.founder must reference Person');
   process.exit(1);

@@ -1307,6 +1307,12 @@ a:focus-visible {
     border-color: rgba(0, 0, 0, 0.45);
     color: var(--text-dim);
   }
+
+  .gpt-kbd {
+    border-color: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--text);
+  }
 }
 
 @media print {
