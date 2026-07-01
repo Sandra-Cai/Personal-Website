@@ -319,7 +319,6 @@
         'your medium articles',
         'articles on medium',
         'medium profile',
-        'macro writing',
         'macroeconomic writing',
       ],
       priority: 8,
@@ -607,7 +606,6 @@
         'plurall digital trust',
         'why deepfake',
         'why deepfakes',
-        'why this problem',
         'why plurall matters',
         'why this problem matters',
         'plurall mission',
@@ -672,13 +670,13 @@
         'Python is central to quant and research work (e.g. Vigil/Nuveaux); ML and full-stack work show up in projects listed under Work and GitHub on this page.',
     },
     {
-      keys: ['your github', 'your github profile', 'github repos', 'your repos', 'bayes-theorem repo', 'jane-street-india-ban'],
+      keys: ['your github', 'your github profile', 'your github repos', 'your repos', 'bayes-theorem repo', 'jane-street-india-ban'],
       priority: 8,
       reply:
         'Repos (papers, projects, tooling) are under Sandra-Cai on GitHub—including Bayes-Theorem and Jane-Street-India-Ban-Analysis linked from Research.',
     },
     {
-      keys: ['what projects', 'side project', 'your portfolio', 'work portfolio', 'pet project'],
+      keys: ['what projects', 'side project', 'work portfolio', 'pet project'],
       priority: 12,
       reply: 'Highlighted work is under Work and Research; code and papers are linked from GitHub (Sandra-Cai).',
     },

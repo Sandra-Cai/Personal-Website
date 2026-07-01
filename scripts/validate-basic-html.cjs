@@ -121,6 +121,10 @@ const checksIndex = [
   ['gpt heading', /id="gpt-heading"[^>]*>Ask what you want to know/],
   ['perspective rigor split', /id="perspective"[\s\S]*?Rigor as[\s\S]*?infrastructure/],
   ['quant card title', /id="work"[\s\S]*?Markets &amp; crypto infrastructure/],
+  ['gpt kicker', /class="ba-kicker"[^>]*>SandraGPT/],
+  ['founding deepfake', /ba-card--lead[\s\S]*?deepfake detection/],
+  ['external strip email', /aria-label="External links"[\s\S]*?sandraxcyj@gmail\.com/],
+  ['hero eyebrow founding', /class="ba-eyebrow"[^>]*>[^<]*industry, research/],
 ];
 
 const html404 = read('404.html');
@@ -224,6 +228,17 @@ if (ogImageAlt[1] !== twImageAlt[1]) {
 }
 if (!/Plurall AI/i.test(ogImageAlt[1])) {
   console.error('validate-basic-html: og:image:alt must mention Plurall AI');
+  process.exit(1);
+}
+
+const ogImage = indexHtml.match(/<meta property="og:image" content="([^"]+)"/);
+const twImage = indexHtml.match(/<meta name="twitter:image" content="([^"]+)"/);
+if (!ogImage || !twImage) {
+  console.error('validate-basic-html: could not parse og:image or twitter:image');
+  process.exit(1);
+}
+if (ogImage[1] !== twImage[1]) {
+  console.error('validate-basic-html: og:image and twitter:image must match');
   process.exit(1);
 }
 

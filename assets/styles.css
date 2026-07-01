@@ -1293,7 +1293,8 @@ a:focus-visible {
   .ba-404-lead a,
   .gpt-note a,
   .gpt-noscript a,
-  .gpt-starter {
+  .gpt-starter,
+  .gpt-msg--bot a {
     text-decoration: underline;
     text-underline-offset: 0.18em;
   }

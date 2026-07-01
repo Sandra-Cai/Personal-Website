@@ -154,6 +154,10 @@ if (website.url !== 'https://www.sandracai.com/') {
   console.error('validate-jsonld: WebSite.url must be https://www.sandracai.com/');
   process.exit(1);
 }
+if (website.name !== 'Sandra Cai') {
+  console.error('validate-jsonld: WebSite.name must be Sandra Cai');
+  process.exit(1);
+}
 if (website.inLanguage !== 'en-US') {
   console.error('validate-jsonld: WebSite.inLanguage must be en-US');
   process.exit(1);
