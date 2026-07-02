@@ -264,7 +264,7 @@
       reply: 'The site notes a Phoenix Trading Competition win (crypto strategies) during New York Tech Week 2023.',
     },
     {
-      keys: ['trading comp', 'trading comps', 'paper trade', 'trade competition'],
+      keys: ['trading comp', 'trading comps', 'trade competition'],
       priority: 10,
       reply:
         'I take structured trading and markets work seriously—competitions, research writing, and related projects. Work and Research on this page point to specifics.',
@@ -319,10 +319,14 @@
         'your medium articles',
         'articles on medium',
         'medium profile',
-        'macroeconomic writing',
       ],
       priority: 8,
       reply: 'Longer threads are on LinkedIn and Medium; Substack is @caisandra. Links are in the header and social strips.',
+    },
+    {
+      keys: ['your medium handle', 'medium handle', 'caisandra medium', '@caisandra medium'],
+      priority: 13,
+      reply: 'Medium profile is @caisandra—linked from the Writing strip, Research deck, and footer on this page.',
     },
     {
       keys: ['yijia sandra cai', 'which linkedin', 'linkedin handle', 'wrong sandra cai'],
@@ -479,7 +483,6 @@
         'anything new at plurall',
         'anything new with plurall',
         'any updates on plurall',
-        'updates on plurall',
         'news about plurall',
         'any news on plurall',
         'recent work at plurall',
@@ -670,7 +673,16 @@
         'Python is central to quant and research work (e.g. Vigil/Nuveaux); ML and full-stack work show up in projects listed under Work and GitHub on this page.',
     },
     {
-      keys: ['your github', 'your github profile', 'your github repos', 'your repos', 'bayes-theorem repo', 'jane-street-india-ban'],
+      keys: [
+        'your github',
+        'your github profile',
+        'your github repos',
+        'your github username',
+        'github username',
+        'your repos',
+        'bayes-theorem repo',
+        'jane-street-india-ban',
+      ],
       priority: 8,
       reply:
         'Repos (papers, projects, tooling) are under Sandra-Cai on GitHub—including Bayes-Theorem and Jane-Street-India-Ban-Analysis linked from Research.',

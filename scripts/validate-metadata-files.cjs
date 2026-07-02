@@ -39,6 +39,9 @@ const security = read('.well-known/security.txt');
 if (!/^\s*Contact:\s*mailto:[^\s]+@[^\s]+\s*$/im.test(security)) {
   fail('security.txt missing a valid Contact mailto');
 }
+if (!/sandraxcyj@gmail\.com/i.test(security)) {
+  fail('security.txt Contact must use sandraxcyj@gmail.com');
+}
 if (!new RegExp(`^\\s*Canonical:\\s*${SITE_ORIGIN.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/\\.well-known/security\\.txt\\s*$`, 'im').test(security)) {
   fail('security.txt canonical URL is missing or incorrect');
 }

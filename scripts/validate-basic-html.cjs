@@ -125,6 +125,12 @@ const checksIndex = [
   ['founding deepfake', /ba-card--lead[\s\S]*?deepfake detection/],
   ['external strip email', /aria-label="External links"[\s\S]*?sandraxcyj@gmail\.com/],
   ['hero eyebrow founding', /class="ba-eyebrow"[^>]*>[^<]*industry, research/],
+  ['JSON-LD jobTitle', /"jobTitle":\s*"Founder"/],
+  ['JSON-LD givenName', /"givenName":\s*"Sandra"/],
+  ['work deck pipelines', /id="work"[\s\S]*?quant pipelines/],
+  ['founding phase', /ba-card--lead[\s\S]*?ba-phase">Founding/],
+  ['footer email', /ba-footer-links[\s\S]*?mailto:sandraxcyj@gmail\.com/],
+  ['page title plurall', /<title>Sandra Cai · Founder, Plurall AI<\/title>/],
 ];
 
 const html404 = read('404.html');
@@ -251,6 +257,16 @@ if (!pageTitle || !ogTitle || !twTitle) {
 }
 if (pageTitle[1] !== ogTitle[1] || pageTitle[1] !== twTitle[1]) {
   console.error('validate-basic-html: title, og:title, and twitter:title must match');
+  process.exit(1);
+}
+
+const ogSiteName = indexHtml.match(/<meta property="og:site_name" content="([^"]+)"/);
+if (!ogSiteName) {
+  console.error('validate-basic-html: could not parse og:site_name');
+  process.exit(1);
+}
+if (ogSiteName[1] !== 'Sandra Cai') {
+  console.error('validate-basic-html: og:site_name must be Sandra Cai');
   process.exit(1);
 }
 

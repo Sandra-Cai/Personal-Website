@@ -1281,6 +1281,7 @@ a:focus-visible {
 
   .gpt-sidebar-item {
     background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.35);
   }
 
   .ba-nav a,
