@@ -131,6 +131,10 @@ const checksIndex = [
   ['founding phase', /ba-card--lead[\s\S]*?ba-phase">Founding/],
   ['footer email', /ba-footer-links[\s\S]*?mailto:sandraxcyj@gmail\.com/],
   ['page title plurall', /<title>Sandra Cai · Founder, Plurall AI<\/title>/],
+  ['JSON-LD familyName', /"familyName":\s*"Cai"/],
+  ['institutional phase', /id="work"[\s\S]*?ba-phase">Institutional/],
+  ['hero student technical', /class="ba-student-note"[^>]*>[\s\S]*?Technical education/],
+  ['research deck substack', /id="research"[\s\S]*?essays on[\s\S]*?substack\.com/],
 ];
 
 const html404 = read('404.html');
@@ -267,6 +271,16 @@ if (!ogSiteName) {
 }
 if (ogSiteName[1] !== 'Sandra Cai') {
   console.error('validate-basic-html: og:site_name must be Sandra Cai');
+  process.exit(1);
+}
+
+const metaAuthor = indexHtml.match(/<meta name="author" content="([^"]+)"/);
+if (!metaAuthor) {
+  console.error('validate-basic-html: could not parse meta author');
+  process.exit(1);
+}
+if (metaAuthor[1] !== ogSiteName[1]) {
+  console.error('validate-basic-html: meta author must match og:site_name');
   process.exit(1);
 }
 

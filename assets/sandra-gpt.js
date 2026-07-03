@@ -483,7 +483,6 @@
         'anything new at plurall',
         'anything new with plurall',
         'any updates on plurall',
-        'news about plurall',
         'any news on plurall',
         'recent work at plurall',
       ],
@@ -693,7 +692,7 @@
       reply: 'Highlighted work is under Work and Research; code and papers are linked from GitHub (Sandra-Cai).',
     },
     {
-      keys: ['your passion', 'what are you passionate', 'areas of interest', 'personal interest', 'why finance', 'why markets'],
+      keys: ['your passion', 'what are you passionate', 'areas of interest', 'why finance', 'why markets'],
       priority: 5,
       reply: 'I focus on where careful financial analysis meets solid engineering—in markets, research, and product.',
     },
@@ -706,6 +705,11 @@
       keys: ['your substack', 'substack profile', 'substack link', 'caisandra substack'],
       priority: 14,
       reply: 'Substack is @caisandra—linked from the header Writing nav, external links strip, and footer on this page.',
+    },
+    {
+      keys: ['your email address', 'email address', 'what is your email', 'sandraxcyj', 'gmail address'],
+      priority: 16,
+      reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,
     },
     {
       keys: [

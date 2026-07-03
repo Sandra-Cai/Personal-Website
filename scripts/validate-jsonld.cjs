@@ -101,6 +101,10 @@ if (!person.alumniOf || person.alumniOf.name !== 'New York University') {
   console.error('validate-jsonld: Person.alumniOf must name New York University');
   process.exit(1);
 }
+if (!person.alumniOf['@type'] || person.alumniOf['@type'] !== 'CollegeOrUniversity') {
+  console.error('validate-jsonld: Person.alumniOf @type must be CollegeOrUniversity');
+  process.exit(1);
+}
 const sameAs = Array.isArray(person.sameAs) ? person.sameAs : [];
 if (!sameAs.some((u) => /github\.com\/Sandra-Cai/i.test(u))) {
   console.error('validate-jsonld: Person.sameAs must include GitHub profile');
