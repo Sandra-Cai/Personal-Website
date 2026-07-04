@@ -135,6 +135,10 @@ const checksIndex = [
   ['institutional phase', /id="work"[\s\S]*?ba-phase">Institutional/],
   ['hero student technical', /class="ba-student-note"[^>]*>[\s\S]*?Technical education/],
   ['research deck substack', /id="research"[\s\S]*?essays on[\s\S]*?substack\.com/],
+  ['quant phase', /id="work"[\s\S]*?ba-phase">Quant/],
+  ['beliefs path wrong', /id="beliefs"[\s\S]*?path to being wrong/],
+  ['hero focus ai trust', /class="ba-focus"[^>]*>[\s\S]*?AI &amp; trust/],
+  ['og canonical url', /property="og:url" content="https:\/\/www\.sandracai\.com\/"/],
 ];
 
 const html404 = read('404.html');
@@ -249,6 +253,16 @@ if (!ogImage || !twImage) {
 }
 if (ogImage[1] !== twImage[1]) {
   console.error('validate-basic-html: og:image and twitter:image must match');
+  process.exit(1);
+}
+
+const ogImageSecure = indexHtml.match(/<meta property="og:image:secure_url" content="([^"]+)"/);
+if (!ogImageSecure) {
+  console.error('validate-basic-html: could not parse og:image:secure_url');
+  process.exit(1);
+}
+if (ogImage[1] !== ogImageSecure[1]) {
+  console.error('validate-basic-html: og:image and og:image:secure_url must match');
   process.exit(1);
 }
 

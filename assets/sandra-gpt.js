@@ -317,7 +317,6 @@
     {
       keys: [
         'your medium articles',
-        'articles on medium',
         'medium profile',
       ],
       priority: 8,
@@ -480,8 +479,6 @@
         'whats new at plurall',
         "what's the latest with plurall",
         'whats the latest at plurall',
-        'anything new at plurall',
-        'anything new with plurall',
         'any updates on plurall',
         'any news on plurall',
         'recent work at plurall',
@@ -685,6 +682,11 @@
       priority: 8,
       reply:
         'Repos (papers, projects, tooling) are under Sandra-Cai on GitHub—including Bayes-Theorem and Jane-Street-India-Ban-Analysis linked from Research.',
+    },
+    {
+      keys: ['github handle', 'sandra-cai github', 'github.com/sandra-cai', 'your github handle'],
+      priority: 13,
+      reply: 'GitHub profile is Sandra-Cai—linked from the header nav, Code strip, founding card, and footer on this page.',
     },
     {
       keys: ['what projects', 'side project', 'work portfolio', 'pet project'],

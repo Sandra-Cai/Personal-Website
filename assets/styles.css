@@ -1291,6 +1291,7 @@ a:focus-visible {
 
   .ba-nav a,
   .ba-logo,
+  .ba-nav-external,
   .ba-strip-items a,
   .ba-footer-links a,
   .ba-list a,
@@ -1318,6 +1319,14 @@ a:focus-visible {
   .gpt-kbd {
     border-color: rgba(0, 0, 0, 0.45);
     background: rgba(0, 0, 0, 0.1);
+    color: var(--text);
+  }
+
+  .gpt-field {
+    border-color: rgba(0, 0, 0, 0.35);
+  }
+
+  .gpt-field input {
     color: var(--text);
   }
 }

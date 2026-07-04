@@ -88,6 +88,9 @@ if (!inLanguageMatch) fail('index.html missing JSON-LD inLanguage');
 if (manifest.lang !== inLanguageMatch[1]) {
   fail('site.webmanifest lang must match JSON-LD WebSite.inLanguage');
 }
+if (manifest.name !== 'Sandra Cai' || manifest.short_name !== 'Sandra Cai') {
+  fail('site.webmanifest name and short_name must be Sandra Cai');
+}
 
 const vercel = read('vercel.json');
 let vercelJson;
