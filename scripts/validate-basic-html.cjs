@@ -139,6 +139,11 @@ const checksIndex = [
   ['beliefs path wrong', /id="beliefs"[\s\S]*?path to being wrong/],
   ['hero focus ai trust', /class="ba-focus"[^>]*>[\s\S]*?AI &amp; trust/],
   ['og canonical url', /property="og:url" content="https:\/\/www\.sandracai\.com\/"/],
+  ['twitter card', /name="twitter:card" content="summary_large_image"/],
+  ['og type website', /property="og:type" content="website"/],
+  ['academic coursework ml', /id="education"[\s\S]*?algorithms through ML/],
+  ['founding card title', /ba-card--lead[\s\S]*?Plurall AI &amp; product/],
+  ['404 footer linkedin', /ba-footer-links[\s\S]*?linkedin\.com\/in\/yijia-sandra-cai/],
 ];
 
 const html404 = read('404.html');
@@ -295,6 +300,17 @@ if (!metaAuthor) {
 }
 if (metaAuthor[1] !== ogSiteName[1]) {
   console.error('validate-basic-html: meta author must match og:site_name');
+  process.exit(1);
+}
+
+const canonical = indexHtml.match(/<link rel="canonical" href="([^"]+)"/);
+const ogUrl = indexHtml.match(/<meta property="og:url" content="([^"]+)"/);
+if (!canonical || !ogUrl) {
+  console.error('validate-basic-html: could not parse canonical or og:url');
+  process.exit(1);
+}
+if (canonical[1] !== ogUrl[1]) {
+  console.error('validate-basic-html: canonical href must match og:url');
   process.exit(1);
 }
 

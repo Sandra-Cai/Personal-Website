@@ -1322,6 +1322,15 @@ a:focus-visible {
     color: var(--text);
   }
 
+  .gpt-msg--user {
+    border-left-color: rgba(0, 0, 0, 0.45);
+    color: var(--text);
+  }
+
+  .gpt-msg--user p::before {
+    color: var(--text-dim);
+  }
+
   .gpt-field {
     border-color: rgba(0, 0, 0, 0.35);
   }

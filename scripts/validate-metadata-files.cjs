@@ -91,6 +91,9 @@ if (manifest.lang !== inLanguageMatch[1]) {
 if (manifest.name !== 'Sandra Cai' || manifest.short_name !== 'Sandra Cai') {
   fail('site.webmanifest name and short_name must be Sandra Cai');
 }
+if (manifest.start_url !== '/') {
+  fail('site.webmanifest start_url must be /');
+}
 
 const vercel = read('vercel.json');
 let vercelJson;

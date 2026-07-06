@@ -281,6 +281,11 @@
       reply: 'The AeroVironment (AVAV) thesis is listed under Research on this page.',
     },
     {
+      keys: ['perplexity thesis', 'read on perplexity', 'avav on perplexity', 'perplexity avav thesis'],
+      priority: 32,
+      reply: 'The AVAV investment thesis is linked from Research on this page (Perplexity).',
+    },
+    {
       keys: ['jane street india', 'inside the ban', 'jane street india ban', 'jane street microstructure', 'jane-street-india-ban', 'sebi enforcement', 'sebi india'],
       priority: 45,
       reply:
@@ -308,7 +313,6 @@
         'geopolitical macro',
         'oscar medium',
         'oscar should be given',
-        'hawkish dovish',
         'hawkish vs dovish',
       ],
       priority: 12,
@@ -480,7 +484,6 @@
         "what's the latest with plurall",
         'whats the latest at plurall',
         'any updates on plurall',
-        'any news on plurall',
         'recent work at plurall',
       ],
       priority: 11,
@@ -709,7 +712,7 @@
       reply: 'Substack is @caisandra—linked from the header Writing nav, external links strip, and footer on this page.',
     },
     {
-      keys: ['your email address', 'email address', 'what is your email', 'sandraxcyj', 'gmail address'],
+      keys: ['your email address', 'email address', 'what is your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,
     },
