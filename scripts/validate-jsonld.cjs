@@ -153,6 +153,10 @@ if (!/synthetic-media trust/i.test(plurall.description)) {
   console.error('validate-jsonld: Plurall AI Organization.description must mention synthetic-media trust');
   process.exit(1);
 }
+if (plurall['@type'] !== 'Organization') {
+  console.error('validate-jsonld: Plurall AI node @type must be Organization');
+  process.exit(1);
+}
 
 if (!website) {
   console.error('validate-jsonld: missing WebSite node');

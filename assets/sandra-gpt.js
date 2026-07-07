@@ -276,6 +276,12 @@
         'Quant-style work shows up at Vigil/Nuveaux, in trading competitions, and in independent research. Work and Research on this page cover each thread.',
     },
     {
+      keys: ['assembly optimization', 'assembly-level', 'low-level optimization', 'crypto volume analysis'],
+      priority: 30,
+      reply:
+        'At Vigil Markets (Nuveaux Trading) the quant work included Python crypto volume analysis and assembly-level optimizations alongside counterparty and clearinghouse risk mapping—see the Quant card under Track record.',
+    },
+    {
       keys: ['aerovironment', 'avav', 'avav thesis', 'equity pitch avav', 'your equity pitch', 'avav perplexity', 'perplexity avav'],
       priority: 35,
       reply: 'The AeroVironment (AVAV) thesis is listed under Research on this page.',
@@ -310,7 +316,6 @@
         'chip war medium',
         'ai performance medium',
         'supply chain macro',
-        'oscar medium',
         'oscar should be given',
         'hawkish vs dovish',
       ],

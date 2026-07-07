@@ -150,6 +150,10 @@ const checksIndex = [
   ['gpt sidebar history', /class="gpt-sidebar-title"[^>]*>History/],
   ['nav writing substack', /class="ba-nav-external"[^>]*href="https:\/\/substack\.com\/@caisandra"/],
   ['JSON-LD person url', /"url":\s*"https:\/\/www\.sandracai\.com"/],
+  ['gpt char count', /id="gpt-char-count"[^>]*aria-live="polite"/],
+  ['gpt log region', /id="gpt-log"[^>]*role="log"/],
+  ['gpt input describedby', /id="gpt-input"[^>]*aria-describedby="gpt-disclaimer gpt-char-count"/],
+  ['skip link top', /class="ba-skip" href="#top"/],
 ];
 
 const html404 = read('404.html');
@@ -323,6 +327,12 @@ if (canonical[1] !== ogUrl[1]) {
 const ogLocale = indexHtml.match(/<meta property="og:locale" content="([^"]+)"/);
 if (!ogLocale || ogLocale[1] !== 'en_US') {
   console.error('validate-basic-html: og:locale must be en_US');
+  process.exit(1);
+}
+
+const ogImageType = indexHtml.match(/<meta property="og:image:type" content="([^"]+)"/);
+if (!ogImageType || ogImageType[1] !== 'image/jpeg') {
+  console.error('validate-basic-html: og:image:type must be image/jpeg');
   process.exit(1);
 }
 

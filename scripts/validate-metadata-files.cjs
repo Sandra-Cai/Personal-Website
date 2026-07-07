@@ -34,6 +34,12 @@ const lastmodMatch = sitemap.match(/<lastmod>\s*([^<]+?)\s*<\/lastmod>/i);
 if (!lastmodMatch || !/^\d{4}-\d{2}-\d{2}$/.test(lastmodMatch[1])) {
   fail('sitemap.xml lastmod must be YYYY-MM-DD');
 }
+if (!/<changefreq>\s*monthly\s*<\/changefreq>/i.test(sitemap)) {
+  fail('sitemap.xml changefreq must be monthly');
+}
+if (!/<priority>\s*1\.0\s*<\/priority>/i.test(sitemap)) {
+  fail('sitemap.xml priority must be 1.0');
+}
 
 const security = read('.well-known/security.txt');
 if (!/^\s*Contact:\s*mailto:[^\s]+@[^\s]+\s*$/im.test(security)) {

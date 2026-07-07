@@ -1343,6 +1343,11 @@ a:focus-visible {
   .gpt-sidebar-empty {
     color: var(--text-dim);
   }
+
+  .gpt-char-count,
+  .ba-phase {
+    color: var(--text-dim);
+  }
 }
 
 @media print {
