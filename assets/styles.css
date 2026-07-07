@@ -1338,6 +1338,11 @@ a:focus-visible {
   .gpt-field input {
     color: var(--text);
   }
+
+  .gpt-sidebar-title,
+  .gpt-sidebar-empty {
+    color: var(--text-dim);
+  }
 }
 
 @media print {

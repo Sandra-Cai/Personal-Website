@@ -42,6 +42,9 @@ if (!/^\s*Contact:\s*mailto:[^\s]+@[^\s]+\s*$/im.test(security)) {
 if (!/sandraxcyj@gmail\.com/i.test(security)) {
   fail('security.txt Contact must use sandraxcyj@gmail.com');
 }
+if (!/^\s*Preferred-Languages:\s*en\s*$/im.test(security)) {
+  fail('security.txt Preferred-Languages must be en');
+}
 if (!new RegExp(`^\\s*Canonical:\\s*${SITE_ORIGIN.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/\\.well-known/security\\.txt\\s*$`, 'im').test(security)) {
   fail('security.txt canonical URL is missing or incorrect');
 }
@@ -93,6 +96,9 @@ if (manifest.name !== 'Sandra Cai' || manifest.short_name !== 'Sandra Cai') {
 }
 if (manifest.start_url !== '/') {
   fail('site.webmanifest start_url must be /');
+}
+if (manifest.display !== 'browser') {
+  fail('site.webmanifest display must be browser');
 }
 
 const vercel = read('vercel.json');

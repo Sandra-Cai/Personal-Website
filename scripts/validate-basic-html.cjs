@@ -144,6 +144,12 @@ const checksIndex = [
   ['academic coursework ml', /id="education"[\s\S]*?algorithms through ML/],
   ['founding card title', /ba-card--lead[\s\S]*?Plurall AI &amp; product/],
   ['404 footer linkedin', /ba-footer-links[\s\S]*?linkedin\.com\/in\/yijia-sandra-cai/],
+  ['og image dimensions', /property="og:image:width" content="1200"[\s\S]*?property="og:image:height" content="630"/],
+  ['research synthetic media', /id="research"[\s\S]*?synthetic-media trust/],
+  ['beliefs microstructure', /id="beliefs"[\s\S]*?Microstructure, risk/],
+  ['gpt sidebar history', /class="gpt-sidebar-title"[^>]*>History/],
+  ['nav writing substack', /class="ba-nav-external"[^>]*href="https:\/\/substack\.com\/@caisandra"/],
+  ['JSON-LD person url', /"url":\s*"https:\/\/www\.sandracai\.com"/],
 ];
 
 const html404 = read('404.html');
@@ -311,6 +317,12 @@ if (!canonical || !ogUrl) {
 }
 if (canonical[1] !== ogUrl[1]) {
   console.error('validate-basic-html: canonical href must match og:url');
+  process.exit(1);
+}
+
+const ogLocale = indexHtml.match(/<meta property="og:locale" content="([^"]+)"/);
+if (!ogLocale || ogLocale[1] !== 'en_US') {
+  console.error('validate-basic-html: og:locale must be en_US');
   process.exit(1);
 }
 

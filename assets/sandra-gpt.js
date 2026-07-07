@@ -310,7 +310,6 @@
         'chip war medium',
         'ai performance medium',
         'supply chain macro',
-        'geopolitical macro',
         'oscar medium',
         'oscar should be given',
         'hawkish vs dovish',
@@ -342,6 +341,12 @@
       priority: 14,
       reply:
         'LinkedIn profile is Yijia Sandra Cai—linked from the Writing strip, Research deck, and footer on this page.',
+    },
+    {
+      keys: ['linkedin posts', 'your linkedin posts', 'linkedin threads', 'posts on linkedin'],
+      priority: 14,
+      reply:
+        'Quant and macro threads on LinkedIn (Yijia Sandra Cai); essays on Substack and Medium too—links on this page.',
     },
     {
       keys: [
@@ -480,7 +485,6 @@
     {
       keys: [
         "what's new with plurall",
-        'whats new at plurall',
         "what's the latest with plurall",
         'whats the latest at plurall',
         'any updates on plurall',

@@ -178,6 +178,15 @@ if (!website.potentialAction || website.potentialAction['@type'] !== 'SearchActi
   console.error('validate-jsonld: WebSite.potentialAction SearchAction missing');
   process.exit(1);
 }
+const searchTarget = website.potentialAction.target;
+if (!searchTarget || searchTarget['@type'] !== 'EntryPoint') {
+  console.error('validate-jsonld: WebSite SearchAction target must be EntryPoint');
+  process.exit(1);
+}
+if (searchTarget.urlTemplate !== 'https://www.sandracai.com/?q={search_term_string}') {
+  console.error('validate-jsonld: WebSite SearchAction urlTemplate incorrect');
+  process.exit(1);
+}
 if (!website.publisher || website.publisher['@id'] !== 'https://www.sandracai.com/#person') {
   console.error('validate-jsonld: WebSite.publisher must reference Person');
   process.exit(1);
