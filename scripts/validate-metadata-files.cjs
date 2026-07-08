@@ -106,6 +106,9 @@ if (manifest.start_url !== '/') {
 if (manifest.display !== 'browser') {
   fail('site.webmanifest display must be browser');
 }
+if (!Array.isArray(manifest.icons) || manifest.icons.length < 3) {
+  fail('site.webmanifest must include at least 3 icons');
+}
 
 const vercel = read('vercel.json');
 let vercelJson;

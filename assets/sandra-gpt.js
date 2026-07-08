@@ -491,7 +491,6 @@
       keys: [
         "what's new with plurall",
         "what's the latest with plurall",
-        'whats the latest at plurall',
         'any updates on plurall',
         'recent work at plurall',
       ],
@@ -510,7 +509,6 @@
         'deepfake startup',
         'are you a founder',
         'founder of plurall',
-        'your startup',
         'what startup',
         'what are you founding',
         'what are you building',
@@ -719,6 +717,12 @@
       keys: ['your substack', 'substack profile', 'substack link', 'caisandra substack'],
       priority: 14,
       reply: 'Substack is @caisandra—linked from the header Writing nav, external links strip, and footer on this page.',
+    },
+    {
+      keys: ['writing strip', 'external links writing', 'where is your writing', 'writing links'],
+      priority: 13,
+      reply:
+        'Writing links (Substack, Medium, LinkedIn) are in the header nav, external links strip, Research deck, and footer on this page.',
     },
     {
       keys: ['your email address', 'email address', 'what is your email', 'gmail address', 'sandraxcyj@gmail.com'],

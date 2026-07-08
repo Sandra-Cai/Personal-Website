@@ -1348,6 +1348,11 @@ a:focus-visible {
   .ba-phase {
     color: var(--text-dim);
   }
+
+  .ba-strip-label,
+  .gpt-msg--bot::before {
+    color: var(--text-dim);
+  }
 }
 
 @media print {

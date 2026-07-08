@@ -41,6 +41,10 @@ if (person['@id'] !== 'https://www.sandracai.com/#person') {
   console.error('validate-jsonld: Person.@id must be https://www.sandracai.com/#person');
   process.exit(1);
 }
+if (!person['@type'] || person['@type'] !== 'Person') {
+  console.error('validate-jsonld: Person @type must be Person');
+  process.exit(1);
+}
 if (!person.email || person.email !== 'sandraxcyj@gmail.com') {
   console.error('validate-jsonld: Person.email missing or incorrect');
   process.exit(1);

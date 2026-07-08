@@ -41,6 +41,7 @@ const checks404 = [
   ['color-scheme light', /<meta name="color-scheme" content="light"/],
   ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
   ['404 email lead', /ba-404-lead[\s\S]*?sandraxcyj@gmail\.com/],
+  ['404 skip main', /class="ba-skip" href="#main"/],
 ];
 
 const checksIndex = [
@@ -154,6 +155,12 @@ const checksIndex = [
   ['gpt log region', /id="gpt-log"[^>]*role="log"/],
   ['gpt input describedby', /id="gpt-input"[^>]*aria-describedby="gpt-disclaimer gpt-char-count"/],
   ['skip link top', /class="ba-skip" href="#top"/],
+  ['gpt form aria-busy', /id="gpt-form"[^>]*aria-busy="false"/],
+  ['gpt sync status', /id="gpt-sync-status"[^>]*role="status"/],
+  ['gpt clear history', /id="gpt-clear-history"[^>]*aria-label="Clear question history"/],
+  ['external strip writing', /aria-label="External links"[\s\S]*?ba-strip-label">Writing/],
+  ['og image social card', /property="og:image" content="[^"]*social-card\.jpg"/],
+  ['meta viewport', /<meta name="viewport" content="width=device-width, initial-scale=1"/],
 ];
 
 const html404 = read('404.html');
