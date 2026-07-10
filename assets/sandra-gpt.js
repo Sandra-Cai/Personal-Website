@@ -195,6 +195,8 @@
         'lead card',
         'markets systems trust',
         'one discipline',
+        'connector strip',
+        'connector aside',
       ],
       priority: 25,
       reply:
@@ -731,7 +733,13 @@
         'GitHub (Sandra-Cai) is linked from the header nav, Code strip, founding card, and footer on this page.',
     },
     {
-      keys: ['your email address', 'what is your email', 'what is your email address', 'gmail address', 'sandraxcyj@gmail.com'],
+      keys: ['contact strip', 'external links contact', 'email on page', 'contact link on page', 'where is your email on page'],
+      priority: 13,
+      reply:
+        `Email (${EMAIL}) is in the Contact strip, SandraGPT disclaimer, and footer on this page.`,
+    },
+    {
+      keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,
     },
@@ -740,7 +748,6 @@
         'contact you',
         'contact info',
         'email me',
-        'your email',
         'reach you',
         'reach out to you',
         'how to reach out',

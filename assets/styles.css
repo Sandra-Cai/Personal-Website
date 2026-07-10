@@ -1355,7 +1355,10 @@ a:focus-visible {
   }
 
   .ba-eyebrow,
-  .gpt-starters-label {
+  .gpt-starters-label,
+  .ba-kicker,
+  .gpt-note,
+  .ba-deck {
     color: var(--text-dim);
   }
 }

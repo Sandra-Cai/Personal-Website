@@ -112,6 +112,12 @@ if (!Array.isArray(manifest.icons) || manifest.icons.length < 3) {
 if (!manifest.icons.some((icon) => /favicon-32\.png/i.test(icon.src))) {
   fail('site.webmanifest icons must include favicon-32.png');
 }
+if (!manifest.icons.some((icon) => /favicon-16\.png/i.test(icon.src))) {
+  fail('site.webmanifest icons must include favicon-16.png');
+}
+if (!manifest.icons.some((icon) => /apple-touch-icon\.png/i.test(icon.src))) {
+  fail('site.webmanifest icons must include apple-touch-icon.png');
+}
 
 const vercel = read('vercel.json');
 let vercelJson;

@@ -166,7 +166,12 @@ const checksIndex = [
   ['logo aria home', /class="ba-logo"[^>]*aria-label="Sandra Cai, home"/],
   ['gpt starters label', /class="gpt-starters"[^>]*aria-label="Example questions"/],
   ['external strip code', /aria-label="External links"[\s\S]*?ba-strip-label">Code/],
+  ['external strip contact', /aria-label="External links"[\s\S]*?ba-strip-label">Contact/],
   ['beliefs stress test', /id="beliefs"[\s\S]*?stress-test research/],
+  ['nav track record', /class="ba-nav"[\s\S]*?href="#work">Track record/],
+  ['nav research', /class="ba-nav"[\s\S]*?href="#research">Research/],
+  ['nav academic', /class="ba-nav"[\s\S]*?href="#education">Academic/],
+  ['gpt disclaimer mailto', /id="gpt-disclaimer"[^>]*>[\s\S]*?mailto:sandraxcyj@gmail\.com/],
 ];
 
 const html404 = read('404.html');
