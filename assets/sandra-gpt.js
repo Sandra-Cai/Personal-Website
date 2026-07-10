@@ -704,7 +704,7 @@
       reply: 'Highlighted work is under Work and Research; code and papers are linked from GitHub (Sandra-Cai).',
     },
     {
-      keys: ['your passion', 'what are you passionate', 'areas of interest', 'why finance', 'why markets'],
+      keys: ['your passion', 'what are you passionate', 'why finance', 'why markets'],
       priority: 5,
       reply: 'I focus on where careful financial analysis meets solid engineering—in markets, research, and product.',
     },
@@ -725,7 +725,13 @@
         'Writing links (Substack, Medium, LinkedIn) are in the header nav, external links strip, Research deck, and footer on this page.',
     },
     {
-      keys: ['your email address', 'email address', 'what is your email', 'gmail address', 'sandraxcyj@gmail.com'],
+      keys: ['code strip', 'external links code', 'where is github', 'github link on page'],
+      priority: 13,
+      reply:
+        'GitHub (Sandra-Cai) is linked from the header nav, Code strip, founding card, and footer on this page.',
+    },
+    {
+      keys: ['your email address', 'what is your email', 'what is your email address', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,
     },

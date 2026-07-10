@@ -109,6 +109,9 @@ if (manifest.display !== 'browser') {
 if (!Array.isArray(manifest.icons) || manifest.icons.length < 3) {
   fail('site.webmanifest must include at least 3 icons');
 }
+if (!manifest.icons.some((icon) => /favicon-32\.png/i.test(icon.src))) {
+  fail('site.webmanifest icons must include favicon-32.png');
+}
 
 const vercel = read('vercel.json');
 let vercelJson;

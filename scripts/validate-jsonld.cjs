@@ -178,6 +178,10 @@ if (website.name !== 'Sandra Cai') {
   console.error('validate-jsonld: WebSite.name must be Sandra Cai');
   process.exit(1);
 }
+if (website['@type'] !== 'WebSite') {
+  console.error('validate-jsonld: WebSite @type must be WebSite');
+  process.exit(1);
+}
 if (website.inLanguage !== 'en-US') {
   console.error('validate-jsonld: WebSite.inLanguage must be en-US');
   process.exit(1);
