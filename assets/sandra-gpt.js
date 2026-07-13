@@ -739,6 +739,24 @@
         `Email (${EMAIL}) is in the Contact strip, SandraGPT disclaimer, and footer on this page.`,
     },
     {
+      keys: ['footer links', 'footer strip', 'links in footer', 'social links footer', 'where are footer links'],
+      priority: 13,
+      reply:
+        'Substack, Medium, LinkedIn, GitHub, and email are in the footer at the bottom of this page (and mirrored in the external links strip above it).',
+    },
+    {
+      keys: ['nav sandragpt', 'sandra gpt nav', 'sandra gpt link', 'link to sandragpt', 'jump to sandragpt'],
+      priority: 14,
+      reply:
+        'SandraGPT is in the header nav (SandraGPT link) and the #sandra-gpt section—press / to focus the question box from anywhere on the page.',
+    },
+    {
+      keys: ['clear history', 'clear question history', 'delete history', 'erase history', 'sidebar history'],
+      priority: 15,
+      reply:
+        'Use the Clear button in the SandraGPT History sidebar to remove saved questions from this browser.',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,
@@ -752,7 +770,6 @@
         'reach out to you',
         'how to reach out',
         'want to reach out',
-        'get in touch with you',
         'collaborate with you',
         'collaboration request',
         'collaborating with you',

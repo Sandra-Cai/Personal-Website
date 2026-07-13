@@ -1358,7 +1358,10 @@ a:focus-visible {
   .gpt-starters-label,
   .ba-kicker,
   .gpt-note,
-  .ba-deck {
+  .ba-deck,
+  .ba-lead,
+  .ba-mission,
+  .ba-strip-text {
     color: var(--text-dim);
   }
 }

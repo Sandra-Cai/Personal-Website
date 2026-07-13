@@ -69,6 +69,7 @@ const checksIndex = [
   ['external links nav', /<nav class="ba-strip ba-strip--dim" aria-label="External links">/],
   ['JSON-LD inLanguage', /"inLanguage":\s*"en-US"/],
   ['JSON-LD Plurall org', /"@id":\s*"https:\/\/www\.sandracai\.com\/#plurall"/],
+  ['JSON-LD worksFor org', /"worksFor":\s*\{\s*"@type":\s*"Organization"/],
   ['meta 4+ years', /4\+ years across industry, research, and founding/],
   ['og locale', /property="og:locale" content="en_US"/],
   ['color-scheme light', /<meta name="color-scheme" content="light"/],
@@ -172,6 +173,11 @@ const checksIndex = [
   ['nav research', /class="ba-nav"[\s\S]*?href="#research">Research/],
   ['nav academic', /class="ba-nav"[\s\S]*?href="#education">Academic/],
   ['gpt disclaimer mailto', /id="gpt-disclaimer"[^>]*>[\s\S]*?mailto:sandraxcyj@gmail\.com/],
+  ['nav sandragpt', /class="ba-nav"[\s\S]*?href="#sandra-gpt">SandraGPT/],
+  ['gpt sidebar aria', /class="gpt-sidebar"[^>]*aria-label="Question history"/],
+  ['footer contentinfo', /<footer class="ba-footer" role="contentinfo"/],
+  ['external strip contact email', /aria-label="External links"[\s\S]*?ba-strip-label">Contact[\s\S]*?sandraxcyj@gmail\.com/],
+  ['connector strip text', /aria-label="Connector"[\s\S]*?class="ba-strip-text"/],
 ];
 
 const html404 = read('404.html');

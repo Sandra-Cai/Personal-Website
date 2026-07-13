@@ -161,6 +161,10 @@ if (plurall['@type'] !== 'Organization') {
   console.error('validate-jsonld: Plurall AI node @type must be Organization');
   process.exit(1);
 }
+if (!person.worksFor['@type'] || person.worksFor['@type'] !== 'Organization') {
+  console.error('validate-jsonld: Person.worksFor @type must be Organization');
+  process.exit(1);
+}
 
 if (!website) {
   console.error('validate-jsonld: missing WebSite node');
