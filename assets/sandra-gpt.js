@@ -781,6 +781,25 @@
         'The footer shows © with the current year (updated in-browser) and Sandra Cai, plus Substack, Medium, LinkedIn, GitHub, and email links.',
     },
     {
+      keys: [
+        'example questions',
+        'starter prompts',
+        'try buttons',
+        'gpt starters',
+        'suggested questions',
+        'what can i try',
+      ],
+      priority: 15,
+      reply:
+        'Under the question box, Try starters cover Plurall AI, what I do, Duke Fintech, Theorem of Wisdom, and Inside the Ban—click one to fill the input.',
+    },
+    {
+      keys: ['404 page', 'not found page', 'wrong url', 'broken link on site', 'page does not exist'],
+      priority: 14,
+      reply:
+        'Unknown paths show a styled 404 with links back home, SandraGPT, and email—same nav and footer as the rest of the site.',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,

@@ -42,6 +42,10 @@ const checks404 = [
   ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
   ['404 email lead', /ba-404-lead[\s\S]*?sandraxcyj@gmail\.com/],
   ['404 skip main', /class="ba-skip" href="#main"/],
+  ['404 nav github', /class="ba-nav-external"[^>]*href="https:\/\/github\.com\/Sandra-Cai"/],
+  ['404 logo home', /class="ba-logo"[^>]*aria-label="Sandra Cai, home"/],
+  ['404 footer contentinfo', /<footer class="ba-footer" role="contentinfo"/],
+  ['404 script cache', /src="\/assets\/script\.js\?v=/],
 ];
 
 const checksIndex = [
@@ -184,6 +188,9 @@ const checksIndex = [
   ['gpt noscript email', /<noscript>[\s\S]*?mailto:sandraxcyj@gmail\.com/],
   ['footer name', /class="ba-footer-name"[^>]*>Sandra Cai/],
   ['hero technical education', /class="ba-student-note"[^>]*>[\s\S]*?Technical education/],
+  ['gpt spellcheck', /id="gpt-input"[^>]*spellcheck="true"/],
+  ['gpt form autocomplete', /id="gpt-form"[^>]*autocomplete="off"/],
+  ['JSON-LD founder person', /"founder":\s*\{\s*"@type":\s*"Person"/],
 ];
 
 const html404 = read('404.html');

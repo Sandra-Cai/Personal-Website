@@ -149,6 +149,14 @@ if (!metaCache || !/max-age=3600/.test(metaCache.value)) {
   fail('vercel.json metadata Cache-Control should use max-age=3600');
 }
 
+const csp = (globalRule.headers || []).find((h) => h.key === 'Content-Security-Policy');
+if (!csp || !/default-src 'self'/.test(csp.value)) {
+  fail('vercel.json missing Content-Security-Policy with default-src self');
+}
+if (!csp || !/frame-ancestors 'none'/.test(csp.value)) {
+  fail('vercel.json CSP must include frame-ancestors none');
+}
+
 const apiRule = headerRules.find((r) => r.source === '/api/(.*)');
 if (!apiRule) fail('vercel.json missing /api/(.*) header rule');
 const apiCache = (apiRule.headers || []).find((h) => h.key === 'Cache-Control');

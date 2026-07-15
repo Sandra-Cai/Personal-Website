@@ -149,6 +149,10 @@ if (!plurall.founder || plurall.founder['@id'] !== 'https://www.sandracai.com/#p
   console.error('validate-jsonld: Plurall AI Organization.founder must reference Person');
   process.exit(1);
 }
+if (!plurall.founder['@type'] || plurall.founder['@type'] !== 'Person') {
+  console.error('validate-jsonld: Plurall AI Organization.founder @type must be Person');
+  process.exit(1);
+}
 if (!plurall.description || !/deepfake detection/i.test(plurall.description)) {
   console.error('validate-jsonld: Plurall AI Organization.description missing or incorrect');
   process.exit(1);

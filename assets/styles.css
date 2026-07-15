@@ -1354,6 +1354,12 @@ a:focus-visible {
     color: var(--text-dim);
   }
 
+  .ba-nav a[aria-current='location'] {
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
   .ba-eyebrow,
   .gpt-starters-label,
   .ba-kicker,
@@ -1365,7 +1371,11 @@ a:focus-visible {
   .ba-student-note,
   .ba-focus,
   .ba-footer-copy,
-  .gpt-noscript {
+  .gpt-noscript,
+  .ba-footer-name,
+  .ba-h3,
+  .gpt-sync-status,
+  .ba-404-kicker {
     color: var(--text-dim);
   }
 }
