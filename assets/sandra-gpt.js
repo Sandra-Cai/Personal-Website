@@ -757,6 +757,30 @@
         'Use the Clear button in the SandraGPT History sidebar to remove saved questions from this browser.',
     },
     {
+      keys: ['skip link', 'skip to content', 'accessibility skip', 'jump to content', 'skip navigation'],
+      priority: 16,
+      reply:
+        'The first focusable control on this page is Skip to content—it jumps past the header to the main landmark (#top).',
+    },
+    {
+      keys: [
+        'technical education',
+        'student note',
+        'hero education',
+        'coursework summary',
+        'education note on page',
+      ],
+      priority: 14,
+      reply:
+        'Under the hero, Technical education summarizes NYU CS with Mathematics and BEMT minors; the full Academic section expands coursework.',
+    },
+    {
+      keys: ['copyright', 'footer copyright', '© sandra', 'year in footer', 'copyright year'],
+      priority: 12,
+      reply:
+        'The footer shows © with the current year (updated in-browser) and Sandra Cai, plus Substack, Medium, LinkedIn, GitHub, and email links.',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,

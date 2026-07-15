@@ -1361,7 +1361,11 @@ a:focus-visible {
   .ba-deck,
   .ba-lead,
   .ba-mission,
-  .ba-strip-text {
+  .ba-strip-text,
+  .ba-student-note,
+  .ba-focus,
+  .ba-footer-copy,
+  .gpt-noscript {
     color: var(--text-dim);
   }
 }

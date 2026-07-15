@@ -207,6 +207,14 @@ if (!website.publisher || website.publisher['@id'] !== 'https://www.sandracai.co
   console.error('validate-jsonld: WebSite.publisher must reference Person');
   process.exit(1);
 }
+if (!website.publisher['@type'] || website.publisher['@type'] !== 'Person') {
+  console.error('validate-jsonld: WebSite.publisher @type must be Person');
+  process.exit(1);
+}
+if (sameAs.length < 4) {
+  console.error('validate-jsonld: Person.sameAs must include at least 4 profiles');
+  process.exit(1);
+}
 if (!person.description || !website.description || person.description !== website.description) {
   console.error('validate-jsonld: Person.description and WebSite.description must match');
   process.exit(1);

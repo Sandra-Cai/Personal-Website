@@ -118,6 +118,9 @@ if (!manifest.icons.some((icon) => /favicon-16\.png/i.test(icon.src))) {
 if (!manifest.icons.some((icon) => /apple-touch-icon\.png/i.test(icon.src))) {
   fail('site.webmanifest icons must include apple-touch-icon.png');
 }
+if (manifest.icons.length !== 3) {
+  fail('site.webmanifest should list exactly 3 icons (16, 32, apple-touch)');
+}
 
 const vercel = read('vercel.json');
 let vercelJson;

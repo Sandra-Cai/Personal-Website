@@ -70,6 +70,7 @@ const checksIndex = [
   ['JSON-LD inLanguage', /"inLanguage":\s*"en-US"/],
   ['JSON-LD Plurall org', /"@id":\s*"https:\/\/www\.sandracai\.com\/#plurall"/],
   ['JSON-LD worksFor org', /"worksFor":\s*\{\s*"@type":\s*"Organization"/],
+  ['JSON-LD publisher person', /"publisher":\s*\{\s*"@type":\s*"Person"/],
   ['meta 4+ years', /4\+ years across industry, research, and founding/],
   ['og locale', /property="og:locale" content="en_US"/],
   ['color-scheme light', /<meta name="color-scheme" content="light"/],
@@ -178,6 +179,11 @@ const checksIndex = [
   ['footer contentinfo', /<footer class="ba-footer" role="contentinfo"/],
   ['external strip contact email', /aria-label="External links"[\s\S]*?ba-strip-label">Contact[\s\S]*?sandraxcyj@gmail\.com/],
   ['connector strip text', /aria-label="Connector"[\s\S]*?class="ba-strip-text"/],
+  ['nav primary label', /<nav class="ba-nav" aria-label="Primary">/],
+  ['hero focus aria', /class="ba-focus"[^>]*aria-label="Focus areas"/],
+  ['gpt noscript email', /<noscript>[\s\S]*?mailto:sandraxcyj@gmail\.com/],
+  ['footer name', /class="ba-footer-name"[^>]*>Sandra Cai/],
+  ['hero technical education', /class="ba-student-note"[^>]*>[\s\S]*?Technical education/],
 ];
 
 const html404 = read('404.html');
