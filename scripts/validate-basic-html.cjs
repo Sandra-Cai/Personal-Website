@@ -191,6 +191,11 @@ const checksIndex = [
   ['gpt spellcheck', /id="gpt-input"[^>]*spellcheck="true"/],
   ['gpt form autocomplete', /id="gpt-form"[^>]*autocomplete="off"/],
   ['JSON-LD founder person', /"founder":\s*\{\s*"@type":\s*"Person"/],
+  ['gpt log relevant additions', /id="gpt-log"[^>]*aria-relevant="additions"/],
+  ['gpt char count atomic', /id="gpt-char-count"[^>]*aria-atomic="true"/],
+  ['font preload crossorigin', /rel="preload"[^>]*Geist-Variable\.woff2[^>]*crossorigin/],
+  ['apple touch icon', /rel="apple-touch-icon"[^>]*apple-touch-icon\.png/],
+  ['footer current year fallback', /id="year">2026<\/span>/],
 ];
 
 const html404 = read('404.html');

@@ -1339,6 +1339,11 @@ a:focus-visible {
     color: var(--text);
   }
 
+  .gpt-field input::placeholder {
+    color: var(--text-dim);
+    opacity: 1;
+  }
+
   .gpt-sidebar-title,
   .gpt-sidebar-empty {
     color: var(--text-dim);

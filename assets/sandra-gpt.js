@@ -800,6 +800,31 @@
         'Unknown paths show a styled 404 with links back home, SandraGPT, and email—same nav and footer as the rest of the site.',
     },
     {
+      keys: [
+        'history privacy',
+        'where is history saved',
+        'where are questions saved',
+        'browser history storage',
+        'does sandragpt save',
+        'question storage',
+      ],
+      priority: 18,
+      reply:
+        'SandraGPT saves this session’s questions in your browser. If database sync is available, the status beside History says so; Clear removes the session locally and requests server deletion when sync is on.',
+    },
+    {
+      keys: [
+        'active nav',
+        'current section nav',
+        'navigation highlight',
+        'which section am i on',
+        'scroll spy',
+      ],
+      priority: 14,
+      reply:
+        'The primary nav highlights the section currently in view (SandraGPT, Track record, Research, or Academic) and exposes it as the current location to assistive technology.',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,

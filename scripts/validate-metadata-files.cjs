@@ -138,9 +138,29 @@ if (!assetCache || !/immutable/.test(assetCache.value)) {
   fail('vercel.json /assets Cache-Control should be long-lived and immutable');
 }
 if (!globalRule) fail('vercel.json missing global header rule');
+const xFrameOptions = (globalRule.headers || []).find((h) => h.key === 'X-Frame-Options');
+if (!xFrameOptions || xFrameOptions.value !== 'DENY') {
+  fail('vercel.json missing X-Frame-Options: DENY');
+}
+const noSniff = (globalRule.headers || []).find((h) => h.key === 'X-Content-Type-Options');
+if (!noSniff || noSniff.value !== 'nosniff') {
+  fail('vercel.json missing X-Content-Type-Options: nosniff');
+}
+const referrerPolicy = (globalRule.headers || []).find((h) => h.key === 'Referrer-Policy');
+if (!referrerPolicy || referrerPolicy.value !== 'strict-origin-when-cross-origin') {
+  fail('vercel.json missing strict-origin-when-cross-origin Referrer-Policy');
+}
 const coop = (globalRule.headers || []).find((h) => h.key === 'Cross-Origin-Opener-Policy');
 if (!coop || coop.value !== 'same-origin') {
   fail('vercel.json missing Cross-Origin-Opener-Policy: same-origin');
+}
+const permissionsPolicy = (globalRule.headers || []).find((h) => h.key === 'Permissions-Policy');
+if (!permissionsPolicy || !/camera=\(\)/.test(permissionsPolicy.value) || !/microphone=\(\)/.test(permissionsPolicy.value)) {
+  fail('vercel.json Permissions-Policy must disable camera and microphone');
+}
+const hsts = (globalRule.headers || []).find((h) => h.key === 'Strict-Transport-Security');
+if (!hsts || !/max-age=63072000/.test(hsts.value) || !/includeSubDomains/.test(hsts.value)) {
+  fail('vercel.json Strict-Transport-Security must use two years and include subdomains');
 }
 const metaRule = headerRules.find((r) => r.source === '/(site.webmanifest|robots.txt|sitemap.xml)');
 if (!metaRule) fail('vercel.json missing metadata files cache header rule');
