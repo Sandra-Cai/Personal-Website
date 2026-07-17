@@ -6,7 +6,7 @@ if (y) y.textContent = new Date().getFullYear();
 /** Highlight in-page nav link for the section currently in view. */
 function initNavScrollSpy() {
   const nav = document.querySelector('.ba-nav');
-  if (!nav || typeof IntersectionObserver !== 'function') return;
+  if (!nav) return;
 
   const pairs = [
     ['#sandra-gpt', 'sandra-gpt'],
@@ -34,6 +34,12 @@ function initNavScrollSpy() {
     }
   };
 
+  const hashId = location.hash.replace(/^#/, '');
+  if (hashId && tracked.some((r) => r.id === hashId)) setActive(hashId);
+
+  // Hash navigation still exposes the current location in older browsers.
+  if (typeof IntersectionObserver !== 'function') return;
+
   const observer = new IntersectionObserver(
     (entries) => {
       const visible = entries
@@ -45,9 +51,6 @@ function initNavScrollSpy() {
   );
 
   for (const row of tracked) observer.observe(row.section);
-
-  const hashId = location.hash.replace(/^#/, '');
-  if (hashId && tracked.some((r) => r.id === hashId)) setActive(hashId);
 
   window.addEventListener('hashchange', () => {
     const id = location.hash.replace(/^#/, '');

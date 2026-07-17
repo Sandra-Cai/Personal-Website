@@ -155,12 +155,22 @@ if (!coop || coop.value !== 'same-origin') {
   fail('vercel.json missing Cross-Origin-Opener-Policy: same-origin');
 }
 const permissionsPolicy = (globalRule.headers || []).find((h) => h.key === 'Permissions-Policy');
-if (!permissionsPolicy || !/camera=\(\)/.test(permissionsPolicy.value) || !/microphone=\(\)/.test(permissionsPolicy.value)) {
-  fail('vercel.json Permissions-Policy must disable camera and microphone');
+if (
+  !permissionsPolicy ||
+  !/camera=\(\)/.test(permissionsPolicy.value) ||
+  !/microphone=\(\)/.test(permissionsPolicy.value) ||
+  !/geolocation=\(\)/.test(permissionsPolicy.value)
+) {
+  fail('vercel.json Permissions-Policy must disable camera, microphone, and geolocation');
 }
 const hsts = (globalRule.headers || []).find((h) => h.key === 'Strict-Transport-Security');
-if (!hsts || !/max-age=63072000/.test(hsts.value) || !/includeSubDomains/.test(hsts.value)) {
-  fail('vercel.json Strict-Transport-Security must use two years and include subdomains');
+if (
+  !hsts ||
+  !/max-age=63072000/.test(hsts.value) ||
+  !/includeSubDomains/.test(hsts.value) ||
+  !/preload/.test(hsts.value)
+) {
+  fail('vercel.json Strict-Transport-Security must use two years, subdomains, and preload');
 }
 const metaRule = headerRules.find((r) => r.source === '/(site.webmanifest|robots.txt|sitemap.xml)');
 if (!metaRule) fail('vercel.json missing metadata files cache header rule');
@@ -175,6 +185,9 @@ if (!csp || !/default-src 'self'/.test(csp.value)) {
 }
 if (!csp || !/frame-ancestors 'none'/.test(csp.value)) {
   fail('vercel.json CSP must include frame-ancestors none');
+}
+if (!/base-uri 'self'/.test(csp.value) || !/form-action 'self'/.test(csp.value)) {
+  fail('vercel.json CSP must restrict base-uri and form-action to self');
 }
 
 const apiRule = headerRules.find((r) => r.source === '/api/(.*)');

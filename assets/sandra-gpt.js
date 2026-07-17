@@ -825,6 +825,32 @@
         'The primary nav highlights the section currently in view (SandraGPT, Track record, Research, or Academic) and exposes it as the current location to assistive technology.',
     },
     {
+      keys: [
+        'offline history',
+        'offline questions',
+        'network comes back',
+        'sync after offline',
+        'browser only no api',
+        'database sync status',
+      ],
+      priority: 19,
+      reply:
+        'Questions remain usable and saved in-browser if the API is unavailable. When the network returns, SandraGPT retries unsynced turns; the History status reports browser-only, partial, or database sync.',
+    },
+    {
+      keys: [
+        'question limit',
+        'character limit',
+        'maximum question length',
+        'max question length',
+        '280 characters',
+        'how long can my question be',
+      ],
+      priority: 17,
+      reply:
+        'Questions can be up to 280 characters. The input and live character count enforce that limit before submission.',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,

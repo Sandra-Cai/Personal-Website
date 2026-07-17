@@ -46,6 +46,8 @@ const checks404 = [
   ['404 logo home', /class="ba-logo"[^>]*aria-label="Sandra Cai, home"/],
   ['404 footer contentinfo', /<footer class="ba-footer" role="contentinfo"/],
   ['404 script cache', /src="\/assets\/script\.js\?v=/],
+  ['404 year fallback', /id="year">2026<\/span>/],
+  ['404 email footer', /ba-footer-links[\s\S]*?mailto:sandraxcyj@gmail\.com/],
 ];
 
 const checksIndex = [
@@ -232,6 +234,17 @@ if (!indexGptV) {
 }
 
 const gptJs = read('assets/sandra-gpt.js');
+const siteJs = read('assets/script.js');
+for (const [label, snippet] of [
+  ['scroll spy current location', "setAttribute('aria-current', 'location')"],
+  ['scroll spy observer fallback', "typeof IntersectionObserver !== 'function'"],
+  ['dynamic footer year', 'new Date().getFullYear()'],
+]) {
+  if (!siteJs.includes(snippet)) {
+    console.error(`validate-basic-html: assets/script.js missing expected: ${label}`);
+    process.exit(1);
+  }
+}
 const taglineJs = gptJs.match(/const TAGLINE = '([^']+)';/);
 const taglineHtml = indexHtml.match(/id="gpt-tagline"[^>]*>([^<]+)</);
 if (!taglineJs || !taglineHtml) {

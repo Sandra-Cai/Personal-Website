@@ -1383,6 +1383,11 @@ a:focus-visible {
   .ba-404-kicker {
     color: var(--text-dim);
   }
+
+  .gpt-sync-status--ok,
+  .gpt-sync-status--warn {
+    color: var(--text-dim);
+  }
 }
 
 @media print {
