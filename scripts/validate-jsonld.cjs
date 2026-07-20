@@ -207,6 +207,10 @@ if (searchTarget.urlTemplate !== 'https://www.sandracai.com/?q={search_term_stri
   console.error('validate-jsonld: WebSite SearchAction urlTemplate incorrect');
   process.exit(1);
 }
+if (website.potentialAction['query-input'] !== 'required name=search_term_string') {
+  console.error('validate-jsonld: WebSite SearchAction query-input must be required name=search_term_string');
+  process.exit(1);
+}
 if (!website.publisher || website.publisher['@id'] !== 'https://www.sandracai.com/#person') {
   console.error('validate-jsonld: WebSite.publisher must reference Person');
   process.exit(1);

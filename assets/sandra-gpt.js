@@ -851,6 +851,41 @@
         'Questions can be up to 280 characters. The input and live character count enforce that limit before submission.',
     },
     {
+      keys: [
+        'reduced motion',
+        'prefers reduced motion',
+        'motion preference',
+        'disable animations',
+        'accessibility motion',
+      ],
+      priority: 16,
+      reply:
+        'This site respects prefers-reduced-motion: animations and hover transforms are minimized when that OS setting is on.',
+    },
+    {
+      keys: [
+        'print this page',
+        'print stylesheet',
+        'printing the site',
+        'how does print look',
+      ],
+      priority: 14,
+      reply:
+        'Print styles hide chrome (header, SandraGPT, strips) and keep reading content with underlined links and visible URLs for external pages.',
+    },
+    {
+      keys: [
+        'security contact',
+        'security.txt',
+        'responsible disclosure',
+        'report a vulnerability',
+        'vulnerability report',
+      ],
+      priority: 18,
+      reply:
+        `For security reports, use the contact in /.well-known/security.txt (mailto:${EMAIL}) or email that address directly with clear reproduction steps.`,
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,

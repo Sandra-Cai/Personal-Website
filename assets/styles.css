@@ -1379,8 +1379,10 @@ a:focus-visible {
   .gpt-noscript,
   .ba-footer-name,
   .ba-h3,
+  .ba-h2,
   .gpt-sync-status,
-  .ba-404-kicker {
+  .ba-404-kicker,
+  .ba-404-title {
     color: var(--text-dim);
   }
 

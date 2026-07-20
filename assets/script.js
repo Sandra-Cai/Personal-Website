@@ -34,10 +34,29 @@ function initNavScrollSpy() {
     }
   };
 
-  const hashId = location.hash.replace(/^#/, '');
-  if (hashId && tracked.some((r) => r.id === hashId)) setActive(hashId);
+  const applyHash = () => {
+    const id = location.hash.replace(/^#/, '');
+    if (id && tracked.some((r) => r.id === id)) setActive(id);
+    else if (!id && window.scrollY < 120) clearActive();
+  };
 
-  // Hash navigation still exposes the current location in older browsers.
+  applyHash();
+
+  // Hash navigation works with or without IntersectionObserver.
+  window.addEventListener('hashchange', applyHash);
+
+  let scrollTimer;
+  window.addEventListener(
+    'scroll',
+    () => {
+      window.clearTimeout(scrollTimer);
+      scrollTimer = window.setTimeout(() => {
+        if (window.scrollY < 120 && !location.hash) clearActive();
+      }, 80);
+    },
+    { passive: true }
+  );
+
   if (typeof IntersectionObserver !== 'function') return;
 
   const observer = new IntersectionObserver(
@@ -51,24 +70,6 @@ function initNavScrollSpy() {
   );
 
   for (const row of tracked) observer.observe(row.section);
-
-  window.addEventListener('hashchange', () => {
-    const id = location.hash.replace(/^#/, '');
-    if (id && tracked.some((r) => r.id === id)) setActive(id);
-    else if (!id && window.scrollY < 120) clearActive();
-  });
-
-  let scrollTimer;
-  window.addEventListener(
-    'scroll',
-    () => {
-      window.clearTimeout(scrollTimer);
-      scrollTimer = window.setTimeout(() => {
-        if (window.scrollY < 120) clearActive();
-      }, 80);
-    },
-    { passive: true }
-  );
 }
 
 initNavScrollSpy();

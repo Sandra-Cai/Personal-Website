@@ -198,6 +198,10 @@ const checksIndex = [
   ['font preload crossorigin', /rel="preload"[^>]*Geist-Variable\.woff2[^>]*crossorigin/],
   ['apple touch icon', /rel="apple-touch-icon"[^>]*apple-touch-icon\.png/],
   ['footer current year fallback', /id="year">2026<\/span>/],
+  ['favicon ico', /rel="icon"[^>]*favicon\.ico/],
+  ['sandra gpt script defer', /src="\/assets\/sandra-gpt\.js\?v=\d+" defer/],
+  ['site script defer', /src="\/assets\/script\.js\?v=\d+" defer/],
+  ['JSON-LD query-input', /"query-input":\s*"required name=search_term_string"/],
 ];
 
 const html404 = read('404.html');
@@ -238,6 +242,7 @@ const siteJs = read('assets/script.js');
 for (const [label, snippet] of [
   ['scroll spy current location', "setAttribute('aria-current', 'location')"],
   ['scroll spy observer fallback', "typeof IntersectionObserver !== 'function'"],
+  ['hashchange always registered', "window.addEventListener('hashchange', applyHash)"],
   ['dynamic footer year', 'new Date().getFullYear()'],
 ]) {
   if (!siteJs.includes(snippet)) {

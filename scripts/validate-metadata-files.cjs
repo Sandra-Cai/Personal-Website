@@ -51,6 +51,9 @@ if (!/sandraxcyj@gmail\.com/i.test(security)) {
 if (!/^\s*Preferred-Languages:\s*en\s*$/im.test(security)) {
   fail('security.txt Preferred-Languages must be en');
 }
+if (!/^\s*Contact:\s*mailto:sandraxcyj@gmail\.com\s*$/im.test(security)) {
+  fail('security.txt Contact must be exactly mailto:sandraxcyj@gmail.com');
+}
 if (!new RegExp(`^\\s*Canonical:\\s*${SITE_ORIGIN.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/\\.well-known/security\\.txt\\s*$`, 'im').test(security)) {
   fail('security.txt canonical URL is missing or incorrect');
 }
