@@ -20,6 +20,15 @@ try {
   process.exit(1);
 }
 
+if (!ld['@context'] || ld['@context'] !== 'https://schema.org') {
+  console.error('validate-jsonld: @context must be https://schema.org');
+  process.exit(1);
+}
+if (!Array.isArray(ld['@graph']) || ld['@graph'].length < 3) {
+  console.error('validate-jsonld: @graph must include at least Person, WebSite, and Organization');
+  process.exit(1);
+}
+
 const graph = ld['@graph'] || (ld['@type'] ? [ld] : []);
 const person = graph.find((n) => n['@type'] === 'Person');
 const website = graph.find((n) => n['@type'] === 'WebSite');

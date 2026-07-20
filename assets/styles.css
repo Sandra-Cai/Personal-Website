@@ -1390,6 +1390,12 @@ a:focus-visible {
   .gpt-sync-status--warn {
     color: var(--text-dim);
   }
+
+  .ba-skip:focus,
+  .ba-skip:focus-visible {
+    outline: 3px solid #0a0a0a;
+    outline-offset: 3px;
+  }
 }
 
 @media print {

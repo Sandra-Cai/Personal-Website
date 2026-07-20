@@ -886,6 +886,43 @@
         `For security reports, use the contact in /.well-known/security.txt (mailto:${EMAIL}) or email that address directly with clear reproduction steps.`,
     },
     {
+      keys: [
+        'robots txt',
+        'robots.txt',
+        'sitemap xml',
+        'sitemap.xml',
+        'is this site crawlable',
+        'search engine indexing',
+      ],
+      priority: 15,
+      reply:
+        'robots.txt allows crawling of the site and points crawlers to sitemap.xml; /api/ is disallowed. The home URL is listed in the sitemap with monthly change frequency.',
+    },
+    {
+      keys: [
+        'theme color',
+        'theme-color',
+        'browser chrome color',
+        'site theme color',
+        'what color is the theme',
+      ],
+      priority: 13,
+      reply:
+        'The site uses a light color scheme with theme-color #FFFDF7 (warm paper) for supported browser chrome and the web app manifest.',
+    },
+    {
+      keys: [
+        'web manifest',
+        'site.webmanifest',
+        'pwa manifest',
+        'add to home screen',
+        'web app manifest',
+      ],
+      priority: 13,
+      reply:
+        'site.webmanifest names the site Sandra Cai, starts at /, uses display browser, and includes 16×16, 32×32, and apple-touch icons matching the theme color.',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,

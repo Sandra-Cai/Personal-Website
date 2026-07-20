@@ -48,6 +48,8 @@ const checks404 = [
   ['404 script cache', /src="\/assets\/script\.js\?v=/],
   ['404 year fallback', /id="year">2026<\/span>/],
   ['404 email footer', /ba-footer-links[\s\S]*?mailto:sandraxcyj@gmail\.com/],
+  ['404 favicon ico', /rel="icon"[^>]*favicon\.ico/],
+  ['404 writing nav', /class="ba-nav-external"[^>]*href="https:\/\/substack\.com\/@caisandra"/],
 ];
 
 const checksIndex = [
@@ -202,6 +204,8 @@ const checksIndex = [
   ['sandra gpt script defer', /src="\/assets\/sandra-gpt\.js\?v=\d+" defer/],
   ['site script defer', /src="\/assets\/script\.js\?v=\d+" defer/],
   ['JSON-LD query-input', /"query-input":\s*"required name=search_term_string"/],
+  ['favicon 32 png', /rel="icon"[^>]*favicon-32\.png/],
+  ['JSON-LD context schema', /"@context":\s*"https:\/\/schema\.org"/],
 ];
 
 const html404 = read('404.html');
