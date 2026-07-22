@@ -1382,7 +1382,8 @@ a:focus-visible {
   .ba-h2,
   .gpt-sync-status,
   .ba-404-kicker,
-  .ba-404-title {
+  .ba-404-title,
+  .ba-404-lead {
     color: var(--text-dim);
   }
 

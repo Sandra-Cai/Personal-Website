@@ -923,6 +923,31 @@
         'site.webmanifest names the site Sandra Cai, starts at /, uses display browser, and includes 16×16, 32×32, and apple-touch icons matching the theme color.',
     },
     {
+      keys: [
+        'api logging',
+        'sandra gpt api',
+        'history api',
+        'supabase sync',
+        'database for questions',
+        'server side history',
+      ],
+      priority: 17,
+      reply:
+        'Optional /api/sandra-gpt can sync session history when configured. Without it, answers still work from on-site notes and history stays in this browser only; robots.txt disallows /api/.',
+    },
+    {
+      keys: [
+        'content security policy',
+        'csp header',
+        'security headers',
+        'x-frame-options',
+        'hsts',
+      ],
+      priority: 14,
+      reply:
+        'Deployed responses send security headers including CSP (self scripts/styles), X-Frame-Options DENY, HSTS with preload, and Permissions-Policy that disables camera, microphone, and geolocation.',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,

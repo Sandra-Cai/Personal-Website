@@ -206,6 +206,8 @@ const checksIndex = [
   ['JSON-LD query-input', /"query-input":\s*"required name=search_term_string"/],
   ['favicon 32 png', /rel="icon"[^>]*favicon-32\.png/],
   ['JSON-LD context schema', /"@context":\s*"https:\/\/schema\.org"/],
+  ['favicon 16 png', /rel="icon"[^>]*favicon-16\.png/],
+  ['gpt maxlength matches constant', /id="gpt-input"[^>]*maxlength="280"/],
 ];
 
 const html404 = read('404.html');
@@ -420,6 +422,21 @@ assertBlankLinksLabeled('404.html', read('404.html'));
 const maxQ = gptJs.match(/const MAX_QUESTION_CHARS = (\d+);/);
 if (!maxQ || maxQ[1] !== '280') {
   console.error('validate-basic-html: MAX_QUESTION_CHARS in sandra-gpt.js must be 280');
+  process.exit(1);
+}
+
+const apiJs = read('api/sandra-gpt.js');
+const apiMaxQ = apiJs.match(/const MAX_Q = (\d+);/);
+if (!apiMaxQ || apiMaxQ[1] !== maxQ[1]) {
+  console.error('validate-basic-html: api/sandra-gpt.js MAX_Q must match client MAX_QUESTION_CHARS');
+  process.exit(1);
+}
+if (!apiJs.includes("X-Robots-Tag', 'noindex, nofollow'")) {
+  console.error('validate-basic-html: api/sandra-gpt.js must set X-Robots-Tag noindex, nofollow');
+  process.exit(1);
+}
+if (!apiJs.includes("Cache-Control', 'no-store'")) {
+  console.error('validate-basic-html: api/sandra-gpt.js must set Cache-Control no-store');
   process.exit(1);
 }
 

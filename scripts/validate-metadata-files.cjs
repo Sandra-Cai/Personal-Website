@@ -193,6 +193,9 @@ if (!csp || !/frame-ancestors 'none'/.test(csp.value)) {
 if (!/base-uri 'self'/.test(csp.value) || !/form-action 'self'/.test(csp.value)) {
   fail('vercel.json CSP must restrict base-uri and form-action to self');
 }
+if (!/script-src 'self'/.test(csp.value) || !/connect-src 'self'/.test(csp.value)) {
+  fail('vercel.json CSP must keep script-src and connect-src on self');
+}
 
 const apiRule = headerRules.find((r) => r.source === '/api/(.*)');
 if (!apiRule) fail('vercel.json missing /api/(.*) header rule');

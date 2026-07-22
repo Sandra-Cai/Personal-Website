@@ -9,7 +9,7 @@
 
 const { createClient } = require('@supabase/supabase-js');
 
-const MAX_Q = 500;
+const MAX_Q = 280;
 const MAX_A = 8000;
 
 function readJsonBody(req) {
