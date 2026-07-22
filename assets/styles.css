@@ -1397,6 +1397,16 @@ a:focus-visible {
     outline: 3px solid #0a0a0a;
     outline-offset: 3px;
   }
+
+  .gpt-send:disabled {
+    background: #52525b;
+    color: #fafafa;
+  }
+
+  .ba-display-accent,
+  .ba-logo-accent {
+    color: var(--text);
+  }
 }
 
 @media print {

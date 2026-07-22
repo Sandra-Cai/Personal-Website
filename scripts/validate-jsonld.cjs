@@ -140,6 +140,14 @@ if (!sameAs.some((u) => /medium\.com\/@caisandra/i.test(u))) {
   process.exit(1);
 }
 const relMe = [...html.matchAll(/<link rel="me" href="([^"]+)"/g)].map((match) => match[1]);
+if (relMe.length < 4) {
+  console.error('validate-jsonld: expected at least 4 rel=me profile links');
+  process.exit(1);
+}
+if (new Set(sameAs).size !== sameAs.length) {
+  console.error('validate-jsonld: Person.sameAs must not contain duplicates');
+  process.exit(1);
+}
 for (const href of relMe) {
   if (!sameAs.includes(href)) {
     console.error(`validate-jsonld: rel=me href must appear in Person.sameAs: ${href}`);

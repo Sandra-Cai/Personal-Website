@@ -948,6 +948,31 @@
         'Deployed responses send security headers including CSP (self scripts/styles), X-Frame-Options DENY, HSTS with preload, and Permissions-Policy that disables camera, microphone, and geolocation.',
     },
     {
+      keys: [
+        'rate limited',
+        'rate limit',
+        'too many requests',
+        'retry after',
+        'api rate limit',
+        '429 error',
+      ],
+      priority: 16,
+      reply:
+        'If optional history sync is rate-limited, answers still work from on-site notes and stay saved in this browser; the API returns 429 with Retry-After and the UI retries later.',
+    },
+    {
+      keys: [
+        'duplicate question',
+        'same question twice',
+        'accidental double submit',
+        'submitted twice',
+        'double send',
+      ],
+      priority: 15,
+      reply:
+        'SandraGPT ignores an identical question submitted again within a short window, so accidental double Enter does not duplicate the turn.',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,

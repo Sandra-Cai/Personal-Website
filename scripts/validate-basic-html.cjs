@@ -50,6 +50,8 @@ const checks404 = [
   ['404 email footer', /ba-footer-links[\s\S]*?mailto:sandraxcyj@gmail\.com/],
   ['404 favicon ico', /rel="icon"[^>]*favicon\.ico/],
   ['404 writing nav', /class="ba-nav-external"[^>]*href="https:\/\/substack\.com\/@caisandra"/],
+  ['404 primary nav', /<nav class="ba-nav" aria-label="Primary">/],
+  ['404 color-scheme light', /<meta name="color-scheme" content="light"/],
 ];
 
 const checksIndex = [
@@ -249,6 +251,7 @@ for (const [label, snippet] of [
   ['scroll spy current location', "setAttribute('aria-current', 'location')"],
   ['scroll spy observer fallback', "typeof IntersectionObserver !== 'function'"],
   ['hashchange always registered', "window.addEventListener('hashchange', applyHash)"],
+  ['passive scroll listener', '{ passive: true }'],
   ['dynamic footer year', 'new Date().getFullYear()'],
 ]) {
   if (!siteJs.includes(snippet)) {
@@ -437,6 +440,19 @@ if (!apiJs.includes("X-Robots-Tag', 'noindex, nofollow'")) {
 }
 if (!apiJs.includes("Cache-Control', 'no-store'")) {
   console.error('validate-basic-html: api/sandra-gpt.js must set Cache-Control no-store');
+  process.exit(1);
+}
+if (!apiJs.includes("Retry-After', '30'")) {
+  console.error('validate-basic-html: api/sandra-gpt.js must set Retry-After on rate limits');
+  process.exit(1);
+}
+if (!apiJs.includes("Allow', 'GET, POST, OPTIONS'")) {
+  console.error('validate-basic-html: api/sandra-gpt.js OPTIONS must Allow GET, POST, OPTIONS');
+  process.exit(1);
+}
+const apiMaxA = apiJs.match(/const MAX_A = (\d+);/);
+if (!apiMaxA || Number(apiMaxA[1]) < 1000 || Number(apiMaxA[1]) > 20000) {
+  console.error('validate-basic-html: api/sandra-gpt.js MAX_A must be between 1000 and 20000');
   process.exit(1);
 }
 
