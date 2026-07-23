@@ -973,6 +973,30 @@
         'SandraGPT ignores an identical question submitted again within a short window, so accidental double Enter does not duplicate the turn.',
     },
     {
+      keys: [
+        'arrow up history',
+        'recall previous question',
+        'previous questions keyboard',
+        'arrow keys sandragpt',
+        'navigate question history',
+      ],
+      priority: 15,
+      reply:
+        'With the question box focused, Arrow Up / Arrow Down recalls earlier questions from this session (like a shell), then you can edit and resubmit.',
+    },
+    {
+      keys: [
+        'how many questions saved',
+        'history limit',
+        'max history turns',
+        'eighty questions',
+        '80 questions',
+      ],
+      priority: 14,
+      reply:
+        'This browser keeps up to 80 recent SandraGPT turns locally; older ones drop off. Optional API sync uses the same session cap.',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,
@@ -1252,7 +1276,10 @@
     try {
       let sid = localStorage.getItem(SESSION_KEY);
       if (!sid) {
-        sid = crypto.randomUUID();
+        sid =
+          typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+            ? crypto.randomUUID()
+            : `anon-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
         localStorage.setItem(SESSION_KEY, sid);
       }
       return sid;

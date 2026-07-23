@@ -196,6 +196,12 @@ if (!/base-uri 'self'/.test(csp.value) || !/form-action 'self'/.test(csp.value))
 if (!/script-src 'self'/.test(csp.value) || !/connect-src 'self'/.test(csp.value)) {
   fail('vercel.json CSP must keep script-src and connect-src on self');
 }
+if (!/img-src 'self' data:/.test(csp.value) || !/font-src 'self'/.test(csp.value)) {
+  fail('vercel.json CSP must allow self fonts and self/data images');
+}
+if (!/style-src 'self' 'unsafe-inline'/.test(csp.value)) {
+  fail("vercel.json CSP style-src must allow self and unsafe-inline");
+}
 
 const apiRule = headerRules.find((r) => r.source === '/api/(.*)');
 if (!apiRule) fail('vercel.json missing /api/(.*) header rule');

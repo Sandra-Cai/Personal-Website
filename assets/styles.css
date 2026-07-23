@@ -1407,6 +1407,11 @@ a:focus-visible {
   .ba-logo-accent {
     color: var(--text);
   }
+
+  .ba-split-copy,
+  .ba-agent-sub {
+    color: var(--text-dim);
+  }
 }
 
 @media print {

@@ -210,6 +210,8 @@ const checksIndex = [
   ['JSON-LD context schema', /"@context":\s*"https:\/\/schema\.org"/],
   ['favicon 16 png', /rel="icon"[^>]*favicon-16\.png/],
   ['gpt maxlength matches constant', /id="gpt-input"[^>]*maxlength="280"/],
+  ['perspective split a', /class="ba-split-a"[^>]*>Rigor as/],
+  ['agent subtitle tagline', /class="ba-agent-sub"[^>]*id="gpt-tagline"/],
 ];
 
 const html404 = read('404.html');
@@ -252,6 +254,7 @@ for (const [label, snippet] of [
   ['scroll spy observer fallback', "typeof IntersectionObserver !== 'function'"],
   ['hashchange always registered', "window.addEventListener('hashchange', applyHash)"],
   ['passive scroll listener', '{ passive: true }'],
+  ['js class marker', "document.documentElement.classList.add('js')"],
   ['dynamic footer year', 'new Date().getFullYear()'],
 ]) {
   if (!siteJs.includes(snippet)) {
@@ -453,6 +456,24 @@ if (!apiJs.includes("Allow', 'GET, POST, OPTIONS'")) {
 const apiMaxA = apiJs.match(/const MAX_A = (\d+);/);
 if (!apiMaxA || Number(apiMaxA[1]) < 1000 || Number(apiMaxA[1]) > 20000) {
   console.error('validate-basic-html: api/sandra-gpt.js MAX_A must be between 1000 and 20000');
+  process.exit(1);
+}
+if (!apiJs.includes('.limit(80)')) {
+  console.error('validate-basic-html: api/sandra-gpt.js GET must limit turns to 80');
+  process.exit(1);
+}
+const maxTurns = gptJs.match(/const MAX_TURNS = (\d+);/);
+if (!maxTurns || maxTurns[1] !== '80') {
+  console.error('validate-basic-html: MAX_TURNS in sandra-gpt.js must be 80');
+  process.exit(1);
+}
+const dupWindow = gptJs.match(/const DUPLICATE_SUBMIT_WINDOW_MS = (\d+);/);
+if (!dupWindow || Number(dupWindow[1]) < 500 || Number(dupWindow[1]) > 5000) {
+  console.error('validate-basic-html: DUPLICATE_SUBMIT_WINDOW_MS must be between 500 and 5000');
+  process.exit(1);
+}
+if (!gptJs.includes("typeof crypto.randomUUID === 'function'")) {
+  console.error('validate-basic-html: sandra-gpt.js must fall back when crypto.randomUUID is missing');
   process.exit(1);
 }
 
