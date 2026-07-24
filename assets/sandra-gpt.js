@@ -997,6 +997,41 @@
         'This browser keeps up to 80 recent SandraGPT turns locally; older ones drop off. Optional API sync uses the same session cap.',
     },
     {
+      keys: [
+        'send button',
+        'why is send disabled',
+        'cannot send',
+        'sending status',
+        'aria busy form',
+      ],
+      priority: 15,
+      reply:
+        'Send stays disabled until the box has text. While a reply is processing, the form is marked busy, Send shows Sending…, and another submit is blocked.',
+    },
+    {
+      keys: [
+        'character count',
+        'characters left',
+        'near character limit',
+        'when does char count show',
+      ],
+      priority: 14,
+      reply:
+        'A live character count appears when 40 or fewer characters remain of the 280-character limit.',
+    },
+    {
+      keys: [
+        'hash sandragpt',
+        'focus from url',
+        'open sandragpt link',
+        '#sandra-gpt',
+        'deep link sandragpt',
+      ],
+      priority: 14,
+      reply:
+        'Opening /#sandra-gpt (or the header SandraGPT link) scrolls to the helper and focuses the question box.',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,
@@ -1512,10 +1547,10 @@
     const busy = form?.getAttribute('aria-busy') === 'true';
     const hasText = Boolean(input.value.trim());
     sendBtn.disabled = busy || !hasText;
-    sendBtn.setAttribute(
-      'aria-label',
-      hasText && !busy ? 'Send question' : 'Enter a question to send'
-    );
+    let label = 'Enter a question to send';
+    if (busy) label = 'Sending…';
+    else if (hasText) label = 'Send question';
+    sendBtn.setAttribute('aria-label', label);
   }
 
   function updateCharCount() {
@@ -1779,6 +1814,7 @@
       const sendBtn = form.querySelector('.gpt-send');
       form.setAttribute('aria-busy', 'true');
       if (sendBtn) sendBtn.disabled = true;
+      updateSendState();
       window.setTimeout(() => {
         form.setAttribute('aria-busy', 'false');
         updateSendState();

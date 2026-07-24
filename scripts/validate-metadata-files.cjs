@@ -210,4 +210,25 @@ if (!apiCache || apiCache.value !== 'no-store') {
   fail('vercel.json /api Cache-Control must be no-store');
 }
 
+let pkg;
+try {
+  pkg = JSON.parse(read('package.json'));
+} catch {
+  fail('package.json is not valid JSON');
+}
+if (!pkg.engines || !pkg.engines.node || !/>=18/.test(String(pkg.engines.node))) {
+  fail('package.json engines.node must require >=18');
+}
+if (!pkg.scripts || pkg.scripts.verify !== 'node scripts/verify-all.cjs') {
+  fail('package.json verify script must run scripts/verify-all.cjs');
+}
+
+const ciYml = read('.github/workflows/ci.yml');
+if (!/npm run verify/.test(ciYml)) {
+  fail('.github/workflows/ci.yml must run npm run verify');
+}
+if (!/node-version:\s*'20'/.test(ciYml)) {
+  fail(".github/workflows/ci.yml must use Node 20");
+}
+
 console.log('validate-metadata-files: OK');

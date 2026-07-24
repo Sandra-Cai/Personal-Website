@@ -1412,6 +1412,15 @@ a:focus-visible {
   .ba-agent-sub {
     color: var(--text-dim);
   }
+
+  .ba-card--bare {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.22);
+  }
+
+  .ba-list strong {
+    color: var(--text);
+  }
 }
 
 @media print {

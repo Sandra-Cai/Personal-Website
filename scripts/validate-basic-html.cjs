@@ -212,6 +212,8 @@ const checksIndex = [
   ['gpt maxlength matches constant', /id="gpt-input"[^>]*maxlength="280"/],
   ['perspective split a', /class="ba-split-a"[^>]*>Rigor as/],
   ['agent subtitle tagline', /class="ba-agent-sub"[^>]*id="gpt-tagline"/],
+  ['beliefs bare cards', /id="beliefs"[\s\S]*?ba-card--bare[\s\S]*?Show the work/],
+  ['gpt send default label', /class="gpt-send"[^>]*aria-label="Enter a question to send"/],
 ];
 
 const html404 = read('404.html');
@@ -474,6 +476,14 @@ if (!dupWindow || Number(dupWindow[1]) < 500 || Number(dupWindow[1]) > 5000) {
 }
 if (!gptJs.includes("typeof crypto.randomUUID === 'function'")) {
   console.error('validate-basic-html: sandra-gpt.js must fall back when crypto.randomUUID is missing');
+  process.exit(1);
+}
+if (!/const RESET_HISTORY_ON_LOAD = false;/.test(gptJs)) {
+  console.error('validate-basic-html: RESET_HISTORY_ON_LOAD must be false for production');
+  process.exit(1);
+}
+if (!gptJs.includes("'Sending…'") && !gptJs.includes('"Sending…"')) {
+  console.error('validate-basic-html: send button busy state must use Sending… aria-label');
   process.exit(1);
 }
 
