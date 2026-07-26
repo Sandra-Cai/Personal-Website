@@ -216,6 +216,9 @@ const checksIndex = [
   ['gpt send default label', /class="gpt-send"[^>]*aria-label="Enter a question to send"/],
   ['gpt kbd slash', /class="gpt-kbd"[^>]*>\/<\/kbd>/],
   ['og image type jpeg', /property="og:image:type" content="image\/jpeg"/],
+  ['twitter image alt', /name="twitter:image:alt" content="[^"]*Plurall AI/],
+  ['gpt clear confirm copy', /id="gpt-clear-history"[^>]*aria-label="Clear question history"/],
+  ['404 theme color', /<meta name="theme-color" content="#FFFDF7"/],
 ];
 
 const html404 = read('404.html');
@@ -502,6 +505,18 @@ if (!gptJs.includes('preventScroll: true')) {
 }
 if (!gptJs.includes('function prefersReducedMotion')) {
   console.error('validate-basic-html: sandra-gpt.js must respect prefers-reduced-motion');
+  process.exit(1);
+}
+if (!gptJs.includes("window.addEventListener('hashchange'") || !gptJs.includes('focusSandraGptFromHash')) {
+  console.error('validate-basic-html: sandra-gpt.js must focus input on #sandra-gpt hashchange');
+  process.exit(1);
+}
+if (!gptJs.includes('window.confirm') || !gptJs.includes('clearAllHistory')) {
+  console.error('validate-basic-html: clear history must confirm before wiping');
+  process.exit(1);
+}
+if (!gptJs.includes("addEventListener('online'")) {
+  console.error('validate-basic-html: sandra-gpt.js must retry sync when back online');
   process.exit(1);
 }
 

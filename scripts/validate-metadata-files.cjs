@@ -67,6 +67,9 @@ const expiresAt = Date.parse(expiresMatch[1]);
 if (!Number.isFinite(expiresAt) || expiresAt <= Date.now()) {
   fail('security.txt Expires must be a future RFC 3339 timestamp');
 }
+if (expiresAt - Date.now() < 1000 * 60 * 60 * 24 * 30) {
+  fail('security.txt Expires should be at least 30 days in the future');
+}
 
 const indexHtml = read('index.html');
 const themeMeta = indexHtml.match(/<meta name="theme-color" content="([^"]+)"/);

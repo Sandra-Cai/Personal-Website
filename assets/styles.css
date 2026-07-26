@@ -1425,6 +1425,15 @@ a:focus-visible {
   .ba-split-b {
     color: var(--text);
   }
+
+  .ba-footer {
+    border-top-color: rgba(0, 0, 0, 0.28);
+  }
+
+  .gpt-sidebar-clear:focus-visible {
+    outline: 2px solid #0a0a0a;
+    outline-offset: 2px;
+  }
 }
 
 @media print {

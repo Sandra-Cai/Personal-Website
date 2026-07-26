@@ -1069,6 +1069,41 @@
         'In the question box, Ctrl+Enter or Cmd+Enter submits the same way as the Send button (in addition to plain Enter).',
     },
     {
+      keys: [
+        'try starters hide',
+        'example questions disappear',
+        'where did starters go',
+        'starters hidden',
+        'try buttons gone',
+      ],
+      priority: 14,
+      reply:
+        'The Try starter buttons hide after the first answer appears in the log so the chat stays uncluttered; Clear history brings them back.',
+    },
+    {
+      keys: [
+        'clear confirmation',
+        'confirm clear history',
+        'does clear ask',
+        'clear history prompt',
+      ],
+      priority: 15,
+      reply:
+        'Clear asks for confirmation before wiping this session’s questions from the browser (and from the server when sync is on).',
+    },
+    {
+      keys: [
+        'online sync retry',
+        'comes back online',
+        'reconnect sync',
+        'network restored',
+        'upload when online',
+      ],
+      priority: 16,
+      reply:
+        'When the browser fires an online event, SandraGPT retries uploading any turns still only stored locally, then updates the History sync status.',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,
@@ -2001,7 +2036,15 @@
           block: 'start',
         });
       }
-      input.focus();
+      try {
+        input.focus({ preventScroll: true });
+      } catch {
+        input.focus();
+      }
     });
   }
+
+  window.addEventListener('hashchange', () => {
+    focusSandraGptFromHash();
+  });
 })();
