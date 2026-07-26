@@ -1032,6 +1032,43 @@
         'Opening /#sandra-gpt (or the header SandraGPT link) scrolls to the helper and focuses the question box.',
     },
     {
+      keys: [
+        'query parameter',
+        'url question',
+        '?q=',
+        'prefill question',
+        'shared question link',
+        'deep link question',
+      ],
+      priority: 16,
+      reply:
+        'Links like /?q=Plurall+AI prefill SandraGPT from the query string, strip q from the URL, and submit once—handy for shared prompts.',
+    },
+    {
+      keys: [
+        'escape key',
+        'press escape',
+        'blur question box',
+        'unfocus sandragpt',
+        'leave the input',
+      ],
+      priority: 14,
+      reply:
+        'With the question box focused, Escape blurs it so you can return to page navigation without the caret staying in the field.',
+    },
+    {
+      keys: [
+        'ctrl enter',
+        'cmd enter',
+        'command enter',
+        'submit with keyboard',
+        'keyboard submit',
+      ],
+      priority: 14,
+      reply:
+        'In the question box, Ctrl+Enter or Cmd+Enter submits the same way as the Send button (in addition to plain Enter).',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,
@@ -1531,7 +1568,11 @@
   function focusSandraGptFromHash() {
     if (location.hash !== '#sandra-gpt' || !input) return;
     window.requestAnimationFrame(() => {
-      input.focus({ preventScroll: true });
+      try {
+        input.focus({ preventScroll: true });
+      } catch {
+        input.focus();
+      }
     });
   }
 

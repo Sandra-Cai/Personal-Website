@@ -78,6 +78,14 @@ if (!Array.isArray(person.knowsAbout) || person.knowsAbout.length < 3) {
   console.error('validate-jsonld: Person.knowsAbout must be an array with at least 3 topics');
   process.exit(1);
 }
+if (person.knowsAbout.length < 7) {
+  console.error('validate-jsonld: Person.knowsAbout should list at least 7 topics');
+  process.exit(1);
+}
+if (new Set(person.knowsAbout).size !== person.knowsAbout.length) {
+  console.error('validate-jsonld: Person.knowsAbout must not contain duplicates');
+  process.exit(1);
+}
 if (!person.knowsAbout.some((t) => /deepfake detection/i.test(t))) {
   console.error('validate-jsonld: Person.knowsAbout must include Deepfake detection');
   process.exit(1);

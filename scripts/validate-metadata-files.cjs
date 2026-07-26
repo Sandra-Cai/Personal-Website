@@ -125,6 +125,12 @@ if (!manifest.icons.some((icon) => /apple-touch-icon\.png/i.test(icon.src))) {
 if (manifest.icons.length !== 3) {
   fail('site.webmanifest should list exactly 3 icons (16, 32, apple-touch)');
 }
+if (!manifest.icons.every((icon) => icon.type === 'image/png')) {
+  fail('site.webmanifest icons must all be type image/png');
+}
+if (!manifest.icons.some((icon) => icon.sizes === '180x180')) {
+  fail('site.webmanifest must include a 180x180 apple-touch icon size');
+}
 
 const vercel = read('vercel.json');
 let vercelJson;

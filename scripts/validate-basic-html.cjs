@@ -214,6 +214,8 @@ const checksIndex = [
   ['agent subtitle tagline', /class="ba-agent-sub"[^>]*id="gpt-tagline"/],
   ['beliefs bare cards', /id="beliefs"[\s\S]*?ba-card--bare[\s\S]*?Show the work/],
   ['gpt send default label', /class="gpt-send"[^>]*aria-label="Enter a question to send"/],
+  ['gpt kbd slash', /class="gpt-kbd"[^>]*>\/<\/kbd>/],
+  ['og image type jpeg', /property="og:image:type" content="image\/jpeg"/],
 ];
 
 const html404 = read('404.html');
@@ -484,6 +486,22 @@ if (!/const RESET_HISTORY_ON_LOAD = false;/.test(gptJs)) {
 }
 if (!gptJs.includes("'Sending…'") && !gptJs.includes('"Sending…"')) {
   console.error('validate-basic-html: send button busy state must use Sending… aria-label');
+  process.exit(1);
+}
+if (!gptJs.includes('applyDeepLinkQuestion') || !gptJs.includes('URLSearchParams')) {
+  console.error('validate-basic-html: sandra-gpt.js must support ?q= deep-link prefills');
+  process.exit(1);
+}
+if (!gptJs.includes("e.key !== 'Escape'") || !gptJs.includes('input.blur()')) {
+  console.error('validate-basic-html: sandra-gpt.js must blur input on Escape');
+  process.exit(1);
+}
+if (!gptJs.includes('preventScroll: true')) {
+  console.error('validate-basic-html: hash focus should prefer preventScroll when supported');
+  process.exit(1);
+}
+if (!gptJs.includes('function prefersReducedMotion')) {
+  console.error('validate-basic-html: sandra-gpt.js must respect prefers-reduced-motion');
   process.exit(1);
 }
 
