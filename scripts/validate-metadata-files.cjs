@@ -18,8 +18,13 @@ function fail(message) {
 
 const robots = read('robots.txt');
 if (!/^\s*User-agent:\s*\*/im.test(robots)) fail('robots.txt missing "User-agent: *"');
-if (!/^\s*Allow:\s*\/\s*$/im.test(robots)) fail('robots.txt missing "Allow: /"');
 if (!/^\s*Disallow:\s*\/api\/\s*$/im.test(robots)) fail('robots.txt missing "Disallow: /api/"');
+if (!/^\s*Allow:\s*\/\s*$/im.test(robots)) fail('robots.txt missing "Allow: /"');
+const allowIdx = robots.search(/^\s*Allow:\s*\/\s*$/im);
+const disallowIdx = robots.search(/^\s*Disallow:\s*\/api\/\s*$/im);
+if (allowIdx < 0 || disallowIdx < 0 || allowIdx > disallowIdx) {
+  fail('robots.txt should Allow / before Disallow /api/');
+}
 if (!new RegExp(`^\\s*Sitemap:\\s*${SITE_ORIGIN.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/sitemap\\.xml\\s*$`, 'im').test(robots)) {
   fail('robots.txt sitemap URL is missing or incorrect');
 }

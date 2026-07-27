@@ -1434,6 +1434,16 @@ a:focus-visible {
     outline: 2px solid #0a0a0a;
     outline-offset: 2px;
   }
+
+  .ba-header {
+    background: #fffdf7;
+    border-bottom-color: rgba(0, 0, 0, 0.28);
+    backdrop-filter: none;
+  }
+
+  .gpt-sidebar {
+    border-right-color: rgba(0, 0, 0, 0.28);
+  }
 }
 
 @media print {

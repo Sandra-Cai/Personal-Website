@@ -219,6 +219,9 @@ const checksIndex = [
   ['twitter image alt', /name="twitter:image:alt" content="[^"]*Plurall AI/],
   ['gpt clear confirm copy', /id="gpt-clear-history"[^>]*aria-label="Clear question history"/],
   ['404 theme color', /<meta name="theme-color" content="#FFFDF7"/],
+  ['sticky header', /class="ba-header"/],
+  ['gpt shell layout', /class="ba-agent-card gpt-shell"/],
+  ['jsonld knows systems', /"knowsAbout"[\s\S]*?"Systems engineering"/],
 ];
 
 const html404 = read('404.html');
@@ -517,6 +520,18 @@ if (!gptJs.includes('window.confirm') || !gptJs.includes('clearAllHistory')) {
 }
 if (!gptJs.includes("addEventListener('online'")) {
   console.error('validate-basic-html: sandra-gpt.js must retry sync when back online');
+  process.exit(1);
+}
+if (!gptJs.includes("aria-label', 'You asked'") || !gptJs.includes("aria-label', 'SandraGPT replied'")) {
+  console.error('validate-basic-html: chat turns must expose You asked / SandraGPT replied labels');
+  process.exit(1);
+}
+if (!gptJs.includes('function scrollToTurn') || !gptJs.includes('gpt-turn-')) {
+  console.error('validate-basic-html: history sidebar must scroll to gpt-turn elements');
+  process.exit(1);
+}
+if (!gptJs.includes("aria-current', 'true'")) {
+  console.error('validate-basic-html: active history item must set aria-current');
   process.exit(1);
 }
 

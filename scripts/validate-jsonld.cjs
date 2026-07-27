@@ -252,5 +252,13 @@ if (!person.description || !website.description || person.description !== websit
   console.error('validate-jsonld: Person.description and WebSite.description must match');
   process.exit(1);
 }
+if (!/Plurall AI/i.test(person.description) || !/4\+ years/i.test(person.description)) {
+  console.error('validate-jsonld: Person.description must mention Plurall AI and 4+ years');
+  process.exit(1);
+}
+if (!/deepfake detection/i.test(person.description)) {
+  console.error('validate-jsonld: Person.description must mention deepfake detection');
+  process.exit(1);
+}
 
 console.log('validate-jsonld: OK');

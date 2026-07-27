@@ -1104,6 +1104,29 @@
         'When the browser fires an online event, SandraGPT retries uploading any turns still only stored locally, then updates the History sync status.',
     },
     {
+      keys: [
+        'history sidebar click',
+        'click a past question',
+        'jump to answer',
+        'scroll to turn',
+        'reopen previous reply',
+      ],
+      priority: 15,
+      reply:
+        'Click a question in the History sidebar to jump to that turn in the log; the active item is marked for assistive technology.',
+    },
+    {
+      keys: [
+        'you asked label',
+        'sandragpt replied label',
+        'chat aria labels',
+        'how are answers labeled',
+      ],
+      priority: 13,
+      reply:
+        'Each turn is labeled for accessibility as You asked and SandraGPT replied, inside a Question and reply group in the live log.',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,
