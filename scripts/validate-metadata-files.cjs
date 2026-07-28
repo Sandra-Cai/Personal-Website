@@ -139,6 +139,9 @@ if (!manifest.icons.every((icon) => icon.type === 'image/png')) {
 if (!manifest.icons.some((icon) => icon.sizes === '180x180')) {
   fail('site.webmanifest must include a 180x180 apple-touch icon size');
 }
+if (!/^#[0-9A-Fa-f]{6}$/.test(manifest.theme_color || '')) {
+  fail('site.webmanifest theme_color must be a 6-digit hex color');
+}
 
 const vercel = read('vercel.json');
 let vercelJson;

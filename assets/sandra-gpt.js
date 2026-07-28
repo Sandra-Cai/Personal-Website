@@ -1127,6 +1127,30 @@
         'Each turn is labeled for accessibility as You asked and SandraGPT replied, inside a Question and reply group in the live log.',
     },
     {
+      keys: [
+        'links in answers',
+        'urls in chat',
+        'why no links',
+        'clickable links sandragpt',
+        'plain text replies',
+      ],
+      priority: 16,
+      reply:
+        'SandraGPT replies are plain text only—no URLs or clickable links in the chat log. Use the page strips, Research section, or footer for outbound links.',
+    },
+    {
+      keys: [
+        'private browsing',
+        'incognito history',
+        'storage quota',
+        'localstorage full',
+        'history not saving',
+      ],
+      priority: 15,
+      reply:
+        'History uses this browser’s local storage. In private mode or when storage is full, answers still work but saved history may not persist across reloads.',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,

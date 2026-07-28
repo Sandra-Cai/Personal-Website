@@ -222,6 +222,9 @@ const checksIndex = [
   ['sticky header', /class="ba-header"/],
   ['gpt shell layout', /class="ba-agent-card gpt-shell"/],
   ['jsonld knows systems', /"knowsAbout"[\s\S]*?"Systems engineering"/],
+  ['hero lead strong years', /class="ba-lead"[\s\S]*?<strong>4\+ years<\/strong>/],
+  ['research list landmark', /id="research"[\s\S]*?<ul class="ba-list">/],
+  ['agent scroll margin', /id="sandra-gpt"[^>]*class="ba-agent"/],
 ];
 
 const html404 = read('404.html');
@@ -455,6 +458,14 @@ if (!apiJs.includes("Cache-Control', 'no-store'")) {
   console.error('validate-basic-html: api/sandra-gpt.js must set Cache-Control no-store');
   process.exit(1);
 }
+if (!apiJs.includes('payload_too_large') || !apiJs.includes('not_configured')) {
+  console.error('validate-basic-html: api must handle payload_too_large and not_configured');
+  process.exit(1);
+}
+if (!/replace\(\/\\u0000\/g,\s*''\)/.test(apiJs)) {
+  console.error('validate-basic-html: api sanitize must strip null bytes');
+  process.exit(1);
+}
 if (!apiJs.includes("Retry-After', '30'")) {
   console.error('validate-basic-html: api/sandra-gpt.js must set Retry-After on rate limits');
   process.exit(1);
@@ -532,6 +543,18 @@ if (!gptJs.includes('function scrollToTurn') || !gptJs.includes('gpt-turn-')) {
 }
 if (!gptJs.includes("aria-current', 'true'")) {
   console.error('validate-basic-html: active history item must set aria-current');
+  process.exit(1);
+}
+if (/https?:\/\//i.test(gptJs) || /\bhref\s*=/i.test(gptJs)) {
+  console.error('validate-basic-html: sandra-gpt.js must not embed http(s) URLs or href= (plain-text replies only)');
+  process.exit(1);
+}
+if (!gptJs.includes('/* quota or private mode */')) {
+  console.error('validate-basic-html: saveHistory must tolerate private mode / quota failures');
+  process.exit(1);
+}
+if (!gptJs.includes('.textContent = q') || !gptJs.includes('.textContent = answerText')) {
+  console.error('validate-basic-html: chat turns must render via textContent (not HTML)');
   process.exit(1);
 }
 

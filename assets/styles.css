@@ -1444,6 +1444,20 @@ a:focus-visible {
   .gpt-sidebar {
     border-right-color: rgba(0, 0, 0, 0.28);
   }
+
+  .ba-student-note {
+    border-top-color: rgba(0, 0, 0, 0.28);
+    color: var(--text-dim);
+  }
+
+  .ba-student-note strong,
+  .ba-lead strong {
+    color: var(--text);
+  }
+
+  .ba-agent {
+    border-top-color: rgba(0, 0, 0, 0.28);
+  }
 }
 
 @media print {
