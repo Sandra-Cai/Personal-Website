@@ -142,6 +142,9 @@ if (!manifest.icons.some((icon) => icon.sizes === '180x180')) {
 if (!/^#[0-9A-Fa-f]{6}$/.test(manifest.theme_color || '')) {
   fail('site.webmanifest theme_color must be a 6-digit hex color');
 }
+if (manifest.background_color !== manifest.theme_color) {
+  fail('site.webmanifest background_color must match theme_color');
+}
 
 const vercel = read('vercel.json');
 let vercelJson;

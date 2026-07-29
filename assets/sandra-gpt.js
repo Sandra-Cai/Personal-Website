@@ -1151,6 +1151,29 @@
         'History uses this browser’s local storage. In private mode or when storage is full, answers still work but saved history may not persist across reloads.',
     },
     {
+      keys: [
+        'sticky header',
+        'header covers section',
+        'scroll margin',
+        'nav overlapping content',
+        'anchor offset',
+      ],
+      priority: 13,
+      reply:
+        'In-page anchors account for the sticky header with scroll-margin on sections, so Track record, Research, Academic, and SandraGPT land below the nav.',
+    },
+    {
+      keys: [
+        'slash while typing',
+        'slash in input',
+        'does slash interrupt',
+        'slash shortcut exception',
+      ],
+      priority: 14,
+      reply:
+        'The / shortcut is ignored while you are typing in an input, textarea, select, or contenteditable field, so it will not steal focus mid-edit.',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,
@@ -2056,10 +2079,11 @@
   });
 
   function isTypingInField(el) {
-    if (!el || !(el instanceof HTMLElement)) return false;
+    if (!el || !(el instanceof Element)) return false;
     const tag = el.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return true;
-    return el.isContentEditable;
+    if (el instanceof HTMLElement && el.isContentEditable) return true;
+    return Boolean(el.closest && el.closest('[contenteditable="true"], [role="textbox"]'));
   }
 
   const agentSection = document.getElementById('sandra-gpt');

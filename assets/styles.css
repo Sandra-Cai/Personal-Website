@@ -1458,6 +1458,14 @@ a:focus-visible {
   .ba-agent {
     border-top-color: rgba(0, 0, 0, 0.28);
   }
+
+  .ba-nav-sep {
+    color: var(--text-dim);
+  }
+
+  .ba-section--repeat {
+    border-top-color: rgba(0, 0, 0, 0.28);
+  }
 }
 
 @media print {

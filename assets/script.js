@@ -70,6 +70,14 @@ function initNavScrollSpy() {
   );
 
   for (const row of tracked) observer.observe(row.section);
+
+  window.addEventListener(
+    'pagehide',
+    () => {
+      observer.disconnect();
+    },
+    { once: true }
+  );
 }
 
 initNavScrollSpy();

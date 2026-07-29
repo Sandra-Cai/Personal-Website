@@ -225,6 +225,9 @@ const checksIndex = [
   ['hero lead strong years', /class="ba-lead"[\s\S]*?<strong>4\+ years<\/strong>/],
   ['research list landmark', /id="research"[\s\S]*?<ul class="ba-list">/],
   ['agent scroll margin', /id="sandra-gpt"[^>]*class="ba-agent"/],
+  ['nav separator', /class="ba-nav-sep"[^>]*aria-hidden="true"/],
+  ['work section scroll target', /class="ba-section"[^>]*id="work"/],
+  ['education section', /class="ba-section ba-section--education"[^>]*id="education"/],
 ];
 
 const html404 = read('404.html');
@@ -268,6 +271,7 @@ for (const [label, snippet] of [
   ['hashchange always registered', "window.addEventListener('hashchange', applyHash)"],
   ['passive scroll listener', '{ passive: true }'],
   ['js class marker', "document.documentElement.classList.add('js')"],
+  ['observer pagehide disconnect', "observer.disconnect()"],
   ['dynamic footer year', 'new Date().getFullYear()'],
 ]) {
   if (!siteJs.includes(snippet)) {
@@ -555,6 +559,15 @@ if (!gptJs.includes('/* quota or private mode */')) {
 }
 if (!gptJs.includes('.textContent = q') || !gptJs.includes('.textContent = answerText')) {
   console.error('validate-basic-html: chat turns must render via textContent (not HTML)');
+  process.exit(1);
+}
+if (!gptJs.includes('[contenteditable="true"], [role="textbox"]')) {
+  console.error('validate-basic-html: slash shortcut must ignore contenteditable/textbox fields');
+  process.exit(1);
+}
+const taglineConst = gptJs.match(/const TAGLINE = '([^']+)';/);
+if (taglineConst && /https?:\/\//i.test(taglineConst[1])) {
+  console.error('validate-basic-html: TAGLINE must stay plain text without URLs');
   process.exit(1);
 }
 
