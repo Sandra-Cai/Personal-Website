@@ -190,6 +190,10 @@ if (plurall['@type'] !== 'Organization') {
   console.error('validate-jsonld: Plurall AI node @type must be Organization');
   process.exit(1);
 }
+if (plurall.url !== 'https://www.sandracai.com/') {
+  console.error('validate-jsonld: Plurall AI Organization.url must be https://www.sandracai.com/');
+  process.exit(1);
+}
 if (!person.worksFor['@type'] || person.worksFor['@type'] !== 'Organization') {
   console.error('validate-jsonld: Person.worksFor @type must be Organization');
   process.exit(1);

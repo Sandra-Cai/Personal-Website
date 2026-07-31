@@ -1482,7 +1482,8 @@ a:focus-visible {
   .ba-header,
   .ba-agent,
   .ba-strip,
-  .gpt-starters {
+  .gpt-starters,
+  .ba-split-lines {
     display: none !important;
   }
 
@@ -1503,7 +1504,8 @@ a:focus-visible {
     word-break: break-all;
   }
 
-  a[href^="mailto"]::after {
+  a[href^="mailto"]::after,
+  a[href^="#"]::after {
     content: none;
   }
 
@@ -1522,6 +1524,11 @@ a:focus-visible {
   .ba-footer {
     border-top: 1px solid #ccc;
     padding: 1rem 0;
+  }
+
+  .ba-split-copy {
+    font-size: 1rem;
+    max-width: none;
   }
 }
 

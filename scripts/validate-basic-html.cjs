@@ -274,17 +274,22 @@ if (!/\.gpt-turn\s*\{[\s\S]*?scroll-margin-top:\s*6rem/.test(stylesCss)) {
 }
 for (const [label, snippet] of [
   ['scroll spy current location', "setAttribute('aria-current', 'location')"],
-  ['scroll spy observer fallback', "typeof IntersectionObserver !== 'function'"],
+  ['scroll spy observer fallback', 'typeof IntersectionObserver === \'function\''],
   ['hashchange always registered', "window.addEventListener('hashchange', applyHash)"],
   ['passive scroll listener', '{ passive: true }'],
   ['js class marker', "document.documentElement.classList.add('js')"],
-  ['observer pagehide disconnect', "observer.disconnect()"],
+  ['observer pagehide disconnect', 'observer.disconnect()'],
+  ['scroll timer pagehide clear', 'clearTimeout(scrollTimer)'],
   ['dynamic footer year', 'new Date().getFullYear()'],
 ]) {
   if (!siteJs.includes(snippet)) {
     console.error(`validate-basic-html: assets/script.js missing expected: ${label}`);
     process.exit(1);
   }
+}
+if (!siteJs.includes('let observer = null') && !siteJs.includes('let observer=null')) {
+  console.error('validate-basic-html: scroll spy must keep observer nullable for pagehide cleanup');
+  process.exit(1);
 }
 const taglineJs = gptJs.match(/const TAGLINE = '([^']+)';/);
 const taglineHtml = indexHtml.match(/id="gpt-tagline"[^>]*>([^<]+)</);
@@ -520,8 +525,16 @@ if (!gptJs.includes('applyDeepLinkQuestion') || !gptJs.includes('URLSearchParams
   console.error('validate-basic-html: sandra-gpt.js must support ?q= deep-link prefills');
   process.exit(1);
 }
-if (!gptJs.includes("e.key !== 'Escape'") || !gptJs.includes('input.blur()')) {
+if (!gptJs.includes("e.key === 'Escape'") || !gptJs.includes('input.blur()')) {
   console.error('validate-basic-html: sandra-gpt.js must blur input on Escape');
+  process.exit(1);
+}
+if (!gptJs.includes('e.repeat')) {
+  console.error('validate-basic-html: slash shortcut must ignore key repeat');
+  process.exit(1);
+}
+if (!/addEventListener\(\s*'pagehide'[\s\S]*?clearTimeout\(onlineDebounce\)/.test(gptJs)) {
+  console.error('validate-basic-html: online sync debounce must clear on pagehide');
   process.exit(1);
 }
 if (!gptJs.includes('preventScroll: true')) {
@@ -582,6 +595,14 @@ if (!gptJs.includes('function greetingReply') || !gptJs.includes('function thank
 }
 if (!gptJs.includes('sandra)?')) {
   console.error('validate-basic-html: greeting matcher should allow hi sandra');
+  process.exit(1);
+}
+if (!/@media print[\s\S]*?\.ba-split-lines/.test(stylesCss)) {
+  console.error('validate-basic-html: print stylesheet must hide decorative ba-split-lines');
+  process.exit(1);
+}
+if (!/@media print[\s\S]*?a\[href\^="#"]::after/.test(stylesCss)) {
+  console.error('validate-basic-html: print stylesheet must suppress hash-link URL appendices');
   process.exit(1);
 }
 const taglineConst = gptJs.match(/const TAGLINE = '([^']+)';/);

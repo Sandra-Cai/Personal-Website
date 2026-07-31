@@ -57,24 +57,26 @@ function initNavScrollSpy() {
     { passive: true }
   );
 
-  if (typeof IntersectionObserver !== 'function') return;
+  let observer = null;
+  if (typeof IntersectionObserver === 'function') {
+    observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible.length) setActive(visible[0].target.id);
+      },
+      { rootMargin: '-35% 0px -55% 0px', threshold: [0, 0.15, 0.35, 0.6] }
+    );
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      const visible = entries
-        .filter((e) => e.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-      if (visible.length) setActive(visible[0].target.id);
-    },
-    { rootMargin: '-35% 0px -55% 0px', threshold: [0, 0.15, 0.35, 0.6] }
-  );
-
-  for (const row of tracked) observer.observe(row.section);
+    for (const row of tracked) observer.observe(row.section);
+  }
 
   window.addEventListener(
     'pagehide',
     () => {
-      observer.disconnect();
+      window.clearTimeout(scrollTimer);
+      if (observer) observer.disconnect();
     },
     { once: true }
   );

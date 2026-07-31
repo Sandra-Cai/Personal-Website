@@ -2100,6 +2100,13 @@
         .catch(handleSyncError);
     }, 450);
   });
+  window.addEventListener(
+    'pagehide',
+    () => {
+      window.clearTimeout(onlineDebounce);
+    },
+    { once: true }
+  );
 
   function isTypingInField(el) {
     if (!el || !(el instanceof Element)) return false;
@@ -2110,17 +2117,16 @@
   }
 
   const agentSection = document.getElementById('sandra-gpt');
-  if (agentSection && input) {
-    agentSection.addEventListener('keydown', (e) => {
-      if (e.key !== 'Escape') return;
-      if (document.activeElement !== input) return;
-      e.preventDefault();
-      input.blur();
-    });
-  }
 
   if (input) {
     document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (document.activeElement !== input) return;
+        e.preventDefault();
+        input.blur();
+        return;
+      }
+      if (e.repeat) return;
       const isSlashKey = e.key === '/' || (e.code === 'Slash' && !e.shiftKey);
       if (!isSlashKey || e.ctrlKey || e.metaKey || e.altKey) return;
       if (isTypingInField(document.activeElement)) return;
