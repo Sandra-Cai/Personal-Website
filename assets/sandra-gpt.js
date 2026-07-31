@@ -1174,6 +1174,29 @@
         'The / shortcut is ignored while you are typing in an input, textarea, select, or contenteditable field, so it will not steal focus mid-edit.',
     },
     {
+      keys: [
+        'say hi',
+        'say hello',
+        'greeting replies',
+        'can i say thanks',
+        'goodbye reply',
+      ],
+      priority: 12,
+      reply:
+        'Short greetings (hi/hello), thanks, and goodbyes get brief conversational replies. For site facts, ask about a section, company, or project on the page.',
+    },
+    {
+      keys: [
+        'chat turn spacing',
+        'scroll to message',
+        'turn under header',
+        'history jump obscured',
+      ],
+      priority: 13,
+      reply:
+        'Each chat turn uses scroll-margin so jumping from History clears the sticky header and keeps the question/reply pair readable.',
+    },
+    {
       keys: ['your email address', 'what is your email', 'what is your email address', 'your email', 'gmail address', 'sandraxcyj@gmail.com'],
       priority: 16,
       reply: `${EMAIL} or LinkedIn. Please include scope and relevant links.`,
@@ -1294,7 +1317,7 @@
 
   function greetingReply(q) {
     const t = q.trim();
-    if (/^(hi|hey|hello|yo|sup)[!?.]*$/i.test(t)) return true;
+    if (/^(hi|hey|hello|yo|sup)(\s+sandra)?[!?.]*$/i.test(t)) return true;
     if (/^(hi|hey|hello)\s+there[!?.]*$/i.test(t)) return true;
     if (/^good (morning|afternoon|evening)[!?.]*$/i.test(t)) return true;
     return false;
@@ -1302,7 +1325,7 @@
 
   function thanksReply(q) {
     const t = q.trim();
-    if (/^(thanks|thank you|thx|ty|appreciate it)[!?.]*$/i.test(t)) return true;
+    if (/^(thanks|thank you|thx|ty|appreciate it)( so much)?[!?.]*$/i.test(t)) return true;
     return false;
   }
 
@@ -2098,7 +2121,8 @@
 
   if (input) {
     document.addEventListener('keydown', (e) => {
-      if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+      const isSlashKey = e.key === '/' || (e.code === 'Slash' && !e.shiftKey);
+      if (!isSlashKey || e.ctrlKey || e.metaKey || e.altKey) return;
       if (isTypingInField(document.activeElement)) return;
       e.preventDefault();
       if (agentSection) {

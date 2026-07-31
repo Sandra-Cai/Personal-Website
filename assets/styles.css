@@ -1466,6 +1466,14 @@ a:focus-visible {
   .ba-section--repeat {
     border-top-color: rgba(0, 0, 0, 0.28);
   }
+
+  .ba-logo-mark {
+    color: var(--text);
+  }
+
+  .ba-card--lead {
+    border-color: rgba(0, 0, 0, 0.28);
+  }
 }
 
 @media print {

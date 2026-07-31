@@ -228,6 +228,8 @@ const checksIndex = [
   ['nav separator', /class="ba-nav-sep"[^>]*aria-hidden="true"/],
   ['work section scroll target', /class="ba-section"[^>]*id="work"/],
   ['education section', /class="ba-section ba-section--education"[^>]*id="education"/],
+  ['founding lead card', /ba-card--lead[\s\S]*?ba-phase">Founding/],
+  ['logo mark sandra', /class="ba-logo-mark"[^>]*>Sandra/],
 ];
 
 const html404 = read('404.html');
@@ -265,6 +267,11 @@ if (!indexGptV) {
 
 const gptJs = read('assets/sandra-gpt.js');
 const siteJs = read('assets/script.js');
+const stylesCss = read('assets/styles.css');
+if (!/\.gpt-turn\s*\{[\s\S]*?scroll-margin-top:\s*6rem/.test(stylesCss)) {
+  console.error('validate-basic-html: .gpt-turn must set scroll-margin-top 6rem for sticky header');
+  process.exit(1);
+}
 for (const [label, snippet] of [
   ['scroll spy current location', "setAttribute('aria-current', 'location')"],
   ['scroll spy observer fallback', "typeof IntersectionObserver !== 'function'"],
@@ -563,6 +570,18 @@ if (!gptJs.includes('.textContent = q') || !gptJs.includes('.textContent = answe
 }
 if (!gptJs.includes('[contenteditable="true"], [role="textbox"]')) {
   console.error('validate-basic-html: slash shortcut must ignore contenteditable/textbox fields');
+  process.exit(1);
+}
+if (!gptJs.includes("e.code === 'Slash'") || !gptJs.includes('!e.shiftKey')) {
+  console.error('validate-basic-html: slash shortcut must use KeyboardEvent.code with shift guard');
+  process.exit(1);
+}
+if (!gptJs.includes('function greetingReply') || !gptJs.includes('function thanksReply') || !gptJs.includes('function goodbyeReply')) {
+  console.error('validate-basic-html: sandra-gpt.js must handle greeting/thanks/goodbye intents');
+  process.exit(1);
+}
+if (!gptJs.includes('sandra)?')) {
+  console.error('validate-basic-html: greeting matcher should allow hi sandra');
   process.exit(1);
 }
 const taglineConst = gptJs.match(/const TAGLINE = '([^']+)';/);

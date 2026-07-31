@@ -261,4 +261,13 @@ if (!/deepfake detection/i.test(person.description)) {
   process.exit(1);
 }
 
+if (person.worksFor['@id'] !== plurall['@id']) {
+  console.error('validate-jsonld: Person.worksFor must match Plurall Organization @id');
+  process.exit(1);
+}
+if (plurall.founder['@id'] !== person['@id']) {
+  console.error('validate-jsonld: Plurall founder must match Person @id');
+  process.exit(1);
+}
+
 console.log('validate-jsonld: OK');
