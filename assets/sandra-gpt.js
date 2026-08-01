@@ -1464,7 +1464,12 @@
   const sidebarList = document.getElementById('gpt-sidebar-list');
   const clearBtn = document.getElementById('gpt-clear-history');
   const syncStatusEl = document.getElementById('gpt-sync-status');
+  const SUBMIT_BUSY_MS = 260;
   let submitBusy = false;
+  let submitBusyTimer = 0;
+  let clearBusy = false;
+  /** Bumped on Clear so in-flight restoreHistory results are ignored. */
+  let historyEpoch = 0;
   let lastSubmittedCanonical = '';
   let lastSubmittedAt = 0;
   // Hoisted so handleSubmit can reset recall after a submission (programmatic
@@ -1710,10 +1715,17 @@
     starters.hidden = Boolean(logEl && logEl.children.length > 0);
   }
 
+  function updateClearState() {
+    if (!clearBtn) return;
+    const empty = !(logEl && logEl.children.length) && !(sidebarList && sidebarList.children.length);
+    clearBtn.disabled = clearBusy || empty;
+    clearBtn.setAttribute('aria-busy', clearBusy ? 'true' : 'false');
+  }
+
   function updateSendState() {
     const sendBtn = form?.querySelector('.gpt-send');
     if (!sendBtn || !input) return;
-    const busy = form?.getAttribute('aria-busy') === 'true';
+    const busy = form?.getAttribute('aria-busy') === 'true' || submitBusy;
     const hasText = Boolean(input.value.trim());
     sendBtn.disabled = busy || !hasText;
     let label = 'Enter a question to send';
@@ -1786,6 +1798,7 @@
       wrap.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
     }
     updateStartersVisibility();
+    updateClearState();
   }
 
   function setSidebarItemActive(turnId) {
@@ -1818,6 +1831,7 @@
 
     li.appendChild(btn);
     sidebarList.appendChild(li);
+    updateClearState();
   }
 
   function pruneRenderedHistoryUI() {
@@ -1863,6 +1877,9 @@
   }
 
   async function clearAllHistory() {
+    if (clearBusy) return;
+    const empty = !(logEl && logEl.children.length) && !(sidebarList && sidebarList.children.length);
+    if (empty) return;
     if (
       !window.confirm(
         'Clear this session’s questions and answers from this browser (and from the server, if database sync is on)?'
@@ -1870,6 +1887,9 @@
     ) {
       return;
     }
+    clearBusy = true;
+    historyEpoch += 1;
+    updateClearState();
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch {
@@ -1882,8 +1902,14 @@
     lastSubmittedCanonical = '';
     lastSubmittedAt = 0;
     updateStartersVisibility();
-    const clearedOnServer = await clearRemote(getOrCreateSessionId());
-    setSyncStatus(clearedOnServer ? 'server' : 'local');
+    updateClearState();
+    try {
+      const clearedOnServer = await clearRemote(getOrCreateSessionId());
+      setSyncStatus(clearedOnServer ? 'server' : 'local');
+    } finally {
+      clearBusy = false;
+      updateClearState();
+    }
     if (input) {
       input.focus();
       updateSendState();
@@ -1892,8 +1918,10 @@
 
   async function restoreHistory() {
     if (!logEl || !sidebarList) return;
+    const epoch = historyEpoch;
     const sessionId = getOrCreateSessionId();
     const { apiDisabled, turns: remote } = await fetchRemoteHistory(sessionId);
+    if (epoch !== historyEpoch) return;
 
     logEl.innerHTML = '';
     sidebarList.innerHTML = '';
@@ -1906,6 +1934,7 @@
         renderTurn(row.id, row.q, a, false);
         addSidebarEntry(row.id, row.q);
       }
+      if (epoch !== historyEpoch) return;
       saveHistory(
         recentRemote.map((r) => ({
           id: r.id,
@@ -1916,9 +1945,11 @@
       );
       setSyncStatus('server');
       updateStartersVisibility();
+      updateClearState();
       return;
     }
 
+    if (epoch !== historyEpoch) return;
     const entries = normalizeTurns(loadHistory());
     for (const row of entries) {
       if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
@@ -1929,9 +1960,11 @@
 
     setSyncStatus(apiDisabled ? 'local' : 'server');
     updateStartersVisibility();
+    updateClearState();
     if (!apiDisabled && entries.length > 0) {
       void syncUnsavedTurnsToServer(sessionId)
         .then((did) => {
+          if (epoch !== historyEpoch) return;
           if (did) setSyncStatus('server');
         })
         .catch(handleSyncError);
@@ -1965,9 +1998,12 @@
     }
 
     submitBusy = true;
-    window.setTimeout(() => {
+    window.clearTimeout(submitBusyTimer);
+    submitBusyTimer = window.setTimeout(() => {
       submitBusy = false;
-    }, 260);
+      if (form) form.setAttribute('aria-busy', 'false');
+      updateSendState();
+    }, SUBMIT_BUSY_MS);
 
     const turnId = newTurnId();
     const answerText = answerFor(q);
@@ -1984,10 +2020,6 @@
       form.setAttribute('aria-busy', 'true');
       if (sendBtn) sendBtn.disabled = true;
       updateSendState();
-      window.setTimeout(() => {
-        form.setAttribute('aria-busy', 'false');
-        updateSendState();
-      }, 180);
     }
 
     renderTurn(turnId, q, answerText);
@@ -2079,9 +2111,11 @@
       updateSendState();
     });
     updateSendState();
+    updateClearState();
   }
 
   if (clearBtn) {
+    updateClearState();
     clearBtn.addEventListener('click', () => {
       void clearAllHistory();
     });
@@ -2100,13 +2134,10 @@
         .catch(handleSyncError);
     }, 450);
   });
-  window.addEventListener(
-    'pagehide',
-    () => {
-      window.clearTimeout(onlineDebounce);
-    },
-    { once: true }
-  );
+  window.addEventListener('pagehide', () => {
+    window.clearTimeout(onlineDebounce);
+    window.clearTimeout(submitBusyTimer);
+  });
 
   function isTypingInField(el) {
     if (!el || !(el instanceof Element)) return false;
@@ -2124,6 +2155,14 @@
         if (document.activeElement !== input) return;
         e.preventDefault();
         input.blur();
+        const heading = document.getElementById('gpt-heading');
+        if (heading) {
+          try {
+            heading.focus({ preventScroll: true });
+          } catch {
+            heading.focus();
+          }
+        }
         return;
       }
       if (e.repeat) return;

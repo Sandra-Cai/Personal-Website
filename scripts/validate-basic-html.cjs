@@ -52,6 +52,7 @@ const checks404 = [
   ['404 writing nav', /class="ba-nav-external"[^>]*href="https:\/\/substack\.com\/@caisandra"/],
   ['404 primary nav', /<nav class="ba-nav" aria-label="Primary">/],
   ['404 color-scheme light', /<meta name="color-scheme" content="light"/],
+  ['404 font preload crossorigin', /rel="preload"[^>]*Geist-Variable\.woff2[^>]*crossorigin/],
 ];
 
 const checksIndex = [
@@ -230,6 +231,7 @@ const checksIndex = [
   ['education section', /class="ba-section ba-section--education"[^>]*id="education"/],
   ['founding lead card', /ba-card--lead[\s\S]*?ba-phase">Founding/],
   ['logo mark sandra', /class="ba-logo-mark"[^>]*>Sandra/],
+  ['gpt heading focusable', /id="gpt-heading"[^>]*tabindex="-1"/],
 ];
 
 const html404 = read('404.html');
@@ -272,13 +274,35 @@ if (!/\.gpt-turn\s*\{[\s\S]*?scroll-margin-top:\s*6rem/.test(stylesCss)) {
   console.error('validate-basic-html: .gpt-turn must set scroll-margin-top 6rem for sticky header');
   process.exit(1);
 }
+if (!/html\s*\{[\s\S]*?scroll-padding-top:\s*5\.5rem/.test(stylesCss)) {
+  console.error('validate-basic-html: html must set scroll-padding-top 5.5rem');
+  process.exit(1);
+}
+if (!/\.ba-agent\s*\{[\s\S]*?scroll-margin-top:\s*5\.5rem/.test(stylesCss)) {
+  console.error('validate-basic-html: .ba-agent must set scroll-margin-top 5.5rem');
+  process.exit(1);
+}
+if (!/\.ba-section\s*\{[\s\S]*?scroll-margin-top:\s*5\.5rem/.test(stylesCss)) {
+  console.error('validate-basic-html: .ba-section must set scroll-margin-top 5.5rem');
+  process.exit(1);
+}
+if (!/@media\s*\(prefers-contrast:\s*more\)[\s\S]*?\.ba-logo-mark[\s\S]*?color:\s*var\(--text\)/.test(stylesCss)) {
+  console.error('validate-basic-html: high-contrast must set .ba-logo-mark to var(--text)');
+  process.exit(1);
+}
+if (!/@media\s*\(prefers-contrast:\s*more\)[\s\S]*?\.ba-logo-accent[\s\S]*?color:\s*var\(--text\)/.test(stylesCss)) {
+  console.error('validate-basic-html: high-contrast must set .ba-logo-accent to var(--text)');
+  process.exit(1);
+}
 for (const [label, snippet] of [
   ['scroll spy current location', "setAttribute('aria-current', 'location')"],
-  ['scroll spy observer fallback', 'typeof IntersectionObserver === \'function\''],
+  ['scroll spy observer fallback', "typeof IntersectionObserver === 'function'"],
   ['hashchange always registered', "window.addEventListener('hashchange', applyHash)"],
   ['passive scroll listener', '{ passive: true }'],
   ['js class marker', "document.documentElement.classList.add('js')"],
   ['observer pagehide disconnect', 'observer.disconnect()'],
+  ['bfcache persist guard', '!event.persisted'],
+  ['bfcache pageshow reapply', "addEventListener('pageshow'"],
   ['scroll timer pagehide clear', 'clearTimeout(scrollTimer)'],
   ['dynamic footer year', 'new Date().getFullYear()'],
 ]) {
@@ -529,12 +553,28 @@ if (!gptJs.includes("e.key === 'Escape'") || !gptJs.includes('input.blur()')) {
   console.error('validate-basic-html: sandra-gpt.js must blur input on Escape');
   process.exit(1);
 }
+if (!gptJs.includes("getElementById('gpt-heading')") || !gptJs.includes('heading.focus')) {
+  console.error('validate-basic-html: Escape should move focus to gpt-heading');
+  process.exit(1);
+}
 if (!gptJs.includes('e.repeat')) {
   console.error('validate-basic-html: slash shortcut must ignore key repeat');
   process.exit(1);
 }
 if (!/addEventListener\(\s*'pagehide'[\s\S]*?clearTimeout\(onlineDebounce\)/.test(gptJs)) {
   console.error('validate-basic-html: online sync debounce must clear on pagehide');
+  process.exit(1);
+}
+if (!gptJs.includes('clearTimeout(submitBusyTimer)')) {
+  console.error('validate-basic-html: submit busy timer must clear on pagehide');
+  process.exit(1);
+}
+if (!gptJs.includes('SUBMIT_BUSY_MS') || !gptJs.includes('historyEpoch')) {
+  console.error('validate-basic-html: submit busy constant and history epoch race guard required');
+  process.exit(1);
+}
+if (!gptJs.includes('function updateClearState') || !gptJs.includes('clearBusy')) {
+  console.error('validate-basic-html: Clear button must track empty/busy state');
   process.exit(1);
 }
 if (!gptJs.includes('preventScroll: true')) {

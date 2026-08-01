@@ -1,7 +1,7 @@
 # Personal-Website
 For myself.
 
-_Last synced to GitHub: 2026-07-30._
+_Last synced to GitHub: 2026-08-01._
 
 I've been in private schools my whole life. Now I want to share my ~$600,000 education (what I've learned and how I've learned) for free.
 

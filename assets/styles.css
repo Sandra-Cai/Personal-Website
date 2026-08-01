@@ -426,9 +426,14 @@ a:focus-visible {
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.gpt-sidebar-clear:hover {
+.gpt-sidebar-clear:hover:not(:disabled) {
   color: var(--text-dim);
   border-color: var(--line-hover);
+}
+
+.gpt-sidebar-clear:disabled {
+  opacity: 0.45;
+  cursor: default;
 }
 
 .gpt-sidebar-clear:focus-visible {
@@ -594,6 +599,15 @@ a:focus-visible {
   margin: 0 0 0.5rem;
   line-height: 1.15;
   color: var(--text);
+}
+
+.ba-agent-title:focus {
+  outline: none;
+}
+
+.ba-agent-title:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
 }
 
 .ba-agent-sub {

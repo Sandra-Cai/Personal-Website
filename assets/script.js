@@ -72,14 +72,15 @@ function initNavScrollSpy() {
     for (const row of tracked) observer.observe(row.section);
   }
 
-  window.addEventListener(
-    'pagehide',
-    () => {
-      window.clearTimeout(scrollTimer);
-      if (observer) observer.disconnect();
-    },
-    { once: true }
-  );
+  window.addEventListener('pagehide', (event) => {
+    window.clearTimeout(scrollTimer);
+    // Keep the observer alive when the page enters bfcache so Back restores spy.
+    if (!event.persisted && observer) observer.disconnect();
+  });
+
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) applyHash();
+  });
 }
 
 initNavScrollSpy();
