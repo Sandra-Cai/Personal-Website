@@ -21,7 +21,7 @@ function assertChecks(file, html, checks) {
 
 const checks404 = [
   ['doctype', /<!doctype html>/i],
-  ['html lang en', /<html lang="en">/],
+  ['html lang en-US', /<html lang="en-US">/],
   ['skip link', /class="ba-skip"/],
   ['main landmark', /\bid="main"/],
   ['404 block', /class="ba-404/],
@@ -57,7 +57,7 @@ const checks404 = [
 
 const checksIndex = [
   ['doctype', /<!doctype html>/i],
-  ['html lang en', /<html lang="en">/],
+  ['html lang en-US', /<html lang="en-US">/],
   ['skip link', /class="ba-skip"/],
   ['main landmark', /\bid="top"/],
   ['SandraGPT section', /\bid="sandra-gpt"/],
@@ -157,7 +157,7 @@ const checksIndex = [
   ['og type website', /property="og:type" content="website"/],
   ['academic coursework ml', /id="education"[\s\S]*?algorithms through ML/],
   ['founding card title', /ba-card--lead[\s\S]*?Plurall AI &amp; product/],
-  ['404 footer linkedin', /ba-footer-links[\s\S]*?linkedin\.com\/in\/yijia-sandra-cai/],
+  ['footer LinkedIn', /ba-footer-links[\s\S]*?linkedin\.com\/in\/yijia-sandra-cai/],
   ['og image dimensions', /property="og:image:width" content="1200"[\s\S]*?property="og:image:height" content="630"/],
   ['research synthetic media', /id="research"[\s\S]*?synthetic-media trust/],
   ['beliefs microstructure', /id="beliefs"[\s\S]*?Microstructure, risk/],
@@ -219,7 +219,7 @@ const checksIndex = [
   ['og image type jpeg', /property="og:image:type" content="image\/jpeg"/],
   ['twitter image alt', /name="twitter:image:alt" content="[^"]*Plurall AI/],
   ['gpt clear confirm copy', /id="gpt-clear-history"[^>]*aria-label="Clear question history"/],
-  ['404 theme color', /<meta name="theme-color" content="#FFFDF7"/],
+  ['theme color', /<meta name="theme-color" content="#FFFDF7"/],
   ['sticky header', /class="ba-header"/],
   ['gpt shell layout', /class="ba-agent-card gpt-shell"/],
   ['jsonld knows systems', /"knowsAbout"[\s\S]*?"Systems engineering"/],
@@ -565,8 +565,16 @@ if (!/addEventListener\(\s*'pagehide'[\s\S]*?clearTimeout\(onlineDebounce\)/.tes
   console.error('validate-basic-html: online sync debounce must clear on pagehide');
   process.exit(1);
 }
-if (!gptJs.includes('clearTimeout(submitBusyTimer)')) {
-  console.error('validate-basic-html: submit busy timer must clear on pagehide');
+if (!gptJs.includes('clearTimeout(submitBusyTimer)') || !gptJs.includes('function resetSubmitBusy')) {
+  console.error('validate-basic-html: submit busy timer must clear via resetSubmitBusy');
+  process.exit(1);
+}
+if (!gptJs.includes("addEventListener('pageshow'") || !gptJs.includes('resetSubmitBusy()')) {
+  console.error('validate-basic-html: sandra-gpt.js must reset submit busy on bfcache pageshow');
+  process.exit(1);
+}
+if (!gptJs.includes("aria-live', 'off'") || !gptJs.includes("aria-busy', 'true'")) {
+  console.error('validate-basic-html: restoreHistory must mute live region while hydrating');
   process.exit(1);
 }
 if (!gptJs.includes('SUBMIT_BUSY_MS') || !gptJs.includes('historyEpoch')) {

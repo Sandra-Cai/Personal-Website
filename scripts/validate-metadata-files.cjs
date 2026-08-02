@@ -40,6 +40,16 @@ const lastmodMatch = sitemap.match(/<lastmod>\s*([^<]+?)\s*<\/lastmod>/i);
 if (!lastmodMatch || !/^\d{4}-\d{2}-\d{2}$/.test(lastmodMatch[1])) {
   fail('sitemap.xml lastmod must be YYYY-MM-DD');
 }
+const lastmod = lastmodMatch[1];
+const todayUtc = new Date().toISOString().slice(0, 10);
+if (lastmod > todayUtc) {
+  fail('sitemap.xml lastmod must not be in the future');
+}
+const lastmodMs = Date.parse(`${lastmod}T00:00:00Z`);
+const todayMs = Date.parse(`${todayUtc}T00:00:00Z`);
+if (!Number.isFinite(lastmodMs) || todayMs - lastmodMs > 1000 * 60 * 60 * 24 * 14) {
+  fail('sitemap.xml lastmod should be within the last 14 days');
+}
 if (!/<changefreq>\s*monthly\s*<\/changefreq>/i.test(sitemap)) {
   fail('sitemap.xml changefreq must be monthly');
 }
@@ -118,8 +128,8 @@ if (manifest.start_url !== '/') {
 if (manifest.display !== 'browser') {
   fail('site.webmanifest display must be browser');
 }
-if (!Array.isArray(manifest.icons) || manifest.icons.length < 3) {
-  fail('site.webmanifest must include at least 3 icons');
+if (!Array.isArray(manifest.icons) || manifest.icons.length < 4) {
+  fail('site.webmanifest must include at least 4 icons');
 }
 if (!manifest.icons.some((icon) => /favicon-32\.png/i.test(icon.src))) {
   fail('site.webmanifest icons must include favicon-32.png');
@@ -130,14 +140,31 @@ if (!manifest.icons.some((icon) => /favicon-16\.png/i.test(icon.src))) {
 if (!manifest.icons.some((icon) => /apple-touch-icon\.png/i.test(icon.src))) {
   fail('site.webmanifest icons must include apple-touch-icon.png');
 }
-if (manifest.icons.length !== 3) {
-  fail('site.webmanifest should list exactly 3 icons (16, 32, apple-touch)');
+if (!manifest.icons.some((icon) => /icon-512\.png/i.test(icon.src))) {
+  fail('site.webmanifest icons must include icon-512.png');
+}
+if (!fs.existsSync(path.join(root, 'assets', 'icon-512.png'))) {
+  fail('assets/icon-512.png must exist for the web manifest');
+}
+if (manifest.icons.length !== 4) {
+  fail('site.webmanifest should list exactly 4 icons (16, 32, apple-touch, 512)');
 }
 if (!manifest.icons.every((icon) => icon.type === 'image/png')) {
   fail('site.webmanifest icons must all be type image/png');
 }
 if (!manifest.icons.some((icon) => icon.sizes === '180x180')) {
   fail('site.webmanifest must include a 180x180 apple-touch icon size');
+}
+if (!manifest.icons.some((icon) => icon.sizes === '512x512')) {
+  fail('site.webmanifest must include a 512x512 icon size');
+}
+if (!manifest.icons.every((icon) => /\?v=\d+/.test(icon.src))) {
+  fail('site.webmanifest icon src values must include a ?v= cache buster');
+}
+const faviconV = indexHtml.match(/favicon-32\.png\?v=(\d+)/);
+const manifest32 = manifest.icons.find((icon) => /favicon-32\.png/i.test(icon.src));
+if (!faviconV || !manifest32 || !manifest32.src.includes(`?v=${faviconV[1]}`)) {
+  fail('site.webmanifest favicon-32 cache version must match index.html');
 }
 if (!/^#[0-9A-Fa-f]{6}$/.test(manifest.theme_color || '')) {
   fail('site.webmanifest theme_color must be a 6-digit hex color');
@@ -201,6 +228,12 @@ if (!metaRule) fail('vercel.json missing metadata files cache header rule');
 const metaCache = (metaRule.headers || []).find((h) => h.key === 'Cache-Control');
 if (!metaCache || !/max-age=3600/.test(metaCache.value)) {
   fail('vercel.json metadata Cache-Control should use max-age=3600');
+}
+const securityRule = headerRules.find((r) => r.source === '/.well-known/security.txt');
+if (!securityRule) fail('vercel.json missing /.well-known/security.txt cache header rule');
+const securityCache = (securityRule.headers || []).find((h) => h.key === 'Cache-Control');
+if (!securityCache || !/max-age=3600/.test(securityCache.value)) {
+  fail('vercel.json security.txt Cache-Control should use max-age=3600');
 }
 
 const csp = (globalRule.headers || []).find((h) => h.key === 'Content-Security-Policy');

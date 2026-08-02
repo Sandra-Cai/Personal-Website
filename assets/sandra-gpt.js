@@ -1920,54 +1920,63 @@
     if (!logEl || !sidebarList) return;
     const epoch = historyEpoch;
     const sessionId = getOrCreateSessionId();
-    const { apiDisabled, turns: remote } = await fetchRemoteHistory(sessionId);
-    if (epoch !== historyEpoch) return;
+    const livePrev = logEl.getAttribute('aria-live');
+    logEl.setAttribute('aria-busy', 'true');
+    logEl.setAttribute('aria-live', 'off');
+    try {
+      const { apiDisabled, turns: remote } = await fetchRemoteHistory(sessionId);
+      if (epoch !== historyEpoch) return;
 
-    logEl.innerHTML = '';
-    sidebarList.innerHTML = '';
+      logEl.innerHTML = '';
+      sidebarList.innerHTML = '';
 
-    if (!apiDisabled && remote && remote.length > 0) {
-      const recentRemote = normalizeTurns(remote);
-      for (const row of recentRemote) {
+      if (!apiDisabled && remote && remote.length > 0) {
+        const recentRemote = normalizeTurns(remote);
+        for (const row of recentRemote) {
+          if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
+          const a = typeof row.a === 'string' ? row.a : '';
+          renderTurn(row.id, row.q, a, false);
+          addSidebarEntry(row.id, row.q);
+        }
+        if (epoch !== historyEpoch) return;
+        saveHistory(
+          recentRemote.map((r) => ({
+            id: r.id,
+            q: r.q,
+            a: r.a,
+            t: typeof r.t === 'number' ? r.t : Date.now(),
+          }))
+        );
+        setSyncStatus('server');
+        updateStartersVisibility();
+        updateClearState();
+        return;
+      }
+
+      if (epoch !== historyEpoch) return;
+      const entries = normalizeTurns(loadHistory());
+      for (const row of entries) {
         if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
         const a = typeof row.a === 'string' ? row.a : '';
         renderTurn(row.id, row.q, a, false);
         addSidebarEntry(row.id, row.q);
       }
-      if (epoch !== historyEpoch) return;
-      saveHistory(
-        recentRemote.map((r) => ({
-          id: r.id,
-          q: r.q,
-          a: r.a,
-          t: typeof r.t === 'number' ? r.t : Date.now(),
-        }))
-      );
-      setSyncStatus('server');
+
+      setSyncStatus(apiDisabled ? 'local' : 'server');
       updateStartersVisibility();
       updateClearState();
-      return;
-    }
-
-    if (epoch !== historyEpoch) return;
-    const entries = normalizeTurns(loadHistory());
-    for (const row of entries) {
-      if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
-      const a = typeof row.a === 'string' ? row.a : '';
-      renderTurn(row.id, row.q, a, false);
-      addSidebarEntry(row.id, row.q);
-    }
-
-    setSyncStatus(apiDisabled ? 'local' : 'server');
-    updateStartersVisibility();
-    updateClearState();
-    if (!apiDisabled && entries.length > 0) {
-      void syncUnsavedTurnsToServer(sessionId)
-        .then((did) => {
-          if (epoch !== historyEpoch) return;
-          if (did) setSyncStatus('server');
-        })
-        .catch(handleSyncError);
+      if (!apiDisabled && entries.length > 0) {
+        void syncUnsavedTurnsToServer(sessionId)
+          .then((did) => {
+            if (epoch !== historyEpoch) return;
+            if (did) setSyncStatus('server');
+          })
+          .catch(handleSyncError);
+      }
+    } finally {
+      logEl.removeAttribute('aria-busy');
+      if (livePrev) logEl.setAttribute('aria-live', livePrev);
+      else logEl.setAttribute('aria-live', 'polite');
     }
   }
 
@@ -2134,9 +2143,20 @@
         .catch(handleSyncError);
     }, 450);
   });
+  function resetSubmitBusy() {
+    window.clearTimeout(submitBusyTimer);
+    submitBusy = false;
+    if (form) form.setAttribute('aria-busy', 'false');
+    updateSendState();
+  }
+
   window.addEventListener('pagehide', () => {
     window.clearTimeout(onlineDebounce);
-    window.clearTimeout(submitBusyTimer);
+    resetSubmitBusy();
+  });
+
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) resetSubmitBusy();
   });
 
   function isTypingInField(el) {
