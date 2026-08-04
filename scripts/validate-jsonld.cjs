@@ -42,8 +42,8 @@ if (person.name !== 'Sandra Cai') {
   console.error('validate-jsonld: Person.name must be Sandra Cai');
   process.exit(1);
 }
-if (person.url !== 'https://www.sandracai.com') {
-  console.error('validate-jsonld: Person.url must be https://www.sandracai.com');
+if (person.url !== 'https://www.sandracai.com/') {
+  console.error('validate-jsonld: Person.url must be https://www.sandracai.com/');
   process.exit(1);
 }
 if (person['@id'] !== 'https://www.sandracai.com/#person') {

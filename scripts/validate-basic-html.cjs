@@ -163,7 +163,7 @@ const checksIndex = [
   ['beliefs microstructure', /id="beliefs"[\s\S]*?Microstructure, risk/],
   ['gpt sidebar history', /class="gpt-sidebar-title"[^>]*>History/],
   ['nav writing substack', /class="ba-nav-external"[^>]*href="https:\/\/substack\.com\/@caisandra"/],
-  ['JSON-LD person url', /"url":\s*"https:\/\/www\.sandracai\.com"/],
+  ['JSON-LD person url', /"url":\s*"https:\/\/www\.sandracai\.com\/"/],
   ['gpt char count', /id="gpt-char-count"[^>]*aria-live="polite"/],
   ['gpt log region', /id="gpt-log"[^>]*role="log"/],
   ['gpt input describedby', /id="gpt-input"[^>]*aria-describedby="gpt-disclaimer gpt-char-count"/],
@@ -303,6 +303,8 @@ for (const [label, snippet] of [
   ['observer pagehide disconnect', 'observer.disconnect()'],
   ['bfcache persist guard', '!event.persisted'],
   ['bfcache pageshow reapply', "addEventListener('pageshow'"],
+  ['scroll spy clear past education', "clearTargets"],
+  ['scroll spy beliefs clear', "'beliefs'"],
   ['scroll timer pagehide clear', 'clearTimeout(scrollTimer)'],
   ['dynamic footer year', 'new Date().getFullYear()'],
 ]) {
@@ -573,8 +575,20 @@ if (!gptJs.includes("addEventListener('pageshow'") || !gptJs.includes('resetSubm
   console.error('validate-basic-html: sandra-gpt.js must reset submit busy on bfcache pageshow');
   process.exit(1);
 }
+if (!gptJs.includes('function resetClearBusy') || !gptJs.includes('resetClearBusy()')) {
+  console.error('validate-basic-html: sandra-gpt.js must reset clearBusy on pagehide/pageshow');
+  process.exit(1);
+}
+if (!gptJs.includes('function recycleApiAbort') || !gptJs.includes('signal: apiSignal()')) {
+  console.error('validate-basic-html: sandra-gpt.js must abort in-flight API fetches on leave');
+  process.exit(1);
+}
 if (!gptJs.includes("aria-live', 'off'") || !gptJs.includes("aria-busy', 'true'")) {
   console.error('validate-basic-html: restoreHistory must mute live region while hydrating');
+  process.exit(1);
+}
+if (!gptJs.includes('syncLivePrev')) {
+  console.error('validate-basic-html: restoreHistory must mute sync status while hydrating');
   process.exit(1);
 }
 if (!gptJs.includes('SUBMIT_BUSY_MS') || !gptJs.includes('historyEpoch')) {

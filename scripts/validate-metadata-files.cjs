@@ -255,6 +255,19 @@ if (!/img-src 'self' data:/.test(csp.value) || !/font-src 'self'/.test(csp.value
 if (!/style-src 'self' 'unsafe-inline'/.test(csp.value)) {
   fail("vercel.json CSP style-src must allow self and unsafe-inline");
 }
+if (!/object-src 'none'/.test(csp.value)) {
+  fail("vercel.json CSP must include object-src 'none'");
+}
+
+const htmlCacheSources = ['/', '/404', '/index.html', '/404.html'];
+for (const source of htmlCacheSources) {
+  const rule = headerRules.find((r) => r.source === source);
+  if (!rule) fail(`vercel.json missing HTML Cache-Control rule for ${source}`);
+  const cache = (rule.headers || []).find((h) => h.key === 'Cache-Control');
+  if (!cache || !/max-age=0/.test(cache.value) || !/must-revalidate/.test(cache.value)) {
+    fail(`vercel.json ${source} Cache-Control must be max-age=0 must-revalidate`);
+  }
+}
 
 const apiRule = headerRules.find((r) => r.source === '/api/(.*)');
 if (!apiRule) fail('vercel.json missing /api/(.*) header rule');

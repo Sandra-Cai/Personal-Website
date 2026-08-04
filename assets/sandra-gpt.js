@@ -1470,6 +1470,7 @@
   let clearBusy = false;
   /** Bumped on Clear so in-flight restoreHistory results are ignored. */
   let historyEpoch = 0;
+  let apiAbort = typeof AbortController === 'function' ? new AbortController() : null;
   let lastSubmittedCanonical = '';
   let lastSubmittedAt = 0;
   // Hoisted so handleSubmit can reset recall after a submission (programmatic
@@ -1532,12 +1533,34 @@
     return trimTurns(out);
   }
 
+  function apiSignal() {
+    return apiAbort ? apiAbort.signal : undefined;
+  }
+
+  function isAbortError(err) {
+    return Boolean(err && (err.name === 'AbortError' || err.code === 20));
+  }
+
+  function recycleApiAbort() {
+    if (typeof AbortController !== 'function') return;
+    if (apiAbort) {
+      try {
+        apiAbort.abort();
+      } catch {
+        /* ignore */
+      }
+    }
+    apiAbort = new AbortController();
+  }
+
   /**
    * @returns {{ apiDisabled: boolean, turns: Array<{id:string,q:string,a:string,t?:number}>|null }}
    */
   async function fetchRemoteHistory(sessionId) {
     try {
-      const r = await fetch(`/api/sandra-gpt?sessionId=${encodeURIComponent(sessionId)}`);
+      const r = await fetch(`/api/sandra-gpt?sessionId=${encodeURIComponent(sessionId)}`, {
+        signal: apiSignal(),
+      });
       if (r.status === 503 || r.status === 404) {
         return { apiDisabled: true, turns: null };
       }
@@ -1553,7 +1576,8 @@
         return { apiDisabled: false, turns: null };
       }
       return { apiDisabled: false, turns: j.turns };
-    } catch {
+    } catch (err) {
+      if (isAbortError(err)) return { apiDisabled: false, turns: null };
       return { apiDisabled: true, turns: null };
     }
   }
@@ -1594,11 +1618,22 @@
   async function postTurnRemote(sessionId, id, q, a) {
     const payload = JSON.stringify({ sessionId, id, q, a });
     for (let attempt = 0; attempt < 2; attempt++) {
-      const r = await fetch('/api/sandra-gpt', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: payload,
-      });
+      let r;
+      try {
+        r = await fetch('/api/sandra-gpt', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: payload,
+          signal: apiSignal(),
+        });
+      } catch (err) {
+        if (isAbortError(err)) throw err;
+        if (attempt === 0) {
+          await new Promise((resolve) => setTimeout(resolve, 450));
+          continue;
+        }
+        throw new Error('post_failed');
+      }
       if (r.status === 503) return;
       if (r.ok) return;
       if (r.status === 429) {
@@ -1630,6 +1665,7 @@
         await postTurnRemote(sessionId, row.id, row.q, row.a);
         uploadedAny = true;
       } catch (err) {
+        if (isAbortError(err)) throw err;
         if (err && err.message === 'rate_limited') {
           throw err;
         }
@@ -1648,10 +1684,12 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'clear', sessionId }),
+        signal: apiSignal(),
       });
       if (r.status === 503) return false;
       return r.ok;
-    } catch {
+    } catch (err) {
+      if (isAbortError(err)) return false;
       return false;
     }
   }
@@ -1921,8 +1959,10 @@
     const epoch = historyEpoch;
     const sessionId = getOrCreateSessionId();
     const livePrev = logEl.getAttribute('aria-live');
+    const syncLivePrev = syncStatusEl ? syncStatusEl.getAttribute('aria-live') : null;
     logEl.setAttribute('aria-busy', 'true');
     logEl.setAttribute('aria-live', 'off');
+    if (syncStatusEl) syncStatusEl.setAttribute('aria-live', 'off');
     try {
       const { apiDisabled, turns: remote } = await fetchRemoteHistory(sessionId);
       if (epoch !== historyEpoch) return;
@@ -1971,12 +2011,19 @@
             if (epoch !== historyEpoch) return;
             if (did) setSyncStatus('server');
           })
-          .catch(handleSyncError);
+          .catch((err) => {
+            if (isAbortError(err)) return;
+            handleSyncError(err);
+          });
       }
     } finally {
       logEl.removeAttribute('aria-busy');
       if (livePrev) logEl.setAttribute('aria-live', livePrev);
       else logEl.setAttribute('aria-live', 'polite');
+      if (syncStatusEl) {
+        if (syncLivePrev) syncStatusEl.setAttribute('aria-live', syncLivePrev);
+        else syncStatusEl.setAttribute('aria-live', 'polite');
+      }
     }
   }
 
@@ -2046,6 +2093,7 @@
         setSyncStatus('server');
       })
       .catch((err) => {
+        if (isAbortError(err)) return;
         if (err && err.message === 'rate_limited') {
           setSyncStatus('warn', 'rate');
         } else {
@@ -2140,7 +2188,10 @@
         .then((did) => {
           if (did) setSyncStatus('server');
         })
-        .catch(handleSyncError);
+        .catch((err) => {
+          if (isAbortError(err)) return;
+          handleSyncError(err);
+        });
     }, 450);
   });
   function resetSubmitBusy() {
@@ -2150,13 +2201,22 @@
     updateSendState();
   }
 
+  function resetClearBusy() {
+    clearBusy = false;
+    updateClearState();
+  }
+
   window.addEventListener('pagehide', () => {
     window.clearTimeout(onlineDebounce);
+    recycleApiAbort();
     resetSubmitBusy();
+    resetClearBusy();
   });
 
   window.addEventListener('pageshow', (event) => {
-    if (event.persisted) resetSubmitBusy();
+    if (!event.persisted) return;
+    resetSubmitBusy();
+    resetClearBusy();
   });
 
   function isTypingInField(el) {

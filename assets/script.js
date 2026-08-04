@@ -57,6 +57,15 @@ function initNavScrollSpy() {
     { passive: true }
   );
 
+  // Sections without primary-nav links: clear aria-current when they take the viewport.
+  const clearTargets = new Set();
+  for (const id of ['beliefs', 'perspective']) {
+    const el = document.getElementById(id);
+    if (el) clearTargets.add(el);
+  }
+  const footer = document.querySelector('footer.ba-footer');
+  if (footer) clearTargets.add(footer);
+
   let observer = null;
   if (typeof IntersectionObserver === 'function') {
     observer = new IntersectionObserver(
@@ -64,12 +73,16 @@ function initNavScrollSpy() {
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible.length) setActive(visible[0].target.id);
+        if (!visible.length) return;
+        const top = visible[0].target;
+        if (tracked.some((r) => r.section === top)) setActive(top.id);
+        else if (clearTargets.has(top)) clearActive();
       },
       { rootMargin: '-35% 0px -55% 0px', threshold: [0, 0.15, 0.35, 0.6] }
     );
 
     for (const row of tracked) observer.observe(row.section);
+    for (const el of clearTargets) observer.observe(el);
   }
 
   window.addEventListener('pagehide', (event) => {
