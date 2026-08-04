@@ -296,5 +296,8 @@ if (!/npm run verify/.test(ciYml)) {
 if (!/node-version:\s*'20'/.test(ciYml)) {
   fail(".github/workflows/ci.yml must use Node 20");
 }
+if (!/permissions:\s*\n\s*contents:\s*read/.test(ciYml)) {
+  fail('.github/workflows/ci.yml must set permissions.contents to read');
+}
 
 console.log('validate-metadata-files: OK');

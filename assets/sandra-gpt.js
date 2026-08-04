@@ -1680,11 +1680,12 @@
 
   async function clearRemote(sessionId) {
     try {
+      // Intentionally no shared abort signal: local clear already ran; the
+      // server wipe should still finish if the user navigates away mid-request.
       const r = await fetch('/api/sandra-gpt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'clear', sessionId }),
-        signal: apiSignal(),
       });
       if (r.status === 503) return false;
       return r.ok;

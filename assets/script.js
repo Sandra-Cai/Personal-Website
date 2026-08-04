@@ -37,7 +37,7 @@ function initNavScrollSpy() {
   const applyHash = () => {
     const id = location.hash.replace(/^#/, '');
     if (id && tracked.some((r) => r.id === id)) setActive(id);
-    else if (!id && window.scrollY < 120) clearActive();
+    else clearActive();
   };
 
   applyHash();
@@ -63,6 +63,8 @@ function initNavScrollSpy() {
     const el = document.getElementById(id);
     if (el) clearTargets.add(el);
   }
+  const hero = document.querySelector('.ba-hero');
+  if (hero) clearTargets.add(hero);
   const footer = document.querySelector('footer.ba-footer');
   if (footer) clearTargets.add(footer);
 

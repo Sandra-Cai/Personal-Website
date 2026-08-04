@@ -42,7 +42,7 @@
 
   <link rel="preload" href="/assets/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="/assets/styles.css?v=90" />
+  <link rel="stylesheet" href="/assets/styles.css?v=91" />
 
   <script type="application/ld+json">
   {
@@ -56,7 +56,13 @@
         "familyName": "Cai",
         "alternateName": "Yijia Sandra Cai",
         "url": "https://www.sandracai.com/",
-        "image": "https://www.sandracai.com/assets/sandra-headshot.jpg",
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://www.sandracai.com/assets/sandra-headshot.jpg",
+          "contentUrl": "https://www.sandracai.com/assets/sandra-headshot.jpg",
+          "width": 930,
+          "height": 1024
+        },
         "description": "Sandra Cai: founder of Plurall AI (enterprise deepfake detection). Quant research, markets, and systems—4+ years across industry, research, and founding.",
         "jobTitle": "Founder",
         "email": "sandraxcyj@gmail.com",
@@ -130,7 +136,7 @@
     </div>
   </header>
 
-  <main id="top">
+  <main id="top" tabindex="-1">
     <section class="ba-hero">
       <p class="ba-eyebrow">4+ years · industry, research &amp; founding</p>
       <h1 class="ba-display">
@@ -360,7 +366,7 @@
     <p class="ba-footer-copy">© <span id="year">2026</span> Sandra Cai</p>
   </footer>
 
-  <script src="/assets/sandra-gpt.js?v=107" defer></script>
-  <script src="/assets/script.js?v=21" defer></script>
+  <script src="/assets/sandra-gpt.js?v=108" defer></script>
+  <script src="/assets/script.js?v=22" defer></script>
 </body>
 </html>

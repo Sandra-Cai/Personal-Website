@@ -24,6 +24,7 @@ const checks404 = [
   ['html lang en-US', /<html lang="en-US">/],
   ['skip link', /class="ba-skip"/],
   ['main landmark', /\bid="main"/],
+  ['404 main focusable', /<main id="main" tabindex="-1">/],
   ['404 block', /class="ba-404/],
   ['404 sandragpt link', /href="\/#sandra-gpt"/],
   ['404 robots noindex', /<meta name="robots" content="noindex"/],
@@ -60,6 +61,7 @@ const checksIndex = [
   ['html lang en-US', /<html lang="en-US">/],
   ['skip link', /class="ba-skip"/],
   ['main landmark', /\bid="top"/],
+  ['main focusable', /<main id="top" tabindex="-1">/],
   ['SandraGPT section', /\bid="sandra-gpt"/],
   ['canonical', /<link rel="canonical" href="https:\/\/www\.sandracai\.com\/"/],
   ['rel me github', /<link rel="me" href="https:\/\/github\.com\/Sandra-Cai"/],
@@ -305,6 +307,8 @@ for (const [label, snippet] of [
   ['bfcache pageshow reapply', "addEventListener('pageshow'"],
   ['scroll spy clear past education', "clearTargets"],
   ['scroll spy beliefs clear', "'beliefs'"],
+  ['scroll spy hero clear', "querySelector('.ba-hero')"],
+  ['scroll spy home hash clear', 'else clearActive()'],
   ['scroll timer pagehide clear', 'clearTimeout(scrollTimer)'],
   ['dynamic footer year', 'new Date().getFullYear()'],
 ]) {
@@ -581,6 +585,10 @@ if (!gptJs.includes('function resetClearBusy') || !gptJs.includes('resetClearBus
 }
 if (!gptJs.includes('function recycleApiAbort') || !gptJs.includes('signal: apiSignal()')) {
   console.error('validate-basic-html: sandra-gpt.js must abort in-flight API fetches on leave');
+  process.exit(1);
+}
+if (/async function clearRemote[\s\S]*?signal:\s*apiSignal\(\)/.test(gptJs)) {
+  console.error('validate-basic-html: clearRemote must not use shared abort signal');
   process.exit(1);
 }
 if (!gptJs.includes("aria-live', 'off'") || !gptJs.includes("aria-busy', 'true'")) {
