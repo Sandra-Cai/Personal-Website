@@ -188,6 +188,19 @@ const assetCache = (assetRule.headers || []).find((h) => h.key === 'Cache-Contro
 if (!assetCache || !/immutable/.test(assetCache.value)) {
   fail('vercel.json /assets Cache-Control should be long-lived and immutable');
 }
+for (const source of ['/assets/social-card.jpg', '/assets/sandra-headshot.jpg']) {
+  const rule = headerRules.find((r) => r.source === source);
+  if (!rule) fail(`vercel.json missing short-cache rule for ${source}`);
+  const cache = (rule.headers || []).find((h) => h.key === 'Cache-Control');
+  if (!cache || !/max-age=86400/.test(cache.value) || !/must-revalidate/.test(cache.value)) {
+    fail(`vercel.json ${source} must use max-age=86400 must-revalidate`);
+  }
+  const assetIdx = headerRules.indexOf(assetRule);
+  const ruleIdx = headerRules.indexOf(rule);
+  if (ruleIdx < 0 || assetIdx < 0 || ruleIdx > assetIdx) {
+    fail(`vercel.json ${source} cache rule must appear before /assets/(.*) immutable rule`);
+  }
+}
 if (!globalRule) fail('vercel.json missing global header rule');
 const xFrameOptions = (globalRule.headers || []).find((h) => h.key === 'X-Frame-Options');
 if (!xFrameOptions || xFrameOptions.value !== 'DENY') {
@@ -210,9 +223,13 @@ if (
   !permissionsPolicy ||
   !/camera=\(\)/.test(permissionsPolicy.value) ||
   !/microphone=\(\)/.test(permissionsPolicy.value) ||
-  !/geolocation=\(\)/.test(permissionsPolicy.value)
+  !/geolocation=\(\)/.test(permissionsPolicy.value) ||
+  !/payment=\(\)/.test(permissionsPolicy.value) ||
+  !/usb=\(\)/.test(permissionsPolicy.value) ||
+  !/interest-cohort=\(\)/.test(permissionsPolicy.value) ||
+  !/browsing-topics=\(\)/.test(permissionsPolicy.value)
 ) {
-  fail('vercel.json Permissions-Policy must disable camera, microphone, and geolocation');
+  fail('vercel.json Permissions-Policy must disable camera, mic, geo, payment, usb, interest-cohort, browsing-topics');
 }
 const hsts = (globalRule.headers || []).find((h) => h.key === 'Strict-Transport-Security');
 if (
@@ -298,6 +315,24 @@ if (!/node-version:\s*'20'/.test(ciYml)) {
 }
 if (!/permissions:\s*\n\s*contents:\s*read/.test(ciYml)) {
   fail('.github/workflows/ci.yml must set permissions.contents to read');
+}
+if (!/actions\/checkout@[0-9a-f]{40}/.test(ciYml) || !/actions\/setup-node@[0-9a-f]{40}/.test(ciYml)) {
+  fail('.github/workflows/ci.yml must pin checkout and setup-node to full commit SHAs');
+}
+
+const requiredAssets = [
+  'assets/social-card.jpg',
+  'assets/sandra-headshot.jpg',
+  'assets/favicon.ico',
+  'assets/favicon-16.png',
+  'assets/favicon-32.png',
+  'assets/apple-touch-icon.png',
+  'assets/icon-512.png',
+];
+for (const rel of requiredAssets) {
+  if (!fs.existsSync(path.join(root, rel))) {
+    fail(`missing required asset file: ${rel}`);
+  }
 }
 
 console.log('validate-metadata-files: OK');

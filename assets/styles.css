@@ -1001,6 +1001,15 @@ a:focus-visible {
   text-wrap: balance;
 }
 
+.ba-h2:focus {
+  outline: none;
+}
+
+.ba-h2:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
 .ba-deck {
   max-width: 40rem;
   margin: 0 0 2rem;

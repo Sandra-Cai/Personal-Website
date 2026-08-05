@@ -37,7 +37,6 @@ const checks404 = [
   ['footer Medium', /ba-footer-links[\s\S]*?medium\.com/i],
   ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
   ['manifest link', /rel="manifest"/],
-  ['404 canonical', /<link rel="canonical" href="https:\/\/www\.sandracai\.com\/"/],
   ['referrer policy', /<meta name="referrer" content="strict-origin-when-cross-origin"/],
   ['color-scheme light', /<meta name="color-scheme" content="light"/],
   ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
@@ -126,10 +125,10 @@ const checksIndex = [
   ['beliefs ship iterate', /id="beliefs"[\s\S]*?Ship and iterate/],
   ['perspective rigor copy', /id="perspective"[\s\S]*?assumptions you can defend/],
   ['gpt disclaimer not live model', /id="gpt-disclaimer"[^>]*>[\s\S]*?not a live model/],
-  ['work accel title', /id="accel-title"[^>]*>Accelerating work that ships/],
+  ['work accel title', /id="accel-title"[^>]*tabindex="-1"[^>]*>Accelerating work that ships/],
   ['JSON-LD person id', /"@id":\s*"https:\/\/www\.sandracai\.com\/#person"/],
-  ['research section title', /id="research-title"[^>]*>Independent research/],
-  ['academic title', /id="edu-title"[^>]*>Academic/],
+  ['research section title', /id="research-title"[^>]*tabindex="-1"[^>]*>Independent research/],
+  ['academic title', /id="edu-title"[^>]*tabindex="-1"[^>]*>Academic/],
   ['beliefs title', /id="beliefs-title"[^>]*>Three things I believe/],
   ['hero mission ai-native', /class="ba-mission"[^>]*>[\s\S]*?AI-native world/],
   ['JSON-LD website id', /"@id":\s*"https:\/\/www\.sandracai\.com\/#website"/],
@@ -238,6 +237,10 @@ const checksIndex = [
 
 const html404 = read('404.html');
 assertChecks('404.html', html404, checks404);
+if (/rel=["']canonical["']/.test(html404)) {
+  console.error('validate-basic-html: 404.html must not declare a canonical URL (keep noindex only)');
+  process.exit(1);
+}
 const indexHtml = read('index.html');
 assertChecks('index.html', indexHtml, checksIndex);
 
@@ -309,6 +312,8 @@ for (const [label, snippet] of [
   ['scroll spy beliefs clear', "'beliefs'"],
   ['scroll spy hero clear', "querySelector('.ba-hero')"],
   ['scroll spy home hash clear', 'else clearActive()'],
+  ['hash focus target helper', 'focusHashTarget'],
+  ['hash focus work heading', "work: 'accel-title'"],
   ['scroll timer pagehide clear', 'clearTimeout(scrollTimer)'],
   ['dynamic footer year', 'new Date().getFullYear()'],
 ]) {

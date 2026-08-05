@@ -15,6 +15,13 @@ function initNavScrollSpy() {
     ['#education', 'education'],
   ];
 
+  /** Section hash → focusable heading (SandraGPT focuses its own input). */
+  const focusHeadingBySection = {
+    work: 'accel-title',
+    research: 'research-title',
+    education: 'edu-title',
+  };
+
   const tracked = [];
   for (const [href, id] of pairs) {
     const link = nav.querySelector(`a[href="${href}"]`);
@@ -34,10 +41,27 @@ function initNavScrollSpy() {
     }
   };
 
+  const focusHashTarget = () => {
+    const id = location.hash.replace(/^#/, '');
+    if (!id || id === 'sandra-gpt') return;
+    let el = null;
+    if (id === 'top') el = document.getElementById('top');
+    else if (focusHeadingBySection[id]) el = document.getElementById(focusHeadingBySection[id]);
+    if (!el) return;
+    window.requestAnimationFrame(() => {
+      try {
+        el.focus({ preventScroll: true });
+      } catch {
+        el.focus();
+      }
+    });
+  };
+
   const applyHash = () => {
     const id = location.hash.replace(/^#/, '');
     if (id && tracked.some((r) => r.id === id)) setActive(id);
     else clearActive();
+    focusHashTarget();
   };
 
   applyHash();
