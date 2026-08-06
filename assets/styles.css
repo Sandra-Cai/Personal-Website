@@ -63,10 +63,7 @@ body.bai-site {
   text-rendering: optimizeLegibility;
 }
 
-main:focus {
-  outline: none;
-}
-
+main:focus,
 main:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 4px;
@@ -610,10 +607,7 @@ a:focus-visible {
   color: var(--text);
 }
 
-.ba-agent-title:focus {
-  outline: none;
-}
-
+.ba-agent-title:focus,
 .ba-agent-title:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 4px;
@@ -1001,10 +995,7 @@ a:focus-visible {
   text-wrap: balance;
 }
 
-.ba-h2:focus {
-  outline: none;
-}
-
+.ba-h2:focus,
 .ba-h2:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 4px;

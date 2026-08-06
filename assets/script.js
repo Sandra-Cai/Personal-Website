@@ -3,6 +3,33 @@ document.documentElement.classList.add('js');
 const y = document.getElementById('year');
 if (y) y.textContent = new Date().getFullYear();
 
+/** Prefer a visible focus ring for programmatic focus (hash / skip). */
+function focusProgrammatic(el) {
+  if (!el) return;
+  window.requestAnimationFrame(() => {
+    try {
+      el.focus({ preventScroll: true, focusVisible: true });
+    } catch {
+      try {
+        el.focus({ preventScroll: true });
+      } catch {
+        el.focus();
+      }
+    }
+  });
+}
+
+/** Skip / logo home: re-focus even when the hash does not change. */
+function initLandmarkRefocus() {
+  document.querySelectorAll('a[href="#top"], a[href="#main"]').forEach((a) => {
+    a.addEventListener('click', () => {
+      const id = (a.getAttribute('href') || '').replace(/^#/, '');
+      if (!id) return;
+      focusProgrammatic(document.getElementById(id));
+    });
+  });
+}
+
 /** Highlight in-page nav link for the section currently in view. */
 function initNavScrollSpy() {
   const nav = document.querySelector('.ba-nav');
@@ -48,13 +75,7 @@ function initNavScrollSpy() {
     if (id === 'top') el = document.getElementById('top');
     else if (focusHeadingBySection[id]) el = document.getElementById(focusHeadingBySection[id]);
     if (!el) return;
-    window.requestAnimationFrame(() => {
-      try {
-        el.focus({ preventScroll: true });
-      } catch {
-        el.focus();
-      }
-    });
+    focusProgrammatic(el);
   };
 
   const applyHash = () => {
@@ -122,4 +143,5 @@ function initNavScrollSpy() {
   });
 }
 
+initLandmarkRefocus();
 initNavScrollSpy();

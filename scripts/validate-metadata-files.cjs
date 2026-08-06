@@ -161,6 +161,9 @@ if (!manifest.icons.some((icon) => icon.sizes === '512x512')) {
 if (!manifest.icons.every((icon) => /\?v=\d+/.test(icon.src))) {
   fail('site.webmanifest icon src values must include a ?v= cache buster');
 }
+if (!manifest.icons.every((icon) => icon.purpose === 'any')) {
+  fail('site.webmanifest icons must declare purpose any');
+}
 const faviconV = indexHtml.match(/favicon-32\.png\?v=(\d+)/);
 const manifest32 = manifest.icons.find((icon) => /favicon-32\.png/i.test(icon.src));
 if (!faviconV || !manifest32 || !manifest32.src.includes(`?v=${faviconV[1]}`)) {
@@ -334,5 +337,41 @@ for (const rel of requiredAssets) {
     fail(`missing required asset file: ${rel}`);
   }
 }
+
+function pngSize(buf) {
+  if (buf.length < 24 || buf[0] !== 0x89 || buf[1] !== 0x50) return null;
+  return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
+}
+
+function jpegSize(buf) {
+  if (buf.length < 4 || buf[0] !== 0xff || buf[1] !== 0xd8) return null;
+  let i = 2;
+  while (i + 9 < buf.length) {
+    if (buf[i] !== 0xff) return null;
+    const marker = buf[i + 1];
+    if (marker === 0xd9 || marker === 0xda) break;
+    const len = buf.readUInt16BE(i + 2);
+    if (len < 2) return null;
+    if (marker >= 0xc0 && marker <= 0xc3) {
+      return { height: buf.readUInt16BE(i + 5), width: buf.readUInt16BE(i + 7) };
+    }
+    i += 2 + len;
+  }
+  return null;
+}
+
+function assertImageSize(rel, expectedW, expectedH) {
+  const buf = fs.readFileSync(path.join(root, rel));
+  if (buf.length < 100) fail(`${rel} looks empty or truncated`);
+  const size = /\.png$/i.test(rel) ? pngSize(buf) : jpegSize(buf);
+  if (!size) fail(`could not read dimensions for ${rel}`);
+  if (size.width !== expectedW || size.height !== expectedH) {
+    fail(`${rel} must be ${expectedW}x${expectedH} (got ${size.width}x${size.height})`);
+  }
+}
+
+assertImageSize('assets/social-card.jpg', 1200, 630);
+assertImageSize('assets/sandra-headshot.jpg', 930, 1024);
+assertImageSize('assets/icon-512.png', 512, 512);
 
 console.log('validate-metadata-files: OK');

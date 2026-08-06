@@ -24,8 +24,8 @@ if (!ld['@context'] || ld['@context'] !== 'https://schema.org') {
   console.error('validate-jsonld: @context must be https://schema.org');
   process.exit(1);
 }
-if (!Array.isArray(ld['@graph']) || ld['@graph'].length < 3) {
-  console.error('validate-jsonld: @graph must include at least Person, WebSite, and Organization');
+if (!Array.isArray(ld['@graph']) || ld['@graph'].length < 4) {
+  console.error('validate-jsonld: @graph must include Person, WebSite, Organization, and WebPage');
   process.exit(1);
 }
 
@@ -33,6 +33,7 @@ const graph = ld['@graph'] || (ld['@type'] ? [ld] : []);
 const person = graph.find((n) => n['@type'] === 'Person');
 const website = graph.find((n) => n['@type'] === 'WebSite');
 const plurall = graph.find((n) => n['@type'] === 'Organization' && n['@id'] === 'https://www.sandracai.com/#plurall');
+const webpage = graph.find((n) => n['@type'] === 'WebPage');
 
 if (!person) {
   console.error('validate-jsonld: missing Person node');
@@ -283,6 +284,41 @@ if (person.worksFor['@id'] !== plurall['@id']) {
 }
 if (plurall.founder['@id'] !== person['@id']) {
   console.error('validate-jsonld: Plurall founder must match Person @id');
+  process.exit(1);
+}
+
+if (!webpage) {
+  console.error('validate-jsonld: missing WebPage node');
+  process.exit(1);
+}
+if (webpage['@id'] !== 'https://www.sandracai.com/#webpage') {
+  console.error('validate-jsonld: WebPage.@id must be https://www.sandracai.com/#webpage');
+  process.exit(1);
+}
+if (webpage.url !== 'https://www.sandracai.com/') {
+  console.error('validate-jsonld: WebPage.url must be https://www.sandracai.com/');
+  process.exit(1);
+}
+if (!webpage.isPartOf || webpage.isPartOf['@id'] !== 'https://www.sandracai.com/#website') {
+  console.error('validate-jsonld: WebPage.isPartOf must reference WebSite');
+  process.exit(1);
+}
+if (!webpage.about || webpage.about['@id'] !== 'https://www.sandracai.com/#person') {
+  console.error('validate-jsonld: WebPage.about must reference Person');
+  process.exit(1);
+}
+if (!/^\d{4}-\d{2}-\d{2}$/.test(webpage.dateModified || '')) {
+  console.error('validate-jsonld: WebPage.dateModified must be YYYY-MM-DD');
+  process.exit(1);
+}
+const sitemapXml = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
+const sitemapLastmod = sitemapXml.match(/<lastmod>\s*([^<]+?)\s*<\/lastmod>/i);
+if (!sitemapLastmod || sitemapLastmod[1] !== webpage.dateModified) {
+  console.error('validate-jsonld: WebPage.dateModified must match sitemap.xml lastmod');
+  process.exit(1);
+}
+if (webpage.inLanguage !== 'en-US') {
+  console.error('validate-jsonld: WebPage.inLanguage must be en-US');
   process.exit(1);
 }
 

@@ -1042,7 +1042,7 @@
       ],
       priority: 16,
       reply:
-        'Links like /?q=Plurall+AI prefill SandraGPT from the query string, strip q from the URL, and submit once—handy for shared prompts.',
+        'Links like /?q=Plurall+AI prefill SandraGPT from the query string and strip q from the URL—then you can edit and send.',
     },
     {
       keys: [
@@ -1707,7 +1707,7 @@
     }
   }
 
-  /** Prefill from ?q= (e.g. shared links to sandracai.com/?q=Plurall+AI) and submit. */
+  /** Prefill from ?q= (e.g. shared links to sandracai.com/?q=Plurall+AI); user sends. */
   function applyDeepLinkQuestion() {
     if (!input) return false;
     try {
@@ -1730,7 +1730,15 @@
       window.history.replaceState(null, '', nextUrl);
       updateCharCount();
       updateSendState();
-      if (form) form.requestSubmit();
+      try {
+        input.focus({ preventScroll: true, focusVisible: true });
+      } catch {
+        try {
+          input.focus({ preventScroll: true });
+        } catch {
+          input.focus();
+        }
+      }
       return true;
     } catch {
       return false;
@@ -1741,9 +1749,13 @@
     if (location.hash !== '#sandra-gpt' || !input) return;
     window.requestAnimationFrame(() => {
       try {
-        input.focus({ preventScroll: true });
+        input.focus({ preventScroll: true, focusVisible: true });
       } catch {
-        input.focus();
+        try {
+          input.focus({ preventScroll: true });
+        } catch {
+          input.focus();
+        }
       }
     });
   }
@@ -2239,9 +2251,13 @@
         const heading = document.getElementById('gpt-heading');
         if (heading) {
           try {
-            heading.focus({ preventScroll: true });
+            heading.focus({ preventScroll: true, focusVisible: true });
           } catch {
-            heading.focus();
+            try {
+              heading.focus({ preventScroll: true });
+            } catch {
+              heading.focus();
+            }
           }
         }
         return;
@@ -2258,9 +2274,13 @@
         });
       }
       try {
-        input.focus({ preventScroll: true });
+        input.focus({ preventScroll: true, focusVisible: true });
       } catch {
-        input.focus();
+        try {
+          input.focus({ preventScroll: true });
+        } catch {
+          input.focus();
+        }
       }
     });
   }

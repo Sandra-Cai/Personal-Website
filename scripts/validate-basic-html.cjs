@@ -81,6 +81,8 @@ const checksIndex = [
   ['external links nav', /<nav class="ba-strip ba-strip--dim" aria-label="External links">/],
   ['JSON-LD inLanguage', /"inLanguage":\s*"en-US"/],
   ['JSON-LD Plurall org', /"@id":\s*"https:\/\/www\.sandracai\.com\/#plurall"/],
+  ['JSON-LD WebPage', /"@type":\s*"WebPage"/],
+  ['JSON-LD dateModified', /"dateModified":\s*"\d{4}-\d{2}-\d{2}"/],
   ['JSON-LD worksFor org', /"worksFor":\s*\{\s*"@type":\s*"Organization"/],
   ['JSON-LD publisher person', /"publisher":\s*\{\s*"@type":\s*"Person"/],
   ['meta 4+ years', /4\+ years across industry, research, and founding/],
@@ -305,6 +307,9 @@ for (const [label, snippet] of [
   ['hashchange always registered', "window.addEventListener('hashchange', applyHash)"],
   ['passive scroll listener', '{ passive: true }'],
   ['js class marker', "document.documentElement.classList.add('js')"],
+  ['programmatic focus helper', 'function focusProgrammatic'],
+  ['landmark same-hash refocus', 'function initLandmarkRefocus'],
+  ['focusVisible option', 'focusVisible: true'],
   ['observer pagehide disconnect', 'observer.disconnect()'],
   ['bfcache persist guard', '!event.persisted'],
   ['bfcache pageshow reapply', "addEventListener('pageshow'"],
@@ -558,6 +563,15 @@ if (!gptJs.includes("'Sending…'") && !gptJs.includes('"Sending…"')) {
 }
 if (!gptJs.includes('applyDeepLinkQuestion') || !gptJs.includes('URLSearchParams')) {
   console.error('validate-basic-html: sandra-gpt.js must support ?q= deep-link prefills');
+  process.exit(1);
+}
+const deepLinkFn = gptJs.match(/function applyDeepLinkQuestion\(\) \{[\s\S]*?\n  function /);
+if (!deepLinkFn || /requestSubmit/.test(deepLinkFn[0])) {
+  console.error('validate-basic-html: ?q= deep links must prefill without auto-submit');
+  process.exit(1);
+}
+if (!gptJs.includes('prefill SandraGPT from the query string and strip q') || /submit once/.test(gptJs)) {
+  console.error('validate-basic-html: deep-link reply must describe prefill without auto-submit');
   process.exit(1);
 }
 if (!gptJs.includes("e.key === 'Escape'") || !gptJs.includes('input.blur()')) {
