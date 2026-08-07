@@ -1707,6 +1707,19 @@
     }
   }
 
+  function focusInputField() {
+    if (!input) return;
+    try {
+      input.focus({ preventScroll: true, focusVisible: true });
+    } catch {
+      try {
+        input.focus({ preventScroll: true });
+      } catch {
+        input.focus({ preventScroll: false });
+      }
+    }
+  }
+
   /** Prefill from ?q= (e.g. shared links to sandracai.com/?q=Plurall+AI); user sends. */
   function applyDeepLinkQuestion() {
     if (!input) return false;
@@ -1730,15 +1743,7 @@
       window.history.replaceState(null, '', nextUrl);
       updateCharCount();
       updateSendState();
-      try {
-        input.focus({ preventScroll: true, focusVisible: true });
-      } catch {
-        try {
-          input.focus({ preventScroll: true });
-        } catch {
-          input.focus();
-        }
-      }
+      focusInputField();
       return true;
     } catch {
       return false;
@@ -1748,15 +1753,7 @@
   function focusSandraGptFromHash() {
     if (location.hash !== '#sandra-gpt' || !input) return;
     window.requestAnimationFrame(() => {
-      try {
-        input.focus({ preventScroll: true, focusVisible: true });
-      } catch {
-        try {
-          input.focus({ preventScroll: true });
-        } catch {
-          input.focus();
-        }
-      }
+      focusInputField();
     });
   }
 
@@ -1962,7 +1959,7 @@
       updateClearState();
     }
     if (input) {
-      input.focus();
+      focusInputField();
       updateSendState();
     }
   }
@@ -2048,7 +2045,7 @@
     const canonicalQ = normalize(q);
     const now = Date.now();
     if (canonicalQ === lastSubmittedCanonical && now - lastSubmittedAt < DUPLICATE_SUBMIT_WINDOW_MS) {
-      input.focus();
+      focusInputField();
       return;
     }
     if (q.length > MAX_QUESTION_CHARS) {
@@ -2115,7 +2112,7 @@
       });
 
     window.requestAnimationFrame(() => {
-      input.focus();
+      focusInputField();
     });
   }
 
@@ -2274,13 +2271,9 @@
         });
       }
       try {
-        input.focus({ preventScroll: true, focusVisible: true });
+        focusInputField();
       } catch {
-        try {
-          input.focus({ preventScroll: true });
-        } catch {
-          input.focus();
-        }
+        /* ignore */
       }
     });
   }

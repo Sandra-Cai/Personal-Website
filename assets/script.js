@@ -47,6 +47,7 @@ function initNavScrollSpy() {
     work: 'accel-title',
     research: 'research-title',
     education: 'edu-title',
+    beliefs: 'beliefs-title',
   };
 
   const tracked = [];

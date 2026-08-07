@@ -278,6 +278,9 @@ if (!/style-src 'self' 'unsafe-inline'/.test(csp.value)) {
 if (!/object-src 'none'/.test(csp.value)) {
   fail("vercel.json CSP must include object-src 'none'");
 }
+if (!/upgrade-insecure-requests/.test(csp.value)) {
+  fail('vercel.json CSP must include upgrade-insecure-requests');
+}
 
 const htmlCacheSources = ['/', '/404', '/index.html', '/404.html'];
 for (const source of htmlCacheSources) {
@@ -373,5 +376,8 @@ function assertImageSize(rel, expectedW, expectedH) {
 assertImageSize('assets/social-card.jpg', 1200, 630);
 assertImageSize('assets/sandra-headshot.jpg', 930, 1024);
 assertImageSize('assets/icon-512.png', 512, 512);
+assertImageSize('assets/favicon-16.png', 16, 16);
+assertImageSize('assets/favicon-32.png', 32, 32);
+assertImageSize('assets/apple-touch-icon.png', 180, 180);
 
 console.log('validate-metadata-files: OK');

@@ -321,5 +321,10 @@ if (webpage.inLanguage !== 'en-US') {
   console.error('validate-jsonld: WebPage.inLanguage must be en-US');
   process.exit(1);
 }
+const titleMatch = html.match(/<title>([^<]+)<\/title>/i);
+if (!titleMatch || webpage.name !== titleMatch[1].trim()) {
+  console.error('validate-jsonld: WebPage.name must match document <title>');
+  process.exit(1);
+}
 
 console.log('validate-jsonld: OK');

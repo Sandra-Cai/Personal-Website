@@ -131,7 +131,7 @@ const checksIndex = [
   ['JSON-LD person id', /"@id":\s*"https:\/\/www\.sandracai\.com\/#person"/],
   ['research section title', /id="research-title"[^>]*tabindex="-1"[^>]*>Independent research/],
   ['academic title', /id="edu-title"[^>]*tabindex="-1"[^>]*>Academic/],
-  ['beliefs title', /id="beliefs-title"[^>]*>Three things I believe/],
+  ['beliefs title', /id="beliefs-title"[^>]*tabindex="-1"[^>]*>Three things I believe/],
   ['hero mission ai-native', /class="ba-mission"[^>]*>[\s\S]*?AI-native world/],
   ['JSON-LD website id', /"@id":\s*"https:\/\/www\.sandracai\.com\/#website"/],
   ['gpt tagline trading comps', /id="gpt-tagline"[^>]*>[\s\S]*?trading comps/],
@@ -268,6 +268,20 @@ if (indexScriptV[1] !== script404V[1]) {
   process.exit(1);
 }
 
+for (const asset of ['favicon.ico', 'favicon-16.png', 'favicon-32.png', 'apple-touch-icon.png']) {
+  const re = new RegExp(`${asset.replace(/\./g, '\\.')}\\?v=(\\d+)`);
+  const indexV = indexHtml.match(re);
+  const page404V = html404.match(re);
+  if (!indexV || !page404V) {
+    console.error(`validate-basic-html: could not parse ${asset} cache version on index/404`);
+    process.exit(1);
+  }
+  if (indexV[1] !== page404V[1]) {
+    console.error(`validate-basic-html: index.html and 404.html ${asset} cache versions must match`);
+    process.exit(1);
+  }
+}
+
 const indexGptV = indexHtml.match(/src="\/assets\/sandra-gpt\.js\?v=(\d+)"/);
 if (!indexGptV) {
   console.error('validate-basic-html: could not parse sandra-gpt.js cache version');
@@ -319,6 +333,7 @@ for (const [label, snippet] of [
   ['scroll spy home hash clear', 'else clearActive()'],
   ['hash focus target helper', 'focusHashTarget'],
   ['hash focus work heading', "work: 'accel-title'"],
+  ['hash focus beliefs heading', "beliefs: 'beliefs-title'"],
   ['scroll timer pagehide clear', 'clearTimeout(scrollTimer)'],
   ['dynamic footer year', 'new Date().getFullYear()'],
 ]) {
@@ -626,8 +641,12 @@ if (!gptJs.includes('function updateClearState') || !gptJs.includes('clearBusy')
   console.error('validate-basic-html: Clear button must track empty/busy state');
   process.exit(1);
 }
-if (!gptJs.includes('preventScroll: true')) {
-  console.error('validate-basic-html: hash focus should prefer preventScroll when supported');
+if (!gptJs.includes('function focusInputField') || !gptJs.includes('focusVisible: true')) {
+  console.error('validate-basic-html: sandra-gpt.js must focus input with focusVisible helper');
+  process.exit(1);
+}
+if (/\binput\.focus\(\)/.test(gptJs)) {
+  console.error('validate-basic-html: sandra-gpt.js must not use bare input.focus()');
   process.exit(1);
 }
 if (!gptJs.includes('function prefersReducedMotion')) {
