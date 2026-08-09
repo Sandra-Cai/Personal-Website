@@ -169,6 +169,20 @@ const manifest32 = manifest.icons.find((icon) => /favicon-32\.png/i.test(icon.sr
 if (!faviconV || !manifest32 || !manifest32.src.includes(`?v=${faviconV[1]}`)) {
   fail('site.webmanifest favicon-32 cache version must match index.html');
 }
+for (const [file, htmlRe] of [
+  ['favicon-16.png', /favicon-16\.png\?v=(\d+)/],
+  ['apple-touch-icon.png', /apple-touch-icon\.png\?v=(\d+)/],
+]) {
+  const htmlMatch = indexHtml.match(htmlRe);
+  const icon = manifest.icons.find((i) => i.src.includes(file));
+  if (!htmlMatch || !icon || !icon.src.includes(`?v=${htmlMatch[1]}`)) {
+    fail(`site.webmanifest ${file} cache version must match index.html`);
+  }
+}
+const manifest512 = manifest.icons.find((icon) => /icon-512\.png/i.test(icon.src));
+if (!faviconV || !manifest512 || !manifest512.src.includes(`?v=${faviconV[1]}`)) {
+  fail('site.webmanifest icon-512 cache version must match favicon-32 bust');
+}
 if (!/^#[0-9A-Fa-f]{6}$/.test(manifest.theme_color || '')) {
   fail('site.webmanifest theme_color must be a 6-digit hex color');
 }

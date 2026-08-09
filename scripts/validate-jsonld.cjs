@@ -326,5 +326,35 @@ if (!titleMatch || webpage.name !== titleMatch[1].trim()) {
   console.error('validate-jsonld: WebPage.name must match document <title>');
   process.exit(1);
 }
+const metaDesc = html.match(/<meta name="description" content="([^"]+)"/);
+if (!metaDesc || webpage.description !== metaDesc[1]) {
+  console.error('validate-jsonld: WebPage.description must match meta description');
+  process.exit(1);
+}
+if (!webpage.mainEntity || webpage.mainEntity['@id'] !== 'https://www.sandracai.com/#person') {
+  console.error('validate-jsonld: WebPage.mainEntity must reference Person');
+  process.exit(1);
+}
+if (!webpage.primaryImageOfPage || webpage.primaryImageOfPage['@type'] !== 'ImageObject') {
+  console.error('validate-jsonld: WebPage.primaryImageOfPage must be an ImageObject');
+  process.exit(1);
+}
+if (webpage.primaryImageOfPage.url !== 'https://www.sandracai.com/assets/social-card.jpg') {
+  console.error('validate-jsonld: WebPage.primaryImageOfPage.url must be social-card.jpg');
+  process.exit(1);
+}
+if (webpage.primaryImageOfPage.contentUrl !== webpage.primaryImageOfPage.url) {
+  console.error('validate-jsonld: WebPage.primaryImageOfPage.contentUrl must match url');
+  process.exit(1);
+}
+if (webpage.primaryImageOfPage.width !== 1200 || webpage.primaryImageOfPage.height !== 630) {
+  console.error('validate-jsonld: WebPage.primaryImageOfPage dimensions must be 1200x630');
+  process.exit(1);
+}
+const ogImage = html.match(/property="og:image" content="([^"]+)"/);
+if (!ogImage || ogImage[1] !== webpage.primaryImageOfPage.url) {
+  console.error('validate-jsonld: WebPage.primaryImageOfPage.url must match og:image');
+  process.exit(1);
+}
 
 console.log('validate-jsonld: OK');

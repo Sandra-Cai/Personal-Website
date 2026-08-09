@@ -83,6 +83,7 @@ const checksIndex = [
   ['JSON-LD Plurall org', /"@id":\s*"https:\/\/www\.sandracai\.com\/#plurall"/],
   ['JSON-LD WebPage', /"@type":\s*"WebPage"/],
   ['JSON-LD dateModified', /"dateModified":\s*"\d{4}-\d{2}-\d{2}"/],
+  ['JSON-LD primaryImageOfPage', /"primaryImageOfPage"[\s\S]*?social-card\.jpg/],
   ['JSON-LD worksFor org', /"worksFor":\s*\{\s*"@type":\s*"Organization"/],
   ['JSON-LD publisher person', /"publisher":\s*\{\s*"@type":\s*"Person"/],
   ['meta 4+ years', /4\+ years across industry, research, and founding/],
@@ -157,6 +158,7 @@ const checksIndex = [
   ['hero focus ai trust', /class="ba-focus"[^>]*>[\s\S]*?AI &amp; trust/],
   ['og canonical url', /property="og:url" content="https:\/\/www\.sandracai\.com\/"/],
   ['twitter card', /name="twitter:card" content="summary_large_image"/],
+  ['twitter url', /name="twitter:url" content="https:\/\/www\.sandracai\.com\/"/],
   ['og type website', /property="og:type" content="website"/],
   ['academic coursework ml', /id="education"[\s\S]*?algorithms through ML/],
   ['founding card title', /ba-card--lead[\s\S]*?Plurall AI &amp; product/],
@@ -215,6 +217,7 @@ const checksIndex = [
   ['favicon 16 png', /rel="icon"[^>]*favicon-16\.png/],
   ['gpt maxlength matches constant', /id="gpt-input"[^>]*maxlength="280"/],
   ['perspective split a', /class="ba-split-a"[^>]*>Rigor as/],
+  ['perspective title focusable', /id="split-title"[^>]*tabindex="-1"/],
   ['agent subtitle tagline', /class="ba-agent-sub"[^>]*id="gpt-tagline"/],
   ['beliefs bare cards', /id="beliefs"[\s\S]*?ba-card--bare[\s\S]*?Show the work/],
   ['gpt send default label', /class="gpt-send"[^>]*aria-label="Enter a question to send"/],
@@ -322,8 +325,11 @@ for (const [label, snippet] of [
   ['passive scroll listener', '{ passive: true }'],
   ['js class marker', "document.documentElement.classList.add('js')"],
   ['programmatic focus helper', 'function focusProgrammatic'],
+  ['section focus helper', 'function focusSectionById'],
   ['landmark same-hash refocus', 'function initLandmarkRefocus'],
   ['focusVisible option', 'focusVisible: true'],
+  ['nav same-hash work', "'#work'"],
+  ['nav same-hash sandragpt', "'#sandra-gpt'"],
   ['observer pagehide disconnect', 'observer.disconnect()'],
   ['bfcache persist guard', '!event.persisted'],
   ['bfcache pageshow reapply', "addEventListener('pageshow'"],
@@ -334,6 +340,7 @@ for (const [label, snippet] of [
   ['hash focus target helper', 'focusHashTarget'],
   ['hash focus work heading', "work: 'accel-title'"],
   ['hash focus beliefs heading', "beliefs: 'beliefs-title'"],
+  ['hash focus perspective heading', "perspective: 'split-title'"],
   ['scroll timer pagehide clear', 'clearTimeout(scrollTimer)'],
   ['dynamic footer year', 'new Date().getFullYear()'],
 ]) {
@@ -477,6 +484,11 @@ if (!canonical || !ogUrl) {
 }
 if (canonical[1] !== ogUrl[1]) {
   console.error('validate-basic-html: canonical href must match og:url');
+  process.exit(1);
+}
+const twitterUrl = indexHtml.match(/<meta name="twitter:url" content="([^"]+)"/);
+if (!twitterUrl || twitterUrl[1] !== canonical[1]) {
+  console.error('validate-basic-html: twitter:url must match canonical');
   process.exit(1);
 }
 

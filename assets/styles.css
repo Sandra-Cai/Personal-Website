@@ -1273,6 +1273,19 @@ a:focus-visible {
   border: 0;
 }
 
+.visually-hidden:focus,
+.visually-hidden:focus-visible {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
 @media (prefers-contrast: more) {
   :root {
     --text-dim: #18181b;

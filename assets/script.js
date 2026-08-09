@@ -19,13 +19,46 @@ function focusProgrammatic(el) {
   });
 }
 
-/** Skip / logo home: re-focus even when the hash does not change. */
+/** Section hash → focusable heading (SandraGPT focuses its input). */
+const focusHeadingBySection = {
+  work: 'accel-title',
+  research: 'research-title',
+  education: 'edu-title',
+  beliefs: 'beliefs-title',
+  perspective: 'split-title',
+};
+
+function focusSectionById(id) {
+  if (!id) return;
+  if (id === 'sandra-gpt') {
+    focusProgrammatic(document.getElementById('gpt-input'));
+    return;
+  }
+  if (id === 'top' || id === 'main') {
+    focusProgrammatic(document.getElementById(id));
+    return;
+  }
+  const headingId = focusHeadingBySection[id];
+  if (headingId) focusProgrammatic(document.getElementById(headingId));
+}
+
+/** Re-focus even when the hash does not change (second click / skip). */
 function initLandmarkRefocus() {
-  document.querySelectorAll('a[href="#top"], a[href="#main"]').forEach((a) => {
+  const hrefs = [
+    '#top',
+    '#main',
+    '#sandra-gpt',
+    '#work',
+    '#research',
+    '#education',
+    '#beliefs',
+    '#perspective',
+  ];
+  const selector = hrefs.map((h) => `a[href="${h}"]`).join(', ');
+  document.querySelectorAll(selector).forEach((a) => {
     a.addEventListener('click', () => {
       const id = (a.getAttribute('href') || '').replace(/^#/, '');
-      if (!id) return;
-      focusProgrammatic(document.getElementById(id));
+      focusSectionById(id);
     });
   });
 }
@@ -41,14 +74,6 @@ function initNavScrollSpy() {
     ['#research', 'research'],
     ['#education', 'education'],
   ];
-
-  /** Section hash → focusable heading (SandraGPT focuses its own input). */
-  const focusHeadingBySection = {
-    work: 'accel-title',
-    research: 'research-title',
-    education: 'edu-title',
-    beliefs: 'beliefs-title',
-  };
 
   const tracked = [];
   for (const [href, id] of pairs) {
@@ -71,12 +96,8 @@ function initNavScrollSpy() {
 
   const focusHashTarget = () => {
     const id = location.hash.replace(/^#/, '');
-    if (!id || id === 'sandra-gpt') return;
-    let el = null;
-    if (id === 'top') el = document.getElementById('top');
-    else if (focusHeadingBySection[id]) el = document.getElementById(focusHeadingBySection[id]);
-    if (!el) return;
-    focusProgrammatic(el);
+    if (!id) return;
+    focusSectionById(id);
   };
 
   const applyHash = () => {
