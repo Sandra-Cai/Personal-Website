@@ -270,6 +270,11 @@ if (!securityCache || !/max-age=3600/.test(securityCache.value)) {
   fail('vercel.json security.txt Cache-Control should use max-age=3600');
 }
 
+const securityType = (securityRule.headers || []).find((h) => h.key === 'Content-Type');
+if (!securityType || securityType.value !== 'text/plain; charset=utf-8') {
+  fail('vercel.json security.txt Content-Type must be text/plain; charset=utf-8');
+}
+
 const csp = (globalRule.headers || []).find((h) => h.key === 'Content-Security-Policy');
 if (!csp || !/default-src 'self'/.test(csp.value)) {
   fail('vercel.json missing Content-Security-Policy with default-src self');
@@ -286,8 +291,8 @@ if (!/script-src 'self'/.test(csp.value) || !/connect-src 'self'/.test(csp.value
 if (!/img-src 'self' data:/.test(csp.value) || !/font-src 'self'/.test(csp.value)) {
   fail('vercel.json CSP must allow self fonts and self/data images');
 }
-if (!/style-src 'self' 'unsafe-inline'/.test(csp.value)) {
-  fail("vercel.json CSP style-src must allow self and unsafe-inline");
+if (!/style-src 'self'/.test(csp.value) || /style-src[^;]*'unsafe-inline'/.test(csp.value)) {
+  fail("vercel.json CSP style-src must be 'self' only (no unsafe-inline)");
 }
 if (!/object-src 'none'/.test(csp.value)) {
   fail("vercel.json CSP must include object-src 'none'");

@@ -294,6 +294,21 @@ if (!indexGptV) {
 const gptJs = read('assets/sandra-gpt.js');
 const siteJs = read('assets/script.js');
 const stylesCss = read('assets/styles.css');
+
+function assertCacheBust(label, htmlVersion, source, pattern) {
+  const marker = source.match(pattern);
+  if (!marker) {
+    console.error(`validate-basic-html: ${label} missing cache-bust marker`);
+    process.exit(1);
+  }
+  if (marker[1] !== htmlVersion) {
+    console.error(`validate-basic-html: ${label} cache-bust ${marker[1]} must match HTML ?v=${htmlVersion}`);
+    process.exit(1);
+  }
+}
+assertCacheBust('styles.css', indexCssV[1], stylesCss, /cache-bust:\s*(\d+)/);
+assertCacheBust('script.js', indexScriptV[1], siteJs, /cache-bust:\s*(\d+)/);
+assertCacheBust('sandra-gpt.js', indexGptV[1], gptJs, /cache-bust:\s*(\d+)/);
 if (!/\.gpt-turn\s*\{[\s\S]*?scroll-margin-top:\s*6rem/.test(stylesCss)) {
   console.error('validate-basic-html: .gpt-turn must set scroll-margin-top 6rem for sticky header');
   process.exit(1);
@@ -595,6 +610,14 @@ if (!gptJs.includes('applyDeepLinkQuestion') || !gptJs.includes('URLSearchParams
 const deepLinkFn = gptJs.match(/function applyDeepLinkQuestion\(\) \{[\s\S]*?\n  function /);
 if (!deepLinkFn || /requestSubmit/.test(deepLinkFn[0])) {
   console.error('validate-basic-html: ?q= deep links must prefill without auto-submit');
+  process.exit(1);
+}
+if (!deepLinkFn[0].includes('#sandra-gpt') || !deepLinkFn[0].includes("aria-current', 'location'")) {
+  console.error('validate-basic-html: ?q= deep links must set #sandra-gpt and nav aria-current');
+  process.exit(1);
+}
+if (!deepLinkFn[0].includes("getAttribute('href') === '#sandra-gpt'")) {
+  console.error('validate-basic-html: ?q= deep links must locate SandraGPT nav without href= selector');
   process.exit(1);
 }
 if (!gptJs.includes('prefill SandraGPT from the query string and strip q') || /submit once/.test(gptJs)) {

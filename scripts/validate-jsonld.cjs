@@ -356,5 +356,19 @@ if (!ogImage || ogImage[1] !== webpage.primaryImageOfPage.url) {
   console.error('validate-jsonld: WebPage.primaryImageOfPage.url must match og:image');
   process.exit(1);
 }
+const ogImageAlt = html.match(/property="og:image:alt" content="([^"]+)"/);
+const twitterImageAlt = html.match(/name="twitter:image:alt" content="([^"]+)"/);
+if (!ogImageAlt || !twitterImageAlt || ogImageAlt[1] !== twitterImageAlt[1]) {
+  console.error('validate-jsonld: og:image:alt must match twitter:image:alt');
+  process.exit(1);
+}
+if (webpage.primaryImageOfPage.name !== ogImageAlt[1] || webpage.primaryImageOfPage.description !== ogImageAlt[1]) {
+  console.error('validate-jsonld: primaryImageOfPage name/description must match og:image:alt');
+  process.exit(1);
+}
+if (!person.image || person.image.name !== ogImageAlt[1] || person.image.description !== ogImageAlt[1]) {
+  console.error('validate-jsonld: Person.image name/description must match og:image:alt');
+  process.exit(1);
+}
 
 console.log('validate-jsonld: OK');

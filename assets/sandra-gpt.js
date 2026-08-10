@@ -1,4 +1,5 @@
 /**
+ * cache-bust: 111
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1739,8 +1740,14 @@
       }
       params.delete('q');
       const rest = params.toString();
-      const nextUrl = window.location.pathname + (rest ? `?${rest}` : '') + window.location.hash;
+      const nextUrl = `${window.location.pathname}${rest ? `?${rest}` : ''}#sandra-gpt`;
       window.history.replaceState(null, '', nextUrl);
+      const nav = document.querySelector('.ba-nav');
+      if (nav) {
+        nav.querySelectorAll('a[aria-current]').forEach((a) => a.removeAttribute('aria-current'));
+        const gptLink = Array.from(nav.querySelectorAll('a')).find((a) => a.getAttribute('href') === '#sandra-gpt');
+        if (gptLink) gptLink.setAttribute('aria-current', 'location');
+      }
       updateCharCount();
       updateSendState();
       focusInputField();
