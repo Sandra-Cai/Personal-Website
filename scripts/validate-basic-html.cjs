@@ -171,6 +171,7 @@ const checksIndex = [
   ['JSON-LD person url', /"url":\s*"https:\/\/www\.sandracai\.com\/"/],
   ['gpt char count', /id="gpt-char-count"[^>]*aria-live="polite"/],
   ['gpt log region', /id="gpt-log"[^>]*role="log"/],
+  ['gpt log aria-label', /id="gpt-log"[^>]*aria-label="SandraGPT conversation"/],
   ['gpt input describedby', /id="gpt-input"[^>]*aria-describedby="gpt-disclaimer gpt-char-count"/],
   ['skip link top', /class="ba-skip" href="#top"/],
   ['gpt form aria-busy', /id="gpt-form"[^>]*aria-busy="false"/],
@@ -356,6 +357,7 @@ for (const [label, snippet] of [
   ['hash focus work heading', "work: 'accel-title'"],
   ['hash focus beliefs heading', "beliefs: 'beliefs-title'"],
   ['hash focus perspective heading', "perspective: 'split-title'"],
+  ['404 focus main on load', "querySelector('.ba-404')"],
   ['scroll timer pagehide clear', 'clearTimeout(scrollTimer)'],
   ['dynamic footer year', 'new Date().getFullYear()'],
 ]) {
@@ -674,6 +676,22 @@ if (!gptJs.includes('SUBMIT_BUSY_MS') || !gptJs.includes('historyEpoch')) {
 }
 if (!gptJs.includes('function updateClearState') || !gptJs.includes('clearBusy')) {
   console.error('validate-basic-html: Clear button must track empty/busy state');
+  process.exit(1);
+}
+if (!gptJs.includes('restorePending') || !gptJs.includes('Loading history…')) {
+  console.error('validate-basic-html: restoreHistory must gate submit with restorePending');
+  process.exit(1);
+}
+if (!/historyEpoch \+= 1/.test(gptJs) || !gptJs.includes('Invalidate in-flight restore')) {
+  console.error('validate-basic-html: handleSubmit must bump historyEpoch to beat restore race');
+  process.exit(1);
+}
+if (!gptJs.includes("setAttribute('aria-label', questionText)")) {
+  console.error('validate-basic-html: history sidebar items must expose full question aria-label');
+  process.exit(1);
+}
+if (!gptJs.includes("setAttribute('aria-label', q)")) {
+  console.error('validate-basic-html: starter buttons must aria-label from data-q when truncated');
   process.exit(1);
 }
 if (!gptJs.includes('function focusInputField') || !gptJs.includes('focusVisible: true')) {

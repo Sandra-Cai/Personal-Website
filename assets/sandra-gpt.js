@@ -1,5 +1,5 @@
 /**
- * cache-bust: 111
+ * cache-bust: 112
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1469,8 +1469,9 @@
   let submitBusy = false;
   let submitBusyTimer = 0;
   let clearBusy = false;
-  /** Bumped on Clear so in-flight restoreHistory results are ignored. */
+  /** Bumped on Clear / submit so in-flight restoreHistory results are ignored. */
   let historyEpoch = 0;
+  let restorePending = false;
   let apiAbort = typeof AbortController === 'function' ? new AbortController() : null;
   let lastSubmittedCanonical = '';
   let lastSubmittedAt = 0;
@@ -1773,18 +1774,18 @@
   function updateClearState() {
     if (!clearBtn) return;
     const empty = !(logEl && logEl.children.length) && !(sidebarList && sidebarList.children.length);
-    clearBtn.disabled = clearBusy || empty;
-    clearBtn.setAttribute('aria-busy', clearBusy ? 'true' : 'false');
+    clearBtn.disabled = clearBusy || empty || restorePending;
+    clearBtn.setAttribute('aria-busy', clearBusy || restorePending ? 'true' : 'false');
   }
 
   function updateSendState() {
     const sendBtn = form?.querySelector('.gpt-send');
     if (!sendBtn || !input) return;
-    const busy = form?.getAttribute('aria-busy') === 'true' || submitBusy;
+    const busy = form?.getAttribute('aria-busy') === 'true' || submitBusy || restorePending;
     const hasText = Boolean(input.value.trim());
     sendBtn.disabled = busy || !hasText;
     let label = 'Enter a question to send';
-    if (busy) label = 'Sending…';
+    if (busy) label = restorePending ? 'Loading history…' : 'Sending…';
     else if (hasText) label = 'Send question';
     sendBtn.setAttribute('aria-label', label);
   }
@@ -1804,10 +1805,14 @@
 
   function initStarterPrompts() {
     document.querySelectorAll('.gpt-starter[data-q]').forEach((btn) => {
+      const q = btn.getAttribute('data-q');
+      if (q && btn.textContent.trim() !== q) {
+        btn.setAttribute('aria-label', q);
+      }
       btn.addEventListener('click', () => {
-        const q = btn.getAttribute('data-q');
-        if (!q || !input || !form) return;
-        input.value = q.slice(0, MAX_QUESTION_CHARS);
+        const ask = btn.getAttribute('data-q');
+        if (!ask || !input || !form) return;
+        input.value = ask.slice(0, MAX_QUESTION_CHARS);
         recallIndex = -1;
         draftBeforeRecall = '';
         updateCharCount();
@@ -1879,6 +1884,7 @@
     const label = questionText.length > 52 ? `${questionText.slice(0, 51)}…` : questionText;
     btn.textContent = label;
     btn.title = questionText;
+    btn.setAttribute('aria-label', questionText);
     btn.addEventListener('click', () => {
       setSidebarItemActive(turnId);
       scrollToTurn(turnId);
@@ -1977,6 +1983,9 @@
     const sessionId = getOrCreateSessionId();
     const livePrev = logEl.getAttribute('aria-live');
     const syncLivePrev = syncStatusEl ? syncStatusEl.getAttribute('aria-live') : null;
+    restorePending = true;
+    updateSendState();
+    updateClearState();
     logEl.setAttribute('aria-busy', 'true');
     logEl.setAttribute('aria-live', 'off');
     if (syncStatusEl) syncStatusEl.setAttribute('aria-live', 'off');
@@ -2034,6 +2043,7 @@
           });
       }
     } finally {
+      restorePending = false;
       logEl.removeAttribute('aria-busy');
       if (livePrev) logEl.setAttribute('aria-live', livePrev);
       else logEl.setAttribute('aria-live', 'polite');
@@ -2041,12 +2051,14 @@
         if (syncLivePrev) syncStatusEl.setAttribute('aria-live', syncLivePrev);
         else syncStatusEl.setAttribute('aria-live', 'polite');
       }
+      updateSendState();
+      updateClearState();
     }
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (submitBusy) return;
+    if (submitBusy || restorePending) return;
     const q = input.value.trim();
     if (!q) return;
     const canonicalQ = normalize(q);
@@ -2055,6 +2067,8 @@
       focusInputField();
       return;
     }
+    // Invalidate in-flight restore so it cannot wipe this turn after await.
+    historyEpoch += 1;
     if (q.length > MAX_QUESTION_CHARS) {
       const turnId = newTurnId();
       const msg = `Please keep questions under ${MAX_QUESTION_CHARS} characters.`;

@@ -257,11 +257,22 @@ if (
 ) {
   fail('vercel.json Strict-Transport-Security must use two years, subdomains, and preload');
 }
-const metaRule = headerRules.find((r) => r.source === '/(site.webmanifest|robots.txt|sitemap.xml)');
-if (!metaRule) fail('vercel.json missing metadata files cache header rule');
-const metaCache = (metaRule.headers || []).find((h) => h.key === 'Cache-Control');
-if (!metaCache || !/max-age=3600/.test(metaCache.value)) {
-  fail('vercel.json metadata Cache-Control should use max-age=3600');
+const metaFiles = [
+  ['/site.webmanifest', 'application/manifest+json'],
+  ['/robots.txt', 'text/plain; charset=utf-8'],
+  ['/sitemap.xml', 'application/xml; charset=utf-8'],
+];
+for (const [source, type] of metaFiles) {
+  const rule = headerRules.find((r) => r.source === source);
+  if (!rule) fail(`vercel.json missing header rule for ${source}`);
+  const cache = (rule.headers || []).find((h) => h.key === 'Cache-Control');
+  if (!cache || !/max-age=3600/.test(cache.value)) {
+    fail(`vercel.json ${source} Cache-Control should use max-age=3600`);
+  }
+  const contentType = (rule.headers || []).find((h) => h.key === 'Content-Type');
+  if (!contentType || contentType.value !== type) {
+    fail(`vercel.json ${source} Content-Type must be ${type}`);
+  }
 }
 const securityRule = headerRules.find((r) => r.source === '/.well-known/security.txt');
 if (!securityRule) fail('vercel.json missing /.well-known/security.txt cache header rule');
