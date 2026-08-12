@@ -311,6 +311,26 @@ if (!/object-src 'none'/.test(csp.value)) {
 if (!/upgrade-insecure-requests/.test(csp.value)) {
   fail('vercel.json CSP must include upgrade-insecure-requests');
 }
+if (!/script-src-attr 'none'/.test(csp.value)) {
+  fail("vercel.json CSP must include script-src-attr 'none'");
+}
+if (!/manifest-src 'self'/.test(csp.value)) {
+  fail("vercel.json CSP must include manifest-src 'self'");
+}
+if (!/worker-src 'none'/.test(csp.value) || !/media-src 'none'/.test(csp.value)) {
+  fail("vercel.json CSP must include worker-src and media-src 'none'");
+}
+
+const fontRule = headerRules.find((r) => r.source === '/assets/fonts/(.*).woff2');
+if (!fontRule) fail('vercel.json missing /assets/fonts/(.*).woff2 header rule');
+const fontCache = (fontRule.headers || []).find((h) => h.key === 'Cache-Control');
+if (!fontCache || !/immutable/.test(fontCache.value)) {
+  fail('vercel.json font Cache-Control should be immutable');
+}
+const fontType = (fontRule.headers || []).find((h) => h.key === 'Content-Type');
+if (!fontType || fontType.value !== 'font/woff2') {
+  fail('vercel.json font Content-Type must be font/woff2');
+}
 
 const htmlCacheSources = ['/', '/404', '/index.html', '/404.html'];
 for (const source of htmlCacheSources) {

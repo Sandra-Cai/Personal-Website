@@ -249,6 +249,10 @@ if (/rel=["']canonical["']/.test(html404)) {
 }
 const indexHtml = read('index.html');
 assertChecks('index.html', indexHtml, checksIndex);
+if (/http-equiv=["']Content-Security-Policy["']/i.test(indexHtml) || /http-equiv=["']Content-Security-Policy["']/i.test(html404)) {
+  console.error('validate-basic-html: CSP must be header-only (no http-equiv meta)');
+  process.exit(1);
+}
 
 const indexCssV = indexHtml.match(/href="\/assets\/styles\.css\?v=(\d+)"/);
 const css404V = html404.match(/href="\/assets\/styles\.css\?v=(\d+)"/);
@@ -609,6 +613,18 @@ if (!gptJs.includes('applyDeepLinkQuestion') || !gptJs.includes('URLSearchParams
   console.error('validate-basic-html: sandra-gpt.js must support ?q= deep-link prefills');
   process.exit(1);
 }
+if (!/applyDeepLinkQuestion\(\);\s*\n\s*void restoreHistory\(\)/.test(gptJs)) {
+  console.error('validate-basic-html: applyDeepLinkQuestion must run before restoreHistory');
+  process.exit(1);
+}
+if (/restoreHistory\(\)\.then\(/.test(gptJs)) {
+  console.error('validate-basic-html: restoreHistory must not chain post-hydrate focus (focus steal)');
+  process.exit(1);
+}
+if (gptJs.includes('focusSandraGptFromHash') || /addEventListener\(\s*'hashchange'/.test(gptJs)) {
+  console.error('validate-basic-html: #sandra-gpt hash focus must live in script.js only');
+  process.exit(1);
+}
 const deepLinkFn = gptJs.match(/function applyDeepLinkQuestion\(\) \{[\s\S]*?\n  function /);
 if (!deepLinkFn || /requestSubmit/.test(deepLinkFn[0])) {
   console.error('validate-basic-html: ?q= deep links must prefill without auto-submit');
@@ -694,6 +710,10 @@ if (!gptJs.includes("setAttribute('aria-label', q)")) {
   console.error('validate-basic-html: starter buttons must aria-label from data-q when truncated');
   process.exit(1);
 }
+if (!/if \(restorePending\) return;/.test(gptJs) || !gptJs.includes('form.requestSubmit()')) {
+  console.error('validate-basic-html: starter prompts must no-op while restorePending');
+  process.exit(1);
+}
 if (!gptJs.includes('function focusInputField') || !gptJs.includes('focusVisible: true')) {
   console.error('validate-basic-html: sandra-gpt.js must focus input with focusVisible helper');
   process.exit(1);
@@ -704,10 +724,6 @@ if (/\binput\.focus\(\)/.test(gptJs)) {
 }
 if (!gptJs.includes('function prefersReducedMotion')) {
   console.error('validate-basic-html: sandra-gpt.js must respect prefers-reduced-motion');
-  process.exit(1);
-}
-if (!gptJs.includes("window.addEventListener('hashchange'") || !gptJs.includes('focusSandraGptFromHash')) {
-  console.error('validate-basic-html: sandra-gpt.js must focus input on #sandra-gpt hashchange');
   process.exit(1);
 }
 if (!gptJs.includes('window.confirm') || !gptJs.includes('clearAllHistory')) {

@@ -1,5 +1,5 @@
 /**
- * cache-bust: 112
+ * cache-bust: 113
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1758,13 +1758,6 @@
     }
   }
 
-  function focusSandraGptFromHash() {
-    if (location.hash !== '#sandra-gpt' || !input) return;
-    window.requestAnimationFrame(() => {
-      focusInputField();
-    });
-  }
-
   function updateStartersVisibility() {
     const starters = document.querySelector('.gpt-starters');
     if (!starters) return;
@@ -1810,6 +1803,7 @@
         btn.setAttribute('aria-label', q);
       }
       btn.addEventListener('click', () => {
+        if (restorePending) return;
         const ask = btn.getAttribute('data-q');
         if (!ask || !input || !form) return;
         input.value = ask.slice(0, MAX_QUESTION_CHARS);
@@ -2152,9 +2146,10 @@
       }
     }
     input.setAttribute('maxlength', String(MAX_QUESTION_CHARS));
-    void restoreHistory().then(() => {
-      if (!applyDeepLinkQuestion()) focusSandraGptFromHash();
-    });
+    // Prefill ?q= before hydrate so a slow restore cannot overwrite typing.
+    // Hash focus lives in script.js — do not re-focus after restore (focus steal).
+    applyDeepLinkQuestion();
+    void restoreHistory();
     initStarterPrompts();
     form.addEventListener('submit', handleSubmit);
     input.addEventListener('keydown', (e) => {
@@ -2299,7 +2294,4 @@
     });
   }
 
-  window.addEventListener('hashchange', () => {
-    focusSandraGptFromHash();
-  });
 })();
