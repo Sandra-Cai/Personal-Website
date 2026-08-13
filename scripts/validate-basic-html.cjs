@@ -27,7 +27,7 @@ const checks404 = [
   ['404 main focusable', /<main id="main" tabindex="-1">/],
   ['404 block', /class="ba-404/],
   ['404 sandragpt link', /href="\/#sandra-gpt"/],
-  ['404 robots noindex', /<meta name="robots" content="noindex"/],
+  ['404 robots noindex', /<meta name="robots" content="noindex, nofollow"/],
   ['404 footer home', /ba-footer-links[\s\S]*?<a href="\/">Home<\/a>/],
   ['site stylesheet', /href="\/assets\/styles\.css\?v=/],
   ['nav separator', /class="ba-nav-sep"/],
@@ -696,6 +696,22 @@ if (!gptJs.includes('function updateClearState') || !gptJs.includes('clearBusy')
 }
 if (!gptJs.includes('restorePending') || !gptJs.includes('Loading history…')) {
   console.error('validate-basic-html: restoreHistory must gate submit with restorePending');
+  process.exit(1);
+}
+if (!gptJs.includes('syncAfterLive') || !gptJs.includes('Announce after live is back')) {
+  console.error('validate-basic-html: restoreHistory must announce sync status after aria-live returns');
+  process.exit(1);
+}
+if (!gptJs.includes('Array.isArray(remote)') || !gptJs.includes("mode: 'warn'")) {
+  console.error('validate-basic-html: restoreHistory must warn when remote fetch returns null');
+  process.exit(1);
+}
+if (!gptJs.includes('btn.disabled = restorePending')) {
+  console.error('validate-basic-html: starter buttons must disable while restorePending');
+  process.exit(1);
+}
+if (!gptJs.includes('512×512') || !gptJs.includes('site.webmanifest names the site')) {
+  console.error('validate-basic-html: manifest Q&A must mention 512×512 icon');
   process.exit(1);
 }
 if (!/historyEpoch \+= 1/.test(gptJs) || !gptJs.includes('Invalidate in-flight restore')) {

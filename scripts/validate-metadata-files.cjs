@@ -320,6 +320,12 @@ if (!/manifest-src 'self'/.test(csp.value)) {
 if (!/worker-src 'none'/.test(csp.value) || !/media-src 'none'/.test(csp.value)) {
   fail("vercel.json CSP must include worker-src and media-src 'none'");
 }
+if (!/frame-src 'none'/.test(csp.value)) {
+  fail("vercel.json CSP must include frame-src 'none'");
+}
+if (!/style-src-attr 'none'/.test(csp.value)) {
+  fail("vercel.json CSP must include style-src-attr 'none'");
+}
 
 const fontRule = headerRules.find((r) => r.source === '/assets/fonts/(.*).woff2');
 if (!fontRule) fail('vercel.json missing /assets/fonts/(.*).woff2 header rule');
@@ -355,8 +361,8 @@ try {
 } catch {
   fail('package.json is not valid JSON');
 }
-if (!pkg.engines || !pkg.engines.node || !/>=18/.test(String(pkg.engines.node))) {
-  fail('package.json engines.node must require >=18');
+if (!pkg.engines || !pkg.engines.node || !/>=20/.test(String(pkg.engines.node))) {
+  fail('package.json engines.node must require >=20');
 }
 if (!pkg.scripts || pkg.scripts.verify !== 'node scripts/verify-all.cjs') {
   fail('package.json verify script must run scripts/verify-all.cjs');

@@ -1,4 +1,4 @@
-/* cache-bust: 94 */
+/* cache-bust: 95 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent. */
 
@@ -740,6 +740,16 @@ a:focus-visible {
 
 .gpt-starter:hover {
   color: var(--text);
+}
+
+.gpt-starter:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.gpt-starter:disabled:hover {
+  color: var(--text-dim);
 }
 
 .gpt-starter:focus-visible {

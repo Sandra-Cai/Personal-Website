@@ -1,5 +1,5 @@
 /**
- * cache-bust: 113
+ * cache-bust: 114
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -921,7 +921,7 @@
       ],
       priority: 13,
       reply:
-        'site.webmanifest names the site Sandra Cai, starts at /, uses display browser, and includes 16×16, 32×32, and apple-touch icons matching the theme color.',
+        'site.webmanifest names the site Sandra Cai, starts at /, uses display browser, and includes 16×16, 32×32, 512×512, and apple-touch icons matching the theme color.',
     },
     {
       keys: [
@@ -1762,6 +1762,9 @@
     const starters = document.querySelector('.gpt-starters');
     if (!starters) return;
     starters.hidden = Boolean(logEl && logEl.children.length > 0);
+    document.querySelectorAll('.gpt-starter[data-q]').forEach((btn) => {
+      btn.disabled = restorePending;
+    });
   }
 
   function updateClearState() {
@@ -1977,9 +1980,12 @@
     const sessionId = getOrCreateSessionId();
     const livePrev = logEl.getAttribute('aria-live');
     const syncLivePrev = syncStatusEl ? syncStatusEl.getAttribute('aria-live') : null;
+    /** @type {{ mode: string, detail?: string }|null} */
+    let syncAfterLive = null;
     restorePending = true;
     updateSendState();
     updateClearState();
+    updateStartersVisibility();
     logEl.setAttribute('aria-busy', 'true');
     logEl.setAttribute('aria-live', 'off');
     if (syncStatusEl) syncStatusEl.setAttribute('aria-live', 'off');
@@ -1990,7 +1996,7 @@
       logEl.innerHTML = '';
       sidebarList.innerHTML = '';
 
-      if (!apiDisabled && remote && remote.length > 0) {
+      if (!apiDisabled && Array.isArray(remote) && remote.length > 0) {
         const recentRemote = normalizeTurns(remote);
         for (const row of recentRemote) {
           if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
@@ -2007,7 +2013,7 @@
             t: typeof r.t === 'number' ? r.t : Date.now(),
           }))
         );
-        setSyncStatus('server');
+        syncAfterLive = { mode: 'server' };
         updateStartersVisibility();
         updateClearState();
         return;
@@ -2022,10 +2028,13 @@
         addSidebarEntry(row.id, row.q);
       }
 
-      setSyncStatus(apiDisabled ? 'local' : 'server');
+      if (apiDisabled) syncAfterLive = { mode: 'local' };
+      else if (Array.isArray(remote)) syncAfterLive = { mode: 'server' };
+      else syncAfterLive = { mode: 'warn' };
+
       updateStartersVisibility();
       updateClearState();
-      if (!apiDisabled && entries.length > 0) {
+      if (!apiDisabled && Array.isArray(remote) && entries.length > 0) {
         void syncUnsavedTurnsToServer(sessionId)
           .then((did) => {
             if (epoch !== historyEpoch) return;
@@ -2045,8 +2054,11 @@
         if (syncLivePrev) syncStatusEl.setAttribute('aria-live', syncLivePrev);
         else syncStatusEl.setAttribute('aria-live', 'polite');
       }
+      // Announce after live is back — status set while muted is often never heard.
+      if (syncAfterLive) setSyncStatus(syncAfterLive.mode, syncAfterLive.detail);
       updateSendState();
       updateClearState();
+      updateStartersVisibility();
     }
   }
 

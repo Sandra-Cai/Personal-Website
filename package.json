@@ -3,7 +3,7 @@
   "private": true,
   "description": "Static site + optional Vercel API for SandraGPT logging",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "scripts": {
     "verify": "node scripts/verify-all.cjs"
