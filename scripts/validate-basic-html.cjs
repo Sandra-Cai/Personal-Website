@@ -45,7 +45,7 @@ const checks404 = [
   ['404 nav github', /class="ba-nav-external"[^>]*href="https:\/\/github\.com\/Sandra-Cai"/],
   ['404 logo home', /class="ba-logo"[^>]*aria-label="Sandra Cai, home"/],
   ['404 footer contentinfo', /<footer class="ba-footer" role="contentinfo"/],
-  ['404 script cache', /src="\/assets\/script\.js\?v=/],
+  ['404 script cache', /src="\/assets\/script\.js\?v=\d+" defer/],
   ['404 year fallback', /id="year">2026<\/span>/],
   ['404 email footer', /ba-footer-links[\s\S]*?mailto:sandraxcyj@gmail\.com/],
   ['404 favicon ico', /rel="icon"[^>]*favicon\.ico/],
@@ -53,6 +53,7 @@ const checks404 = [
   ['404 primary nav', /<nav class="ba-nav" aria-label="Primary">/],
   ['404 color-scheme light', /<meta name="color-scheme" content="light"/],
   ['404 font preload crossorigin', /rel="preload"[^>]*Geist-Variable\.woff2[^>]*crossorigin/],
+  ['404 apple-touch sizes', /rel="apple-touch-icon"[^>]*sizes="180x180"/],
 ];
 
 const checksIndex = [
@@ -207,7 +208,7 @@ const checksIndex = [
   ['gpt log relevant additions', /id="gpt-log"[^>]*aria-relevant="additions"/],
   ['gpt char count atomic', /id="gpt-char-count"[^>]*aria-atomic="true"/],
   ['font preload crossorigin', /rel="preload"[^>]*Geist-Variable\.woff2[^>]*crossorigin/],
-  ['apple touch icon', /rel="apple-touch-icon"[^>]*apple-touch-icon\.png/],
+  ['apple touch icon', /rel="apple-touch-icon"[^>]*sizes="180x180"[^>]*apple-touch-icon\.png/],
   ['footer current year fallback', /id="year">2026<\/span>/],
   ['favicon ico', /rel="icon"[^>]*favicon\.ico/],
   ['sandra gpt script defer', /src="\/assets\/sandra-gpt\.js\?v=\d+" defer/],
@@ -578,6 +579,11 @@ if (!apiJs.includes("Allow', 'GET, POST, OPTIONS'")) {
   console.error('validate-basic-html: api/sandra-gpt.js OPTIONS must Allow GET, POST, OPTIONS');
   process.exit(1);
 }
+const optionsBlock = apiJs.match(/if \(req\.method === 'OPTIONS'\) \{[\s\S]*?return res\.status\(204\)/);
+if (!optionsBlock || !optionsBlock[0].includes("X-Content-Type-Options', 'nosniff'")) {
+  console.error('validate-basic-html: OPTIONS 204 must set X-Content-Type-Options nosniff');
+  process.exit(1);
+}
 const apiMaxA = apiJs.match(/const MAX_A = (\d+);/);
 if (!apiMaxA || Number(apiMaxA[1]) < 1000 || Number(apiMaxA[1]) > 20000) {
   console.error('validate-basic-html: api/sandra-gpt.js MAX_A must be between 1000 and 20000');
@@ -694,8 +700,20 @@ if (!gptJs.includes('function updateClearState') || !gptJs.includes('clearBusy')
   console.error('validate-basic-html: Clear button must track empty/busy state');
   process.exit(1);
 }
-if (!gptJs.includes('restorePending') || !gptJs.includes('Loading history…')) {
-  console.error('validate-basic-html: restoreHistory must gate submit with restorePending');
+if (!gptJs.includes('Network errors are a warn') || !/catch \(err\) \{[\s\S]*?apiDisabled: false, turns: null/.test(gptJs)) {
+  console.error('validate-basic-html: fetchRemoteHistory catch must treat network errors as warn, not API-off');
+  process.exit(1);
+}
+if (!gptJs.includes('Skip online sync while restore hydrates')) {
+  console.error('validate-basic-html: online sync must no-op while restorePending');
+  process.exit(1);
+}
+if (!/ArrowUp[\s\S]{0,120}if \(restorePending\) return;/.test(gptJs)) {
+  console.error('validate-basic-html: history recall must no-op while restorePending');
+  process.exit(1);
+}
+if (!/restorePending = true;\s*\n\s*if \(form\) form\.setAttribute\('aria-busy', 'true'\)/.test(gptJs)) {
+  console.error('validate-basic-html: restoreHistory must set form aria-busy while hydrating');
   process.exit(1);
 }
 if (!gptJs.includes('syncAfterLive') || !gptJs.includes('Announce after live is back')) {

@@ -235,6 +235,10 @@ const coop = (globalRule.headers || []).find((h) => h.key === 'Cross-Origin-Open
 if (!coop || coop.value !== 'same-origin') {
   fail('vercel.json missing Cross-Origin-Opener-Policy: same-origin');
 }
+const corp = (globalRule.headers || []).find((h) => h.key === 'Cross-Origin-Resource-Policy');
+if (!corp || corp.value !== 'same-origin') {
+  fail('vercel.json missing Cross-Origin-Resource-Policy: same-origin');
+}
 const permissionsPolicy = (globalRule.headers || []).find((h) => h.key === 'Permissions-Policy');
 if (
   !permissionsPolicy ||
@@ -323,6 +327,9 @@ if (!/worker-src 'none'/.test(csp.value) || !/media-src 'none'/.test(csp.value))
 if (!/frame-src 'none'/.test(csp.value)) {
   fail("vercel.json CSP must include frame-src 'none'");
 }
+if (!/child-src 'none'/.test(csp.value)) {
+  fail("vercel.json CSP must include child-src 'none'");
+}
 if (!/style-src-attr 'none'/.test(csp.value)) {
   fail("vercel.json CSP must include style-src-attr 'none'");
 }
@@ -347,6 +354,13 @@ for (const source of htmlCacheSources) {
     fail(`vercel.json ${source} Cache-Control must be max-age=0 must-revalidate`);
   }
 }
+for (const source of ['/404', '/404.html']) {
+  const rule = headerRules.find((r) => r.source === source);
+  const robots = (rule.headers || []).find((h) => h.key === 'X-Robots-Tag');
+  if (!robots || robots.value !== 'noindex, nofollow') {
+    fail(`vercel.json ${source} must set X-Robots-Tag noindex, nofollow`);
+  }
+}
 
 const apiRule = headerRules.find((r) => r.source === '/api/(.*)');
 if (!apiRule) fail('vercel.json missing /api/(.*) header rule');
@@ -363,6 +377,18 @@ try {
 }
 if (!pkg.engines || !pkg.engines.node || !/>=20/.test(String(pkg.engines.node))) {
   fail('package.json engines.node must require >=20');
+}
+let lock;
+try {
+  lock = JSON.parse(read('package-lock.json'));
+} catch {
+  fail('package-lock.json is not valid JSON');
+}
+if (!lock.packages || !lock.packages[''] || !/>=20/.test(String((lock.packages[''].engines || {}).node))) {
+  fail('package-lock.json root engines.node must require >=20');
+}
+if (!fs.existsSync(path.join(root, '.npmrc')) || !/engine-strict\s*=\s*true/.test(read('.npmrc'))) {
+  fail('.npmrc must set engine-strict=true');
 }
 if (!pkg.scripts || pkg.scripts.verify !== 'node scripts/verify-all.cjs') {
   fail('package.json verify script must run scripts/verify-all.cjs');

@@ -1,5 +1,5 @@
 /**
- * cache-bust: 114
+ * cache-bust: 115
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1580,7 +1580,8 @@
       return { apiDisabled: false, turns: j.turns };
     } catch (err) {
       if (isAbortError(err)) return { apiDisabled: false, turns: null };
-      return { apiDisabled: true, turns: null };
+      // Network errors are a warn, not API-off (503/404 still set apiDisabled).
+      return { apiDisabled: false, turns: null };
     }
   }
 
@@ -1983,6 +1984,7 @@
     /** @type {{ mode: string, detail?: string }|null} */
     let syncAfterLive = null;
     restorePending = true;
+    if (form) form.setAttribute('aria-busy', 'true');
     updateSendState();
     updateClearState();
     updateStartersVisibility();
@@ -2047,6 +2049,7 @@
       }
     } finally {
       restorePending = false;
+      if (form) form.setAttribute('aria-busy', 'false');
       logEl.removeAttribute('aria-busy');
       if (livePrev) logEl.setAttribute('aria-live', livePrev);
       else logEl.setAttribute('aria-live', 'polite');
@@ -2166,6 +2169,7 @@
     form.addEventListener('submit', handleSubmit);
     input.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        if (restorePending) return;
         if (!shouldHandleRecallKey(e, input)) return;
         const questions = getRecentQuestions(20);
         if (!questions.length) return;
@@ -2221,9 +2225,13 @@
   window.addEventListener('online', () => {
     window.clearTimeout(onlineDebounce);
     onlineDebounce = window.setTimeout(() => {
+      // Skip online sync while restore hydrates.
+      if (restorePending) return;
+      const epoch = historyEpoch;
       const sid = getOrCreateSessionId();
       void syncUnsavedTurnsToServer(sid)
         .then((did) => {
+          if (epoch !== historyEpoch) return;
           if (did) setSyncStatus('server');
         })
         .catch((err) => {
