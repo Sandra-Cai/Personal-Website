@@ -1,5 +1,5 @@
 /**
- * cache-bust: 115
+ * cache-bust: 116
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1472,6 +1472,7 @@
   /** Bumped on Clear / submit so in-flight restoreHistory results are ignored. */
   let historyEpoch = 0;
   let restorePending = false;
+  let onlineSyncQueued = false;
   let apiAbort = typeof AbortController === 'function' ? new AbortController() : null;
   let lastSubmittedCanonical = '';
   let lastSubmittedAt = 0;
@@ -1637,8 +1638,8 @@
         }
         throw new Error('post_failed');
       }
-      if (r.status === 503) return;
-      if (r.ok) return;
+      if (r.status === 503) return false;
+      if (r.ok) return true;
       if (r.status === 429) {
         throw new Error('rate_limited');
       }
@@ -1665,8 +1666,9 @@
       if (!row || typeof row.id !== 'string') continue;
       if (have.has(row.id)) continue;
       try {
-        await postTurnRemote(sessionId, row.id, row.q, row.a);
-        uploadedAny = true;
+        const posted = await postTurnRemote(sessionId, row.id, row.q, row.a);
+        if (posted === false) return uploadedAny;
+        if (posted) uploadedAny = true;
       } catch (err) {
         if (isAbortError(err)) throw err;
         if (err && err.message === 'rate_limited') {
@@ -1948,6 +1950,8 @@
     }
     clearBusy = true;
     historyEpoch += 1;
+    // Abort in-flight POST so Clear cannot be undone by a late insert.
+    recycleApiAbort();
     updateClearState();
     try {
       localStorage.removeItem(STORAGE_KEY);
@@ -2062,6 +2066,7 @@
       updateSendState();
       updateClearState();
       updateStartersVisibility();
+      if (onlineSyncQueued) flushOnlineSync();
     }
   }
 
@@ -2128,11 +2133,15 @@
     saveHistory(entries);
 
     const sid = getOrCreateSessionId();
+    const submitEpoch = historyEpoch;
     postTurnRemote(sid, turnId, q, answerText)
-      .then(() => {
-        setSyncStatus('server');
+      .then((ok) => {
+        if (submitEpoch !== historyEpoch) return;
+        if (ok) setSyncStatus('server');
+        else setSyncStatus('local');
       })
       .catch((err) => {
+        if (submitEpoch !== historyEpoch) return;
         if (isAbortError(err)) return;
         if (err && err.message === 'rate_limited') {
           setSyncStatus('warn', 'rate');
@@ -2222,22 +2231,28 @@
 
   /** When the network comes back, try to upload any turns still only in the browser. */
   let onlineDebounce;
+  function flushOnlineSync() {
+    if (restorePending) {
+      onlineSyncQueued = true;
+      return;
+    }
+    onlineSyncQueued = false;
+    const epoch = historyEpoch;
+    const sid = getOrCreateSessionId();
+    void syncUnsavedTurnsToServer(sid)
+      .then((did) => {
+        if (epoch !== historyEpoch) return;
+        if (did) setSyncStatus('server');
+      })
+      .catch((err) => {
+        if (isAbortError(err)) return;
+        handleSyncError(err);
+      });
+  }
   window.addEventListener('online', () => {
     window.clearTimeout(onlineDebounce);
     onlineDebounce = window.setTimeout(() => {
-      // Skip online sync while restore hydrates.
-      if (restorePending) return;
-      const epoch = historyEpoch;
-      const sid = getOrCreateSessionId();
-      void syncUnsavedTurnsToServer(sid)
-        .then((did) => {
-          if (epoch !== historyEpoch) return;
-          if (did) setSyncStatus('server');
-        })
-        .catch((err) => {
-          if (isAbortError(err)) return;
-          handleSyncError(err);
-        });
+      flushOnlineSync();
     }, 450);
   });
   function resetSubmitBusy() {

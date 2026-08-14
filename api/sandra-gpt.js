@@ -87,8 +87,8 @@ function json(res, status, body) {
 }
 
 module.exports = async (req, res) => {
-  if (req.method === 'OPTIONS') {
-    res.setHeader('Allow', 'GET, POST, OPTIONS');
+  if (req.method === 'OPTIONS' || req.method === 'HEAD') {
+    res.setHeader('Allow', 'GET, POST, HEAD, OPTIONS');
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Robots-Tag', 'noindex, nofollow');
@@ -214,6 +214,6 @@ module.exports = async (req, res) => {
     return json(res, 200, { ok: true });
   }
 
-  res.setHeader('Allow', 'GET, POST, OPTIONS');
+  res.setHeader('Allow', 'GET, POST, HEAD, OPTIONS');
   return json(res, 405, { ok: false, error: 'method_not_allowed' });
 };

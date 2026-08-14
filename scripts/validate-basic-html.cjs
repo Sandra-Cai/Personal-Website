@@ -53,7 +53,7 @@ const checks404 = [
   ['404 primary nav', /<nav class="ba-nav" aria-label="Primary">/],
   ['404 color-scheme light', /<meta name="color-scheme" content="light"/],
   ['404 font preload crossorigin', /rel="preload"[^>]*Geist-Variable\.woff2[^>]*crossorigin/],
-  ['404 apple-touch sizes', /rel="apple-touch-icon"[^>]*sizes="180x180"/],
+  ['404 apple-touch sizes', /rel="apple-touch-icon"[^>]*sizes="180x180"[^>]*apple-touch-icon\.png/],
 ];
 
 const checksIndex = [
@@ -232,7 +232,9 @@ const checksIndex = [
   ['gpt shell layout', /class="ba-agent-card gpt-shell"/],
   ['jsonld knows systems', /"knowsAbout"[\s\S]*?"Systems engineering"/],
   ['hero lead strong years', /class="ba-lead"[\s\S]*?<strong>4\+ years<\/strong>/],
-  ['research list landmark', /id="research"[\s\S]*?<ul class="ba-list">/],
+  ['research list landmark', /id="research"[\s\S]*?<ul class="ba-list"[^>]*role="list"/],
+  ['gpt sidebar list role', /id="gpt-sidebar-list"[^>]*role="list"/],
+  ['gpt form labelledby', /id="gpt-form"[^>]*aria-labelledby="gpt-heading"/],
   ['agent scroll margin', /id="sandra-gpt"[^>]*class="ba-agent"/],
   ['nav separator', /class="ba-nav-sep"[^>]*aria-hidden="true"/],
   ['work section scroll target', /class="ba-section"[^>]*id="work"/],
@@ -575,13 +577,13 @@ if (!apiJs.includes("Retry-After', '30'")) {
   console.error('validate-basic-html: api/sandra-gpt.js must set Retry-After on rate limits');
   process.exit(1);
 }
-if (!apiJs.includes("Allow', 'GET, POST, OPTIONS'")) {
-  console.error('validate-basic-html: api/sandra-gpt.js OPTIONS must Allow GET, POST, OPTIONS');
+if (!apiJs.includes("Allow', 'GET, POST, HEAD, OPTIONS'")) {
+  console.error('validate-basic-html: api/sandra-gpt.js must Allow GET, POST, HEAD, OPTIONS');
   process.exit(1);
 }
-const optionsBlock = apiJs.match(/if \(req\.method === 'OPTIONS'\) \{[\s\S]*?return res\.status\(204\)/);
+const optionsBlock = apiJs.match(/if \(req\.method === 'OPTIONS' \|\| req\.method === 'HEAD'\) \{[\s\S]*?return res\.status\(204\)/);
 if (!optionsBlock || !optionsBlock[0].includes("X-Content-Type-Options', 'nosniff'")) {
-  console.error('validate-basic-html: OPTIONS 204 must set X-Content-Type-Options nosniff');
+  console.error('validate-basic-html: OPTIONS/HEAD 204 must set X-Content-Type-Options nosniff');
   process.exit(1);
 }
 const apiMaxA = apiJs.match(/const MAX_A = (\d+);/);
@@ -704,8 +706,16 @@ if (!gptJs.includes('Network errors are a warn') || !/catch \(err\) \{[\s\S]*?ap
   console.error('validate-basic-html: fetchRemoteHistory catch must treat network errors as warn, not API-off');
   process.exit(1);
 }
-if (!gptJs.includes('Skip online sync while restore hydrates')) {
-  console.error('validate-basic-html: online sync must no-op while restorePending');
+if (!gptJs.includes('function flushOnlineSync') || !gptJs.includes('onlineSyncQueued')) {
+  console.error('validate-basic-html: online sync must queue and flush after restore');
+  process.exit(1);
+}
+if (!gptJs.includes('Abort in-flight POST so Clear cannot be undone')) {
+  console.error('validate-basic-html: clearAllHistory must abort in-flight POST');
+  process.exit(1);
+}
+if (!/if \(r\.status === 503\) return false;/.test(gptJs) || !/if \(r\.ok\) return true;/.test(gptJs)) {
+  console.error('validate-basic-html: postTurnRemote must return false on 503 and true on ok');
   process.exit(1);
 }
 if (!/ArrowUp[\s\S]{0,120}if \(restorePending\) return;/.test(gptJs)) {

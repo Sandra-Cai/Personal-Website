@@ -30,11 +30,14 @@ jobs:
           test -f sitemap.xml
           test -f 404.html
           test -f scripts/validate-jsonld.cjs
+          test -f scripts/validate-basic-html.cjs
           test -f scripts/validate-metadata-files.cjs
           test -f scripts/verify-all.cjs
           test -f api/sandra-gpt.js
           test -f vercel.json
           test -f package.json
+          test -f site.webmanifest
+          test -f .npmrc
           test -f .well-known/security.txt
 
       - name: Install npm dependencies

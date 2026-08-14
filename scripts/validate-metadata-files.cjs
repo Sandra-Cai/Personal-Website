@@ -398,6 +398,12 @@ const ciYml = read('.github/workflows/ci.yml');
 if (!/npm run verify/.test(ciYml)) {
   fail('.github/workflows/ci.yml must run npm run verify');
 }
+if (!/test -f scripts\/validate-basic-html\.cjs/.test(ciYml)) {
+  fail('.github/workflows/ci.yml must test-f scripts/validate-basic-html.cjs');
+}
+if (!/test -f site\.webmanifest/.test(ciYml) || !/test -f \.npmrc/.test(ciYml)) {
+  fail('.github/workflows/ci.yml must test-f site.webmanifest and .npmrc');
+}
 if (!/node-version:\s*'20'/.test(ciYml)) {
   fail(".github/workflows/ci.yml must use Node 20");
 }
