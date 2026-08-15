@@ -1,4 +1,4 @@
-/* cache-bust: 28 */
+/* cache-bust: 29 */
 document.documentElement.classList.add('js');
 
 const y = document.getElementById('year');
@@ -170,5 +170,5 @@ initLandmarkRefocus();
 initNavScrollSpy();
 
 if (document.querySelector('.ba-404')) {
-  focusProgrammatic(document.getElementById('main'));
+  focusProgrammatic(document.querySelector('.ba-404-title') || document.getElementById('main'));
 }

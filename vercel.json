@@ -9,7 +9,7 @@
     {
       "source": "/site.webmanifest",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=3600" },
+        { "key": "Cache-Control", "value": "public, max-age=3600, must-revalidate" },
         { "key": "Content-Type", "value": "application/manifest+json" }
       ]
     },
@@ -37,26 +37,30 @@
     {
       "source": "/",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "Content-Language", "value": "en-US" }
       ]
     },
     {
       "source": "/404",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "Content-Language", "value": "en-US" },
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
       ]
     },
     {
       "source": "/index.html",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "Content-Language", "value": "en-US" }
       ]
     },
     {
       "source": "/404.html",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "Content-Language", "value": "en-US" },
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
       ]
     },
@@ -93,7 +97,7 @@
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
         { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
         { "key": "Cross-Origin-Resource-Policy", "value": "same-origin" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=(), browsing-topics=()" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=(), browsing-topics=(), fullscreen=(), display-capture=(), screen-wake-lock=()" },
         { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
         { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; style-src-attr 'none'; font-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; frame-src 'none'; child-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'none'; media-src 'none'; upgrade-insecure-requests" }
       ]

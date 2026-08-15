@@ -1,5 +1,5 @@
 /**
- * cache-bust: 116
+ * cache-bust: 117
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1621,14 +1621,21 @@
 
   async function postTurnRemote(sessionId, id, q, a) {
     const payload = JSON.stringify({ sessionId, id, q, a });
+    // Capture once so Clear's recycleApiAbort cannot be bypassed on retry.
+    const signal = apiSignal();
     for (let attempt = 0; attempt < 2; attempt++) {
+      if (signal && signal.aborted) {
+        const abortErr = new Error('Aborted');
+        abortErr.name = 'AbortError';
+        throw abortErr;
+      }
       let r;
       try {
         r = await fetch('/api/sandra-gpt', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: payload,
-          signal: apiSignal(),
+          signal,
         });
       } catch (err) {
         if (isAbortError(err)) throw err;
@@ -1638,7 +1645,7 @@
         }
         throw new Error('post_failed');
       }
-      if (r.status === 503) return false;
+      if (r.status === 503 || r.status === 404) return false;
       if (r.ok) return true;
       if (r.status === 429) {
         throw new Error('rate_limited');
@@ -1657,12 +1664,15 @@
   async function syncUnsavedTurnsToServer(sessionId) {
     const snap = normalizeTurns(loadHistory());
     if (!snap.length) return false;
+    const epoch = historyEpoch;
     const remote = await fetchRemoteHistory(sessionId);
+    if (epoch !== historyEpoch) return false;
     if (remote.apiDisabled || !remote.turns) return false;
     const have = new Set(remote.turns.map((t) => t.id));
     let uploadedAny = false;
     let pendingFailures = false;
     for (const row of snap) {
+      if (epoch !== historyEpoch) return uploadedAny;
       if (!row || typeof row.id !== 'string') continue;
       if (have.has(row.id)) continue;
       try {
@@ -1692,7 +1702,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'clear', sessionId }),
       });
-      if (r.status === 503) return false;
+      if (r.status === 503 || r.status === 404) return false;
       return r.ok;
     } catch (err) {
       if (isAbortError(err)) return false;
@@ -1771,10 +1781,17 @@
   }
 
   function updateClearState() {
+    updateSidebarEmpty();
     if (!clearBtn) return;
     const empty = !(logEl && logEl.children.length) && !(sidebarList && sidebarList.children.length);
     clearBtn.disabled = clearBusy || empty || restorePending;
     clearBtn.setAttribute('aria-busy', clearBusy || restorePending ? 'true' : 'false');
+  }
+
+  function updateSidebarEmpty() {
+    const emptyEl = document.getElementById('gpt-sidebar-empty');
+    if (!emptyEl) return;
+    emptyEl.hidden = Boolean(sidebarList && sidebarList.children.length);
   }
 
   function updateSendState() {
@@ -1885,6 +1902,7 @@
     btn.textContent = label;
     btn.title = questionText;
     btn.setAttribute('aria-label', questionText);
+    btn.setAttribute('aria-controls', `gpt-turn-${turnId}`);
     btn.addEventListener('click', () => {
       setSidebarItemActive(turnId);
       scrollToTurn(turnId);
@@ -2278,6 +2296,7 @@
     if (!event.persisted) return;
     resetSubmitBusy();
     resetClearBusy();
+    flushOnlineSync();
   });
 
   function isTypingInField(el) {

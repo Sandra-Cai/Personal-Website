@@ -248,9 +248,12 @@ if (
   !/payment=\(\)/.test(permissionsPolicy.value) ||
   !/usb=\(\)/.test(permissionsPolicy.value) ||
   !/interest-cohort=\(\)/.test(permissionsPolicy.value) ||
-  !/browsing-topics=\(\)/.test(permissionsPolicy.value)
+  !/browsing-topics=\(\)/.test(permissionsPolicy.value) ||
+  !/fullscreen=\(\)/.test(permissionsPolicy.value) ||
+  !/display-capture=\(\)/.test(permissionsPolicy.value) ||
+  !/screen-wake-lock=\(\)/.test(permissionsPolicy.value)
 ) {
-  fail('vercel.json Permissions-Policy must disable camera, mic, geo, payment, usb, interest-cohort, browsing-topics');
+  fail('vercel.json Permissions-Policy must disable camera, mic, geo, payment, usb, interest-cohort, browsing-topics, fullscreen, display-capture, screen-wake-lock');
 }
 const hsts = (globalRule.headers || []).find((h) => h.key === 'Strict-Transport-Security');
 if (
@@ -272,6 +275,9 @@ for (const [source, type] of metaFiles) {
   const cache = (rule.headers || []).find((h) => h.key === 'Cache-Control');
   if (!cache || !/max-age=3600/.test(cache.value)) {
     fail(`vercel.json ${source} Cache-Control should use max-age=3600`);
+  }
+  if (source === '/site.webmanifest' && !/must-revalidate/.test(cache.value)) {
+    fail('vercel.json /site.webmanifest Cache-Control should include must-revalidate');
   }
   const contentType = (rule.headers || []).find((h) => h.key === 'Content-Type');
   if (!contentType || contentType.value !== type) {
@@ -353,6 +359,10 @@ for (const source of htmlCacheSources) {
   if (!cache || !/max-age=0/.test(cache.value) || !/must-revalidate/.test(cache.value)) {
     fail(`vercel.json ${source} Cache-Control must be max-age=0 must-revalidate`);
   }
+  const lang = (rule.headers || []).find((h) => h.key === 'Content-Language');
+  if (!lang || lang.value !== 'en-US') {
+    fail(`vercel.json ${source} must set Content-Language en-US`);
+  }
 }
 for (const source of ['/404', '/404.html']) {
   const rule = headerRules.find((r) => r.source === source);
@@ -387,6 +397,9 @@ try {
 if (!lock.packages || !lock.packages[''] || !/>=20/.test(String((lock.packages[''].engines || {}).node))) {
   fail('package-lock.json root engines.node must require >=20');
 }
+if (lock.lockfileVersion !== 3) {
+  fail('package-lock.json lockfileVersion must be 3');
+}
 if (!fs.existsSync(path.join(root, '.npmrc')) || !/engine-strict\s*=\s*true/.test(read('.npmrc'))) {
   fail('.npmrc must set engine-strict=true');
 }
@@ -397,6 +410,15 @@ if (!pkg.scripts || pkg.scripts.verify !== 'node scripts/verify-all.cjs') {
 const ciYml = read('.github/workflows/ci.yml');
 if (!/npm run verify/.test(ciYml)) {
   fail('.github/workflows/ci.yml must run npm run verify');
+}
+if (!/test -f package-lock\.json/.test(ciYml)) {
+  fail('.github/workflows/ci.yml must test-f package-lock.json');
+}
+if (!/npm ci --ignore-scripts/.test(ciYml)) {
+  fail('.github/workflows/ci.yml must run npm ci --ignore-scripts');
+}
+if (!/cancel-in-progress:\s*true/.test(ciYml)) {
+  fail('.github/workflows/ci.yml must cancel in-progress runs for the same ref');
 }
 if (!/test -f scripts\/validate-basic-html\.cjs/.test(ciYml)) {
   fail('.github/workflows/ci.yml must test-f scripts/validate-basic-html.cjs');

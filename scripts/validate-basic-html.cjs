@@ -25,6 +25,7 @@ const checks404 = [
   ['skip link', /class="ba-skip"/],
   ['main landmark', /\bid="main"/],
   ['404 main focusable', /<main id="main" tabindex="-1">/],
+  ['404 title focusable', /class="ba-404-title"[^>]*tabindex="-1"/],
   ['404 block', /class="ba-404/],
   ['404 sandragpt link', /href="\/#sandra-gpt"/],
   ['404 robots noindex', /<meta name="robots" content="noindex, nofollow"/],
@@ -64,6 +65,7 @@ const checksIndex = [
   ['main focusable', /<main id="top" tabindex="-1">/],
   ['SandraGPT section', /\bid="sandra-gpt"/],
   ['canonical', /<link rel="canonical" href="https:\/\/www\.sandracai\.com\/"/],
+  ['sitemap link', /<link rel="sitemap" type="application\/xml" href="https:\/\/www\.sandracai\.com\/sitemap\.xml"/],
   ['rel me github', /<link rel="me" href="https:\/\/github\.com\/Sandra-Cai"/],
   ['rel me linkedin', /<link rel="me" href="https:\/\/www\.linkedin\.com\/in\/yijia-sandra-cai"/],
   ['rel me substack', /<link rel="me" href="https:\/\/substack\.com\/@caisandra"/],
@@ -364,7 +366,7 @@ for (const [label, snippet] of [
   ['hash focus work heading', "work: 'accel-title'"],
   ['hash focus beliefs heading', "beliefs: 'beliefs-title'"],
   ['hash focus perspective heading', "perspective: 'split-title'"],
-  ['404 focus main on load', "querySelector('.ba-404')"],
+  ['404 focus title on load', "querySelector('.ba-404-title')"],
   ['scroll timer pagehide clear', 'clearTimeout(scrollTimer)'],
   ['dynamic footer year', 'new Date().getFullYear()'],
 ]) {
@@ -714,8 +716,20 @@ if (!gptJs.includes('Abort in-flight POST so Clear cannot be undone')) {
   console.error('validate-basic-html: clearAllHistory must abort in-flight POST');
   process.exit(1);
 }
-if (!/if \(r\.status === 503\) return false;/.test(gptJs) || !/if \(r\.ok\) return true;/.test(gptJs)) {
-  console.error('validate-basic-html: postTurnRemote must return false on 503 and true on ok');
+if (!/if \(r\.status === 503 \|\| r\.status === 404\) return false;/.test(gptJs) || !/if \(r\.ok\) return true;/.test(gptJs)) {
+  console.error('validate-basic-html: postTurnRemote must return false on 503/404 and true on ok');
+  process.exit(1);
+}
+if (!gptJs.includes('Capture once so Clear') || !gptJs.includes('const signal = apiSignal()')) {
+  console.error('validate-basic-html: postTurnRemote must capture abort signal outside the retry loop');
+  process.exit(1);
+}
+if (!gptJs.includes('function updateSidebarEmpty') || !gptJs.includes("aria-controls', `gpt-turn-${turnId}`")) {
+  console.error('validate-basic-html: sidebar empty state and aria-controls on history items required');
+  process.exit(1);
+}
+if (!/addEventListener\('pageshow'[\s\S]*?flushOnlineSync\(\)/.test(gptJs)) {
+  console.error('validate-basic-html: bfcache pageshow must flush online sync');
   process.exit(1);
 }
 if (!/ArrowUp[\s\S]{0,120}if \(restorePending\) return;/.test(gptJs)) {

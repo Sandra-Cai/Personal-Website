@@ -9,6 +9,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -36,12 +40,13 @@ jobs:
           test -f api/sandra-gpt.js
           test -f vercel.json
           test -f package.json
+          test -f package-lock.json
           test -f site.webmanifest
           test -f .npmrc
           test -f .well-known/security.txt
 
       - name: Install npm dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Verify site (JSON-LD + JS syntax)
         run: npm run verify
