@@ -704,6 +704,26 @@ if (!gptJs.includes('function updateClearState') || !gptJs.includes('clearBusy')
   console.error('validate-basic-html: Clear button must track empty/busy state');
   process.exit(1);
 }
+if (!/submitBusy \|\| restorePending \|\| clearBusy/.test(gptJs)) {
+  console.error('validate-basic-html: handleSubmit must gate on clearBusy');
+  process.exit(1);
+}
+if (!gptJs.includes("'Clearing…'") || !gptJs.includes('restorePending || clearBusy')) {
+  console.error('validate-basic-html: send/starters must disable and label Clearing… while clearBusy');
+  process.exit(1);
+}
+if (!gptJs.includes('function scheduleRateLimitedRetry') || !gptJs.includes('Retry-After')) {
+  console.error('validate-basic-html: client must honor Retry-After with a delayed sync');
+  process.exit(1);
+}
+if (!gptJs.includes('function delayMs') || !gptJs.includes("addEventListener('abort'")) {
+  console.error('validate-basic-html: postTurnRemote retry delay must be abort-aware');
+  process.exit(1);
+}
+if (!stylesCss.includes('.ba-404-title:focus') || !stylesCss.includes('.ba-404-title:focus-visible')) {
+  console.error('validate-basic-html: styles must show a focus ring on .ba-404-title');
+  process.exit(1);
+}
 if (!gptJs.includes('Network errors are a warn') || !/catch \(err\) \{[\s\S]*?apiDisabled: false, turns: null/.test(gptJs)) {
   console.error('validate-basic-html: fetchRemoteHistory catch must treat network errors as warn, not API-off');
   process.exit(1);
@@ -732,8 +752,8 @@ if (!/addEventListener\('pageshow'[\s\S]*?flushOnlineSync\(\)/.test(gptJs)) {
   console.error('validate-basic-html: bfcache pageshow must flush online sync');
   process.exit(1);
 }
-if (!/ArrowUp[\s\S]{0,120}if \(restorePending\) return;/.test(gptJs)) {
-  console.error('validate-basic-html: history recall must no-op while restorePending');
+if (!/ArrowUp[\s\S]{0,160}if \(restorePending \|\| clearBusy\) return;/.test(gptJs)) {
+  console.error('validate-basic-html: history recall must no-op while restorePending or clearBusy');
   process.exit(1);
 }
 if (!/restorePending = true;\s*\n\s*if \(form\) form\.setAttribute\('aria-busy', 'true'\)/.test(gptJs)) {
@@ -768,8 +788,8 @@ if (!gptJs.includes("setAttribute('aria-label', q)")) {
   console.error('validate-basic-html: starter buttons must aria-label from data-q when truncated');
   process.exit(1);
 }
-if (!/if \(restorePending\) return;/.test(gptJs) || !gptJs.includes('form.requestSubmit()')) {
-  console.error('validate-basic-html: starter prompts must no-op while restorePending');
+if (!/if \(restorePending \|\| clearBusy\) return;/.test(gptJs) || !gptJs.includes('form.requestSubmit()')) {
+  console.error('validate-basic-html: starter prompts must no-op while restorePending or clearBusy');
   process.exit(1);
 }
 if (!gptJs.includes('function focusInputField') || !gptJs.includes('focusVisible: true')) {

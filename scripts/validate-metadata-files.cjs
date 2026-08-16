@@ -276,8 +276,8 @@ for (const [source, type] of metaFiles) {
   if (!cache || !/max-age=3600/.test(cache.value)) {
     fail(`vercel.json ${source} Cache-Control should use max-age=3600`);
   }
-  if (source === '/site.webmanifest' && !/must-revalidate/.test(cache.value)) {
-    fail('vercel.json /site.webmanifest Cache-Control should include must-revalidate');
+  if (!/must-revalidate/.test(cache.value)) {
+    fail(`vercel.json ${source} Cache-Control should include must-revalidate`);
   }
   const contentType = (rule.headers || []).find((h) => h.key === 'Content-Type');
   if (!contentType || contentType.value !== type) {
@@ -287,8 +287,8 @@ for (const [source, type] of metaFiles) {
 const securityRule = headerRules.find((r) => r.source === '/.well-known/security.txt');
 if (!securityRule) fail('vercel.json missing /.well-known/security.txt cache header rule');
 const securityCache = (securityRule.headers || []).find((h) => h.key === 'Cache-Control');
-if (!securityCache || !/max-age=3600/.test(securityCache.value)) {
-  fail('vercel.json security.txt Cache-Control should use max-age=3600');
+if (!securityCache || !/max-age=3600/.test(securityCache.value) || !/must-revalidate/.test(securityCache.value)) {
+  fail('vercel.json security.txt Cache-Control should use max-age=3600 must-revalidate');
 }
 
 const securityType = (securityRule.headers || []).find((h) => h.key === 'Content-Type');

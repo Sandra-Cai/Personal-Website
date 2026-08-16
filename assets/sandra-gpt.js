@@ -1,5 +1,5 @@
 /**
- * cache-bust: 117
+ * cache-bust: 118
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1473,6 +1473,8 @@
   let historyEpoch = 0;
   let restorePending = false;
   let onlineSyncQueued = false;
+  let rateRetryTimer = 0;
+  const RATE_RETRY_CAP_MS = 30_000;
   let apiAbort = typeof AbortController === 'function' ? new AbortController() : null;
   let lastSubmittedCanonical = '';
   let lastSubmittedAt = 0;
@@ -1614,9 +1616,49 @@
       setSyncStatus('warn', 'partial');
     } else if (err && err.message === 'rate_limited') {
       setSyncStatus('warn', 'rate');
+      scheduleRateLimitedRetry(typeof err.retryAfterMs === 'number' ? err.retryAfterMs : RATE_RETRY_CAP_MS);
     } else {
       setSyncStatus('warn');
     }
+  }
+
+  function parseRetryAfterMs(res) {
+    const raw = res && res.headers ? res.headers.get('Retry-After') : null;
+    if (!raw) return RATE_RETRY_CAP_MS;
+    const secs = Number(raw);
+    if (!Number.isFinite(secs) || secs < 0) return RATE_RETRY_CAP_MS;
+    return Math.min(Math.round(secs * 1000), RATE_RETRY_CAP_MS);
+  }
+
+  function scheduleRateLimitedRetry(ms) {
+    window.clearTimeout(rateRetryTimer);
+    const wait = Math.min(Math.max(Number(ms) || RATE_RETRY_CAP_MS, 0), RATE_RETRY_CAP_MS);
+    rateRetryTimer = window.setTimeout(() => {
+      rateRetryTimer = 0;
+      flushOnlineSync();
+    }, wait || RATE_RETRY_CAP_MS);
+  }
+
+  function delayMs(ms, signal) {
+    return new Promise((resolve, reject) => {
+      if (signal && signal.aborted) {
+        const abortErr = new Error('Aborted');
+        abortErr.name = 'AbortError';
+        reject(abortErr);
+        return;
+      }
+      const t = window.setTimeout(() => {
+        if (signal) signal.removeEventListener('abort', onAbort);
+        resolve();
+      }, ms);
+      function onAbort() {
+        window.clearTimeout(t);
+        const abortErr = new Error('Aborted');
+        abortErr.name = 'AbortError';
+        reject(abortErr);
+      }
+      if (signal) signal.addEventListener('abort', onAbort, { once: true });
+    });
   }
 
   async function postTurnRemote(sessionId, id, q, a) {
@@ -1640,7 +1682,7 @@
       } catch (err) {
         if (isAbortError(err)) throw err;
         if (attempt === 0) {
-          await new Promise((resolve) => setTimeout(resolve, 450));
+          await delayMs(450, signal);
           continue;
         }
         throw new Error('post_failed');
@@ -1648,10 +1690,12 @@
       if (r.status === 503 || r.status === 404) return false;
       if (r.ok) return true;
       if (r.status === 429) {
-        throw new Error('rate_limited');
+        const err = new Error('rate_limited');
+        err.retryAfterMs = parseRetryAfterMs(r);
+        throw err;
       }
       if (attempt === 0) {
-        await new Promise((resolve) => setTimeout(resolve, 450));
+        await delayMs(450, signal);
       }
     }
     throw new Error('post_failed');
@@ -1776,7 +1820,7 @@
     if (!starters) return;
     starters.hidden = Boolean(logEl && logEl.children.length > 0);
     document.querySelectorAll('.gpt-starter[data-q]').forEach((btn) => {
-      btn.disabled = restorePending;
+      btn.disabled = restorePending || clearBusy;
     });
   }
 
@@ -1797,12 +1841,15 @@
   function updateSendState() {
     const sendBtn = form?.querySelector('.gpt-send');
     if (!sendBtn || !input) return;
-    const busy = form?.getAttribute('aria-busy') === 'true' || submitBusy || restorePending;
+    const busy = form?.getAttribute('aria-busy') === 'true' || submitBusy || restorePending || clearBusy;
     const hasText = Boolean(input.value.trim());
     sendBtn.disabled = busy || !hasText;
     let label = 'Enter a question to send';
-    if (busy) label = restorePending ? 'Loading history…' : 'Sending…';
-    else if (hasText) label = 'Send question';
+    if (busy) {
+      if (restorePending) label = 'Loading history…';
+      else if (clearBusy) label = 'Clearing…';
+      else label = 'Sending…';
+    } else if (hasText) label = 'Send question';
     sendBtn.setAttribute('aria-label', label);
   }
 
@@ -1826,7 +1873,7 @@
         btn.setAttribute('aria-label', q);
       }
       btn.addEventListener('click', () => {
-        if (restorePending) return;
+        if (restorePending || clearBusy) return;
         const ask = btn.getAttribute('data-q');
         if (!ask || !input || !form) return;
         input.value = ask.slice(0, MAX_QUESTION_CHARS);
@@ -1970,7 +2017,10 @@
     historyEpoch += 1;
     // Abort in-flight POST so Clear cannot be undone by a late insert.
     recycleApiAbort();
+    if (form) form.setAttribute('aria-busy', 'true');
     updateClearState();
+    updateSendState();
+    updateStartersVisibility();
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch {
@@ -1989,7 +2039,10 @@
       setSyncStatus(clearedOnServer ? 'server' : 'local');
     } finally {
       clearBusy = false;
+      if (form) form.setAttribute('aria-busy', 'false');
       updateClearState();
+      updateSendState();
+      updateStartersVisibility();
     }
     if (input) {
       focusInputField();
@@ -2090,7 +2143,7 @@
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (submitBusy || restorePending) return;
+    if (submitBusy || restorePending || clearBusy) return;
     const q = input.value.trim();
     if (!q) return;
     const canonicalQ = normalize(q);
@@ -2163,6 +2216,7 @@
         if (isAbortError(err)) return;
         if (err && err.message === 'rate_limited') {
           setSyncStatus('warn', 'rate');
+          scheduleRateLimitedRetry(typeof err.retryAfterMs === 'number' ? err.retryAfterMs : RATE_RETRY_CAP_MS);
         } else {
           setSyncStatus('warn');
         }
@@ -2196,7 +2250,7 @@
     form.addEventListener('submit', handleSubmit);
     input.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-        if (restorePending) return;
+        if (restorePending || clearBusy) return;
         if (!shouldHandleRecallKey(e, input)) return;
         const questions = getRecentQuestions(20);
         if (!questions.length) return;
@@ -2283,10 +2337,13 @@
   function resetClearBusy() {
     clearBusy = false;
     updateClearState();
+    updateSendState();
+    updateStartersVisibility();
   }
 
   window.addEventListener('pagehide', () => {
     window.clearTimeout(onlineDebounce);
+    window.clearTimeout(rateRetryTimer);
     recycleApiAbort();
     resetSubmitBusy();
     resetClearBusy();
