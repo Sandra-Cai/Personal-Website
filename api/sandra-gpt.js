@@ -78,6 +78,13 @@ function allowRate(map, ip, max, windowMs) {
   return true;
 }
 
+function retryAfterHeader(map, ip) {
+  const now = Date.now();
+  const e = map.get(ip);
+  if (!e) return '1';
+  return String(Math.max(1, Math.min(60, Math.ceil((e.reset - now) / 1000))));
+}
+
 function json(res, status, body) {
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store');
@@ -108,7 +115,7 @@ module.exports = async (req, res) => {
   if (req.method === 'GET') {
     const ip = getClientIp(req);
     if (!allowRate(getBuckets, ip, 120, 60_000)) {
-      res.setHeader('Retry-After', '30');
+      res.setHeader('Retry-After', retryAfterHeader(getBuckets, ip));
       return json(res, 429, { ok: false, error: 'rate_limited' });
     }
 
@@ -154,7 +161,7 @@ module.exports = async (req, res) => {
   if (req.method === 'POST') {
     const ip = getClientIp(req);
     if (!allowRate(postBuckets, ip, 45, 60_000)) {
-      res.setHeader('Retry-After', '30');
+      res.setHeader('Retry-After', retryAfterHeader(postBuckets, ip));
       return json(res, 429, { ok: false, error: 'rate_limited' });
     }
 

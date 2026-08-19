@@ -29,6 +29,7 @@ const checks404 = [
   ['404 block', /class="ba-404/],
   ['404 sandragpt link', /href="\/#sandra-gpt"/],
   ['404 robots noindex', /<meta name="robots" content="noindex, nofollow"/],
+  ['404 viewport-fit cover', /<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/],
   ['404 footer home', /ba-footer-links[\s\S]*?<a href="\/">Home<\/a>/],
   ['site stylesheet', /href="\/assets\/styles\.css\?v=/],
   ['nav separator', /class="ba-nav-sep"/],
@@ -169,7 +170,7 @@ const checksIndex = [
   ['og image dimensions', /property="og:image:width" content="1200"[\s\S]*?property="og:image:height" content="630"/],
   ['research synthetic media', /id="research"[\s\S]*?synthetic-media trust/],
   ['beliefs microstructure', /id="beliefs"[\s\S]*?Microstructure, risk/],
-  ['gpt sidebar history', /class="gpt-sidebar-title"[^>]*>History/],
+  ['gpt sidebar history', /<h3 class="gpt-sidebar-title"[^>]*>History/],
   ['nav writing substack', /class="ba-nav-external"[^>]*href="https:\/\/substack\.com\/@caisandra"/],
   ['JSON-LD person url', /"url":\s*"https:\/\/www\.sandracai\.com\/"/],
   ['gpt char count', /id="gpt-char-count"[^>]*aria-live="polite"/],
@@ -179,10 +180,11 @@ const checksIndex = [
   ['skip link top', /class="ba-skip" href="#top"/],
   ['gpt form aria-busy', /id="gpt-form"[^>]*aria-busy="false"/],
   ['gpt sync status', /id="gpt-sync-status"[^>]*role="status"/],
-  ['gpt clear history', /id="gpt-clear-history"[^>]*aria-label="Clear question history"/],
+  ['gpt clear history', /id="gpt-clear-history"[^>]*aria-controls="gpt-sidebar-list"/],
   ['external strip writing', /aria-label="External links"[\s\S]*?ba-strip-label">Writing/],
   ['og image social card', /property="og:image" content="[^"]*social-card\.jpg"/],
-  ['meta viewport', /<meta name="viewport" content="width=device-width, initial-scale=1"/],
+  ['meta viewport', /<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/],
+  ['robots preview', /<meta name="robots" content="index, follow, max-image-preview:large"/],
   ['gpt enterkeyhint', /id="gpt-input"[^>]*enterkeyhint="send"/],
   ['nav github', /class="ba-nav-external"[^>]*href="https:\/\/github\.com\/Sandra-Cai"/],
   ['logo aria home', /class="ba-logo"[^>]*aria-label="Sandra Cai, home"/],
@@ -366,7 +368,8 @@ for (const [label, snippet] of [
   ['hash focus work heading', "work: 'accel-title'"],
   ['hash focus beliefs heading', "beliefs: 'beliefs-title'"],
   ['hash focus perspective heading', "perspective: 'split-title'"],
-  ['404 focus title on load', "querySelector('.ba-404-title')"],
+  ['404 focus title on load', 'function focus404Title'],
+  ['404 bfcache title focus', 'if (event.persisted) focus404Title()'],
   ['scroll timer pagehide clear', 'clearTimeout(scrollTimer)'],
   ['dynamic footer year', 'new Date().getFullYear()'],
 ]) {
@@ -575,8 +578,8 @@ if (!/replace\(\/\\u0000\/g,\s*''\)/.test(apiJs)) {
   console.error('validate-basic-html: api sanitize must strip null bytes');
   process.exit(1);
 }
-if (!apiJs.includes("Retry-After', '30'")) {
-  console.error('validate-basic-html: api/sandra-gpt.js must set Retry-After on rate limits');
+if (!apiJs.includes('function retryAfterHeader') || !apiJs.includes("setHeader('Retry-After'")) {
+  console.error('validate-basic-html: api/sandra-gpt.js must set Retry-After from remaining window');
   process.exit(1);
 }
 if (!apiJs.includes("Allow', 'GET, POST, HEAD, OPTIONS'")) {
@@ -716,12 +719,28 @@ if (!gptJs.includes('function scheduleRateLimitedRetry') || !gptJs.includes('Ret
   console.error('validate-basic-html: client must honor Retry-After with a delayed sync');
   process.exit(1);
 }
+if (!gptJs.includes('r.status === 429') || !gptJs.includes('scheduleRateLimitedRetry(parseRetryAfterMs(r))')) {
+  console.error('validate-basic-html: fetchRemoteHistory must honor GET 429 Retry-After');
+  process.exit(1);
+}
+if (!gptJs.includes("cache: 'no-store'")) {
+  console.error('validate-basic-html: SandraGPT fetches must use cache no-store');
+  process.exit(1);
+}
+if (!/clearTimeout\(rateRetryTimer\)/.test(gptJs)) {
+  console.error('validate-basic-html: Clear must cancel pending rate-limit retries');
+  process.exit(1);
+}
 if (!gptJs.includes('function delayMs') || !gptJs.includes("addEventListener('abort'")) {
   console.error('validate-basic-html: postTurnRemote retry delay must be abort-aware');
   process.exit(1);
 }
 if (!stylesCss.includes('.ba-404-title:focus') || !stylesCss.includes('.ba-404-title:focus-visible')) {
   console.error('validate-basic-html: styles must show a focus ring on .ba-404-title');
+  process.exit(1);
+}
+if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText')) {
+  console.error('validate-basic-html: gpt input must restore a forced-colors focus outline');
   process.exit(1);
 }
 if (!gptJs.includes('Network errors are a warn') || !/catch \(err\) \{[\s\S]*?apiDisabled: false, turns: null/.test(gptJs)) {

@@ -426,8 +426,14 @@ if (!/test -f scripts\/validate-basic-html\.cjs/.test(ciYml)) {
 if (!/test -f site\.webmanifest/.test(ciYml) || !/test -f \.npmrc/.test(ciYml)) {
   fail('.github/workflows/ci.yml must test-f site.webmanifest and .npmrc');
 }
-if (!/node-version:\s*'20'/.test(ciYml)) {
-  fail(".github/workflows/ci.yml must use Node 20");
+if (!/node-version:\s*'22'/.test(ciYml)) {
+  fail(".github/workflows/ci.yml must use Node 22");
+}
+if (!/persist-credentials:\s*false/.test(ciYml)) {
+  fail('.github/workflows/ci.yml checkout must set persist-credentials false');
+}
+if (!/timeout-minutes:\s*5/.test(ciYml)) {
+  fail('.github/workflows/ci.yml check job must set timeout-minutes 5');
 }
 if (!/permissions:\s*\n\s*contents:\s*read/.test(ciYml)) {
   fail('.github/workflows/ci.yml must set permissions.contents to read');

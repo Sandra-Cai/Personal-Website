@@ -1,5 +1,5 @@
 /**
- * cache-bust: 118
+ * cache-bust: 119
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1565,9 +1565,14 @@
     try {
       const r = await fetch(`/api/sandra-gpt?sessionId=${encodeURIComponent(sessionId)}`, {
         signal: apiSignal(),
+        cache: 'no-store',
       });
       if (r.status === 503 || r.status === 404) {
         return { apiDisabled: true, turns: null };
+      }
+      if (r.status === 429) {
+        scheduleRateLimitedRetry(parseRetryAfterMs(r));
+        return { apiDisabled: false, turns: null };
       }
       if (!r.ok) {
         return { apiDisabled: false, turns: null };
@@ -1678,6 +1683,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: payload,
           signal,
+          cache: 'no-store',
         });
       } catch (err) {
         if (isAbortError(err)) throw err;
@@ -2017,6 +2023,8 @@
     historyEpoch += 1;
     // Abort in-flight POST so Clear cannot be undone by a late insert.
     recycleApiAbort();
+    window.clearTimeout(rateRetryTimer);
+    rateRetryTimer = 0;
     if (form) form.setAttribute('aria-busy', 'true');
     updateClearState();
     updateSendState();
