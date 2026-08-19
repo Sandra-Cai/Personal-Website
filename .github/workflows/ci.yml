@@ -46,6 +46,7 @@ jobs:
           test -f package-lock.json
           test -f site.webmanifest
           test -f .npmrc
+          test -f .nvmrc
           test -f .well-known/security.txt
 
       - name: Install npm dependencies

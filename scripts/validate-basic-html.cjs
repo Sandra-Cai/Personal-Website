@@ -180,12 +180,13 @@ const checksIndex = [
   ['skip link top', /class="ba-skip" href="#top"/],
   ['gpt form aria-busy', /id="gpt-form"[^>]*aria-busy="false"/],
   ['gpt sync status', /id="gpt-sync-status"[^>]*role="status"/],
-  ['gpt clear history', /id="gpt-clear-history"[^>]*aria-controls="gpt-sidebar-list"/],
+  ['gpt clear history', /id="gpt-clear-history"[^>]*aria-controls="gpt-sidebar-list gpt-log"/],
   ['external strip writing', /aria-label="External links"[\s\S]*?ba-strip-label">Writing/],
   ['og image social card', /property="og:image" content="[^"]*social-card\.jpg"/],
   ['meta viewport', /<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/],
   ['robots preview', /<meta name="robots" content="index, follow, max-image-preview:large"/],
   ['gpt enterkeyhint', /id="gpt-input"[^>]*enterkeyhint="send"/],
+  ['gpt inputmode search', /id="gpt-input"[^>]*inputmode="search"/],
   ['nav github', /class="ba-nav-external"[^>]*href="https:\/\/github\.com\/Sandra-Cai"/],
   ['logo aria home', /class="ba-logo"[^>]*aria-label="Sandra Cai, home"/],
   ['gpt starters label', /class="gpt-starters"[^>]*aria-label="Example questions"/],
@@ -727,6 +728,14 @@ if (!gptJs.includes("cache: 'no-store'")) {
   console.error('validate-basic-html: SandraGPT fetches must use cache no-store');
   process.exit(1);
 }
+if (!gptJs.includes('rateLimited: true') || !gptJs.includes("detail: 'rate'")) {
+  console.error('validate-basic-html: GET 429 must surface rate-limited sync status');
+  process.exit(1);
+}
+if (!gptJs.includes('pendingServerClear') || !gptJs.includes('function applyClearRemoteResult')) {
+  console.error('validate-basic-html: failed server Clear must retry instead of claiming API-off');
+  process.exit(1);
+}
 if (!/clearTimeout\(rateRetryTimer\)/.test(gptJs)) {
   console.error('validate-basic-html: Clear must cancel pending rate-limit retries');
   process.exit(1);
@@ -739,8 +748,8 @@ if (!stylesCss.includes('.ba-404-title:focus') || !stylesCss.includes('.ba-404-t
   console.error('validate-basic-html: styles must show a focus ring on .ba-404-title');
   process.exit(1);
 }
-if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText')) {
-  console.error('validate-basic-html: gpt input must restore a forced-colors focus outline');
+if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-h2:focus-visible')) {
+  console.error('validate-basic-html: forced-colors must restore focus outlines on headings and GPT chrome');
   process.exit(1);
 }
 if (!gptJs.includes('Network errors are a warn') || !/catch \(err\) \{[\s\S]*?apiDisabled: false, turns: null/.test(gptJs)) {

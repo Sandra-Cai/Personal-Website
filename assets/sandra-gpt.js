@@ -1,5 +1,5 @@
 /**
- * cache-bust: 119
+ * cache-bust: 120
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1473,6 +1473,7 @@
   let historyEpoch = 0;
   let restorePending = false;
   let onlineSyncQueued = false;
+  let pendingServerClear = false;
   let rateRetryTimer = 0;
   const RATE_RETRY_CAP_MS = 30_000;
   let apiAbort = typeof AbortController === 'function' ? new AbortController() : null;
@@ -1572,7 +1573,7 @@
       }
       if (r.status === 429) {
         scheduleRateLimitedRetry(parseRetryAfterMs(r));
-        return { apiDisabled: false, turns: null };
+        return { apiDisabled: false, turns: null, rateLimited: true };
       }
       if (!r.ok) {
         return { apiDisabled: false, turns: null };
@@ -1751,12 +1752,33 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'clear', sessionId }),
+        cache: 'no-store',
       });
-      if (r.status === 503 || r.status === 404) return false;
-      return r.ok;
+      if (r.status === 503 || r.status === 404) return { status: 'local' };
+      if (r.status === 429) return { status: 'rate', retryAfterMs: parseRetryAfterMs(r) };
+      if (r.ok) return { status: 'server' };
+      return { status: 'warn' };
     } catch (err) {
-      if (isAbortError(err)) return false;
-      return false;
+      if (isAbortError(err)) return { status: 'warn' };
+      return { status: 'warn' };
+    }
+  }
+
+  function applyClearRemoteResult(result) {
+    if (!result) return;
+    if (result.status === 'server') {
+      pendingServerClear = false;
+      setSyncStatus('server');
+    } else if (result.status === 'local') {
+      pendingServerClear = false;
+      setSyncStatus('local');
+    } else if (result.status === 'rate') {
+      pendingServerClear = true;
+      setSyncStatus('warn', 'rate');
+      scheduleRateLimitedRetry(result.retryAfterMs);
+    } else {
+      pendingServerClear = true;
+      setSyncStatus('warn');
     }
   }
 
@@ -2043,8 +2065,9 @@
     updateStartersVisibility();
     updateClearState();
     try {
-      const clearedOnServer = await clearRemote(getOrCreateSessionId());
-      setSyncStatus(clearedOnServer ? 'server' : 'local');
+      pendingServerClear = true;
+      const result = await clearRemote(getOrCreateSessionId());
+      applyClearRemoteResult(result);
     } finally {
       clearBusy = false;
       if (form) form.setAttribute('aria-busy', 'false');
@@ -2075,7 +2098,7 @@
     logEl.setAttribute('aria-live', 'off');
     if (syncStatusEl) syncStatusEl.setAttribute('aria-live', 'off');
     try {
-      const { apiDisabled, turns: remote } = await fetchRemoteHistory(sessionId);
+      const { apiDisabled, turns: remote, rateLimited } = await fetchRemoteHistory(sessionId);
       if (epoch !== historyEpoch) return;
 
       logEl.innerHTML = '';
@@ -2114,6 +2137,7 @@
       }
 
       if (apiDisabled) syncAfterLive = { mode: 'local' };
+      else if (rateLimited) syncAfterLive = { mode: 'warn', detail: 'rate' };
       else if (Array.isArray(remote)) syncAfterLive = { mode: 'server' };
       else syncAfterLive = { mode: 'warn' };
 
@@ -2319,6 +2343,13 @@
     onlineSyncQueued = false;
     const epoch = historyEpoch;
     const sid = getOrCreateSessionId();
+    if (pendingServerClear) {
+      void clearRemote(sid).then((result) => {
+        if (epoch !== historyEpoch) return;
+        applyClearRemoteResult(result);
+      });
+      return;
+    }
     void syncUnsavedTurnsToServer(sid)
       .then((did) => {
         if (epoch !== historyEpoch) return;

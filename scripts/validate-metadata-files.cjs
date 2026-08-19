@@ -251,9 +251,14 @@ if (
   !/browsing-topics=\(\)/.test(permissionsPolicy.value) ||
   !/fullscreen=\(\)/.test(permissionsPolicy.value) ||
   !/display-capture=\(\)/.test(permissionsPolicy.value) ||
-  !/screen-wake-lock=\(\)/.test(permissionsPolicy.value)
+  !/screen-wake-lock=\(\)/.test(permissionsPolicy.value) ||
+  !/accelerometer=\(\)/.test(permissionsPolicy.value) ||
+  !/gyroscope=\(\)/.test(permissionsPolicy.value) ||
+  !/magnetometer=\(\)/.test(permissionsPolicy.value) ||
+  !/autoplay=\(\)/.test(permissionsPolicy.value) ||
+  !/picture-in-picture=\(\)/.test(permissionsPolicy.value)
 ) {
-  fail('vercel.json Permissions-Policy must disable camera, mic, geo, payment, usb, interest-cohort, browsing-topics, fullscreen, display-capture, screen-wake-lock');
+  fail('vercel.json Permissions-Policy must disable camera, mic, geo, payment, usb, sensors, autoplay, PiP, and related APIs');
 }
 const hsts = (globalRule.headers || []).find((h) => h.key === 'Strict-Transport-Security');
 if (
@@ -378,6 +383,10 @@ const apiCache = (apiRule.headers || []).find((h) => h.key === 'Cache-Control');
 if (!apiCache || apiCache.value !== 'no-store') {
   fail('vercel.json /api Cache-Control must be no-store');
 }
+const apiRobots = (apiRule.headers || []).find((h) => h.key === 'X-Robots-Tag');
+if (!apiRobots || apiRobots.value !== 'noindex, nofollow') {
+  fail('vercel.json /api must set X-Robots-Tag noindex, nofollow');
+}
 
 let pkg;
 try {
@@ -385,8 +394,8 @@ try {
 } catch {
   fail('package.json is not valid JSON');
 }
-if (!pkg.engines || !pkg.engines.node || !/>=20/.test(String(pkg.engines.node))) {
-  fail('package.json engines.node must require >=20');
+if (!pkg.engines || !pkg.engines.node || !/>=22/.test(String(pkg.engines.node))) {
+  fail('package.json engines.node must require >=22');
 }
 let lock;
 try {
@@ -394,14 +403,17 @@ try {
 } catch {
   fail('package-lock.json is not valid JSON');
 }
-if (!lock.packages || !lock.packages[''] || !/>=20/.test(String((lock.packages[''].engines || {}).node))) {
-  fail('package-lock.json root engines.node must require >=20');
+if (!lock.packages || !lock.packages[''] || !/>=22/.test(String((lock.packages[''].engines || {}).node))) {
+  fail('package-lock.json root engines.node must require >=22');
 }
 if (lock.lockfileVersion !== 3) {
   fail('package-lock.json lockfileVersion must be 3');
 }
 if (!fs.existsSync(path.join(root, '.npmrc')) || !/engine-strict\s*=\s*true/.test(read('.npmrc'))) {
   fail('.npmrc must set engine-strict=true');
+}
+if (!fs.existsSync(path.join(root, '.nvmrc')) || !/^22\s*$/.test(read('.nvmrc'))) {
+  fail('.nvmrc must pin Node 22');
 }
 if (!pkg.scripts || pkg.scripts.verify !== 'node scripts/verify-all.cjs') {
   fail('package.json verify script must run scripts/verify-all.cjs');
@@ -425,6 +437,9 @@ if (!/test -f scripts\/validate-basic-html\.cjs/.test(ciYml)) {
 }
 if (!/test -f site\.webmanifest/.test(ciYml) || !/test -f \.npmrc/.test(ciYml)) {
   fail('.github/workflows/ci.yml must test-f site.webmanifest and .npmrc');
+}
+if (!/test -f \.nvmrc/.test(ciYml)) {
+  fail('.github/workflows/ci.yml must test-f .nvmrc');
 }
 if (!/node-version:\s*'22'/.test(ciYml)) {
   fail(".github/workflows/ci.yml must use Node 22");
