@@ -256,9 +256,14 @@ if (
   !/gyroscope=\(\)/.test(permissionsPolicy.value) ||
   !/magnetometer=\(\)/.test(permissionsPolicy.value) ||
   !/autoplay=\(\)/.test(permissionsPolicy.value) ||
-  !/picture-in-picture=\(\)/.test(permissionsPolicy.value)
+  !/picture-in-picture=\(\)/.test(permissionsPolicy.value) ||
+  !/clipboard-write=\(\)/.test(permissionsPolicy.value) ||
+  !/web-share=\(\)/.test(permissionsPolicy.value) ||
+  !/hid=\(\)/.test(permissionsPolicy.value) ||
+  !/serial=\(\)/.test(permissionsPolicy.value) ||
+  !/bluetooth=\(\)/.test(permissionsPolicy.value)
 ) {
-  fail('vercel.json Permissions-Policy must disable camera, mic, geo, payment, usb, sensors, autoplay, PiP, and related APIs');
+  fail('vercel.json Permissions-Policy must disable camera, mic, geo, payment, usb, sensors, autoplay, PiP, clipboard, share, and device APIs');
 }
 const hsts = (globalRule.headers || []).find((h) => h.key === 'Strict-Transport-Security');
 if (
@@ -441,8 +446,8 @@ if (!/test -f site\.webmanifest/.test(ciYml) || !/test -f \.npmrc/.test(ciYml)) 
 if (!/test -f \.nvmrc/.test(ciYml)) {
   fail('.github/workflows/ci.yml must test-f .nvmrc');
 }
-if (!/node-version:\s*'22'/.test(ciYml)) {
-  fail(".github/workflows/ci.yml must use Node 22");
+if (!/node-version-file:\s*'\.nvmrc'/.test(ciYml)) {
+  fail(".github/workflows/ci.yml must use node-version-file '.nvmrc'");
 }
 if (!/persist-credentials:\s*false/.test(ciYml)) {
   fail('.github/workflows/ci.yml checkout must set persist-credentials false');

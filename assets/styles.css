@@ -1,4 +1,4 @@
-/* cache-bust: 98 */
+/* cache-bust: 99 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent. */
 
@@ -1616,13 +1616,19 @@ a:focus-visible {
 @media (forced-colors: active) {
   .gpt-field input:focus-visible,
   .gpt-send:focus-visible,
+  .gpt-sidebar-clear:focus-visible,
+  .gpt-starter:focus-visible,
+  .gpt-sidebar-item:focus-visible,
   .ba-skip:focus-visible,
+  .ba-nav a:focus-visible,
+  .ba-footer-links a:focus-visible,
   .ba-404-title:focus,
   .ba-404-title:focus-visible,
   .ba-h2:focus,
   .ba-h2:focus-visible,
   .ba-agent-title:focus,
-  .ba-agent-title:focus-visible {
+  .ba-agent-title:focus-visible,
+  main:focus-visible {
     outline: 2px solid CanvasText;
     outline-offset: 2px;
   }

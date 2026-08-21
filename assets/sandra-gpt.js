@@ -1,5 +1,5 @@
 /**
- * cache-bust: 120
+ * cache-bust: 121
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1475,7 +1475,9 @@
   let onlineSyncQueued = false;
   let pendingServerClear = false;
   let rateRetryTimer = 0;
+  let rateRetryNotBefore = 0;
   const RATE_RETRY_CAP_MS = 30_000;
+  const CLEAR_WARN_RETRY_MS = 2_500;
   let apiAbort = typeof AbortController === 'function' ? new AbortController() : null;
   let lastSubmittedCanonical = '';
   let lastSubmittedAt = 0;
@@ -1639,10 +1641,23 @@
   function scheduleRateLimitedRetry(ms) {
     window.clearTimeout(rateRetryTimer);
     const wait = Math.min(Math.max(Number(ms) || RATE_RETRY_CAP_MS, 0), RATE_RETRY_CAP_MS);
+    const delay = wait || RATE_RETRY_CAP_MS;
+    rateRetryNotBefore = Date.now() + delay;
     rateRetryTimer = window.setTimeout(() => {
       rateRetryTimer = 0;
+      rateRetryNotBefore = 0;
       flushOnlineSync();
-    }, wait || RATE_RETRY_CAP_MS);
+    }, delay);
+  }
+
+  function resumeRateLimitedRetryOrFlush() {
+    const remaining = rateRetryNotBefore - Date.now();
+    if (remaining > 50) {
+      scheduleRateLimitedRetry(remaining);
+      return;
+    }
+    rateRetryNotBefore = 0;
+    flushOnlineSync();
   }
 
   function delayMs(ms, signal) {
@@ -1779,6 +1794,8 @@
     } else {
       pendingServerClear = true;
       setSyncStatus('warn');
+      // Soft-retry a failed wipe so history cannot resurrect after reload.
+      scheduleRateLimitedRetry(CLEAR_WARN_RETRY_MS);
     }
   }
 
@@ -2047,6 +2064,7 @@
     recycleApiAbort();
     window.clearTimeout(rateRetryTimer);
     rateRetryTimer = 0;
+    rateRetryNotBefore = 0;
     if (form) form.setAttribute('aria-busy', 'true');
     updateClearState();
     updateSendState();
@@ -2312,6 +2330,7 @@
         return;
       }
       if (!(e.ctrlKey || e.metaKey) || e.key !== 'Enter') return;
+      if (restorePending || clearBusy || submitBusy) return;
       e.preventDefault();
       form.requestSubmit();
     });
@@ -2383,6 +2402,8 @@
   window.addEventListener('pagehide', () => {
     window.clearTimeout(onlineDebounce);
     window.clearTimeout(rateRetryTimer);
+    rateRetryTimer = 0;
+    // Keep rateRetryNotBefore so bfcache Back can resume the remaining wait.
     recycleApiAbort();
     resetSubmitBusy();
     resetClearBusy();
@@ -2392,7 +2413,7 @@
     if (!event.persisted) return;
     resetSubmitBusy();
     resetClearBusy();
-    flushOnlineSync();
+    resumeRateLimitedRetryOrFlush();
   });
 
   function isTypingInField(el) {

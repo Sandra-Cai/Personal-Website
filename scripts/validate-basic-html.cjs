@@ -170,7 +170,8 @@ const checksIndex = [
   ['og image dimensions', /property="og:image:width" content="1200"[\s\S]*?property="og:image:height" content="630"/],
   ['research synthetic media', /id="research"[\s\S]*?synthetic-media trust/],
   ['beliefs microstructure', /id="beliefs"[\s\S]*?Microstructure, risk/],
-  ['gpt sidebar history', /<h3 class="gpt-sidebar-title"[^>]*>History/],
+  ['gpt sidebar history', /id="gpt-history-title"[^>]*>History/],
+  ['gpt sidebar labelledby', /class="gpt-sidebar"[^>]*aria-labelledby="gpt-history-title"/],
   ['nav writing substack', /class="ba-nav-external"[^>]*href="https:\/\/substack\.com\/@caisandra"/],
   ['JSON-LD person url', /"url":\s*"https:\/\/www\.sandracai\.com\/"/],
   ['gpt char count', /id="gpt-char-count"[^>]*aria-live="polite"/],
@@ -198,7 +199,6 @@ const checksIndex = [
   ['nav academic', /class="ba-nav"[\s\S]*?href="#education">Academic/],
   ['gpt disclaimer mailto', /id="gpt-disclaimer"[^>]*>[\s\S]*?mailto:sandraxcyj@gmail\.com/],
   ['nav sandragpt', /class="ba-nav"[\s\S]*?href="#sandra-gpt">SandraGPT/],
-  ['gpt sidebar aria', /class="gpt-sidebar"[^>]*aria-label="Question history"/],
   ['footer contentinfo', /<footer class="ba-footer" role="contentinfo"/],
   ['external strip contact email', /aria-label="External links"[\s\S]*?ba-strip-label">Contact[\s\S]*?sandraxcyj@gmail\.com/],
   ['connector strip text', /aria-label="Connector"[\s\S]*?class="ba-strip-text"/],
@@ -748,8 +748,8 @@ if (!stylesCss.includes('.ba-404-title:focus') || !stylesCss.includes('.ba-404-t
   console.error('validate-basic-html: styles must show a focus ring on .ba-404-title');
   process.exit(1);
 }
-if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-h2:focus-visible')) {
-  console.error('validate-basic-html: forced-colors must restore focus outlines on headings and GPT chrome');
+if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.gpt-sidebar-clear:focus-visible') || !stylesCss.includes('.ba-nav a:focus-visible')) {
+  console.error('validate-basic-html: forced-colors must restore focus outlines on nav and GPT chrome');
   process.exit(1);
 }
 if (!gptJs.includes('Network errors are a warn') || !/catch \(err\) \{[\s\S]*?apiDisabled: false, turns: null/.test(gptJs)) {
@@ -776,8 +776,20 @@ if (!gptJs.includes('function updateSidebarEmpty') || !gptJs.includes("aria-cont
   console.error('validate-basic-html: sidebar empty state and aria-controls on history items required');
   process.exit(1);
 }
-if (!/addEventListener\('pageshow'[\s\S]*?flushOnlineSync\(\)/.test(gptJs)) {
-  console.error('validate-basic-html: bfcache pageshow must flush online sync');
+if (!/addEventListener\('pageshow'[\s\S]*?resumeRateLimitedRetryOrFlush\(\)/.test(gptJs)) {
+  console.error('validate-basic-html: bfcache pageshow must resume rate-limit wait or flush sync');
+  process.exit(1);
+}
+if (!gptJs.includes('rateRetryNotBefore') || !gptJs.includes('Keep rateRetryNotBefore')) {
+  console.error('validate-basic-html: pagehide must preserve rateRetryNotBefore across bfcache');
+  process.exit(1);
+}
+if (!gptJs.includes('CLEAR_WARN_RETRY_MS') || !gptJs.includes('Soft-retry a failed wipe')) {
+  console.error('validate-basic-html: failed Clear warn must soft-retry');
+  process.exit(1);
+}
+if (!/metaKey\) \|\| e\.key !== 'Enter'[\s\S]{0,80}restorePending \|\| clearBusy \|\| submitBusy/.test(gptJs)) {
+  console.error('validate-basic-html: Ctrl/Cmd+Enter must gate on restore/clear/submit busy');
   process.exit(1);
 }
 if (!/ArrowUp[\s\S]{0,160}if \(restorePending \|\| clearBusy\) return;/.test(gptJs)) {
