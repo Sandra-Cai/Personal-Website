@@ -9,6 +9,6 @@
     "verify": "node scripts/verify-all.cjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.49.1"
+    "@supabase/supabase-js": "2.103.0"
   }
 }

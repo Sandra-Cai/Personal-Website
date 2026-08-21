@@ -258,10 +258,15 @@ if (
   !/autoplay=\(\)/.test(permissionsPolicy.value) ||
   !/picture-in-picture=\(\)/.test(permissionsPolicy.value) ||
   !/clipboard-write=\(\)/.test(permissionsPolicy.value) ||
+  !/clipboard-read=\(\)/.test(permissionsPolicy.value) ||
   !/web-share=\(\)/.test(permissionsPolicy.value) ||
   !/hid=\(\)/.test(permissionsPolicy.value) ||
   !/serial=\(\)/.test(permissionsPolicy.value) ||
-  !/bluetooth=\(\)/.test(permissionsPolicy.value)
+  !/bluetooth=\(\)/.test(permissionsPolicy.value) ||
+  !/otp-credentials=\(\)/.test(permissionsPolicy.value) ||
+  !/idle-detection=\(\)/.test(permissionsPolicy.value) ||
+  !/storage-access=\(\)/.test(permissionsPolicy.value) ||
+  !/window-management=\(\)/.test(permissionsPolicy.value)
 ) {
   fail('vercel.json Permissions-Policy must disable camera, mic, geo, payment, usb, sensors, autoplay, PiP, clipboard, share, and device APIs');
 }
@@ -401,6 +406,9 @@ try {
 }
 if (!pkg.engines || !pkg.engines.node || !/>=22/.test(String(pkg.engines.node))) {
   fail('package.json engines.node must require >=22');
+}
+if (!pkg.dependencies || pkg.dependencies['@supabase/supabase-js'] !== '2.103.0') {
+  fail('package.json must pin @supabase/supabase-js to 2.103.0');
 }
 let lock;
 try {

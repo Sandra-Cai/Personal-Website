@@ -748,8 +748,8 @@ if (!stylesCss.includes('.ba-404-title:focus') || !stylesCss.includes('.ba-404-t
   console.error('validate-basic-html: styles must show a focus ring on .ba-404-title');
   process.exit(1);
 }
-if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.gpt-sidebar-clear:focus-visible') || !stylesCss.includes('.ba-nav a:focus-visible')) {
-  console.error('validate-basic-html: forced-colors must restore focus outlines on nav and GPT chrome');
+if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-list a:focus-visible') || !stylesCss.includes('.ba-logo:focus-visible')) {
+  console.error('validate-basic-html: forced-colors must restore focus outlines on content links and logo');
   process.exit(1);
 }
 if (!gptJs.includes('Network errors are a warn') || !/catch \(err\) \{[\s\S]*?apiDisabled: false, turns: null/.test(gptJs)) {
@@ -760,8 +760,20 @@ if (!gptJs.includes('function flushOnlineSync') || !gptJs.includes('onlineSyncQu
   console.error('validate-basic-html: online sync must queue and flush after restore');
   process.exit(1);
 }
-if (!gptJs.includes('Abort in-flight POST so Clear cannot be undone')) {
-  console.error('validate-basic-html: clearAllHistory must abort in-flight POST');
+if (!gptJs.includes('Disable Clear before confirm') || !/clearBusy = true;[\s\S]{0,200}window\.confirm/.test(gptJs)) {
+  console.error('validate-basic-html: clearAllHistory must set clearBusy before confirm');
+  process.exit(1);
+}
+if (!gptJs.includes('function addSidebarEntry') || !gptJs.includes('if (restorePending || clearBusy) return;') || !gptJs.includes('scrollToTurn(turnId)')) {
+  console.error('validate-basic-html: history sidebar clicks must no-op while restore/clear busy');
+  process.exit(1);
+}
+if (!/flushOnlineSync[\s\S]{0,120}restorePending \|\| clearBusy/.test(gptJs)) {
+  console.error('validate-basic-html: flushOnlineSync must no-op while clearBusy');
+  process.exit(1);
+}
+if (!gptJs.includes('input.readOnly = clearBusy')) {
+  console.error('validate-basic-html: input must be readOnly while clearBusy');
   process.exit(1);
 }
 if (!/if \(r\.status === 503 \|\| r\.status === 404\) return false;/.test(gptJs) || !/if \(r\.ok\) return true;/.test(gptJs)) {

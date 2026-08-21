@@ -1,5 +1,5 @@
 /**
- * cache-bust: 121
+ * cache-bust: 122
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1889,6 +1889,8 @@
     const busy = form?.getAttribute('aria-busy') === 'true' || submitBusy || restorePending || clearBusy;
     const hasText = Boolean(input.value.trim());
     sendBtn.disabled = busy || !hasText;
+    // Keep focusable after Clear; readOnly blocks typing into a wipe in progress.
+    input.readOnly = clearBusy;
     let label = 'Enter a question to send';
     if (busy) {
       if (restorePending) label = 'Loading history…';
@@ -1996,6 +1998,7 @@
     btn.setAttribute('aria-label', questionText);
     btn.setAttribute('aria-controls', `gpt-turn-${turnId}`);
     btn.addEventListener('click', () => {
+      if (restorePending || clearBusy) return;
       setSidebarItemActive(turnId);
       scrollToTurn(turnId);
     });
@@ -2051,14 +2054,22 @@
     if (clearBusy) return;
     const empty = !(logEl && logEl.children.length) && !(sidebarList && sidebarList.children.length);
     if (empty) return;
+    // Disable Clear before confirm so a second click cannot stack dialogs.
+    clearBusy = true;
+    updateClearState();
+    updateSendState();
+    updateStartersVisibility();
     if (
       !window.confirm(
         'Clear this session’s questions and answers from this browser (and from the server, if database sync is on)?'
       )
     ) {
+      clearBusy = false;
+      updateClearState();
+      updateSendState();
+      updateStartersVisibility();
       return;
     }
-    clearBusy = true;
     historyEpoch += 1;
     // Abort in-flight POST so Clear cannot be undone by a late insert.
     recycleApiAbort();
@@ -2092,6 +2103,7 @@
       updateClearState();
       updateSendState();
       updateStartersVisibility();
+      if (onlineSyncQueued) flushOnlineSync();
     }
     if (input) {
       focusInputField();
@@ -2355,7 +2367,7 @@
   /** When the network comes back, try to upload any turns still only in the browser. */
   let onlineDebounce;
   function flushOnlineSync() {
-    if (restorePending) {
+    if (restorePending || clearBusy) {
       onlineSyncQueued = true;
       return;
     }
