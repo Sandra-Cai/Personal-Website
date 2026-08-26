@@ -748,8 +748,8 @@ if (!stylesCss.includes('.ba-404-title:focus') || !stylesCss.includes('.ba-404-t
   console.error('validate-basic-html: styles must show a focus ring on .ba-404-title');
   process.exit(1);
 }
-if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-list a:focus-visible') || !stylesCss.includes('.ba-logo:focus-visible')) {
-  console.error('validate-basic-html: forced-colors must restore focus outlines on content links and logo');
+if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-deck a:focus-visible') || !stylesCss.includes('.gpt-note a:focus-visible')) {
+  console.error('validate-basic-html: forced-colors must restore focus outlines on deck/note links');
   process.exit(1);
 }
 if (!gptJs.includes('Network errors are a warn') || !/catch \(err\) \{[\s\S]*?apiDisabled: false, turns: null/.test(gptJs)) {
@@ -762,6 +762,26 @@ if (!gptJs.includes('function flushOnlineSync') || !gptJs.includes('onlineSyncQu
 }
 if (!gptJs.includes('Disable Clear before confirm') || !/clearBusy = true;[\s\S]{0,200}window\.confirm/.test(gptJs)) {
   console.error('validate-basic-html: clearAllHistory must set clearBusy before confirm');
+  process.exit(1);
+}
+if (!gptJs.includes('return keyboard users to Clear') || !gptJs.includes('clearBtn.focus')) {
+  console.error('validate-basic-html: Clear cancel must restore focus to the Clear button');
+  process.exit(1);
+}
+if (!gptJs.includes('function updateSidebarBusy') || !gptJs.includes('btn.disabled = busy')) {
+  console.error('validate-basic-html: sidebar history buttons must disable while restore/clear busy');
+  process.exit(1);
+}
+if (!gptJs.includes('keepalive: true')) {
+  console.error('validate-basic-html: clearRemote must use keepalive so wipe can finish on navigate');
+  process.exit(1);
+}
+if (!/for \(const row of recentRemote\) \{\s*\n\s*if \(epoch !== historyEpoch\) return;/.test(gptJs)) {
+  console.error('validate-basic-html: restoreHistory remote loop must check historyEpoch each turn');
+  process.exit(1);
+}
+if (!/for \(const row of entries\) \{\s*\n\s*if \(epoch !== historyEpoch\) return;/.test(gptJs)) {
+  console.error('validate-basic-html: restoreHistory local loop must check historyEpoch each turn');
   process.exit(1);
 }
 if (!gptJs.includes('function addSidebarEntry') || !gptJs.includes('if (restorePending || clearBusy) return;') || !gptJs.includes('scrollToTurn(turnId)')) {
@@ -804,8 +824,8 @@ if (!/metaKey\) \|\| e\.key !== 'Enter'[\s\S]{0,80}restorePending \|\| clearBusy
   console.error('validate-basic-html: Ctrl/Cmd+Enter must gate on restore/clear/submit busy');
   process.exit(1);
 }
-if (!/ArrowUp[\s\S]{0,160}if \(restorePending \|\| clearBusy\) return;/.test(gptJs)) {
-  console.error('validate-basic-html: history recall must no-op while restorePending or clearBusy');
+if (!/ArrowUp[\s\S]{0,160}if \(restorePending \|\| clearBusy \|\| submitBusy\) return;/.test(gptJs)) {
+  console.error('validate-basic-html: history recall must no-op while restore/clear/submit busy');
   process.exit(1);
 }
 if (!/restorePending = true;\s*\n\s*if \(form\) form\.setAttribute\('aria-busy', 'true'\)/.test(gptJs)) {

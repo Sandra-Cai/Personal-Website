@@ -1,5 +1,5 @@
 /**
- * cache-bust: 122
+ * cache-bust: 123
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1768,6 +1768,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'clear', sessionId }),
         cache: 'no-store',
+        keepalive: true,
       });
       if (r.status === 503 || r.status === 404) return { status: 'local' };
       if (r.status === 429) return { status: 'rate', retryAfterMs: parseRetryAfterMs(r) };
@@ -1871,6 +1872,7 @@
 
   function updateClearState() {
     updateSidebarEmpty();
+    updateSidebarBusy();
     if (!clearBtn) return;
     const empty = !(logEl && logEl.children.length) && !(sidebarList && sidebarList.children.length);
     clearBtn.disabled = clearBusy || empty || restorePending;
@@ -1881,6 +1883,14 @@
     const emptyEl = document.getElementById('gpt-sidebar-empty');
     if (!emptyEl) return;
     emptyEl.hidden = Boolean(sidebarList && sidebarList.children.length);
+  }
+
+  function updateSidebarBusy() {
+    if (!sidebarList) return;
+    const busy = restorePending || clearBusy;
+    sidebarList.querySelectorAll('.gpt-sidebar-item').forEach((btn) => {
+      btn.disabled = busy;
+    });
   }
 
   function updateSendState() {
@@ -2068,6 +2078,18 @@
       updateClearState();
       updateSendState();
       updateStartersVisibility();
+      // Confirm often drops focus to body — return keyboard users to Clear.
+      if (clearBtn) {
+        try {
+          clearBtn.focus({ preventScroll: true, focusVisible: true });
+        } catch {
+          try {
+            clearBtn.focus({ preventScroll: true });
+          } catch {
+            clearBtn.focus();
+          }
+        }
+      }
       return;
     }
     historyEpoch += 1;
@@ -2137,6 +2159,7 @@
       if (!apiDisabled && Array.isArray(remote) && remote.length > 0) {
         const recentRemote = normalizeTurns(remote);
         for (const row of recentRemote) {
+          if (epoch !== historyEpoch) return;
           if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
           const a = typeof row.a === 'string' ? row.a : '';
           renderTurn(row.id, row.q, a, false);
@@ -2160,6 +2183,7 @@
       if (epoch !== historyEpoch) return;
       const entries = normalizeTurns(loadHistory());
       for (const row of entries) {
+        if (epoch !== historyEpoch) return;
         if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
         const a = typeof row.a === 'string' ? row.a : '';
         renderTurn(row.id, row.q, a, false);
@@ -2312,7 +2336,7 @@
     form.addEventListener('submit', handleSubmit);
     input.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-        if (restorePending || clearBusy) return;
+        if (restorePending || clearBusy || submitBusy) return;
         if (!shouldHandleRecallKey(e, input)) return;
         const questions = getRecentQuestions(20);
         if (!questions.length) return;

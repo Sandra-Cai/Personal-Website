@@ -422,6 +422,10 @@ if (!lock.packages || !lock.packages[''] || !/>=22/.test(String((lock.packages['
 if (lock.lockfileVersion !== 3) {
   fail('package-lock.json lockfileVersion must be 3');
 }
+const lockSupabase = lock.packages['node_modules/@supabase/supabase-js'];
+if (!lockSupabase || lockSupabase.version !== '2.103.0') {
+  fail('package-lock.json must resolve @supabase/supabase-js to 2.103.0');
+}
 if (!fs.existsSync(path.join(root, '.npmrc')) || !/engine-strict\s*=\s*true/.test(read('.npmrc'))) {
   fail('.npmrc must set engine-strict=true');
 }
