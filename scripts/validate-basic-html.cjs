@@ -748,8 +748,8 @@ if (!stylesCss.includes('.ba-404-title:focus') || !stylesCss.includes('.ba-404-t
   console.error('validate-basic-html: styles must show a focus ring on .ba-404-title');
   process.exit(1);
 }
-if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-deck a:focus-visible') || !stylesCss.includes('.gpt-note a:focus-visible')) {
-  console.error('validate-basic-html: forced-colors must restore focus outlines on deck/note links');
+if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-deck a:focus-visible') || !stylesCss.includes('.gpt-note a:focus-visible') || !stylesCss.includes('.gpt-field:focus-within') || !stylesCss.includes('.gpt-send:disabled')) {
+  console.error('validate-basic-html: forced-colors must restore focus outlines and disabled Send styling');
   process.exit(1);
 }
 if (!gptJs.includes('Network errors are a warn') || !/catch \(err\) \{[\s\S]*?apiDisabled: false, turns: null/.test(gptJs)) {
@@ -792,8 +792,12 @@ if (!/flushOnlineSync[\s\S]{0,120}restorePending \|\| clearBusy/.test(gptJs)) {
   console.error('validate-basic-html: flushOnlineSync must no-op while clearBusy');
   process.exit(1);
 }
-if (!gptJs.includes('input.readOnly = clearBusy')) {
-  console.error('validate-basic-html: input must be readOnly while clearBusy');
+if (!gptJs.includes('input.readOnly = restorePending || clearBusy')) {
+  console.error('validate-basic-html: input must be readOnly while restorePending or clearBusy');
+  process.exit(1);
+}
+if (!/q\.length > MAX_QUESTION_CHARS[\s\S]{0,400}focusInputField\(\)/.test(gptJs)) {
+  console.error('validate-basic-html: over-limit submit must refocus the input field');
   process.exit(1);
 }
 if (!/if \(r\.status === 503 \|\| r\.status === 404\) return false;/.test(gptJs) || !/if \(r\.ok\) return true;/.test(gptJs)) {

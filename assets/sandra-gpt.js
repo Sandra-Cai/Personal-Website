@@ -1,5 +1,5 @@
 /**
- * cache-bust: 123
+ * cache-bust: 124
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1899,8 +1899,8 @@
     const busy = form?.getAttribute('aria-busy') === 'true' || submitBusy || restorePending || clearBusy;
     const hasText = Boolean(input.value.trim());
     sendBtn.disabled = busy || !hasText;
-    // Keep focusable after Clear; readOnly blocks typing into a wipe in progress.
-    input.readOnly = clearBusy;
+    // Keep focusable after Clear; readOnly blocks typing during restore/clear.
+    input.readOnly = restorePending || clearBusy;
     let label = 'Enter a question to send';
     if (busy) {
       if (restorePending) label = 'Loading history…';
@@ -2252,6 +2252,7 @@
       draftBeforeRecall = '';
       updateCharCount();
       updateSendState();
+      focusInputField();
       return;
     }
 
