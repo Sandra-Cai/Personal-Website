@@ -87,6 +87,10 @@ if (expiresAt - Date.now() < 1000 * 60 * 60 * 24 * 30) {
 }
 
 const indexHtml = read('index.html');
+const dateModifiedMatch = indexHtml.match(/"dateModified":\s*"([^"]+)"/);
+if (!dateModifiedMatch || dateModifiedMatch[1] !== lastmod) {
+  fail('index.html WebPage.dateModified must match sitemap.xml lastmod');
+}
 const themeMeta = indexHtml.match(/<meta name="theme-color" content="([^"]+)"/);
 if (!themeMeta) fail('index.html missing meta theme-color');
 

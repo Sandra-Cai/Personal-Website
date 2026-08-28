@@ -1,5 +1,5 @@
 /**
- * cache-bust: 124
+ * cache-bust: 125
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1900,7 +1900,15 @@
     const hasText = Boolean(input.value.trim());
     sendBtn.disabled = busy || !hasText;
     // Keep focusable after Clear; readOnly blocks typing during restore/clear.
-    input.readOnly = restorePending || clearBusy;
+    const readOnly = restorePending || clearBusy;
+    input.readOnly = readOnly;
+    if (readOnly) {
+      input.setAttribute('aria-readonly', 'true');
+    } else {
+      input.removeAttribute('aria-readonly');
+    }
+    const field = input.closest('.gpt-field');
+    if (field) field.classList.toggle('gpt-field--readonly', readOnly);
     let label = 'Enter a question to send';
     if (busy) {
       if (restorePending) label = 'Loading history…';
@@ -1915,10 +1923,13 @@
     if (!el || !input) return;
     const left = MAX_QUESTION_CHARS - input.value.length;
     if (left <= 40) {
-      el.textContent = `${left} characters left`;
+      const label = left === 1 ? '1 character left' : `${left} characters left`;
+      el.textContent = label;
+      el.classList.toggle('gpt-char-count--low', left <= 10);
       el.classList.remove('visually-hidden');
     } else {
       el.textContent = '';
+      el.classList.remove('gpt-char-count--low');
       el.classList.add('visually-hidden');
     }
   }

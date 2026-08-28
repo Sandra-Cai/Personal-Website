@@ -188,6 +188,8 @@ const checksIndex = [
   ['robots preview', /<meta name="robots" content="index, follow, max-image-preview:large"/],
   ['gpt enterkeyhint', /id="gpt-input"[^>]*enterkeyhint="send"/],
   ['gpt inputmode search', /id="gpt-input"[^>]*inputmode="search"/],
+  ['gpt autocapitalize off', /id="gpt-input"[^>]*autocapitalize="off"/],
+  ['gpt autocorrect off', /id="gpt-input"[^>]*autocorrect="off"/],
   ['nav github', /class="ba-nav-external"[^>]*href="https:\/\/github\.com\/Sandra-Cai"/],
   ['logo aria home', /class="ba-logo"[^>]*aria-label="Sandra Cai, home"/],
   ['gpt starters label', /class="gpt-starters"[^>]*aria-label="Example questions"/],
@@ -575,6 +577,10 @@ if (!apiJs.includes('payload_too_large') || !apiJs.includes('not_configured')) {
   console.error('validate-basic-html: api must handle payload_too_large and not_configured');
   process.exit(1);
 }
+if (!/413[\s\S]{0,120}payload_too_large/.test(apiJs)) {
+  console.error('validate-basic-html: api must return 413 for payload_too_large');
+  process.exit(1);
+}
 if (!/replace\(\/\\u0000\/g,\s*''\)/.test(apiJs)) {
   console.error('validate-basic-html: api sanitize must strip null bytes');
   process.exit(1);
@@ -748,8 +754,8 @@ if (!stylesCss.includes('.ba-404-title:focus') || !stylesCss.includes('.ba-404-t
   console.error('validate-basic-html: styles must show a focus ring on .ba-404-title');
   process.exit(1);
 }
-if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-deck a:focus-visible') || !stylesCss.includes('.gpt-note a:focus-visible') || !stylesCss.includes('.gpt-field:focus-within') || !stylesCss.includes('.gpt-send:disabled')) {
-  console.error('validate-basic-html: forced-colors must restore focus outlines and disabled Send styling');
+if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-deck a:focus-visible') || !stylesCss.includes('.gpt-note a:focus-visible') || !stylesCss.includes('.gpt-field:focus-within') || !stylesCss.includes('.gpt-send:disabled') || !stylesCss.includes('.gpt-sidebar-clear:disabled') || !stylesCss.includes('.gpt-field--readonly')) {
+  console.error('validate-basic-html: forced-colors must restore focus outlines and disabled/busy field styling');
   process.exit(1);
 }
 if (!gptJs.includes('Network errors are a warn') || !/catch \(err\) \{[\s\S]*?apiDisabled: false, turns: null/.test(gptJs)) {
@@ -792,8 +798,20 @@ if (!/flushOnlineSync[\s\S]{0,120}restorePending \|\| clearBusy/.test(gptJs)) {
   console.error('validate-basic-html: flushOnlineSync must no-op while clearBusy');
   process.exit(1);
 }
-if (!gptJs.includes('input.readOnly = restorePending || clearBusy')) {
+if (!gptJs.includes('input.readOnly = readOnly') || !gptJs.includes('const readOnly = restorePending || clearBusy')) {
   console.error('validate-basic-html: input must be readOnly while restorePending or clearBusy');
+  process.exit(1);
+}
+if (!gptJs.includes("setAttribute('aria-readonly', 'true')") || !gptJs.includes("removeAttribute('aria-readonly')")) {
+  console.error('validate-basic-html: input aria-readonly must track restore/clear busy state');
+  process.exit(1);
+}
+if (!gptJs.includes('gpt-field--readonly')) {
+  console.error('validate-basic-html: read-only input must toggle gpt-field--readonly on the pill');
+  process.exit(1);
+}
+if (!gptJs.includes('gpt-char-count--low')) {
+  console.error('validate-basic-html: char count must escalate styling when near the limit');
   process.exit(1);
 }
 if (!/q\.length > MAX_QUESTION_CHARS[\s\S]{0,400}focusInputField\(\)/.test(gptJs)) {

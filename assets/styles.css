@@ -1,4 +1,4 @@
-/* cache-bust: 102 */
+/* cache-bust: 103 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent. */
 
@@ -411,6 +411,7 @@ a:focus-visible {
 
 .gpt-sync-status--warn {
   color: #92400e;
+  font-weight: 600;
 }
 
 .gpt-form[aria-busy='true'] .gpt-send {
@@ -646,6 +647,22 @@ a:focus-visible {
   box-shadow: 0 0 0 1px var(--accent-dim);
 }
 
+.gpt-field--readonly {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: var(--line);
+  box-shadow: none;
+}
+
+.gpt-field--readonly:focus-within {
+  border-color: var(--line);
+  box-shadow: none;
+}
+
+.gpt-field--readonly input {
+  cursor: default;
+  color: var(--text-dim);
+}
+
 .gpt-field input {
   flex: 1;
   min-width: 0;
@@ -772,6 +789,11 @@ a:focus-visible {
   font-size: 0.6875rem;
   color: var(--text-faint);
   letter-spacing: 0.02em;
+}
+
+.gpt-char-count--low {
+  color: #92400e;
+  font-weight: 600;
 }
 
 .gpt-note {
@@ -1409,6 +1431,11 @@ a:focus-visible {
     color: var(--text-dim);
   }
 
+  .gpt-char-count--low {
+    color: var(--text);
+    font-weight: 700;
+  }
+
   .ba-strip-label,
   .gpt-msg--bot::before {
     color: var(--text-dim);
@@ -1652,5 +1679,14 @@ a:focus-visible {
   .gpt-send:disabled {
     background: ButtonFace;
     color: GrayText;
+  }
+
+  .gpt-sidebar-clear:disabled {
+    background: ButtonFace;
+    color: GrayText;
+  }
+
+  .gpt-field--readonly:focus-within {
+    outline: none;
   }
 }

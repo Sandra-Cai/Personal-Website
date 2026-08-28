@@ -172,6 +172,9 @@ module.exports = async (req, res) => {
       try {
         body = await readJsonBody(req);
       } catch (e) {
+        if (e && e.message === 'payload_too_large') {
+          return json(res, 413, { ok: false, error: 'payload_too_large' });
+        }
         return json(res, 400, { ok: false, error: 'invalid_json' });
       }
     }
