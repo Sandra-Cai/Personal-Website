@@ -91,6 +91,16 @@ const dateModifiedMatch = indexHtml.match(/"dateModified":\s*"([^"]+)"/);
 if (!dateModifiedMatch || dateModifiedMatch[1] !== lastmod) {
   fail('index.html WebPage.dateModified must match sitemap.xml lastmod');
 }
+const readme = read('README.md');
+const readmeSync = readme.match(/_Last synced to GitHub: (\d{4}-\d{2}-\d{2})\._/);
+if (!readmeSync || readmeSync[1] !== lastmod) {
+  fail('README.md Last synced date must match sitemap.xml lastmod');
+}
+const syncStatus = read('docs/GITHUB-SYNC-STATUS.md');
+const syncPush = syncStatus.match(/\*\*Last push:\*\* (\d{4}-\d{2}-\d{2})/);
+if (!syncPush || syncPush[1] !== lastmod) {
+  fail('docs/GITHUB-SYNC-STATUS.md Last push date must match sitemap.xml lastmod');
+}
 const themeMeta = indexHtml.match(/<meta name="theme-color" content="([^"]+)"/);
 if (!themeMeta) fail('index.html missing meta theme-color');
 

@@ -1,4 +1,4 @@
-/* cache-bust: 103 */
+/* cache-bust: 104 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent. */
 
@@ -796,6 +796,11 @@ a:focus-visible {
   font-weight: 600;
 }
 
+.gpt-char-count--at-limit {
+  color: #7c2d12;
+  font-weight: 700;
+}
+
 .gpt-note {
   font-size: 0.875rem;
   color: var(--text-faint);
@@ -1436,6 +1441,12 @@ a:focus-visible {
     font-weight: 700;
   }
 
+  .gpt-char-count--at-limit {
+    color: var(--text);
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
   .ba-strip-label,
   .gpt-msg--bot::before {
     color: var(--text-dim);
@@ -1475,7 +1486,8 @@ a:focus-visible {
   }
 
   .gpt-sync-status--warn {
-    font-weight: 600;
+    font-weight: 700;
+    text-decoration: underline;
   }
 
   .ba-skip:focus,
@@ -1688,5 +1700,16 @@ a:focus-visible {
 
   .gpt-field--readonly:focus-within {
     outline: none;
+  }
+
+  .gpt-char-count--low,
+  .gpt-char-count--at-limit {
+    color: CanvasText;
+    font-weight: 700;
+  }
+
+  .gpt-sync-status--warn {
+    font-weight: 700;
+    text-decoration: underline;
   }
 }

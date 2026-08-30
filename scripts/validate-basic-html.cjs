@@ -43,6 +43,9 @@ const checks404 = [
   ['color-scheme light', /<meta name="color-scheme" content="light"/],
   ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
   ['404 email lead', /ba-404-lead[\s\S]*?sandraxcyj@gmail\.com/],
+  ['404 home aria-label', /ba-404-lead[\s\S]*?href="\/" aria-label="Back to home page"/],
+  ['404 sandragpt aria-label', /ba-404-lead[\s\S]*?href="\/#sandra-gpt" aria-label="SandraGPT on home page"/],
+  ['404 email aria-label', /ba-404-lead[\s\S]*?aria-label="Email Sandra Cai"/],
   ['404 skip main', /class="ba-skip" href="#main"/],
   ['404 nav github', /class="ba-nav-external"[^>]*href="https:\/\/github\.com\/Sandra-Cai"/],
   ['404 logo home', /class="ba-logo"[^>]*aria-label="Sandra Cai, home"/],
@@ -178,6 +181,7 @@ const checksIndex = [
   ['gpt log region', /id="gpt-log"[^>]*role="log"/],
   ['gpt log aria-label', /id="gpt-log"[^>]*aria-label="SandraGPT conversation"/],
   ['gpt input describedby', /id="gpt-input"[^>]*aria-describedby="gpt-disclaimer gpt-char-count"/],
+  ['gpt input errormessage', /id="gpt-input"[^>]*aria-errormessage="gpt-char-count"/],
   ['skip link top', /class="ba-skip" href="#top"/],
   ['gpt form aria-busy', /id="gpt-form"[^>]*aria-busy="false"/],
   ['gpt sync status', /id="gpt-sync-status"[^>]*role="status"/],
@@ -581,6 +585,10 @@ if (!/413[\s\S]{0,120}payload_too_large/.test(apiJs)) {
   console.error('validate-basic-html: api must return 413 for payload_too_large');
   process.exit(1);
 }
+if (!/r\.status === 413[\s\S]{0,80}return false/.test(gptJs)) {
+  console.error('validate-basic-html: postTurnRemote must fast-fail on 413');
+  process.exit(1);
+}
 if (!/replace\(\/\\u0000\/g,\s*''\)/.test(apiJs)) {
   console.error('validate-basic-html: api sanitize must strip null bytes');
   process.exit(1);
@@ -754,8 +762,8 @@ if (!stylesCss.includes('.ba-404-title:focus') || !stylesCss.includes('.ba-404-t
   console.error('validate-basic-html: styles must show a focus ring on .ba-404-title');
   process.exit(1);
 }
-if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-deck a:focus-visible') || !stylesCss.includes('.gpt-note a:focus-visible') || !stylesCss.includes('.gpt-field:focus-within') || !stylesCss.includes('.gpt-send:disabled') || !stylesCss.includes('.gpt-sidebar-clear:disabled') || !stylesCss.includes('.gpt-field--readonly')) {
-  console.error('validate-basic-html: forced-colors must restore focus outlines and disabled/busy field styling');
+if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-deck a:focus-visible') || !stylesCss.includes('.gpt-note a:focus-visible') || !stylesCss.includes('.gpt-field:focus-within') || !stylesCss.includes('.gpt-send:disabled') || !stylesCss.includes('.gpt-sidebar-clear:disabled') || !stylesCss.includes('.gpt-field--readonly') || !stylesCss.includes('.gpt-char-count--at-limit') || !stylesCss.includes('.gpt-sync-status--warn')) {
+  console.error('validate-basic-html: forced-colors must restore focus outlines and busy/urgency styling');
   process.exit(1);
 }
 if (!gptJs.includes('Network errors are a warn') || !/catch \(err\) \{[\s\S]*?apiDisabled: false, turns: null/.test(gptJs)) {
@@ -812,6 +820,10 @@ if (!gptJs.includes('gpt-field--readonly')) {
 }
 if (!gptJs.includes('gpt-char-count--low')) {
   console.error('validate-basic-html: char count must escalate styling when near the limit');
+  process.exit(1);
+}
+if (!gptJs.includes('gpt-char-count--at-limit') || !gptJs.includes("setAttribute('aria-invalid', 'true')")) {
+  console.error('validate-basic-html: char count must mark at-limit input invalid');
   process.exit(1);
 }
 if (!/q\.length > MAX_QUESTION_CHARS[\s\S]{0,400}focusInputField\(\)/.test(gptJs)) {

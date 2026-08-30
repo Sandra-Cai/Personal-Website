@@ -1,5 +1,5 @@
 /**
- * cache-bust: 125
+ * cache-bust: 126
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1015,10 +1015,12 @@
         'characters left',
         'near character limit',
         'when does char count show',
+        'at character limit',
+        'aria-invalid',
       ],
       priority: 14,
       reply:
-        'A live character count appears when 40 or fewer characters remain of the 280-character limit.',
+        'A live character count appears when 40 or fewer characters remain of the 280-character limit. Near the limit it turns amber; at exactly 280 characters it reads "At character limit" and the input is marked invalid.',
     },
     {
       keys: [
@@ -1710,6 +1712,7 @@
         throw new Error('post_failed');
       }
       if (r.status === 503 || r.status === 404) return false;
+      if (r.status === 413) return false;
       if (r.ok) return true;
       if (r.status === 429) {
         const err = new Error('rate_limited');
@@ -1923,13 +1926,23 @@
     if (!el || !input) return;
     const left = MAX_QUESTION_CHARS - input.value.length;
     if (left <= 40) {
-      const label = left === 1 ? '1 character left' : `${left} characters left`;
-      el.textContent = label;
-      el.classList.toggle('gpt-char-count--low', left <= 10);
+      if (left === 0) {
+        el.textContent = 'At character limit';
+        el.classList.remove('gpt-char-count--low');
+        el.classList.add('gpt-char-count--at-limit');
+        input.setAttribute('aria-invalid', 'true');
+      } else {
+        const label = left === 1 ? '1 character left' : `${left} characters left`;
+        el.textContent = label;
+        el.classList.toggle('gpt-char-count--low', left <= 10);
+        el.classList.remove('gpt-char-count--at-limit');
+        input.removeAttribute('aria-invalid');
+      }
       el.classList.remove('visually-hidden');
     } else {
       el.textContent = '';
-      el.classList.remove('gpt-char-count--low');
+      el.classList.remove('gpt-char-count--low', 'gpt-char-count--at-limit');
+      input.removeAttribute('aria-invalid');
       el.classList.add('visually-hidden');
     }
   }
