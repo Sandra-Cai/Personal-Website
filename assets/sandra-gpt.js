@@ -1,5 +1,5 @@
 /**
- * cache-bust: 126
+ * cache-bust: 127
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1011,6 +1011,17 @@
     },
     {
       keys: [
+        'payload too large',
+        '413 error',
+        'turn too large to sync',
+        'too large to sync',
+      ],
+      priority: 13,
+      reply:
+        'If a turn is too large for the API, it stays saved in your browser and sync shows a warning — not the same as API being off. Answers still work locally.',
+    },
+    {
+      keys: [
         'character count',
         'characters left',
         'near character limit',
@@ -1612,6 +1623,8 @@
         syncStatusEl.textContent = 'Server busy; saved in browser only';
       } else if (detail === 'partial') {
         syncStatusEl.textContent = 'Partially synced; retrying later';
+      } else if (detail === 'payload') {
+        syncStatusEl.textContent = 'Turn too large to sync; saved in browser only';
       } else {
         syncStatusEl.textContent = 'Couldn’t sync; saved in browser only';
       }
@@ -1627,6 +1640,8 @@
     } else if (err && err.message === 'rate_limited') {
       setSyncStatus('warn', 'rate');
       scheduleRateLimitedRetry(typeof err.retryAfterMs === 'number' ? err.retryAfterMs : RATE_RETRY_CAP_MS);
+    } else if (err && err.message === 'payload_too_large') {
+      setSyncStatus('warn', 'payload');
     } else {
       setSyncStatus('warn');
     }
@@ -1712,7 +1727,7 @@
         throw new Error('post_failed');
       }
       if (r.status === 503 || r.status === 404) return false;
-      if (r.status === 413) return false;
+      if (r.status === 413) return 'payload_too_large';
       if (r.ok) return true;
       if (r.status === 429) {
         const err = new Error('rate_limited');
@@ -1740,6 +1755,7 @@
     const have = new Set(remote.turns.map((t) => t.id));
     let uploadedAny = false;
     let pendingFailures = false;
+    let payloadSkipped = false;
     for (const row of snap) {
       if (epoch !== historyEpoch) return uploadedAny;
       if (!row || typeof row.id !== 'string') continue;
@@ -1747,6 +1763,10 @@
       try {
         const posted = await postTurnRemote(sessionId, row.id, row.q, row.a);
         if (posted === false) return uploadedAny;
+        if (posted === 'payload_too_large') {
+          payloadSkipped = true;
+          continue;
+        }
         if (posted) uploadedAny = true;
       } catch (err) {
         if (isAbortError(err)) throw err;
@@ -1758,6 +1778,9 @@
     }
     if (pendingFailures) {
       throw new Error('partial_sync_failed');
+    }
+    if (payloadSkipped) {
+      throw new Error('payload_too_large');
     }
     return uploadedAny;
   }
@@ -1924,6 +1947,7 @@
   function updateCharCount() {
     const el = document.getElementById('gpt-char-count');
     if (!el || !input) return;
+    const field = input.closest('.gpt-field');
     const left = MAX_QUESTION_CHARS - input.value.length;
     if (left <= 40) {
       if (left === 0) {
@@ -1931,18 +1955,24 @@
         el.classList.remove('gpt-char-count--low');
         el.classList.add('gpt-char-count--at-limit');
         input.setAttribute('aria-invalid', 'true');
+        el.setAttribute('role', 'alert');
+        if (field) field.classList.add('gpt-field--at-limit');
       } else {
         const label = left === 1 ? '1 character left' : `${left} characters left`;
         el.textContent = label;
         el.classList.toggle('gpt-char-count--low', left <= 10);
         el.classList.remove('gpt-char-count--at-limit');
         input.removeAttribute('aria-invalid');
+        el.removeAttribute('role');
+        if (field) field.classList.remove('gpt-field--at-limit');
       }
       el.classList.remove('visually-hidden');
     } else {
       el.textContent = '';
       el.classList.remove('gpt-char-count--low', 'gpt-char-count--at-limit');
       input.removeAttribute('aria-invalid');
+      el.removeAttribute('role');
+      if (field) field.classList.remove('gpt-field--at-limit');
       el.classList.add('visually-hidden');
     }
   }
@@ -2319,8 +2349,9 @@
     postTurnRemote(sid, turnId, q, answerText)
       .then((ok) => {
         if (submitEpoch !== historyEpoch) return;
-        if (ok) setSyncStatus('server');
-        else setSyncStatus('local');
+        if (ok === true) setSyncStatus('server');
+        else if (ok === 'payload_too_large') setSyncStatus('warn', 'payload');
+        else if (ok === false) setSyncStatus('local');
       })
       .catch((err) => {
         if (submitEpoch !== historyEpoch) return;
@@ -2356,6 +2387,7 @@
     // Prefill ?q= before hydrate so a slow restore cannot overwrite typing.
     // Hash focus lives in script.js — do not re-focus after restore (focus steal).
     applyDeepLinkQuestion();
+    updateCharCount();
     void restoreHistory();
     initStarterPrompts();
     form.addEventListener('submit', handleSubmit);

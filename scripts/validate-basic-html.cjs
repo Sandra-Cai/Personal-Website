@@ -30,7 +30,7 @@ const checks404 = [
   ['404 sandragpt link', /href="\/#sandra-gpt"/],
   ['404 robots noindex', /<meta name="robots" content="noindex, nofollow"/],
   ['404 viewport-fit cover', /<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/],
-  ['404 footer home', /ba-footer-links[\s\S]*?<a href="\/">Home<\/a>/],
+  ['404 footer home', /ba-footer-links[\s\S]*?<a href="\/" aria-label="Home page">Home<\/a>/],
   ['site stylesheet', /href="\/assets\/styles\.css\?v=/],
   ['nav separator', /class="ba-nav-sep"/],
   ['nav external class', /class="ba-nav-external"/],
@@ -585,8 +585,16 @@ if (!/413[\s\S]{0,120}payload_too_large/.test(apiJs)) {
   console.error('validate-basic-html: api must return 413 for payload_too_large');
   process.exit(1);
 }
-if (!/r\.status === 413[\s\S]{0,80}return false/.test(gptJs)) {
-  console.error('validate-basic-html: postTurnRemote must fast-fail on 413');
+if (!/r\.status === 413[\s\S]{0,80}return 'payload_too_large'/.test(gptJs)) {
+  console.error('validate-basic-html: postTurnRemote must fast-fail on 413 with payload_too_large sentinel');
+  process.exit(1);
+}
+if (!gptJs.includes("setSyncStatus('warn', 'payload')") || !/ok === 'payload_too_large'/.test(gptJs)) {
+  console.error('validate-basic-html: 413 must show payload warn sync status, not API-off');
+  process.exit(1);
+}
+if (!/rawQ\.length > MAX_Q/.test(apiJs) || !/rawA\.length > MAX_A/.test(apiJs)) {
+  console.error('validate-basic-html: api must reject oversize q/a fields with 413');
   process.exit(1);
 }
 if (!/replace\(\/\\u0000\/g,\s*''\)/.test(apiJs)) {
@@ -641,8 +649,12 @@ if (!gptJs.includes('applyDeepLinkQuestion') || !gptJs.includes('URLSearchParams
   console.error('validate-basic-html: sandra-gpt.js must support ?q= deep-link prefills');
   process.exit(1);
 }
-if (!/applyDeepLinkQuestion\(\);\s*\n\s*void restoreHistory\(\)/.test(gptJs)) {
+if (!/applyDeepLinkQuestion\(\);[\s\S]{0,120}void restoreHistory\(\)/.test(gptJs)) {
   console.error('validate-basic-html: applyDeepLinkQuestion must run before restoreHistory');
+  process.exit(1);
+}
+if (!/applyDeepLinkQuestion\(\);[\s\S]{0,80}updateCharCount\(\)/.test(gptJs)) {
+  console.error('validate-basic-html: init must refresh char count after deep-link prefill');
   process.exit(1);
 }
 if (/restoreHistory\(\)\.then\(/.test(gptJs)) {
@@ -762,7 +774,7 @@ if (!stylesCss.includes('.ba-404-title:focus') || !stylesCss.includes('.ba-404-t
   console.error('validate-basic-html: styles must show a focus ring on .ba-404-title');
   process.exit(1);
 }
-if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-deck a:focus-visible') || !stylesCss.includes('.gpt-note a:focus-visible') || !stylesCss.includes('.gpt-field:focus-within') || !stylesCss.includes('.gpt-send:disabled') || !stylesCss.includes('.gpt-sidebar-clear:disabled') || !stylesCss.includes('.gpt-field--readonly') || !stylesCss.includes('.gpt-char-count--at-limit') || !stylesCss.includes('.gpt-sync-status--warn')) {
+if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-deck a:focus-visible') || !stylesCss.includes('.gpt-note a:focus-visible') || !stylesCss.includes('.gpt-field:focus-within') || !stylesCss.includes('.gpt-send:disabled') || !stylesCss.includes('.gpt-sidebar-clear:disabled') || !stylesCss.includes('.gpt-field--readonly') || !stylesCss.includes('.gpt-field--at-limit') || !stylesCss.includes('.gpt-char-count--at-limit') || !stylesCss.includes('.gpt-sync-status--warn')) {
   console.error('validate-basic-html: forced-colors must restore focus outlines and busy/urgency styling');
   process.exit(1);
 }
@@ -824,6 +836,10 @@ if (!gptJs.includes('gpt-char-count--low')) {
 }
 if (!gptJs.includes('gpt-char-count--at-limit') || !gptJs.includes("setAttribute('aria-invalid', 'true')")) {
   console.error('validate-basic-html: char count must mark at-limit input invalid');
+  process.exit(1);
+}
+if (!gptJs.includes('gpt-field--at-limit') || !gptJs.includes("setAttribute('role', 'alert')")) {
+  console.error('validate-basic-html: at-limit char count must style pill and alert screen readers');
   process.exit(1);
 }
 if (!/q\.length > MAX_QUESTION_CHARS[\s\S]{0,400}focusInputField\(\)/.test(gptJs)) {

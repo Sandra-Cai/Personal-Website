@@ -1,4 +1,4 @@
-/* cache-bust: 104 */
+/* cache-bust: 105 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent. */
 
@@ -661,6 +661,16 @@ a:focus-visible {
 .gpt-field--readonly input {
   cursor: default;
   color: var(--text-dim);
+}
+
+.gpt-field--at-limit {
+  border-color: #7c2d12;
+  box-shadow: 0 0 0 1px rgba(124, 45, 18, 0.35);
+}
+
+.gpt-field--at-limit:focus-within {
+  border-color: #7c2d12;
+  box-shadow: 0 0 0 1px rgba(124, 45, 18, 0.5);
 }
 
 .gpt-field input {
@@ -1417,6 +1427,11 @@ a:focus-visible {
     border-color: rgba(0, 0, 0, 0.35);
   }
 
+  .gpt-field--at-limit {
+    border-color: #0a0a0a;
+    box-shadow: 0 0 0 2px #0a0a0a;
+  }
+
   .gpt-field input {
     color: var(--text);
   }
@@ -1700,6 +1715,11 @@ a:focus-visible {
 
   .gpt-field--readonly:focus-within {
     outline: none;
+  }
+
+  .gpt-field--at-limit:focus-within {
+    outline: 2px solid CanvasText;
+    outline-offset: 2px;
   }
 
   .gpt-char-count--low,

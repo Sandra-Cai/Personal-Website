@@ -197,6 +197,11 @@ module.exports = async (req, res) => {
     }
 
     const id = sanitize(body.id, 120);
+    const rawQ = typeof body.q === 'string' ? body.q.replace(/\u0000/g, '').trim() : '';
+    const rawA = typeof body.a === 'string' ? body.a.replace(/\u0000/g, '').trim() : '';
+    if (rawQ.length > MAX_Q || rawA.length > MAX_A) {
+      return json(res, 413, { ok: false, error: 'payload_too_large' });
+    }
     const q = sanitize(body.q, MAX_Q);
     const a = sanitize(body.a, MAX_A);
     if (!id || !q) {
