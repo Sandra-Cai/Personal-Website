@@ -154,7 +154,9 @@ const checksIndex = [
   ['JSON-LD givenName', /"givenName":\s*"Sandra"/],
   ['work deck pipelines', /id="work"[\s\S]*?quant pipelines/],
   ['founding phase', /ba-card--lead[\s\S]*?ba-phase">Founding/],
-  ['footer email', /ba-footer-links[\s\S]*?mailto:sandraxcyj@gmail\.com/],
+  ['footer email', /ba-footer-links[\s\S]*?mailto:sandraxcyj@gmail\.com[^>]*aria-label="Email Sandra Cai"/],
+  ['contact strip email', /ba-strip-items[\s\S]*?mailto:sandraxcyj@gmail\.com[^>]*aria-label="Email Sandra Cai"/],
+  ['gpt disclaimer email aria', /id="gpt-disclaimer"[\s\S]*?mailto:sandraxcyj@gmail\.com[^>]*aria-label="Email Sandra Cai"/],
   ['page title plurall', /<title>Sandra Cai · Founder, Plurall AI<\/title>/],
   ['JSON-LD familyName', /"familyName":\s*"Cai"/],
   ['institutional phase', /id="work"[\s\S]*?ba-phase">Institutional/],
@@ -180,7 +182,7 @@ const checksIndex = [
   ['gpt char count', /id="gpt-char-count"[^>]*aria-live="polite"/],
   ['gpt log region', /id="gpt-log"[^>]*role="log"/],
   ['gpt log aria-label', /id="gpt-log"[^>]*aria-label="SandraGPT conversation"/],
-  ['gpt input describedby', /id="gpt-input"[^>]*aria-describedby="gpt-disclaimer gpt-char-count"/],
+  ['gpt input describedby', /id="gpt-input"[^>]*aria-describedby="gpt-disclaimer"/],
   ['gpt input errormessage', /id="gpt-input"[^>]*aria-errormessage="gpt-char-count"/],
   ['skip link top', /class="ba-skip" href="#top"/],
   ['gpt form aria-busy', /id="gpt-form"[^>]*aria-busy="false"/],
@@ -210,7 +212,7 @@ const checksIndex = [
   ['connector strip text', /aria-label="Connector"[\s\S]*?class="ba-strip-text"/],
   ['nav primary label', /<nav class="ba-nav" aria-label="Primary">/],
   ['hero focus aria', /class="ba-focus"[^>]*aria-label="Focus areas"/],
-  ['gpt noscript email', /<noscript>[\s\S]*?mailto:sandraxcyj@gmail\.com/],
+  ['gpt noscript email', /<noscript>[\s\S]*?mailto:sandraxcyj@gmail\.com[^>]*aria-label="Email Sandra Cai"/],
   ['footer name', /class="ba-footer-name"[^>]*>Sandra Cai/],
   ['hero technical education', /class="ba-student-note"[^>]*>[\s\S]*?Technical education/],
   ['gpt spellcheck', /id="gpt-input"[^>]*spellcheck="true"/],
@@ -774,7 +776,7 @@ if (!stylesCss.includes('.ba-404-title:focus') || !stylesCss.includes('.ba-404-t
   console.error('validate-basic-html: styles must show a focus ring on .ba-404-title');
   process.exit(1);
 }
-if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-deck a:focus-visible') || !stylesCss.includes('.gpt-note a:focus-visible') || !stylesCss.includes('.gpt-field:focus-within') || !stylesCss.includes('.gpt-send:disabled') || !stylesCss.includes('.gpt-sidebar-clear:disabled') || !stylesCss.includes('.gpt-field--readonly') || !stylesCss.includes('.gpt-field--at-limit') || !stylesCss.includes('.gpt-char-count--at-limit') || !stylesCss.includes('.gpt-sync-status--warn')) {
+if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-deck a:focus-visible') || !stylesCss.includes('.gpt-note a:focus-visible') || !stylesCss.includes('.gpt-field:focus-within') || !stylesCss.includes('.gpt-send:disabled') || !stylesCss.includes('.gpt-sidebar-clear:disabled') || !stylesCss.includes('.gpt-field--readonly') || !stylesCss.includes('.gpt-field--at-limit') || !stylesCss.includes('.gpt-field--near-limit') || !stylesCss.includes('.gpt-char-count--at-limit') || !stylesCss.includes('.gpt-sync-status--warn') || !stylesCss.includes('.gpt-sync-status:empty')) {
   console.error('validate-basic-html: forced-colors must restore focus outlines and busy/urgency styling');
   process.exit(1);
 }
@@ -840,6 +842,22 @@ if (!gptJs.includes('gpt-char-count--at-limit') || !gptJs.includes("setAttribute
 }
 if (!gptJs.includes('gpt-field--at-limit') || !gptJs.includes("setAttribute('role', 'alert')")) {
   console.error('validate-basic-html: at-limit char count must style pill and alert screen readers');
+  process.exit(1);
+}
+if (!gptJs.includes('gpt-field--near-limit')) {
+  console.error('validate-basic-html: near-limit char count must style the input pill');
+  process.exit(1);
+}
+if (!gptJs.includes("'aria-describedby'") || !/gpt-disclaimer gpt-char-count/.test(gptJs)) {
+  console.error('validate-basic-html: char count must add gpt-char-count to aria-describedby when visible');
+  process.exit(1);
+}
+if (!/questions\[recallIndex\][\s\S]{0,80}\.slice\(0, MAX_QUESTION_CHARS\)/.test(gptJs)) {
+  console.error('validate-basic-html: history recall must truncate to MAX_QUESTION_CHARS');
+  process.exit(1);
+}
+if (!/row\.q\.trim\(\)\.slice\(0, MAX_QUESTION_CHARS\)/.test(gptJs)) {
+  console.error('validate-basic-html: normalizeTurns must truncate questions to MAX_QUESTION_CHARS');
   process.exit(1);
 }
 if (!/q\.length > MAX_QUESTION_CHARS[\s\S]{0,400}focusInputField\(\)/.test(gptJs)) {

@@ -1,5 +1,5 @@
 /**
- * cache-bust: 127
+ * cache-bust: 128
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1028,10 +1028,12 @@
         'when does char count show',
         'at character limit',
         'aria-invalid',
+        'gpt-field--at-limit',
+        'pill at limit',
       ],
       priority: 14,
       reply:
-        'A live character count appears when 40 or fewer characters remain of the 280-character limit. Near the limit it turns amber; at exactly 280 characters it reads "At character limit" and the input is marked invalid.',
+        'A live character count appears when 40 or fewer characters remain of the 280-character limit. Near the limit it turns amber; at exactly 280 characters the pill gets a dark border, the count uses role="alert", and the input is marked invalid.',
     },
     {
       keys: [
@@ -1544,7 +1546,7 @@
     const out = [];
     for (const row of entries) {
       if (!row || typeof row !== 'object') continue;
-      const q = typeof row.q === 'string' ? row.q.trim() : '';
+      const q = typeof row.q === 'string' ? row.q.trim().slice(0, MAX_QUESTION_CHARS) : '';
       if (!q) continue;
       const a = typeof row.a === 'string' ? row.a : '';
       const id = typeof row.id === 'string' && row.id ? row.id : newTurnId();
@@ -1949,6 +1951,10 @@
     if (!el || !input) return;
     const field = input.closest('.gpt-field');
     const left = MAX_QUESTION_CHARS - input.value.length;
+    input.setAttribute(
+      'aria-describedby',
+      left <= 40 ? 'gpt-disclaimer gpt-char-count' : 'gpt-disclaimer',
+    );
     if (left <= 40) {
       if (left === 0) {
         el.textContent = 'At character limit';
@@ -1956,7 +1962,10 @@
         el.classList.add('gpt-char-count--at-limit');
         input.setAttribute('aria-invalid', 'true');
         el.setAttribute('role', 'alert');
-        if (field) field.classList.add('gpt-field--at-limit');
+        if (field) {
+          field.classList.add('gpt-field--at-limit');
+          field.classList.remove('gpt-field--near-limit');
+        }
       } else {
         const label = left === 1 ? '1 character left' : `${left} characters left`;
         el.textContent = label;
@@ -1964,7 +1973,10 @@
         el.classList.remove('gpt-char-count--at-limit');
         input.removeAttribute('aria-invalid');
         el.removeAttribute('role');
-        if (field) field.classList.remove('gpt-field--at-limit');
+        if (field) {
+          field.classList.remove('gpt-field--at-limit');
+          field.classList.toggle('gpt-field--near-limit', left <= 10);
+        }
       }
       el.classList.remove('visually-hidden');
     } else {
@@ -1972,7 +1984,9 @@
       el.classList.remove('gpt-char-count--low', 'gpt-char-count--at-limit');
       input.removeAttribute('aria-invalid');
       el.removeAttribute('role');
-      if (field) field.classList.remove('gpt-field--at-limit');
+      if (field) {
+        field.classList.remove('gpt-field--at-limit', 'gpt-field--near-limit');
+      }
       el.classList.add('visually-hidden');
     }
   }
@@ -2295,13 +2309,7 @@
     // Invalidate in-flight restore so it cannot wipe this turn after await.
     historyEpoch += 1;
     if (q.length > MAX_QUESTION_CHARS) {
-      const turnId = newTurnId();
-      const msg = `Please keep questions under ${MAX_QUESTION_CHARS} characters.`;
-      lastSubmittedCanonical = canonicalQ;
-      lastSubmittedAt = now;
-      renderTurn(turnId, q, msg);
-      addSidebarEntry(turnId, q);
-      input.value = '';
+      input.value = q.slice(0, MAX_QUESTION_CHARS);
       recallIndex = -1;
       draftBeforeRecall = '';
       updateCharCount();
@@ -2405,7 +2413,7 @@
           } else {
             recallIndex = Math.min(recallIndex + 1, questions.length - 1);
           }
-          input.value = questions[recallIndex] || '';
+          input.value = (questions[recallIndex] || '').slice(0, MAX_QUESTION_CHARS);
           updateCharCount();
           updateSendState();
           return;
@@ -2416,7 +2424,7 @@
           input.value = draftBeforeRecall;
         } else {
           recallIndex -= 1;
-          input.value = questions[recallIndex] || '';
+          input.value = (questions[recallIndex] || '').slice(0, MAX_QUESTION_CHARS);
         }
         updateCharCount();
         updateSendState();

@@ -1,4 +1,4 @@
-/* cache-bust: 105 */
+/* cache-bust: 106 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent. */
 
@@ -405,6 +405,11 @@ a:focus-visible {
   letter-spacing: 0.02em;
 }
 
+.gpt-sync-status:empty {
+  display: none;
+  margin: 0;
+}
+
 .gpt-sync-status--ok {
   color: var(--warm);
 }
@@ -671,6 +676,16 @@ a:focus-visible {
 .gpt-field--at-limit:focus-within {
   border-color: #7c2d12;
   box-shadow: 0 0 0 1px rgba(124, 45, 18, 0.5);
+}
+
+.gpt-field--near-limit {
+  border-color: #b45309;
+  box-shadow: 0 0 0 1px rgba(180, 83, 9, 0.25);
+}
+
+.gpt-field--near-limit:focus-within {
+  border-color: #b45309;
+  box-shadow: 0 0 0 1px rgba(180, 83, 9, 0.35);
 }
 
 .gpt-field input {
@@ -1432,6 +1447,11 @@ a:focus-visible {
     box-shadow: 0 0 0 2px #0a0a0a;
   }
 
+  .gpt-field--near-limit {
+    border-color: rgba(0, 0, 0, 0.55);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+  }
+
   .gpt-field input {
     color: var(--text);
   }
@@ -1718,6 +1738,11 @@ a:focus-visible {
   }
 
   .gpt-field--at-limit:focus-within {
+    outline: 2px solid CanvasText;
+    outline-offset: 2px;
+  }
+
+  .gpt-field--near-limit:focus-within {
     outline: 2px solid CanvasText;
     outline-offset: 2px;
   }
