@@ -52,7 +52,7 @@ const checks404 = [
   ['404 footer contentinfo', /<footer class="ba-footer" role="contentinfo"/],
   ['404 script cache', /src="\/assets\/script\.js\?v=\d+" defer/],
   ['404 year fallback', /id="year">2026<\/span>/],
-  ['404 email footer', /ba-footer-links[\s\S]*?mailto:sandraxcyj@gmail\.com/],
+  ['404 email footer', /ba-footer-links[\s\S]*?mailto:sandraxcyj@gmail\.com[^>]*aria-label="Email Sandra Cai"/],
   ['404 favicon ico', /rel="icon"[^>]*favicon\.ico/],
   ['404 writing nav', /class="ba-nav-external"[^>]*href="https:\/\/substack\.com\/@caisandra"/],
   ['404 primary nav', /<nav class="ba-nav" aria-label="Primary">/],
@@ -736,6 +736,10 @@ if (!gptJs.includes('function updateClearState') || !gptJs.includes('clearBusy')
   console.error('validate-basic-html: Clear button must track empty/busy state');
   process.exit(1);
 }
+if (!gptJs.includes('clearBtn.setAttribute(\'aria-label\'') || !gptJs.includes('Nothing to clear') || !gptJs.includes('Clearing question history')) {
+  console.error('validate-basic-html: Clear button aria-label must reflect empty and busy states');
+  process.exit(1);
+}
 if (!/submitBusy \|\| restorePending \|\| clearBusy/.test(gptJs)) {
   console.error('validate-basic-html: handleSubmit must gate on clearBusy');
   process.exit(1);
@@ -776,7 +780,7 @@ if (!stylesCss.includes('.ba-404-title:focus') || !stylesCss.includes('.ba-404-t
   console.error('validate-basic-html: styles must show a focus ring on .ba-404-title');
   process.exit(1);
 }
-if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-deck a:focus-visible') || !stylesCss.includes('.gpt-note a:focus-visible') || !stylesCss.includes('.gpt-field:focus-within') || !stylesCss.includes('.gpt-send:disabled') || !stylesCss.includes('.gpt-sidebar-clear:disabled') || !stylesCss.includes('.gpt-field--readonly') || !stylesCss.includes('.gpt-field--at-limit') || !stylesCss.includes('.gpt-field--near-limit') || !stylesCss.includes('.gpt-char-count--at-limit') || !stylesCss.includes('.gpt-sync-status--warn') || !stylesCss.includes('.gpt-sync-status:empty')) {
+if (!stylesCss.includes('forced-colors: active') || !stylesCss.includes('CanvasText') || !stylesCss.includes('.ba-deck a:focus-visible') || !stylesCss.includes('.gpt-note a:focus-visible') || !stylesCss.includes('.gpt-field:focus-within') || !stylesCss.includes('.gpt-send:disabled') || !stylesCss.includes('.gpt-sidebar-clear:disabled') || !stylesCss.includes('.gpt-field--readonly') || !stylesCss.includes('.gpt-field--at-limit') || !stylesCss.includes('.gpt-field--near-limit') || !stylesCss.includes('.gpt-char-count--at-limit') || !stylesCss.includes('.gpt-sync-status--warn') || !stylesCss.includes('.gpt-sync-status:empty') || !stylesCss.includes('.gpt-sidebar-empty[hidden]')) {
   console.error('validate-basic-html: forced-colors must restore focus outlines and busy/urgency styling');
   process.exit(1);
 }
@@ -970,6 +974,22 @@ if (/https?:\/\//i.test(gptJs) || /\bhref\s*=/i.test(gptJs)) {
 }
 if (!gptJs.includes('/* quota or private mode */')) {
   console.error('validate-basic-html: saveHistory must tolerate private mode / quota failures');
+  process.exit(1);
+}
+if (!/saveHistory[\s\S]{0,120}normalizeTurns\(entries\)/.test(gptJs)) {
+  console.error('validate-basic-html: saveHistory must persist normalized turns');
+  process.exit(1);
+}
+if (!gptJs.includes('MAX_ANSWER_CHARS') || !/row\.a\.trim\(\)\.slice\(0, MAX_ANSWER_CHARS\)/.test(gptJs)) {
+  console.error('validate-basic-html: normalizeTurns must truncate answers to MAX_ANSWER_CHARS');
+  process.exit(1);
+}
+if (!/postTurnRemote[\s\S]{0,200}safeQ/.test(gptJs) || !/safeA = typeof a === 'string' \? a\.trim\(\)\.slice\(0, MAX_ANSWER_CHARS\)/.test(gptJs)) {
+  console.error('validate-basic-html: postTurnRemote must trim and slice q/a before JSON.stringify');
+  process.exit(1);
+}
+if (!gptJs.includes('gpt-sync-status--local')) {
+  console.error('validate-basic-html: local sync status must use gpt-sync-status--local styling');
   process.exit(1);
 }
 if (!gptJs.includes('.textContent = q') || !gptJs.includes('.textContent = answerText')) {

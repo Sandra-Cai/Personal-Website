@@ -1,4 +1,4 @@
-/* cache-bust: 106 */
+/* cache-bust: 107 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent. */
 
@@ -419,6 +419,10 @@ a:focus-visible {
   font-weight: 600;
 }
 
+.gpt-sync-status--local {
+  font-style: italic;
+}
+
 .gpt-form[aria-busy='true'] .gpt-send {
   /* Blanket opacity dimmed the cream arrow into mud on the cream page;
      dim the background only and keep the icon legible. */
@@ -505,6 +509,10 @@ a:focus-visible {
 
 .gpt-sidebar-list:empty + .gpt-sidebar-empty {
   display: block;
+}
+
+.gpt-sidebar-empty[hidden] {
+  display: none !important;
 }
 
 .gpt-sidebar-item {

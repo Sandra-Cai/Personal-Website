@@ -1,5 +1,5 @@
 /**
- * cache-bust: 128
+ * cache-bust: 129
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1470,6 +1470,7 @@
   const SESSION_KEY = 'sandra-gpt-session';
   const MAX_TURNS = 80;
   const MAX_QUESTION_CHARS = 280;
+  const MAX_ANSWER_CHARS = 8000;
   const DUPLICATE_SUBMIT_WINDOW_MS = 1500;
   /** When true, wipes local session and history on every full page load (fresh demo). */
   const RESET_HISTORY_ON_LOAD = false;
@@ -1530,7 +1531,7 @@
 
   function saveHistory(entries) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(trimTurns(entries)));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizeTurns(entries)));
     } catch {
       /* quota or private mode */
     }
@@ -1548,7 +1549,7 @@
       if (!row || typeof row !== 'object') continue;
       const q = typeof row.q === 'string' ? row.q.trim().slice(0, MAX_QUESTION_CHARS) : '';
       if (!q) continue;
-      const a = typeof row.a === 'string' ? row.a : '';
+      const a = typeof row.a === 'string' ? row.a.trim().slice(0, MAX_ANSWER_CHARS) : '';
       const id = typeof row.id === 'string' && row.id ? row.id : newTurnId();
       const t = typeof row.t === 'number' ? row.t : Date.now();
       out.push({ id, q, a, t });
@@ -1614,12 +1615,13 @@
   function setSyncStatus(mode, detail) {
     if (!syncStatusEl) return;
     syncStatusEl.textContent = '';
-    syncStatusEl.classList.remove('gpt-sync-status--ok', 'gpt-sync-status--warn');
+    syncStatusEl.classList.remove('gpt-sync-status--ok', 'gpt-sync-status--warn', 'gpt-sync-status--local');
     if (mode === 'server') {
       syncStatusEl.textContent = 'Database sync on';
       syncStatusEl.classList.add('gpt-sync-status--ok');
     } else if (mode === 'local') {
       syncStatusEl.textContent = 'Browser only (no API)';
+      syncStatusEl.classList.add('gpt-sync-status--local');
     } else if (mode === 'warn') {
       if (detail === 'rate') {
         syncStatusEl.textContent = 'Server busy; saved in browser only';
@@ -1702,7 +1704,9 @@
   }
 
   async function postTurnRemote(sessionId, id, q, a) {
-    const payload = JSON.stringify({ sessionId, id, q, a });
+    const safeQ = typeof q === 'string' ? q.trim().slice(0, MAX_QUESTION_CHARS) : '';
+    const safeA = typeof a === 'string' ? a.trim().slice(0, MAX_ANSWER_CHARS) : '';
+    const payload = JSON.stringify({ sessionId, id, q: safeQ, a: safeA });
     // Capture once so Clear's recycleApiAbort cannot be bypassed on retry.
     const signal = apiSignal();
     for (let attempt = 0; attempt < 2; attempt++) {
@@ -1905,6 +1909,10 @@
     const empty = !(logEl && logEl.children.length) && !(sidebarList && sidebarList.children.length);
     clearBtn.disabled = clearBusy || empty || restorePending;
     clearBtn.setAttribute('aria-busy', clearBusy || restorePending ? 'true' : 'false');
+    let clearLabel = 'Clear question history';
+    if (clearBusy || restorePending) clearLabel = 'Clearing question history…';
+    else if (empty) clearLabel = 'Nothing to clear';
+    clearBtn.setAttribute('aria-label', clearLabel);
   }
 
   function updateSidebarEmpty() {
