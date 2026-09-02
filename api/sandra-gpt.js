@@ -150,8 +150,8 @@ module.exports = async (req, res) => {
 
     const turns = (data || []).map((row) => ({
       id: row.client_turn_id,
-      q: row.question,
-      a: row.answer,
+      q: sanitize(row.question, MAX_Q),
+      a: sanitize(row.answer, MAX_A),
       t: row.created_at ? new Date(row.created_at).getTime() : Date.now(),
     }));
 

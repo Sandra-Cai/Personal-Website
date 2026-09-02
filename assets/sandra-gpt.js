@@ -1,5 +1,5 @@
 /**
- * cache-bust: 129
+ * cache-bust: 130
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1910,7 +1910,8 @@
     clearBtn.disabled = clearBusy || empty || restorePending;
     clearBtn.setAttribute('aria-busy', clearBusy || restorePending ? 'true' : 'false');
     let clearLabel = 'Clear question history';
-    if (clearBusy || restorePending) clearLabel = 'Clearing question history…';
+    if (clearBusy) clearLabel = 'Clearing question history…';
+    else if (restorePending) clearLabel = 'Loading history…';
     else if (empty) clearLabel = 'Nothing to clear';
     clearBtn.setAttribute('aria-label', clearLabel);
   }
@@ -1918,12 +1919,13 @@
   function updateSidebarEmpty() {
     const emptyEl = document.getElementById('gpt-sidebar-empty');
     if (!emptyEl) return;
-    emptyEl.hidden = Boolean(sidebarList && sidebarList.children.length);
+    emptyEl.hidden = restorePending || Boolean(sidebarList && sidebarList.children.length);
   }
 
   function updateSidebarBusy() {
     if (!sidebarList) return;
     const busy = restorePending || clearBusy;
+    sidebarList.setAttribute('aria-busy', busy ? 'true' : 'false');
     sidebarList.querySelectorAll('.gpt-sidebar-item').forEach((btn) => {
       btn.disabled = busy;
     });

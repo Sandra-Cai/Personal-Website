@@ -247,6 +247,7 @@ const checksIndex = [
   ['hero lead strong years', /class="ba-lead"[\s\S]*?<strong>4\+ years<\/strong>/],
   ['research list landmark', /id="research"[\s\S]*?<ul class="ba-list"[^>]*role="list"/],
   ['gpt sidebar list role', /id="gpt-sidebar-list"[^>]*role="list"/],
+  ['gpt sidebar aria-busy', /id="gpt-sidebar-list"[^>]*aria-busy="false"/],
   ['gpt form labelledby', /id="gpt-form"[^>]*aria-labelledby="gpt-heading"/],
   ['agent scroll margin', /id="sandra-gpt"[^>]*class="ba-agent"/],
   ['nav separator', /class="ba-nav-sep"[^>]*aria-hidden="true"/],
@@ -579,6 +580,10 @@ if (!apiJs.includes("Cache-Control', 'no-store'")) {
   console.error('validate-basic-html: api/sandra-gpt.js must set Cache-Control no-store');
   process.exit(1);
 }
+if (!/sanitize\(row\.question, MAX_Q\)/.test(apiJs) || !/sanitize\(row\.answer, MAX_A\)/.test(apiJs)) {
+  console.error('validate-basic-html: api GET must sanitize question and answer fields');
+  process.exit(1);
+}
 if (!apiJs.includes('payload_too_large') || !apiJs.includes('not_configured')) {
   console.error('validate-basic-html: api must handle payload_too_large and not_configured');
   process.exit(1);
@@ -619,6 +624,11 @@ if (!optionsBlock || !optionsBlock[0].includes("X-Content-Type-Options', 'nosnif
 const apiMaxA = apiJs.match(/const MAX_A = (\d+);/);
 if (!apiMaxA || Number(apiMaxA[1]) < 1000 || Number(apiMaxA[1]) > 20000) {
   console.error('validate-basic-html: api/sandra-gpt.js MAX_A must be between 1000 and 20000');
+  process.exit(1);
+}
+const maxAnswerChars = gptJs.match(/const MAX_ANSWER_CHARS = (\d+);/);
+if (!maxAnswerChars || maxAnswerChars[1] !== apiMaxA[1]) {
+  console.error('validate-basic-html: MAX_ANSWER_CHARS must match api MAX_A');
   process.exit(1);
 }
 if (!apiJs.includes('.limit(80)')) {
@@ -736,8 +746,16 @@ if (!gptJs.includes('function updateClearState') || !gptJs.includes('clearBusy')
   console.error('validate-basic-html: Clear button must track empty/busy state');
   process.exit(1);
 }
-if (!gptJs.includes('clearBtn.setAttribute(\'aria-label\'') || !gptJs.includes('Nothing to clear') || !gptJs.includes('Clearing question history')) {
-  console.error('validate-basic-html: Clear button aria-label must reflect empty and busy states');
+if (!gptJs.includes('clearBtn.setAttribute(\'aria-label\'') || !gptJs.includes('Nothing to clear') || !gptJs.includes('Clearing question history') || !/restorePending\) clearLabel = 'Loading history…'/.test(gptJs)) {
+  console.error('validate-basic-html: Clear button aria-label must reflect empty, busy, and restore states');
+  process.exit(1);
+}
+if (!/emptyEl\.hidden = restorePending/.test(gptJs)) {
+  console.error('validate-basic-html: sidebar empty placeholder must hide during restore');
+  process.exit(1);
+}
+if (!gptJs.includes('sidebarList.setAttribute(\'aria-busy\'') || !/restorePending \|\| clearBusy/.test(gptJs)) {
+  console.error('validate-basic-html: sidebar list must expose aria-busy during restore/clear');
   process.exit(1);
 }
 if (!/submitBusy \|\| restorePending \|\| clearBusy/.test(gptJs)) {

@@ -1,4 +1,4 @@
-/* cache-bust: 107 */
+/* cache-bust: 108 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent. */
 
@@ -1524,8 +1524,13 @@ a:focus-visible {
   }
 
   .gpt-sync-status--ok,
-  .gpt-sync-status--warn {
+  .gpt-sync-status--warn,
+  .gpt-sync-status--local {
     color: var(--text-dim);
+  }
+
+  .gpt-sync-status--local {
+    font-style: italic;
   }
 
   .gpt-sync-status--warn {
@@ -1764,5 +1769,9 @@ a:focus-visible {
   .gpt-sync-status--warn {
     font-weight: 700;
     text-decoration: underline;
+  }
+
+  .gpt-sync-status--local {
+    font-style: italic;
   }
 }
