@@ -1,6 +1,7 @@
-/* cache-bust: 108 */
+/* cache-bust: 109 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
-/* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent. */
+/* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
+   Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
 
 @font-face {
   font-family: Geist;
@@ -27,6 +28,29 @@
   --accent-glow: rgba(0, 0, 0, 0.10);
   --warm: #B8860B;
   --warm-dim: rgba(184, 134, 11, 0.12);
+  --warm-glow: rgba(184, 134, 11, 0.05);
+  --header-bg: color-mix(in srgb, var(--bg) 85%, transparent);
+  --shade-025: rgba(0, 0, 0, 0.025);
+  --shade-035: rgba(0, 0, 0, 0.035);
+  --shade-04: rgba(0, 0, 0, 0.04);
+  --shade-045: rgba(0, 0, 0, 0.045);
+  --shade-05: rgba(0, 0, 0, 0.05);
+  --shade-06: rgba(0, 0, 0, 0.06);
+  --shade-08: rgba(0, 0, 0, 0.08);
+  --shade-09: rgba(0, 0, 0, 0.09);
+  --shade-10: rgba(0, 0, 0, 0.10);
+  --shade-12: rgba(0, 0, 0, 0.12);
+  --shade-14: rgba(0, 0, 0, 0.14);
+  --shade-22: rgba(0, 0, 0, 0.22);
+  --shade-25: rgba(0, 0, 0, 0.25);
+  --warn: #92400e;
+  --warn-strong: #7c2d12;
+  --warn-soft: #b45309;
+  --warn-ring: rgba(124, 45, 18, 0.35);
+  --warn-ring-strong: rgba(124, 45, 18, 0.5);
+  --warn-soft-ring: rgba(180, 83, 9, 0.25);
+  --warn-soft-ring-strong: rgba(180, 83, 9, 0.35);
+  --theme-chrome: #FFFDF7;
   --max: min(1080px, calc(100% - 48px));
   --narrow: 36rem;
   --radius: 12px;
@@ -34,23 +58,16 @@
   --font: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5.5rem;
-  color-scheme: light;
+  color-scheme: light dark;
 }
 
 ::selection {
-  background: rgba(0, 0, 0, 0.14);
+  background: var(--shade-14);
   color: var(--text);
 }
-
 body.bai-site {
   margin: 0;
   color: var(--text);
@@ -127,8 +144,8 @@ a:focus-visible {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 70vw 50vh at 80% 10%, rgba(184, 134, 11, 0.05), transparent 60%),
-    radial-gradient(ellipse 60vw 40vh at 15% 85%, rgba(0, 0, 0, 0.035), transparent 65%),
+    radial-gradient(ellipse 70vw 50vh at 80% 10%, var(--warm-glow), transparent 60%),
+    radial-gradient(ellipse 60vw 40vh at 15% 85%, var(--shade-035), transparent 65%),
     var(--bg);
 }
 
@@ -138,7 +155,7 @@ a:focus-visible {
   top: 0;
   z-index: 50;
   border-bottom: 1px solid var(--line);
-  background: rgba(255, 253, 247, 0.85);
+  background: var(--header-bg);
   backdrop-filter: blur(20px) saturate(180%);
 }
 
@@ -415,7 +432,7 @@ a:focus-visible {
 }
 
 .gpt-sync-status--warn {
-  color: #92400e;
+  color: var(--warn);
   font-weight: 600;
 }
 
@@ -469,7 +486,7 @@ a:focus-visible {
   margin-right: -4px;
   scrollbar-gutter: stable;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+  scrollbar-color: var(--shade-25) transparent;
 }
 
 .gpt-sidebar-scroll::-webkit-scrollbar {
@@ -477,7 +494,7 @@ a:focus-visible {
 }
 
 .gpt-sidebar-scroll::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.22);
+  background: var(--shade-22);
   border-radius: 3px;
 }
 
@@ -527,7 +544,7 @@ a:focus-visible {
   line-height: 1.35;
   color: var(--text-dim);
   /* Stand out from the warmer card paper. */
-  background: rgba(0, 0, 0, 0.045);
+  background: var(--shade-045);
   border: 1px solid transparent;
   border-radius: 8px;
   cursor: pointer;
@@ -535,7 +552,7 @@ a:focus-visible {
 }
 
 .gpt-sidebar-item:hover {
-  background: rgba(0, 0, 0, 0.08);
+  background: var(--shade-08);
   color: var(--text);
 }
 
@@ -547,7 +564,7 @@ a:focus-visible {
 
 .gpt-sidebar-item--active {
   border-color: var(--accent);
-  background: rgba(0, 0, 0, 0.09);
+  background: var(--shade-09);
   color: var(--text);
 }
 
@@ -649,7 +666,7 @@ a:focus-visible {
   padding: 5px 5px 5px 16px;
   /* Slightly darker than the SandraGPT card so the input pill reads as an
      interactive object on top of the surface, not flush with it. */
-  background: rgba(0, 0, 0, 0.06);
+  background: var(--shade-06);
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -661,7 +678,7 @@ a:focus-visible {
 }
 
 .gpt-field--readonly {
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--shade-04);
   border-color: var(--line);
   box-shadow: none;
 }
@@ -677,23 +694,23 @@ a:focus-visible {
 }
 
 .gpt-field--at-limit {
-  border-color: #7c2d12;
-  box-shadow: 0 0 0 1px rgba(124, 45, 18, 0.35);
+  border-color: var(--warn-strong);
+  box-shadow: 0 0 0 1px var(--warn-ring);
 }
 
 .gpt-field--at-limit:focus-within {
-  border-color: #7c2d12;
-  box-shadow: 0 0 0 1px rgba(124, 45, 18, 0.5);
+  border-color: var(--warn-strong);
+  box-shadow: 0 0 0 1px var(--warn-ring-strong);
 }
 
 .gpt-field--near-limit {
-  border-color: #b45309;
-  box-shadow: 0 0 0 1px rgba(180, 83, 9, 0.25);
+  border-color: var(--warn-soft);
+  box-shadow: 0 0 0 1px var(--warn-soft-ring);
 }
 
 .gpt-field--near-limit:focus-within {
-  border-color: #b45309;
-  box-shadow: 0 0 0 1px rgba(180, 83, 9, 0.35);
+  border-color: var(--warn-soft);
+  box-shadow: 0 0 0 1px var(--warn-soft-ring-strong);
 }
 
 .gpt-field input {
@@ -825,12 +842,12 @@ a:focus-visible {
 }
 
 .gpt-char-count--low {
-  color: #92400e;
+  color: var(--warn);
   font-weight: 600;
 }
 
 .gpt-char-count--at-limit {
-  color: #7c2d12;
+  color: var(--warn-strong);
   font-weight: 700;
 }
 
@@ -849,7 +866,7 @@ a:focus-visible {
   font-weight: 500;
   line-height: 1.4;
   color: var(--text-dim);
-  background: rgba(0, 0, 0, 0.06);
+  background: var(--shade-06);
   border: 1px solid var(--line);
   border-radius: 4px;
 }
@@ -859,7 +876,7 @@ a:focus-visible {
   color: var(--text-dim);
   margin: 0 0 1.25rem;
   padding: 0.75rem 1rem;
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--shade-05);
   border: 1px solid var(--line);
   border-radius: 12px;
   line-height: 1.6;
@@ -895,7 +912,7 @@ a:focus-visible {
   padding: 0.875rem 1rem;
   /* Sits inside the warmer .ba-agent-card; needs a slightly stronger ink
      wash to read as its own bubble. */
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--shade-05);
   border: 1px solid var(--line);
   border-radius: var(--radius);
 }
@@ -936,7 +953,7 @@ a:focus-visible {
 }
 
 .ba-strip--dim {
-  background: rgba(0, 0, 0, 0.022);
+  background: var(--shade-025);
 }
 
 .ba-strip-text {
@@ -962,7 +979,7 @@ a:focus-visible {
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
   border: 1px solid var(--line);
-  background: rgba(0, 0, 0, 0.035);
+  background: var(--shade-035);
   text-decoration: none;
   transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
 }
@@ -1105,19 +1122,19 @@ a:focus-visible {
   padding: 1.35rem 1.25rem 1.25rem;
   border-radius: var(--radius);
   border: 1px solid var(--line);
-  background: rgba(0, 0, 0, 0.025);
+  background: var(--shade-025);
   transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 }
 
 .ba-card:hover {
   border-color: var(--line-hover);
-  background: rgba(0, 0, 0, 0.045);
+  background: var(--shade-045);
   transform: translateY(-1px);
 }
 
 .ba-card--lead {
   padding: 1.65rem 1.5rem 1.45rem;
-  background: rgba(0, 0, 0, 0.045);
+  background: var(--shade-045);
 }
 
 .ba-card--lead .ba-h3 {
@@ -1129,7 +1146,7 @@ a:focus-visible {
 }
 
 .ba-card--bare:hover {
-  background: rgba(0, 0, 0, 0.025);
+  background: var(--shade-025);
 }
 
 .ba-phase {
@@ -1173,7 +1190,7 @@ a:focus-visible {
   font-size: 0.875rem;
   color: var(--text-dim);
   line-height: 1.65;
-  background: rgba(0, 0, 0, 0.025);
+  background: var(--shade-025);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   transition: border-color 0.15s ease, background-color 0.15s ease;
@@ -1181,7 +1198,7 @@ a:focus-visible {
 
 .ba-list li:hover {
   border-color: var(--line-hover);
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--shade-04);
 }
 
 .ba-list li::before {
@@ -1362,6 +1379,129 @@ a:focus-visible {
   white-space: normal;
   outline: 2px solid var(--accent);
   outline-offset: 4px;
+}
+
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #141210;
+  --bg-warm: #1c1915;
+  --text: #f4efe6;
+  --text-dim: #c9c0b4;
+  --text-faint: #9a9186;
+  --line: rgba(255, 255, 255, 0.10);
+  --line-hover: rgba(255, 255, 255, 0.22);
+  --accent: #f4efe6;
+  --accent-bright: #ffffff;
+  --accent-dim: rgba(255, 255, 255, 0.08);
+  --accent-glow: rgba(255, 255, 255, 0.14);
+  --warm: #d4a017;
+  --warm-dim: rgba(212, 160, 23, 0.18);
+  --warm-glow: rgba(212, 160, 23, 0.08);
+  --header-bg: color-mix(in srgb, var(--bg) 88%, transparent);
+  --shade-025: rgba(255, 255, 255, 0.03);
+  --shade-035: rgba(255, 255, 255, 0.045);
+  --shade-04: rgba(255, 255, 255, 0.05);
+  --shade-045: rgba(255, 255, 255, 0.055);
+  --shade-05: rgba(255, 255, 255, 0.06);
+  --shade-06: rgba(255, 255, 255, 0.07);
+  --shade-08: rgba(255, 255, 255, 0.09);
+  --shade-09: rgba(255, 255, 255, 0.10);
+  --shade-10: rgba(255, 255, 255, 0.11);
+  --shade-12: rgba(255, 255, 255, 0.13);
+  --shade-14: rgba(255, 255, 255, 0.16);
+  --shade-22: rgba(255, 255, 255, 0.22);
+  --shade-25: rgba(255, 255, 255, 0.28);
+  --warn: #fbbf24;
+  --warn-strong: #fcd34d;
+  --warn-soft: #f59e0b;
+  --warn-ring: rgba(251, 191, 36, 0.35);
+  --warn-ring-strong: rgba(251, 191, 36, 0.5);
+  --warn-soft-ring: rgba(245, 158, 11, 0.3);
+  --warn-soft-ring-strong: rgba(245, 158, 11, 0.45);
+  --theme-chrome: #141210;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #141210;
+    --bg-warm: #1c1915;
+    --text: #f4efe6;
+    --text-dim: #c9c0b4;
+    --text-faint: #9a9186;
+    --line: rgba(255, 255, 255, 0.10);
+    --line-hover: rgba(255, 255, 255, 0.22);
+    --accent: #f4efe6;
+    --accent-bright: #ffffff;
+    --accent-dim: rgba(255, 255, 255, 0.08);
+    --accent-glow: rgba(255, 255, 255, 0.14);
+    --warm: #d4a017;
+    --warm-dim: rgba(212, 160, 23, 0.18);
+    --warm-glow: rgba(212, 160, 23, 0.08);
+    --header-bg: color-mix(in srgb, var(--bg) 88%, transparent);
+    --shade-025: rgba(255, 255, 255, 0.03);
+    --shade-035: rgba(255, 255, 255, 0.045);
+    --shade-04: rgba(255, 255, 255, 0.05);
+    --shade-045: rgba(255, 255, 255, 0.055);
+    --shade-05: rgba(255, 255, 255, 0.06);
+    --shade-06: rgba(255, 255, 255, 0.07);
+    --shade-08: rgba(255, 255, 255, 0.09);
+    --shade-09: rgba(255, 255, 255, 0.10);
+    --shade-10: rgba(255, 255, 255, 0.11);
+    --shade-12: rgba(255, 255, 255, 0.13);
+    --shade-14: rgba(255, 255, 255, 0.16);
+    --shade-22: rgba(255, 255, 255, 0.22);
+    --shade-25: rgba(255, 255, 255, 0.28);
+    --warn: #fbbf24;
+    --warn-strong: #fcd34d;
+    --warn-soft: #f59e0b;
+    --warn-ring: rgba(251, 191, 36, 0.35);
+    --warn-ring-strong: rgba(251, 191, 36, 0.5);
+    --warn-soft-ring: rgba(245, 158, 11, 0.3);
+    --warn-soft-ring-strong: rgba(245, 158, 11, 0.45);
+    --theme-chrome: #141210;
+  }
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* Theme toggle in sticky header */
+.ba-theme-toggle {
+  flex-shrink: 0;
+  margin-left: 4px;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.ba-theme-toggle:hover {
+  color: var(--text);
+  border-color: var(--line-hover);
+  background: var(--shade-04);
+}
+
+.ba-theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 720px) {
+  .ba-theme-toggle {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
 }
 
 @media (prefers-contrast: more) {
@@ -1714,6 +1854,7 @@ a:focus-visible {
   .gpt-sidebar-item:focus-visible,
   .ba-skip:focus-visible,
   .ba-logo:focus-visible,
+  .ba-theme-toggle:focus-visible,
   .ba-nav a:focus-visible,
   .ba-footer-links a:focus-visible,
   .ba-list a:focus-visible,

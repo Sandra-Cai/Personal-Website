@@ -40,8 +40,10 @@ const checks404 = [
   ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
   ['manifest link', /rel="manifest"/],
   ['referrer policy', /<meta name="referrer" content="strict-origin-when-cross-origin"/],
-  ['color-scheme light', /<meta name="color-scheme" content="light"/],
+  ['color-scheme light dark', /<meta name="color-scheme" content="light dark"/],
   ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
+  ['theme boot', /src="\/assets\/theme-boot\.js\?v=\d+"/],
+  ['theme toggle', /id="theme-toggle"[^>]*class="ba-theme-toggle"|class="ba-theme-toggle"[^>]*id="theme-toggle"/],
   ['404 email lead', /ba-404-lead[\s\S]*?sandraxcyj@gmail\.com/],
   ['404 home aria-label', /ba-404-lead[\s\S]*?href="\/" aria-label="Back to home page"/],
   ['404 sandragpt aria-label', /ba-404-lead[\s\S]*?href="\/#sandra-gpt" aria-label="SandraGPT on home page"/],
@@ -56,7 +58,9 @@ const checks404 = [
   ['404 favicon ico', /rel="icon"[^>]*favicon\.ico/],
   ['404 writing nav', /class="ba-nav-external"[^>]*href="https:\/\/substack\.com\/@caisandra"/],
   ['404 primary nav', /<nav class="ba-nav" aria-label="Primary">/],
-  ['404 color-scheme light', /<meta name="color-scheme" content="light"/],
+  ['404 color-scheme light dark', /<meta name="color-scheme" content="light dark"/],
+  ['404 theme boot', /src="\/assets\/theme-boot\.js\?v=\d+"/],
+  ['404 theme toggle', /id="theme-toggle"/],
   ['404 font preload crossorigin', /rel="preload"[^>]*Geist-Variable\.woff2[^>]*crossorigin/],
   ['404 apple-touch sizes', /rel="apple-touch-icon"[^>]*sizes="180x180"[^>]*apple-touch-icon\.png/],
 ];
@@ -95,8 +99,10 @@ const checksIndex = [
   ['JSON-LD publisher person', /"publisher":\s*\{\s*"@type":\s*"Person"/],
   ['meta 4+ years', /4\+ years across industry, research, and founding/],
   ['og locale', /property="og:locale" content="en_US"/],
-  ['color-scheme light', /<meta name="color-scheme" content="light"/],
+  ['color-scheme light dark', /<meta name="color-scheme" content="light dark"/],
   ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
+  ['theme boot', /src="\/assets\/theme-boot\.js\?v=\d+"/],
+  ['theme toggle', /id="theme-toggle"[^>]*class="ba-theme-toggle"|class="ba-theme-toggle"[^>]*id="theme-toggle"/],
   ['gpt maxlength 280', /id="gpt-input"[^>]*maxlength="280"/],
   ['send disabled by default', /class="gpt-send"[^>]*disabled/],
   ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
@@ -331,6 +337,35 @@ function assertCacheBust(label, htmlVersion, source, pattern) {
 assertCacheBust('styles.css', indexCssV[1], stylesCss, /cache-bust:\s*(\d+)/);
 assertCacheBust('script.js', indexScriptV[1], siteJs, /cache-bust:\s*(\d+)/);
 assertCacheBust('sandra-gpt.js', indexGptV[1], gptJs, /cache-bust:\s*(\d+)/);
+
+const themeBoot = read('assets/theme-boot.js');
+const indexBootV = indexHtml.match(/src="\/assets\/theme-boot\.js\?v=(\d+)"/);
+const boot404V = html404.match(/src="\/assets\/theme-boot\.js\?v=(\d+)"/);
+if (!indexBootV || !boot404V) {
+  console.error('validate-basic-html: could not parse theme-boot.js cache version');
+  process.exit(1);
+}
+if (indexBootV[1] !== boot404V[1]) {
+  console.error('validate-basic-html: index.html and 404.html theme-boot.js cache versions must match');
+  process.exit(1);
+}
+assertCacheBust('theme-boot.js', indexBootV[1], themeBoot, /cache-bust:\s*(\d+)/);
+if (!themeBoot.includes("localStorage.getItem('ba-theme')") || !themeBoot.includes('data-theme')) {
+  console.error('validate-basic-html: theme-boot.js must apply stored data-theme before paint');
+  process.exit(1);
+}
+if (!siteJs.includes('function initThemeToggle') || !siteJs.includes('THEME_KEY') || !siteJs.includes('ba-theme')) {
+  console.error('validate-basic-html: script.js must implement theme toggle with localStorage');
+  process.exit(1);
+}
+if (!stylesCss.includes('html[data-theme="dark"]') || !stylesCss.includes('prefers-color-scheme: dark') || !stylesCss.includes('.ba-theme-toggle') || !stylesCss.includes('--theme-chrome')) {
+  console.error('validate-basic-html: styles must define dark theme tokens and theme toggle');
+  process.exit(1);
+}
+if (!stylesCss.includes('color-scheme: light dark')) {
+  console.error('validate-basic-html: html must declare color-scheme light dark');
+  process.exit(1);
+}
 if (!/\.gpt-turn\s*\{[\s\S]*?scroll-margin-top:\s*6rem/.test(stylesCss)) {
   console.error('validate-basic-html: .gpt-turn must set scroll-margin-top 6rem for sticky header');
   process.exit(1);

@@ -1,5 +1,5 @@
 /**
- * cache-bust: 130
+ * cache-bust: 131
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -906,10 +906,14 @@
         'browser chrome color',
         'site theme color',
         'what color is the theme',
+        'dark mode',
+        'dark theme',
+        'light mode',
+        'color theme',
       ],
       priority: 13,
       reply:
-        'The site uses a light color scheme with theme-color #FFFDF7 (warm paper) for supported browser chrome and the web app manifest.',
+        'The site supports light and dark themes. It follows your system preference by default. Use the Theme button in the header to cycle System, Light, and Dark; the choice is saved in this browser. Browser chrome uses theme-color #FFFDF7 in light mode and warm charcoal in dark mode; the web app manifest keeps the light paper color for install splash.',
     },
     {
       keys: [
