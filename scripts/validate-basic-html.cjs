@@ -44,6 +44,8 @@ const checks404 = [
   ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
   ['theme boot', /src="\/assets\/theme-boot\.js\?v=\d+"/],
   ['theme toggle', /id="theme-toggle"[^>]*class="ba-theme-toggle"|class="ba-theme-toggle"[^>]*id="theme-toggle"/],
+  ['theme sun mark', /class="ba-theme-icon ba-theme-icon--sun"/],
+  ['theme moon mark', /class="ba-theme-icon ba-theme-icon--moon"/],
   ['404 email lead', /ba-404-lead[\s\S]*?sandraxcyj@gmail\.com/],
   ['404 home aria-label', /ba-404-lead[\s\S]*?href="\/" aria-label="Back to home page"/],
   ['404 sandragpt aria-label', /ba-404-lead[\s\S]*?href="\/#sandra-gpt" aria-label="SandraGPT on home page"/],
@@ -103,6 +105,8 @@ const checksIndex = [
   ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
   ['theme boot', /src="\/assets\/theme-boot\.js\?v=\d+"/],
   ['theme toggle', /id="theme-toggle"[^>]*class="ba-theme-toggle"|class="ba-theme-toggle"[^>]*id="theme-toggle"/],
+  ['theme sun mark', /class="ba-theme-icon ba-theme-icon--sun"/],
+  ['theme moon mark', /class="ba-theme-icon ba-theme-icon--moon"/],
   ['gpt maxlength 280', /id="gpt-input"[^>]*maxlength="280"/],
   ['send disabled by default', /class="gpt-send"[^>]*disabled/],
   ['footer GitHub', /ba-footer-links[\s\S]*?github\.com/i],
@@ -354,12 +358,12 @@ if (!themeBoot.includes("localStorage.getItem('ba-theme')") || !themeBoot.includ
   console.error('validate-basic-html: theme-boot.js must apply stored data-theme before paint');
   process.exit(1);
 }
-if (!siteJs.includes('function initThemeToggle') || !siteJs.includes('THEME_KEY') || !siteJs.includes('ba-theme')) {
-  console.error('validate-basic-html: script.js must implement theme toggle with localStorage');
+if (!siteJs.includes('function initThemeToggle') || !siteJs.includes('THEME_KEY') || !siteJs.includes('ba-theme') || !siteJs.includes('data-theme-choice')) {
+  console.error('validate-basic-html: script.js must implement sun/moon theme marks with localStorage');
   process.exit(1);
 }
-if (!stylesCss.includes('html[data-theme="dark"]') || !stylesCss.includes('prefers-color-scheme: dark') || !stylesCss.includes('.ba-theme-toggle') || !stylesCss.includes('--theme-chrome')) {
-  console.error('validate-basic-html: styles must define dark theme tokens and theme toggle');
+if (!stylesCss.includes('html[data-theme="dark"]') || !stylesCss.includes('prefers-color-scheme: dark') || !stylesCss.includes('.ba-theme-toggle') || !stylesCss.includes('--theme-chrome') || !stylesCss.includes('.ba-theme-icon--sun') || !stylesCss.includes('.ba-theme-icon--moon')) {
+  console.error('validate-basic-html: styles must define dark theme tokens and sun/moon theme marks');
   process.exit(1);
 }
 if (!stylesCss.includes('color-scheme: light dark')) {

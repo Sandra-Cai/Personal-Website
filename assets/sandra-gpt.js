@@ -1,5 +1,5 @@
 /**
- * cache-bust: 131
+ * cache-bust: 132
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -913,7 +913,7 @@
       ],
       priority: 13,
       reply:
-        'The site supports light and dark themes. It follows your system preference by default. Use the Theme button in the header to cycle System, Light, and Dark; the choice is saved in this browser. Browser chrome uses theme-color #FFFDF7 in light mode and warm charcoal in dark mode; the web app manifest keeps the light paper color for install splash.',
+        'The site supports light and dark themes. The header shows a sun mark for light and a moon mark for dark. It follows your system preference until you pick a mark; choosing the active mark again returns to system. The choice is saved in this browser. Browser chrome uses theme-color #FFFDF7 in light mode and warm charcoal in dark mode; the web app manifest keeps the light paper color for install splash.',
     },
     {
       keys: [

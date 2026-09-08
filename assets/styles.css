@@ -1,4 +1,4 @@
-/* cache-bust: 109 */
+/* cache-bust: 110 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
    Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
@@ -1468,39 +1468,79 @@ html[data-theme="light"] {
   color-scheme: light;
 }
 
-/* Theme toggle in sticky header */
+/* Theme marks: sun = light, moon = dark */
 .ba-theme-toggle {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   margin-left: 4px;
-  padding: 6px 10px;
-  font: inherit;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-faint);
-  background: transparent;
+  padding: 3px;
   border: 1px solid var(--line);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
-}
-
-.ba-theme-toggle:hover {
-  color: var(--text);
-  border-color: var(--line-hover);
+  border-radius: 999px;
   background: var(--shade-04);
 }
 
-.ba-theme-toggle:focus-visible {
+.ba-theme-mark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.ba-theme-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ba-theme-icon--sun circle,
+.ba-theme-icon--moon path {
+  fill: currentColor;
+  stroke: none;
+}
+
+.ba-theme-mark:hover {
+  color: var(--text);
+  background: var(--shade-08);
+}
+
+.ba-theme-mark:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
+.ba-theme-toggle[data-theme-mode="light"] .ba-theme-mark[data-theme-choice="light"],
+.ba-theme-toggle[data-effective="light"] .ba-theme-mark[data-theme-choice="light"] {
+  color: var(--warm);
+  background: var(--shade-10);
+}
+
+.ba-theme-toggle[data-theme-mode="dark"] .ba-theme-mark[data-theme-choice="dark"],
+.ba-theme-toggle[data-effective="dark"] .ba-theme-mark[data-theme-choice="dark"] {
+  color: var(--warm);
+  background: var(--shade-10);
+}
+
+.ba-theme-toggle[data-theme-mode="system"] .ba-theme-mark[aria-pressed="false"] {
+  box-shadow: inset 0 0 0 1px var(--line-hover);
+}
+
 @media (max-width: 720px) {
-  .ba-theme-toggle {
-    padding: 5px 8px;
-    font-size: 10px;
+  .ba-theme-mark {
+    width: 30px;
+    height: 30px;
   }
 }
 
@@ -1854,7 +1894,7 @@ html[data-theme="light"] {
   .gpt-sidebar-item:focus-visible,
   .ba-skip:focus-visible,
   .ba-logo:focus-visible,
-  .ba-theme-toggle:focus-visible,
+  .ba-theme-mark:focus-visible,
   .ba-nav a:focus-visible,
   .ba-footer-links a:focus-visible,
   .ba-list a:focus-visible,

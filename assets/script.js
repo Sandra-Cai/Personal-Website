@@ -1,11 +1,10 @@
-/* cache-bust: 31 */
+/* cache-bust: 32 */
 document.documentElement.classList.add('js');
 
 const y = document.getElementById('year');
 if (y) y.textContent = new Date().getFullYear();
 
 const THEME_KEY = 'ba-theme';
-const THEME_CYCLE = ['system', 'light', 'dark'];
 
 function readStoredTheme() {
   try {
@@ -27,31 +26,44 @@ function applyTheme(mode) {
   const chrome = getComputedStyle(root).getPropertyValue('--theme-chrome').trim() || '#FFFDF7';
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute('content', chrome);
-  const btn = document.getElementById('theme-toggle');
-  if (btn) {
-    const label = mode === 'system' ? 'System' : mode === 'light' ? 'Light' : 'Dark';
-    btn.setAttribute('aria-label', `Color theme: ${label}. Click to change.`);
-    btn.setAttribute('title', `Theme: ${label}`);
-    const visible = btn.querySelector('.ba-theme-toggle-label');
-    if (visible) visible.textContent = label;
+  const group = document.getElementById('theme-toggle');
+  if (!group) return;
+  const effective = mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ? 'dark'
+    : 'light';
+  group.setAttribute('data-theme-mode', mode);
+  group.setAttribute('data-effective', effective);
+  const label = mode === 'system' ? 'System' : mode === 'light' ? 'Light' : 'Dark';
+  group.setAttribute('aria-label', `Color theme: ${label}. Sun is light, moon is dark.`);
+  group.querySelectorAll('.ba-theme-mark').forEach((mark) => {
+    const choice = mark.getAttribute('data-theme-choice');
+    const pressed = mode === choice;
+    mark.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+    mark.setAttribute('title', choice === 'light' ? 'Light' : 'Dark');
+  });
+}
+
+function persistTheme(mode) {
+  try {
+    if (mode === 'system') localStorage.removeItem(THEME_KEY);
+    else localStorage.setItem(THEME_KEY, mode);
+  } catch {
+    /* private mode */
   }
 }
 
 function initThemeToggle() {
-  const btn = document.getElementById('theme-toggle');
+  const group = document.getElementById('theme-toggle');
   let mode = readStoredTheme();
   applyTheme(mode);
-  if (!btn) return;
-  btn.addEventListener('click', () => {
-    const idx = THEME_CYCLE.indexOf(mode);
-    mode = THEME_CYCLE[(idx + 1) % THEME_CYCLE.length];
-    try {
-      if (mode === 'system') localStorage.removeItem(THEME_KEY);
-      else localStorage.setItem(THEME_KEY, mode);
-    } catch {
-      /* private mode */
-    }
-    applyTheme(mode);
+  if (!group) return;
+  group.querySelectorAll('.ba-theme-mark').forEach((mark) => {
+    mark.addEventListener('click', () => {
+      const choice = mark.getAttribute('data-theme-choice');
+      mode = mode === choice ? 'system' : choice;
+      persistTheme(mode);
+      applyTheme(mode);
+    });
   });
   try {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
