@@ -1,4 +1,4 @@
-/* cache-bust: 32 */
+/* cache-bust: 33 */
 document.documentElement.classList.add('js');
 
 const y = document.getElementById('year');
@@ -38,8 +38,16 @@ function applyTheme(mode) {
   group.querySelectorAll('.ba-theme-mark').forEach((mark) => {
     const choice = mark.getAttribute('data-theme-choice');
     const pressed = mode === choice;
+    const name = choice === 'light' ? 'Light' : 'Dark';
     mark.setAttribute('aria-pressed', pressed ? 'true' : 'false');
-    mark.setAttribute('title', choice === 'light' ? 'Light' : 'Dark');
+    mark.setAttribute('title', name);
+    if (pressed) {
+      mark.setAttribute('aria-label', `${name} theme, selected`);
+    } else if (mode === 'system' && choice === effective) {
+      mark.setAttribute('aria-label', `${name} theme, following system`);
+    } else {
+      mark.setAttribute('aria-label', `${name} theme`);
+    }
   });
 }
 
