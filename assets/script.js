@@ -1,4 +1,4 @@
-/* cache-bust: 33 */
+/* cache-bust: 34 */
 document.documentElement.classList.add('js');
 
 const y = document.getElementById('year');
@@ -65,12 +65,29 @@ function initThemeToggle() {
   let mode = readStoredTheme();
   applyTheme(mode);
   if (!group) return;
-  group.querySelectorAll('.ba-theme-mark').forEach((mark) => {
+  const marks = Array.from(group.querySelectorAll('.ba-theme-mark'));
+  const choose = (choice, toggleSystem) => {
+    if (choice !== 'light' && choice !== 'dark') return;
+    mode = toggleSystem && mode === choice ? 'system' : choice;
+    persistTheme(mode);
+    applyTheme(mode);
+  };
+  marks.forEach((mark, index) => {
     mark.addEventListener('click', () => {
-      const choice = mark.getAttribute('data-theme-choice');
-      mode = mode === choice ? 'system' : choice;
-      persistTheme(mode);
-      applyTheme(mode);
+      choose(mark.getAttribute('data-theme-choice'), true);
+    });
+    mark.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Home' && e.key !== 'End') return;
+      e.preventDefault();
+      let next = index;
+      if (e.key === 'Home') next = 0;
+      else if (e.key === 'End') next = marks.length - 1;
+      else if (e.key === 'ArrowRight') next = Math.min(index + 1, marks.length - 1);
+      else next = Math.max(index - 1, 0);
+      const target = marks[next];
+      if (!target) return;
+      target.focus();
+      choose(target.getAttribute('data-theme-choice'), false);
     });
   });
   try {

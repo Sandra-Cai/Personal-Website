@@ -366,12 +366,20 @@ if (!siteJs.includes('function initThemeToggle') || !siteJs.includes('THEME_KEY'
   console.error('validate-basic-html: script.js must implement sun/moon theme marks with localStorage');
   process.exit(1);
 }
+if (!/ArrowLeft[\s\S]{0,240}ArrowRight/.test(siteJs) || !siteJs.includes("e.key === 'Home'") || !siteJs.includes("e.key === 'End'")) {
+  console.error('validate-basic-html: theme marks must support ArrowLeft/Right and Home/End');
+  process.exit(1);
+}
 if (!stylesCss.includes('html[data-theme="dark"]') || !stylesCss.includes('prefers-color-scheme: dark') || !stylesCss.includes('.ba-theme-toggle') || !stylesCss.includes('--theme-chrome') || !stylesCss.includes('.ba-theme-icon--sun') || !stylesCss.includes('.ba-theme-icon--moon')) {
   console.error('validate-basic-html: styles must define dark theme tokens and sun/moon theme marks');
   process.exit(1);
 }
 if (!stylesCss.includes('color-scheme: light dark')) {
   console.error('validate-basic-html: html must declare color-scheme light dark');
+  process.exit(1);
+}
+if (!/@media print \{[\s\S]*?color-scheme: light/.test(stylesCss)) {
+  console.error('validate-basic-html: print stylesheet must force color-scheme light');
   process.exit(1);
 }
 if (!/\.gpt-turn\s*\{[\s\S]*?scroll-margin-top:\s*6rem/.test(stylesCss)) {
