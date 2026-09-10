@@ -1,4 +1,4 @@
-/* cache-bust: 112 */
+/* cache-bust: 113 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
    Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
@@ -1965,5 +1965,14 @@ html[data-theme="light"] {
 
   .gpt-sync-status--local {
     font-style: italic;
+  }
+
+  .ba-theme-mark[aria-pressed="true"],
+  .ba-theme-toggle[data-theme-mode="system"][data-effective="light"] .ba-theme-mark[data-theme-choice="light"],
+  .ba-theme-toggle[data-theme-mode="system"][data-effective="dark"] .ba-theme-mark[data-theme-choice="dark"] {
+    color: HighlightText;
+    background: Highlight;
+    forced-color-adjust: none;
+    box-shadow: inset 0 0 0 2px CanvasText;
   }
 }

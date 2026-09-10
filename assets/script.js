@@ -1,4 +1,4 @@
-/* cache-bust: 34 */
+/* cache-bust: 35 */
 document.documentElement.classList.add('js');
 
 const y = document.getElementById('year');
@@ -100,6 +100,20 @@ function initThemeToggle() {
   } catch {
     /* ignore */
   }
+  const syncFromStore = () => {
+    mode = readStoredTheme();
+    applyTheme(mode);
+  };
+  // Back/forward cache can restore an older theme-color or mark state.
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) syncFromStore();
+  });
+  // Keep sun/moon marks in sync if another tab changes the theme.
+  window.addEventListener('storage', (event) => {
+    if (event.key === THEME_KEY || (event.key === null && event.newValue === null)) {
+      syncFromStore();
+    }
+  });
 }
 
 initThemeToggle();

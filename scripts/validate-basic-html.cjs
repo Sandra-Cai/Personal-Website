@@ -370,8 +370,20 @@ if (!/ArrowLeft[\s\S]{0,240}ArrowRight/.test(siteJs) || !siteJs.includes("e.key 
   console.error('validate-basic-html: theme marks must support ArrowLeft/Right and Home/End');
   process.exit(1);
 }
+if (!/addEventListener\('pageshow'[\s\S]{0,120}persisted[\s\S]{0,80}syncFromStore|readStoredTheme/.test(siteJs)) {
+  console.error('validate-basic-html: theme must re-apply from storage on bfcache pageshow');
+  process.exit(1);
+}
+if (!/addEventListener\('storage'[\s\S]{0,160}THEME_KEY/.test(siteJs)) {
+  console.error('validate-basic-html: theme must sync across tabs via storage events');
+  process.exit(1);
+}
 if (!stylesCss.includes('html[data-theme="dark"]') || !stylesCss.includes('prefers-color-scheme: dark') || !stylesCss.includes('.ba-theme-toggle') || !stylesCss.includes('--theme-chrome') || !stylesCss.includes('.ba-theme-icon--sun') || !stylesCss.includes('.ba-theme-icon--moon')) {
   console.error('validate-basic-html: styles must define dark theme tokens and sun/moon theme marks');
+  process.exit(1);
+}
+if (!stylesCss.includes('forced-color-adjust: none') || !stylesCss.includes('.ba-theme-mark[aria-pressed="true"]')) {
+  console.error('validate-basic-html: forced-colors must highlight selected sun/moon marks');
   process.exit(1);
 }
 if (!stylesCss.includes('color-scheme: light dark')) {
