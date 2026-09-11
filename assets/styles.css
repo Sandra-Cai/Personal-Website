@@ -1,4 +1,4 @@
-/* cache-bust: 113 */
+/* cache-bust: 114 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
    Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
@@ -1558,6 +1558,23 @@ html[data-theme="light"] {
     --line: rgba(0, 0, 0, 0.22);
     --line-hover: rgba(0, 0, 0, 0.38);
     --accent-dim: rgba(0, 0, 0, 0.18);
+  }
+
+  .ba-theme-toggle {
+    border-color: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  .ba-theme-mark {
+    color: #0a0a0a;
+  }
+
+  .ba-theme-mark[aria-pressed="true"],
+  .ba-theme-toggle[data-theme-mode="system"][data-effective="light"] .ba-theme-mark[data-theme-choice="light"],
+  .ba-theme-toggle[data-theme-mode="system"][data-effective="dark"] .ba-theme-mark[data-theme-choice="dark"] {
+    color: #0a0a0a;
+    background: rgba(184, 134, 11, 0.28);
+    box-shadow: inset 0 0 0 2px #0a0a0a;
   }
 
   .ba-card,

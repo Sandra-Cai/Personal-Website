@@ -362,6 +362,14 @@ if (!themeBoot.includes("localStorage.getItem('ba-theme')") || !themeBoot.includ
   console.error('validate-basic-html: theme-boot.js must apply stored data-theme before paint');
   process.exit(1);
 }
+if (!themeBoot.includes("meta[name=\"theme-color\"]") || !themeBoot.includes('#141210') || !themeBoot.includes('colorScheme')) {
+  console.error('validate-basic-html: theme-boot.js must set theme-color and color-scheme before paint');
+  process.exit(1);
+}
+if (!siteJs.includes("removeProperty('color-scheme')")) {
+  console.error('validate-basic-html: applyTheme must clear boot inline color-scheme');
+  process.exit(1);
+}
 if (!siteJs.includes('function initThemeToggle') || !siteJs.includes('THEME_KEY') || !siteJs.includes('ba-theme') || !siteJs.includes('data-theme-choice')) {
   console.error('validate-basic-html: script.js must implement sun/moon theme marks with localStorage');
   process.exit(1);
@@ -384,6 +392,10 @@ if (!stylesCss.includes('html[data-theme="dark"]') || !stylesCss.includes('prefe
 }
 if (!stylesCss.includes('forced-color-adjust: none') || !stylesCss.includes('.ba-theme-mark[aria-pressed="true"]')) {
   console.error('validate-basic-html: forced-colors must highlight selected sun/moon marks');
+  process.exit(1);
+}
+if (!/prefers-contrast: more[\s\S]*?\.ba-theme-mark\[aria-pressed="true"\]/.test(stylesCss)) {
+  console.error('validate-basic-html: prefers-contrast must strengthen selected sun/moon marks');
   process.exit(1);
 }
 if (!stylesCss.includes('color-scheme: light dark')) {

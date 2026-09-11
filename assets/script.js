@@ -1,4 +1,4 @@
-/* cache-bust: 35 */
+/* cache-bust: 36 */
 document.documentElement.classList.add('js');
 
 const y = document.getElementById('year');
@@ -23,6 +23,8 @@ function applyTheme(mode) {
   } else {
     root.removeAttribute('data-theme');
   }
+  // Boot may set an inline color-scheme; clear so CSS tokens own the page.
+  root.style.removeProperty('color-scheme');
   const chrome = getComputedStyle(root).getPropertyValue('--theme-chrome').trim() || '#FFFDF7';
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute('content', chrome);
