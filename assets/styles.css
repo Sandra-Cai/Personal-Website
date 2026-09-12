@@ -1,4 +1,4 @@
-/* cache-bust: 114 */
+/* cache-bust: 115 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
    Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
@@ -1834,6 +1834,7 @@ html[data-theme="light"] {
   .ba-bg,
   .ba-skip,
   .ba-header,
+  .ba-theme-toggle,
   .ba-agent,
   .ba-strip,
   .gpt-starters,

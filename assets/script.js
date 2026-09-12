@@ -1,10 +1,12 @@
-/* cache-bust: 36 */
+/* cache-bust: 37 */
 document.documentElement.classList.add('js');
 
 const y = document.getElementById('year');
 if (y) y.textContent = new Date().getFullYear();
 
 const THEME_KEY = 'ba-theme';
+const THEME_LIGHT = '#FFFDF7';
+const THEME_DARK = '#141210';
 
 function readStoredTheme() {
   try {
@@ -16,6 +18,30 @@ function readStoredTheme() {
   return 'system';
 }
 
+function systemPrefersDark() {
+  try {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  } catch {
+    return false;
+  }
+}
+
+function syncThemeColorMetas(mode, effective) {
+  const metas = document.querySelectorAll('meta[name="theme-color"]');
+  if (!metas.length) return;
+  if (mode === 'light' || mode === 'dark') {
+    const color = mode === 'dark' ? THEME_DARK : THEME_LIGHT;
+    metas.forEach((meta) => meta.setAttribute('content', color));
+    return;
+  }
+  metas.forEach((meta) => {
+    const media = meta.getAttribute('media') || '';
+    if (media.includes('dark')) meta.setAttribute('content', THEME_DARK);
+    else if (media.includes('light')) meta.setAttribute('content', THEME_LIGHT);
+    else meta.setAttribute('content', effective === 'dark' ? THEME_DARK : THEME_LIGHT);
+  });
+}
+
 function applyTheme(mode) {
   const root = document.documentElement;
   if (mode === 'light' || mode === 'dark') {
@@ -25,14 +51,10 @@ function applyTheme(mode) {
   }
   // Boot may set an inline color-scheme; clear so CSS tokens own the page.
   root.style.removeProperty('color-scheme');
-  const chrome = getComputedStyle(root).getPropertyValue('--theme-chrome').trim() || '#FFFDF7';
-  const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', chrome);
+  const effective = mode === 'dark' || (mode === 'system' && systemPrefersDark()) ? 'dark' : 'light';
+  syncThemeColorMetas(mode, effective);
   const group = document.getElementById('theme-toggle');
   if (!group) return;
-  const effective = mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ? 'dark'
-    : 'light';
   group.setAttribute('data-theme-mode', mode);
   group.setAttribute('data-effective', effective);
   const label = mode === 'system' ? 'System' : mode === 'light' ? 'Light' : 'Dark';

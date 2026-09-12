@@ -1,5 +1,5 @@
 /**
- * cache-bust: 134
+ * cache-bust: 135
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -913,7 +913,7 @@
       ],
       priority: 13,
       reply:
-        'The site supports light and dark themes. The header shows a sun mark for light and a crescent moon for dark. An outline mark follows your system setting; a filled mark means you chose that theme. Choosing the filled mark again returns to system. The choice is saved in this browser. Before the page paints, a small boot script sets theme-color and color-scheme so browser chrome matches. Light uses #FFFDF7; dark uses warm charcoal. The web app manifest keeps the light paper color for install splash.',
+        'The site supports light and dark themes. The header shows a sun mark for light and a crescent moon for dark. An outline mark follows your system setting; a filled mark means you chose that theme. Choosing the filled mark again returns to system. The choice is saved in this browser. HTML includes light and dark theme-color metas for system preference, and a boot script aligns them before paint when you force a theme. Light uses #FFFDF7; dark uses warm charcoal. The web app manifest keeps the light paper color for install splash.',
     },
     {
       keys: [

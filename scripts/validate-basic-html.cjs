@@ -42,6 +42,8 @@ const checks404 = [
   ['referrer policy', /<meta name="referrer" content="strict-origin-when-cross-origin"/],
   ['color-scheme light dark', /<meta name="color-scheme" content="light dark"/],
   ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
+  ['theme-color light media', /<meta name="theme-color" media="\(prefers-color-scheme: light\)" content="#FFFDF7"/],
+  ['theme-color dark media', /<meta name="theme-color" media="\(prefers-color-scheme: dark\)" content="#141210"/],
   ['theme boot', /src="\/assets\/theme-boot\.js\?v=\d+"/],
   ['theme toggle', /id="theme-toggle"[^>]*class="ba-theme-toggle"|class="ba-theme-toggle"[^>]*id="theme-toggle"/],
   ['theme sun mark', /class="ba-theme-icon ba-theme-icon--sun"/],
@@ -105,6 +107,8 @@ const checksIndex = [
   ['og locale', /property="og:locale" content="en_US"/],
   ['color-scheme light dark', /<meta name="color-scheme" content="light dark"/],
   ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
+  ['theme-color light media', /<meta name="theme-color" media="\(prefers-color-scheme: light\)" content="#FFFDF7"/],
+  ['theme-color dark media', /<meta name="theme-color" media="\(prefers-color-scheme: dark\)" content="#141210"/],
   ['theme boot', /src="\/assets\/theme-boot\.js\?v=\d+"/],
   ['theme toggle', /id="theme-toggle"[^>]*class="ba-theme-toggle"|class="ba-theme-toggle"[^>]*id="theme-toggle"/],
   ['theme sun mark', /class="ba-theme-icon ba-theme-icon--sun"/],
@@ -366,6 +370,10 @@ if (!themeBoot.includes("meta[name=\"theme-color\"]") || !themeBoot.includes('#1
   console.error('validate-basic-html: theme-boot.js must set theme-color and color-scheme before paint');
   process.exit(1);
 }
+if (!siteJs.includes('function syncThemeColorMetas') || !siteJs.includes('function systemPrefersDark')) {
+  console.error('validate-basic-html: script.js must sync all theme-color metas for light/dark/system');
+  process.exit(1);
+}
 if (!siteJs.includes("removeProperty('color-scheme')")) {
   console.error('validate-basic-html: applyTheme must clear boot inline color-scheme');
   process.exit(1);
@@ -402,8 +410,8 @@ if (!stylesCss.includes('color-scheme: light dark')) {
   console.error('validate-basic-html: html must declare color-scheme light dark');
   process.exit(1);
 }
-if (!/@media print \{[\s\S]*?color-scheme: light/.test(stylesCss)) {
-  console.error('validate-basic-html: print stylesheet must force color-scheme light');
+if (!/@media print \{[\s\S]*?color-scheme: light[\s\S]*?\.ba-theme-toggle/.test(stylesCss)) {
+  console.error('validate-basic-html: print stylesheet must force light theme and hide theme toggle');
   process.exit(1);
 }
 if (!/\.gpt-turn\s*\{[\s\S]*?scroll-margin-top:\s*6rem/.test(stylesCss)) {
