@@ -374,6 +374,10 @@ if (!siteJs.includes('function syncThemeColorMetas') || !siteJs.includes('functi
   console.error('validate-basic-html: script.js must sync all theme-color metas for light/dark/system');
   process.exit(1);
 }
+if (!siteJs.includes('THEME_LIGHT') || !siteJs.includes('THEME_DARK') || !siteJs.includes('#FFFDF7') || !siteJs.includes('#141210')) {
+  console.error('validate-basic-html: script.js must pin light/dark theme-color constants');
+  process.exit(1);
+}
 if (!siteJs.includes("removeProperty('color-scheme')")) {
   console.error('validate-basic-html: applyTheme must clear boot inline color-scheme');
   process.exit(1);
@@ -402,8 +406,8 @@ if (!stylesCss.includes('forced-color-adjust: none') || !stylesCss.includes('.ba
   console.error('validate-basic-html: forced-colors must highlight selected sun/moon marks');
   process.exit(1);
 }
-if (!/prefers-contrast: more[\s\S]*?\.ba-theme-mark\[aria-pressed="true"\]/.test(stylesCss)) {
-  console.error('validate-basic-html: prefers-contrast must strengthen selected sun/moon marks');
+if (!/prefers-contrast: more[\s\S]*?\.ba-theme-mark\[aria-pressed="true"\][\s\S]*?var\(--text\)/.test(stylesCss)) {
+  console.error('validate-basic-html: prefers-contrast must strengthen selected sun/moon marks with theme tokens');
   process.exit(1);
 }
 if (!stylesCss.includes('color-scheme: light dark')) {

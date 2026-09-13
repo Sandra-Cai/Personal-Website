@@ -1,4 +1,4 @@
-/* cache-bust: 37 */
+/* cache-bust: 38 */
 document.documentElement.classList.add('js');
 
 const y = document.getElementById('year');
