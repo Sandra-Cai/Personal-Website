@@ -1,10 +1,18 @@
-/* cache-bust: 3 */
+/* cache-bust: 4 */
 /* Apply stored theme before paint to avoid a light→dark flash. */
 (function () {
   try {
     var LIGHT = '#FFFDF7';
     var DARK = '#141210';
     var t = localStorage.getItem('ba-theme');
+    if (t != null && t !== 'light' && t !== 'dark') {
+      try {
+        localStorage.removeItem('ba-theme');
+      } catch (e) {
+        /* ignore */
+      }
+      t = null;
+    }
     var systemDark = false;
     try {
       systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;

@@ -1,4 +1,4 @@
-/* cache-bust: 39 */
+/* cache-bust: 40 */
 document.documentElement.classList.add('js');
 
 const y = document.getElementById('year');
@@ -12,6 +12,8 @@ function readStoredTheme() {
   try {
     const t = localStorage.getItem(THEME_KEY);
     if (t === 'light' || t === 'dark') return t;
+    // Drop corrupt values so boot and UI stay on system.
+    if (t != null) localStorage.removeItem(THEME_KEY);
   } catch {
     /* private mode */
   }
@@ -101,12 +103,21 @@ function initThemeToggle() {
       choose(mark.getAttribute('data-theme-choice'), true);
     });
     mark.addEventListener('keydown', (e) => {
-      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Home' && e.key !== 'End') return;
+      if (
+        e.key !== 'ArrowLeft' &&
+        e.key !== 'ArrowRight' &&
+        e.key !== 'ArrowUp' &&
+        e.key !== 'ArrowDown' &&
+        e.key !== 'Home' &&
+        e.key !== 'End'
+      ) {
+        return;
+      }
       e.preventDefault();
       let next = index;
       if (e.key === 'Home') next = 0;
       else if (e.key === 'End') next = marks.length - 1;
-      else if (e.key === 'ArrowRight') next = Math.min(index + 1, marks.length - 1);
+      else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = Math.min(index + 1, marks.length - 1);
       else next = Math.max(index - 1, 0);
       const target = marks[next];
       if (!target) return;

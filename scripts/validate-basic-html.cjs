@@ -368,6 +368,10 @@ if (!themeBoot.includes("localStorage.getItem('ba-theme')") || !themeBoot.includ
   console.error('validate-basic-html: theme-boot.js must apply stored data-theme before paint');
   process.exit(1);
 }
+if (!themeBoot.includes("localStorage.removeItem('ba-theme')")) {
+  console.error('validate-basic-html: theme-boot.js must clear corrupt theme values');
+  process.exit(1);
+}
 if (!themeBoot.includes("meta[name=\"theme-color\"]") || !themeBoot.includes('#141210') || !themeBoot.includes('colorScheme')) {
   console.error('validate-basic-html: theme-boot.js must set theme-color and color-scheme before paint');
   process.exit(1);
@@ -388,8 +392,18 @@ if (!siteJs.includes('function initThemeToggle') || !siteJs.includes('THEME_KEY'
   console.error('validate-basic-html: script.js must implement sun/moon theme marks with localStorage');
   process.exit(1);
 }
-if (!/ArrowLeft[\s\S]{0,240}ArrowRight/.test(siteJs) || !siteJs.includes("e.key === 'Home'") || !siteJs.includes("e.key === 'End'")) {
-  console.error('validate-basic-html: theme marks must support ArrowLeft/Right and Home/End');
+if (
+  !/ArrowLeft[\s\S]{0,320}ArrowRight/.test(siteJs) ||
+  !siteJs.includes('ArrowUp') ||
+  !siteJs.includes('ArrowDown') ||
+  !siteJs.includes("e.key === 'Home'") ||
+  !siteJs.includes("e.key === 'End'")
+) {
+  console.error('validate-basic-html: theme marks must support ArrowLeft/Right/Up/Down and Home/End');
+  process.exit(1);
+}
+if (!siteJs.includes('localStorage.removeItem(THEME_KEY)')) {
+  console.error('validate-basic-html: readStoredTheme must clear corrupt theme values');
   process.exit(1);
 }
 if (!/addEventListener\('pageshow'[\s\S]{0,120}persisted[\s\S]{0,80}syncFromStore|readStoredTheme/.test(siteJs)) {
@@ -406,6 +420,10 @@ if (!/addEventListener\('visibilitychange'[\s\S]{0,160}visibilityState === 'visi
 }
 if (!stylesCss.includes('touch-action: manipulation') || !stylesCss.includes('-webkit-tap-highlight-color: transparent')) {
   console.error('validate-basic-html: theme marks must use touch-action manipulation');
+  process.exit(1);
+}
+if (!stylesCss.includes('.ba-theme-mark:active') || !/prefers-reduced-motion: reduce[\s\S]*?\.ba-theme-mark:active/.test(stylesCss)) {
+  console.error('validate-basic-html: theme marks need press feedback that respects reduced motion');
   process.exit(1);
 }
 if (!stylesCss.includes('html[data-theme="dark"]') || !stylesCss.includes('prefers-color-scheme: dark') || !stylesCss.includes('.ba-theme-toggle') || !stylesCss.includes('--theme-chrome') || !stylesCss.includes('.ba-theme-icon--sun') || !stylesCss.includes('.ba-theme-icon--moon')) {
