@@ -1,4 +1,4 @@
-/* cache-bust: 116 */
+/* cache-bust: 117 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
    Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
@@ -1492,6 +1492,8 @@ html[data-theme="light"] {
   background: transparent;
   color: var(--text);
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
 }
 

@@ -1,4 +1,4 @@
-/* cache-bust: 38 */
+/* cache-bust: 39 */
 document.documentElement.classList.add('js');
 
 const y = document.getElementById('year');
@@ -131,6 +131,10 @@ function initThemeToggle() {
   // Back/forward cache can restore an older theme-color or mark state.
   window.addEventListener('pageshow', (event) => {
     if (event.persisted) syncFromStore();
+  });
+  // OS theme can change while this tab is backgrounded.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') syncFromStore();
   });
   // Keep sun/moon marks in sync if another tab changes the theme.
   window.addEventListener('storage', (event) => {

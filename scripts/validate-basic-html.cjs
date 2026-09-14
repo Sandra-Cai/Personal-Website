@@ -46,6 +46,7 @@ const checks404 = [
   ['theme-color dark media', /<meta name="theme-color" media="\(prefers-color-scheme: dark\)" content="#141210"/],
   ['theme boot', /src="\/assets\/theme-boot\.js\?v=\d+"/],
   ['theme toggle', /id="theme-toggle"[^>]*class="ba-theme-toggle"|class="ba-theme-toggle"[^>]*id="theme-toggle"/],
+  ['theme orientation', /id="theme-toggle"[^>]*aria-orientation="horizontal"/],
   ['theme sun mark', /class="ba-theme-icon ba-theme-icon--sun"/],
   ['theme moon mark', /class="ba-theme-icon ba-theme-icon--moon"/],
   ['theme sun text', /ba-theme-icon--sun[\s\S]{0,900}visually-hidden">Sun</],
@@ -111,6 +112,7 @@ const checksIndex = [
   ['theme-color dark media', /<meta name="theme-color" media="\(prefers-color-scheme: dark\)" content="#141210"/],
   ['theme boot', /src="\/assets\/theme-boot\.js\?v=\d+"/],
   ['theme toggle', /id="theme-toggle"[^>]*class="ba-theme-toggle"|class="ba-theme-toggle"[^>]*id="theme-toggle"/],
+  ['theme orientation', /id="theme-toggle"[^>]*aria-orientation="horizontal"/],
   ['theme sun mark', /class="ba-theme-icon ba-theme-icon--sun"/],
   ['theme moon mark', /class="ba-theme-icon ba-theme-icon--moon"/],
   ['theme sun text', /ba-theme-icon--sun[\s\S]{0,900}visually-hidden">Sun</],
@@ -396,6 +398,14 @@ if (!/addEventListener\('pageshow'[\s\S]{0,120}persisted[\s\S]{0,80}syncFromStor
 }
 if (!/addEventListener\('storage'[\s\S]{0,160}THEME_KEY/.test(siteJs)) {
   console.error('validate-basic-html: theme must sync across tabs via storage events');
+  process.exit(1);
+}
+if (!/addEventListener\('visibilitychange'[\s\S]{0,160}visibilityState === 'visible'/.test(siteJs)) {
+  console.error('validate-basic-html: theme must re-sync when the tab becomes visible');
+  process.exit(1);
+}
+if (!stylesCss.includes('touch-action: manipulation') || !stylesCss.includes('-webkit-tap-highlight-color: transparent')) {
+  console.error('validate-basic-html: theme marks must use touch-action manipulation');
   process.exit(1);
 }
 if (!stylesCss.includes('html[data-theme="dark"]') || !stylesCss.includes('prefers-color-scheme: dark') || !stylesCss.includes('.ba-theme-toggle') || !stylesCss.includes('--theme-chrome') || !stylesCss.includes('.ba-theme-icon--sun') || !stylesCss.includes('.ba-theme-icon--moon')) {
