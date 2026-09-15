@@ -1,4 +1,4 @@
-/* cache-bust: 40 */
+/* cache-bust: 41 */
 document.documentElement.classList.add('js');
 
 const y = document.getElementById('year');
@@ -237,14 +237,35 @@ function initNavScrollSpy() {
   }
   if (!tracked.length) return;
 
+  let activeId = null;
+
   const clearActive = () => {
+    activeId = null;
     for (const row of tracked) row.link.removeAttribute('aria-current');
   };
 
+  const ensureNavLinkVisible = (link) => {
+    const navRect = nav.getBoundingClientRect();
+    const linkRect = link.getBoundingClientRect();
+    // Only nudge when the link sits under the edge fade or off-screen.
+    if (linkRect.left >= navRect.left + 10 && linkRect.right <= navRect.right - 10) return;
+    try {
+      link.scrollIntoView({ behavior: 'auto', inline: 'nearest', block: 'nearest' });
+    } catch {
+      /* ignore */
+    }
+  };
+
   const setActive = (id) => {
+    if (activeId === id) return;
+    activeId = id;
     for (const row of tracked) {
-      if (row.id === id) row.link.setAttribute('aria-current', 'location');
-      else row.link.removeAttribute('aria-current');
+      if (row.id === id) {
+        row.link.setAttribute('aria-current', 'location');
+        ensureNavLinkVisible(row.link);
+      } else {
+        row.link.removeAttribute('aria-current');
+      }
     }
   };
 

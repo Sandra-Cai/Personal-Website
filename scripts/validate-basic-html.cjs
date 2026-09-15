@@ -257,6 +257,7 @@ const checksIndex = [
   ['beliefs bare cards', /id="beliefs"[\s\S]*?ba-card--bare[\s\S]*?Show the work/],
   ['gpt send default label', /class="gpt-send"[^>]*aria-label="Enter a question to send"/],
   ['gpt kbd slash', /class="gpt-kbd"[^>]*>\/<\/kbd>/],
+  ['gpt slash hint wrap', /class="gpt-slash-hint"/],
   ['og image type jpeg', /property="og:image:type" content="image\/jpeg"/],
   ['twitter image alt', /name="twitter:image:alt" content="[^"]*Plurall AI/],
   ['gpt clear confirm copy', /id="gpt-clear-history"[^>]*aria-label="Clear question history"/],
@@ -446,6 +447,17 @@ if (!/@media print \{[\s\S]*?color-scheme: light[\s\S]*?\.ba-theme-toggle/.test(
   console.error('validate-basic-html: print stylesheet must force light theme and hide theme toggle');
   process.exit(1);
 }
+if (
+  !/\.ba-nav a\[aria-current='location'\][\s\S]*?text-decoration:\s*underline/.test(stylesCss) ||
+  !stylesCss.includes('text-underline-offset')
+) {
+  console.error('validate-basic-html: current nav link must use an underline affordance');
+  process.exit(1);
+}
+if (!/@media \(hover: none\) and \(pointer: coarse\)[\s\S]*?\.gpt-slash-hint[\s\S]*?display:\s*none/.test(stylesCss)) {
+  console.error('validate-basic-html: slash keyboard hint must hide on coarse touch pointers');
+  process.exit(1);
+}
 if (!/\.gpt-turn\s*\{[\s\S]*?scroll-margin-top:\s*6rem/.test(stylesCss)) {
   console.error('validate-basic-html: .gpt-turn must set scroll-margin-top 6rem for sticky header');
   process.exit(1);
@@ -472,6 +484,8 @@ if (!/@media\s*\(prefers-contrast:\s*more\)[\s\S]*?\.ba-logo-accent[\s\S]*?color
 }
 for (const [label, snippet] of [
   ['scroll spy current location', "setAttribute('aria-current', 'location')"],
+  ['scroll spy keep active visible', 'ensureNavLinkVisible'],
+  ['scroll spy scrollIntoView', 'scrollIntoView'],
   ['scroll spy observer fallback', "typeof IntersectionObserver === 'function'"],
   ['hashchange always registered', "window.addEventListener('hashchange', applyHash)"],
   ['passive scroll listener', '{ passive: true }'],
