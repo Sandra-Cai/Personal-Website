@@ -1,4 +1,4 @@
-/* cache-bust: 119 */
+/* cache-bust: 120 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
    Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
@@ -60,7 +60,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5.5rem;
+  scroll-padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));
   color-scheme: light dark;
 }
 
@@ -361,7 +361,7 @@ a:focus-visible {
   padding: clamp(3.5rem, 9vw, 5.5rem) max(24px, env(safe-area-inset-right, 0px)) clamp(3.5rem, 9vw, 5.5rem)
     max(24px, env(safe-area-inset-left, 0px));
   border-top: 1px solid var(--line);
-  scroll-margin-top: 5.5rem;
+  scroll-margin-top: calc(5.5rem + env(safe-area-inset-top, 0px));
 }
 
 .ba-agent-card {
@@ -580,7 +580,7 @@ a:focus-visible {
   flex-direction: column;
   gap: 0.75rem;
   margin-bottom: 0.875rem;
-  scroll-margin-top: 6rem;
+  scroll-margin-top: calc(6rem + env(safe-area-inset-top, 0px));
 }
 
 .gpt-turn:last-child {
@@ -722,7 +722,8 @@ a:focus-visible {
   border: 0;
   background: transparent;
   font-family: var(--font);
-  font-size: 0.9375rem;
+  /* 16px minimum so iOS Safari does not zoom the page on focus. */
+  font-size: 16px;
   padding: 11px 0;
   outline: none;
   color: var(--text);
@@ -1069,7 +1070,7 @@ a:focus-visible {
   margin: 0 auto;
   padding: clamp(4rem, 10vw, 6.5rem) max(24px, env(safe-area-inset-right, 0px)) clamp(4rem, 10vw, 6.5rem)
     max(24px, env(safe-area-inset-left, 0px));
-  scroll-margin-top: 5.5rem;
+  scroll-margin-top: calc(5.5rem + env(safe-area-inset-top, 0px));
 }
 
 .ba-section--repeat {
@@ -1239,7 +1240,7 @@ a:focus-visible {
     max(24px, env(safe-area-inset-left, 0px));
   border-top: 1px solid var(--line);
   text-align: center;
-  scroll-margin-top: 5.5rem;
+  scroll-margin-top: calc(5.5rem + env(safe-area-inset-top, 0px));
 }
 
 .ba-split-lines {

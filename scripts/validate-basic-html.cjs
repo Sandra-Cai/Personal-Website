@@ -458,20 +458,28 @@ if (!/@media \(hover: none\) and \(pointer: coarse\)[\s\S]*?\.gpt-slash-hint[\s\
   console.error('validate-basic-html: slash keyboard hint must hide on coarse touch pointers');
   process.exit(1);
 }
-if (!/\.gpt-turn\s*\{[\s\S]*?scroll-margin-top:\s*6rem/.test(stylesCss)) {
-  console.error('validate-basic-html: .gpt-turn must set scroll-margin-top 6rem for sticky header');
+if (!/\.gpt-turn\s*\{[\s\S]*?scroll-margin-top:\s*calc\(6rem \+ env\(safe-area-inset-top/.test(stylesCss)) {
+  console.error('validate-basic-html: .gpt-turn must set scroll-margin-top with safe-area inset');
   process.exit(1);
 }
-if (!/html\s*\{[\s\S]*?scroll-padding-top:\s*5\.5rem/.test(stylesCss)) {
-  console.error('validate-basic-html: html must set scroll-padding-top 5.5rem');
+if (!/html\s*\{[\s\S]*?scroll-padding-top:\s*calc\(5\.5rem \+ env\(safe-area-inset-top/.test(stylesCss)) {
+  console.error('validate-basic-html: html must set scroll-padding-top with safe-area inset');
   process.exit(1);
 }
-if (!/\.ba-agent\s*\{[\s\S]*?scroll-margin-top:\s*5\.5rem/.test(stylesCss)) {
-  console.error('validate-basic-html: .ba-agent must set scroll-margin-top 5.5rem');
+if (!/\.ba-agent\s*\{[\s\S]*?scroll-margin-top:\s*calc\(5\.5rem \+ env\(safe-area-inset-top/.test(stylesCss)) {
+  console.error('validate-basic-html: .ba-agent must set scroll-margin-top with safe-area inset');
   process.exit(1);
 }
-if (!/\.ba-section\s*\{[\s\S]*?scroll-margin-top:\s*5\.5rem/.test(stylesCss)) {
-  console.error('validate-basic-html: .ba-section must set scroll-margin-top 5.5rem');
+if (!/\.ba-section\s*\{[\s\S]*?scroll-margin-top:\s*calc\(5\.5rem \+ env\(safe-area-inset-top/.test(stylesCss)) {
+  console.error('validate-basic-html: .ba-section must set scroll-margin-top with safe-area inset');
+  process.exit(1);
+}
+if (!/\.ba-split\s*\{[\s\S]*?scroll-margin-top:\s*calc\(5\.5rem \+ env\(safe-area-inset-top/.test(stylesCss)) {
+  console.error('validate-basic-html: .ba-split must set scroll-margin-top with safe-area inset');
+  process.exit(1);
+}
+if (!/\.gpt-field input\s*\{[\s\S]*?font-size:\s*16px/.test(stylesCss)) {
+  console.error('validate-basic-html: .gpt-field input must use 16px to avoid iOS focus zoom');
   process.exit(1);
 }
 if (!/@media\s*\(prefers-contrast:\s*more\)[\s\S]*?\.ba-logo-mark[\s\S]*?color:\s*var\(--text\)/.test(stylesCss)) {
