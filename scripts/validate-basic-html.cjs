@@ -490,6 +490,19 @@ if (!/@media\s*\(prefers-contrast:\s*more\)[\s\S]*?\.ba-logo-accent[\s\S]*?color
   console.error('validate-basic-html: high-contrast must set .ba-logo-accent to var(--text)');
   process.exit(1);
 }
+if (
+  !/@media\s*\(prefers-contrast:\s*more\)[\s\S]*?html\[data-theme="dark"\][\s\S]*?--hcm-ink:\s*#f4efe6/.test(stylesCss) ||
+  !/@media\s*\(prefers-contrast:\s*more\)\s*and\s*\(prefers-color-scheme:\s*dark\)[\s\S]*?html:not\(\[data-theme="light"\]\)[\s\S]*?--hcm-header:\s*#141210/.test(
+    stylesCss
+  )
+) {
+  console.error('validate-basic-html: prefers-contrast must include dark-theme HCM token overrides');
+  process.exit(1);
+}
+if (!stylesCss.includes('--hcm-fill:') || !stylesCss.includes('--hcm-ink:')) {
+  console.error('validate-basic-html: prefers-contrast surfaces must use --hcm-* tokens');
+  process.exit(1);
+}
 for (const [label, snippet] of [
   ['scroll spy current location', "setAttribute('aria-current', 'location')"],
   ['scroll spy keep active visible', 'ensureNavLinkVisible'],

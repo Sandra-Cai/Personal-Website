@@ -1,4 +1,4 @@
-/* cache-bust: 120 */
+/* cache-bust: 121 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
    Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
@@ -1575,6 +1575,19 @@ html[data-theme="light"] {
     --line: rgba(0, 0, 0, 0.22);
     --line-hover: rgba(0, 0, 0, 0.38);
     --accent-dim: rgba(0, 0, 0, 0.18);
+    --hcm-fill: rgba(0, 0, 0, 0.06);
+    --hcm-fill-mid: rgba(0, 0, 0, 0.08);
+    --hcm-fill-strong: rgba(0, 0, 0, 0.09);
+    --hcm-fill-field: rgba(0, 0, 0, 0.1);
+    --hcm-fill-active: rgba(0, 0, 0, 0.12);
+    --hcm-fill-bare: rgba(0, 0, 0, 0.05);
+    --hcm-border: rgba(0, 0, 0, 0.22);
+    --hcm-border-mid: rgba(0, 0, 0, 0.28);
+    --hcm-border-strong: rgba(0, 0, 0, 0.35);
+    --hcm-border-heavy: rgba(0, 0, 0, 0.45);
+    --hcm-border-near: rgba(0, 0, 0, 0.55);
+    --hcm-ink: #0a0a0a;
+    --hcm-header: #fffdf7;
   }
 
   .ba-theme-toggle {
@@ -1596,32 +1609,32 @@ html[data-theme="light"] {
 
   .ba-card,
   .ba-list li {
-    background: rgba(0, 0, 0, 0.06);
-    border-color: rgba(0, 0, 0, 0.22);
+    background: var(--hcm-fill);
+    border-color: var(--hcm-border);
   }
 
   .ba-card--lead {
-    background: rgba(0, 0, 0, 0.09);
+    background: var(--hcm-fill-strong);
   }
 
   .gpt-msg--bot {
-    background: rgba(0, 0, 0, 0.08);
-    border-color: rgba(0, 0, 0, 0.22);
+    background: var(--hcm-fill-mid);
+    border-color: var(--hcm-border);
   }
 
   .gpt-field {
-    background: rgba(0, 0, 0, 0.1);
-    border-color: rgba(0, 0, 0, 0.22);
+    background: var(--hcm-fill-field);
+    border-color: var(--hcm-border);
   }
 
   .gpt-sidebar-item {
-    background: rgba(0, 0, 0, 0.08);
-    border-color: rgba(0, 0, 0, 0.35);
+    background: var(--hcm-fill-mid);
+    border-color: var(--hcm-border-strong);
   }
 
   .gpt-sidebar-item--active {
-    border-color: #0a0a0a;
-    background: rgba(0, 0, 0, 0.12);
+    border-color: var(--hcm-ink);
+    background: var(--hcm-fill-active);
   }
 
   .ba-nav a,
@@ -1643,23 +1656,23 @@ html[data-theme="light"] {
   }
 
   .gpt-send:not(:disabled) {
-    outline: 2px solid #0a0a0a;
+    outline: 2px solid var(--hcm-ink);
     outline-offset: 2px;
   }
 
   .gpt-sidebar-clear {
-    border-color: rgba(0, 0, 0, 0.45);
+    border-color: var(--hcm-border-heavy);
     color: var(--text-dim);
   }
 
   .gpt-kbd {
-    border-color: rgba(0, 0, 0, 0.45);
-    background: rgba(0, 0, 0, 0.1);
+    border-color: var(--hcm-border-heavy);
+    background: var(--hcm-fill-field);
     color: var(--text);
   }
 
   .gpt-msg--user {
-    border-left-color: rgba(0, 0, 0, 0.45);
+    border-left-color: var(--hcm-border-heavy);
     color: var(--text);
   }
 
@@ -1668,17 +1681,17 @@ html[data-theme="light"] {
   }
 
   .gpt-field {
-    border-color: rgba(0, 0, 0, 0.35);
+    border-color: var(--hcm-border-strong);
   }
 
   .gpt-field--at-limit {
-    border-color: #0a0a0a;
-    box-shadow: 0 0 0 2px #0a0a0a;
+    border-color: var(--hcm-ink);
+    box-shadow: 0 0 0 2px var(--hcm-ink);
   }
 
   .gpt-field--near-limit {
-    border-color: rgba(0, 0, 0, 0.55);
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+    border-color: var(--hcm-border-near);
+    box-shadow: 0 0 0 1px var(--hcm-border-strong);
   }
 
   .gpt-field input {
@@ -1761,7 +1774,7 @@ html[data-theme="light"] {
 
   .ba-skip:focus,
   .ba-skip:focus-visible {
-    outline: 3px solid #0a0a0a;
+    outline: 3px solid var(--hcm-ink);
     outline-offset: 3px;
   }
 
@@ -1781,8 +1794,8 @@ html[data-theme="light"] {
   }
 
   .ba-card--bare {
-    background: rgba(0, 0, 0, 0.05);
-    border-color: rgba(0, 0, 0, 0.22);
+    background: var(--hcm-fill-bare);
+    border-color: var(--hcm-border);
   }
 
   .ba-list strong {
@@ -1794,26 +1807,26 @@ html[data-theme="light"] {
   }
 
   .ba-footer {
-    border-top-color: rgba(0, 0, 0, 0.28);
+    border-top-color: var(--hcm-border-mid);
   }
 
   .gpt-sidebar-clear:focus-visible {
-    outline: 2px solid #0a0a0a;
+    outline: 2px solid var(--hcm-ink);
     outline-offset: 2px;
   }
 
   .ba-header {
-    background: #fffdf7;
-    border-bottom-color: rgba(0, 0, 0, 0.28);
+    background: var(--hcm-header);
+    border-bottom-color: var(--hcm-border-mid);
     backdrop-filter: none;
   }
 
   .gpt-sidebar {
-    border-right-color: rgba(0, 0, 0, 0.28);
+    border-right-color: var(--hcm-border-mid);
   }
 
   .ba-student-note {
-    border-top-color: rgba(0, 0, 0, 0.28);
+    border-top-color: var(--hcm-border-mid);
     color: var(--text-dim);
   }
 
@@ -1823,7 +1836,7 @@ html[data-theme="light"] {
   }
 
   .ba-agent {
-    border-top-color: rgba(0, 0, 0, 0.28);
+    border-top-color: var(--hcm-border-mid);
   }
 
   .ba-nav-sep {
@@ -1831,7 +1844,7 @@ html[data-theme="light"] {
   }
 
   .ba-section--repeat {
-    border-top-color: rgba(0, 0, 0, 0.28);
+    border-top-color: var(--hcm-border-mid);
   }
 
   .ba-logo-mark {
@@ -1839,7 +1852,52 @@ html[data-theme="light"] {
   }
 
   .ba-card--lead {
-    border-color: rgba(0, 0, 0, 0.28);
+    border-color: var(--hcm-border-mid);
+  }
+
+  /* Dark paper + high contrast: keep ink light (light HCM tokens crush dark theme). */
+  html[data-theme="dark"] {
+    --text-dim: #e8e0d4;
+    --text-faint: #d4cbbf;
+    --line: rgba(255, 255, 255, 0.32);
+    --line-hover: rgba(255, 255, 255, 0.5);
+    --accent-dim: rgba(255, 255, 255, 0.24);
+    --hcm-fill: rgba(255, 255, 255, 0.08);
+    --hcm-fill-mid: rgba(255, 255, 255, 0.1);
+    --hcm-fill-strong: rgba(255, 255, 255, 0.12);
+    --hcm-fill-field: rgba(255, 255, 255, 0.12);
+    --hcm-fill-active: rgba(255, 255, 255, 0.16);
+    --hcm-fill-bare: rgba(255, 255, 255, 0.06);
+    --hcm-border: rgba(255, 255, 255, 0.32);
+    --hcm-border-mid: rgba(255, 255, 255, 0.38);
+    --hcm-border-strong: rgba(255, 255, 255, 0.45);
+    --hcm-border-heavy: rgba(255, 255, 255, 0.55);
+    --hcm-border-near: rgba(255, 255, 255, 0.65);
+    --hcm-ink: #f4efe6;
+    --hcm-header: #141210;
+  }
+}
+
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    --text-dim: #e8e0d4;
+    --text-faint: #d4cbbf;
+    --line: rgba(255, 255, 255, 0.32);
+    --line-hover: rgba(255, 255, 255, 0.5);
+    --accent-dim: rgba(255, 255, 255, 0.24);
+    --hcm-fill: rgba(255, 255, 255, 0.08);
+    --hcm-fill-mid: rgba(255, 255, 255, 0.1);
+    --hcm-fill-strong: rgba(255, 255, 255, 0.12);
+    --hcm-fill-field: rgba(255, 255, 255, 0.12);
+    --hcm-fill-active: rgba(255, 255, 255, 0.16);
+    --hcm-fill-bare: rgba(255, 255, 255, 0.06);
+    --hcm-border: rgba(255, 255, 255, 0.32);
+    --hcm-border-mid: rgba(255, 255, 255, 0.38);
+    --hcm-border-strong: rgba(255, 255, 255, 0.45);
+    --hcm-border-heavy: rgba(255, 255, 255, 0.55);
+    --hcm-border-near: rgba(255, 255, 255, 0.65);
+    --hcm-ink: #f4efe6;
+    --hcm-header: #141210;
   }
 }
 
