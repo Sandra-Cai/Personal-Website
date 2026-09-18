@@ -203,7 +203,7 @@ const checksIndex = [
   ['gpt log region', /id="gpt-log"[^>]*role="log"/],
   ['gpt log aria-label', /id="gpt-log"[^>]*aria-label="SandraGPT conversation"/],
   ['gpt input describedby', /id="gpt-input"[^>]*aria-describedby="gpt-disclaimer"/],
-  ['gpt input errormessage', /id="gpt-input"[^>]*aria-errormessage="gpt-char-count"/],
+  ['gpt input no static errormessage', /id="gpt-input"(?:(?!aria-errormessage)[^>])*>/],
   ['skip link top', /class="ba-skip" href="#top"/],
   ['gpt form aria-busy', /id="gpt-form"[^>]*aria-busy="false"/],
   ['gpt sync status', /id="gpt-sync-status"[^>]*role="status"/],
@@ -1010,6 +1010,20 @@ if (!gptJs.includes('gpt-char-count--low')) {
 }
 if (!gptJs.includes('gpt-char-count--at-limit') || !gptJs.includes("setAttribute('aria-invalid', 'true')")) {
   console.error('validate-basic-html: char count must mark at-limit input invalid');
+  process.exit(1);
+}
+if (
+  !gptJs.includes("setAttribute('aria-errormessage', 'gpt-char-count')") ||
+  !gptJs.includes("removeAttribute('aria-errormessage')")
+) {
+  console.error('validate-basic-html: aria-errormessage must only be set when the input is invalid');
+  process.exit(1);
+}
+if (
+  !gptJs.includes("setAttribute('aria-live', 'assertive')") ||
+  !gptJs.includes("setAttribute('aria-live', 'polite')")
+) {
+  console.error('validate-basic-html: at-limit char count must use assertive aria-live, then restore polite');
   process.exit(1);
 }
 if (!gptJs.includes('gpt-field--at-limit') || !gptJs.includes("setAttribute('role', 'alert')")) {

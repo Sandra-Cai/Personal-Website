@@ -1,5 +1,5 @@
 /**
- * cache-bust: 135
+ * cache-bust: 136
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1032,12 +1032,13 @@
         'when does char count show',
         'at character limit',
         'aria-invalid',
+        'aria-errormessage',
         'gpt-field--at-limit',
         'pill at limit',
       ],
       priority: 14,
       reply:
-        'A live character count appears when 40 or fewer characters remain of the 280-character limit. Near the limit it turns amber; at exactly 280 characters the pill gets a dark border, the count uses role="alert", and the input is marked invalid.',
+        'A live character count appears when 40 or fewer characters remain of the 280-character limit. Near the limit it turns amber; at exactly 280 characters the pill gets a dark border, the count uses role="alert" with assertive live updates, and the input is marked invalid with aria-errormessage pointing at the count.',
     },
     {
       keys: [
@@ -1975,7 +1976,9 @@
         el.classList.remove('gpt-char-count--low');
         el.classList.add('gpt-char-count--at-limit');
         input.setAttribute('aria-invalid', 'true');
+        input.setAttribute('aria-errormessage', 'gpt-char-count');
         el.setAttribute('role', 'alert');
+        el.setAttribute('aria-live', 'assertive');
         if (field) {
           field.classList.add('gpt-field--at-limit');
           field.classList.remove('gpt-field--near-limit');
@@ -1986,7 +1989,9 @@
         el.classList.toggle('gpt-char-count--low', left <= 10);
         el.classList.remove('gpt-char-count--at-limit');
         input.removeAttribute('aria-invalid');
+        input.removeAttribute('aria-errormessage');
         el.removeAttribute('role');
+        el.setAttribute('aria-live', 'polite');
         if (field) {
           field.classList.remove('gpt-field--at-limit');
           field.classList.toggle('gpt-field--near-limit', left <= 10);
@@ -1997,7 +2002,9 @@
       el.textContent = '';
       el.classList.remove('gpt-char-count--low', 'gpt-char-count--at-limit');
       input.removeAttribute('aria-invalid');
+      input.removeAttribute('aria-errormessage');
       el.removeAttribute('role');
+      el.setAttribute('aria-live', 'polite');
       if (field) {
         field.classList.remove('gpt-field--at-limit', 'gpt-field--near-limit');
       }
