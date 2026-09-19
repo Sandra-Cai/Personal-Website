@@ -1,4 +1,4 @@
-/* cache-bust: 121 */
+/* cache-bust: 122 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
    Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
@@ -1324,7 +1324,8 @@ a:focus-visible {
 .ba-404 {
   max-width: var(--max);
   margin: 0 auto;
-  padding: clamp(5rem, 18vw, 10rem) 24px;
+  padding: clamp(5rem, 18vw, 10rem) max(24px, env(safe-area-inset-right, 0px))
+    clamp(5rem, 18vw, 10rem) max(24px, env(safe-area-inset-left, 0px));
   border-top: 1px solid var(--line);
   text-align: center;
 }
@@ -1959,6 +1960,13 @@ html[data-theme="light"] {
   .ba-split-copy {
     font-size: 1rem;
     max-width: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .ba-header {
+    background: var(--bg);
+    backdrop-filter: none;
   }
 }
 

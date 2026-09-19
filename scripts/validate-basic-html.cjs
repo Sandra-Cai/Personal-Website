@@ -482,6 +482,24 @@ if (!/\.gpt-field input\s*\{[\s\S]*?font-size:\s*16px/.test(stylesCss)) {
   console.error('validate-basic-html: .gpt-field input must use 16px to avoid iOS focus zoom');
   process.exit(1);
 }
+if (
+  !/@media\s*\(prefers-reduced-transparency:\s*reduce\)[\s\S]*?\.ba-header[\s\S]*?backdrop-filter:\s*none/.test(
+    stylesCss
+  ) ||
+  !/@media\s*\(prefers-reduced-transparency:\s*reduce\)[\s\S]*?\.ba-header[\s\S]*?background:\s*var\(--bg\)/.test(
+    stylesCss
+  )
+) {
+  console.error('validate-basic-html: prefers-reduced-transparency must solidify the sticky header');
+  process.exit(1);
+}
+if (
+  !/\.ba-404\s*\{[\s\S]*?max\(24px,\s*env\(safe-area-inset-right/.test(stylesCss) ||
+  !/\.ba-404\s*\{[\s\S]*?max\(24px,\s*env\(safe-area-inset-left/.test(stylesCss)
+) {
+  console.error('validate-basic-html: .ba-404 must use horizontal safe-area padding');
+  process.exit(1);
+}
 if (!/@media\s*\(prefers-contrast:\s*more\)[\s\S]*?\.ba-logo-mark[\s\S]*?color:\s*var\(--text\)/.test(stylesCss)) {
   console.error('validate-basic-html: high-contrast must set .ba-logo-mark to var(--text)');
   process.exit(1);
