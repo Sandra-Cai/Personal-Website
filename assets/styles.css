@@ -1,4 +1,4 @@
-/* cache-bust: 122 */
+/* cache-bust: 123 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
    Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
@@ -156,6 +156,7 @@ a:focus-visible {
   z-index: 50;
   border-bottom: 1px solid var(--line);
   background: var(--header-bg);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   backdrop-filter: blur(20px) saturate(180%);
 }
 
@@ -451,7 +452,9 @@ a:focus-visible {
 }
 
 .gpt-sidebar-clear {
-  padding: 4px 8px;
+  position: relative;
+  padding: 8px 12px;
+  min-height: 36px;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -461,7 +464,15 @@ a:focus-visible {
   border: 1px solid var(--line);
   border-radius: 6px;
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.gpt-sidebar-clear::after {
+  content: "";
+  position: absolute;
+  inset: -6px -4px;
 }
 
 .gpt-sidebar-clear:hover:not(:disabled) {
@@ -1819,6 +1830,7 @@ html[data-theme="light"] {
   .ba-header {
     background: var(--hcm-header);
     border-bottom-color: var(--hcm-border-mid);
+    -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
 
@@ -1966,6 +1978,7 @@ html[data-theme="light"] {
 @media (prefers-reduced-transparency: reduce) {
   .ba-header {
     background: var(--bg);
+    -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
 }

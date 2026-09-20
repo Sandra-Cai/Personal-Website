@@ -493,6 +493,17 @@ if (
   console.error('validate-basic-html: prefers-reduced-transparency must solidify the sticky header');
   process.exit(1);
 }
+if (!stylesCss.includes('-webkit-backdrop-filter: blur(20px) saturate(180%)')) {
+  console.error('validate-basic-html: sticky header must set -webkit-backdrop-filter for WebKit');
+  process.exit(1);
+}
+if (
+  !/\.gpt-sidebar-clear\s*\{[\s\S]*?min-height:\s*36px/.test(stylesCss) ||
+  !/\.gpt-sidebar-clear\s*\{[\s\S]*?touch-action:\s*manipulation/.test(stylesCss)
+) {
+  console.error('validate-basic-html: Clear control must have a usable touch target');
+  process.exit(1);
+}
 if (
   !/\.ba-404\s*\{[\s\S]*?max\(24px,\s*env\(safe-area-inset-right/.test(stylesCss) ||
   !/\.ba-404\s*\{[\s\S]*?max\(24px,\s*env\(safe-area-inset-left/.test(stylesCss)
