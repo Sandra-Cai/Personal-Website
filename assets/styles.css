@@ -1,4 +1,4 @@
-/* cache-bust: 123 */
+/* cache-bust: 124 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
    Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
@@ -746,8 +746,8 @@ a:focus-visible {
 
 .gpt-send {
   flex-shrink: 0;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border: 0;
   border-radius: 50%;
   background: var(--accent);
@@ -755,6 +755,8 @@ a:focus-visible {
   cursor: pointer;
   display: grid;
   place-items: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: transform 0.15s ease, background-color 0.15s ease;
 }
 
@@ -819,6 +821,15 @@ a:focus-visible {
   text-decoration: underline;
   text-underline-offset: 2px;
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .gpt-starter {
+    padding: 10px 4px;
+    min-height: 44px;
+  }
 }
 
 .gpt-starter:hover {
@@ -1915,6 +1926,43 @@ html[data-theme="light"] {
 }
 
 @media print {
+  /* Beat dark-theme token selectors so ink stays dark on white paper. */
+  :root,
+  html[data-theme="dark"],
+  html[data-theme="light"],
+  html:not([data-theme="light"]) {
+    color-scheme: light;
+    --bg: #ffffff;
+    --bg-warm: #ffffff;
+    --text: #0a0a0a;
+    --text-dim: #1a1a1a;
+    --text-faint: #333333;
+    --line: #cccccc;
+    --line-hover: #999999;
+    --accent: #0a0a0a;
+    --accent-bright: #000000;
+    --accent-dim: transparent;
+    --accent-glow: transparent;
+    --warm: #0a0a0a;
+    --warm-dim: transparent;
+    --warm-glow: transparent;
+    --header-bg: #ffffff;
+    --shade-025: transparent;
+    --shade-035: transparent;
+    --shade-04: transparent;
+    --shade-045: transparent;
+    --shade-05: transparent;
+    --shade-06: transparent;
+    --shade-08: transparent;
+    --shade-09: transparent;
+    --shade-10: transparent;
+    --shade-12: transparent;
+    --shade-14: transparent;
+    --shade-22: transparent;
+    --shade-25: transparent;
+    --theme-chrome: #ffffff;
+  }
+
   html {
     color-scheme: light;
   }

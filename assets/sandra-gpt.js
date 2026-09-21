@@ -1,5 +1,5 @@
 /**
- * cache-bust: 136
+ * cache-bust: 137
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -836,7 +836,7 @@
       ],
       priority: 19,
       reply:
-        'Questions remain usable and saved in-browser if the API is unavailable. When the network returns, SandraGPT retries unsynced turns; the History status reports browser-only, partial, or database sync.',
+        'Questions remain usable and saved in-browser if the API is unavailable or the tab is offline. History status reports Offline, browser-only, partial, or database sync; when the network returns, SandraGPT retries unsynced turns.',
     },
     {
       keys: [
@@ -1617,8 +1617,20 @@
     }
   }
 
+  function isBrowserOffline() {
+    try {
+      return typeof navigator !== 'undefined' && navigator.onLine === false;
+    } catch {
+      return false;
+    }
+  }
+
   function setSyncStatus(mode, detail) {
     if (!syncStatusEl) return;
+    if (mode === 'server' && isBrowserOffline()) {
+      mode = 'warn';
+      detail = 'offline';
+    }
     syncStatusEl.textContent = '';
     syncStatusEl.classList.remove('gpt-sync-status--ok', 'gpt-sync-status--warn', 'gpt-sync-status--local');
     if (mode === 'server') {
@@ -1628,7 +1640,9 @@
       syncStatusEl.textContent = 'Browser only (no API)';
       syncStatusEl.classList.add('gpt-sync-status--local');
     } else if (mode === 'warn') {
-      if (detail === 'rate') {
+      if (detail === 'offline') {
+        syncStatusEl.textContent = 'Offline; saved in browser only';
+      } else if (detail === 'rate') {
         syncStatusEl.textContent = 'Server busy; saved in browser only';
       } else if (detail === 'partial') {
         syncStatusEl.textContent = 'Partially synced; retrying later';
@@ -1921,10 +1935,20 @@
     clearBtn.setAttribute('aria-label', clearLabel);
   }
 
+  const SIDEBAR_EMPTY_DEFAULT =
+    'Your questions appear here. Saved in this browser; may sync when the API is on.';
+
   function updateSidebarEmpty() {
     const emptyEl = document.getElementById('gpt-sidebar-empty');
     if (!emptyEl) return;
-    emptyEl.hidden = restorePending || Boolean(sidebarList && sidebarList.children.length);
+    const hasItems = Boolean(sidebarList && sidebarList.children.length);
+    if (restorePending && !hasItems) {
+      emptyEl.hidden = false;
+      emptyEl.textContent = 'Loading history…';
+      return;
+    }
+    emptyEl.hidden = hasItems;
+    if (!hasItems) emptyEl.textContent = SIDEBAR_EMPTY_DEFAULT;
   }
 
   function updateSidebarBusy() {
@@ -2501,12 +2525,16 @@
         handleSyncError(err);
       });
   }
+  window.addEventListener('offline', () => {
+    setSyncStatus('warn', 'offline');
+  });
   window.addEventListener('online', () => {
     window.clearTimeout(onlineDebounce);
     onlineDebounce = window.setTimeout(() => {
       flushOnlineSync();
     }, 450);
   });
+  if (isBrowserOffline()) setSyncStatus('warn', 'offline');
   function resetSubmitBusy() {
     window.clearTimeout(submitBusyTimer);
     submitBusy = false;

@@ -448,6 +448,23 @@ if (!/@media print \{[\s\S]*?color-scheme: light[\s\S]*?\.ba-theme-toggle/.test(
   process.exit(1);
 }
 if (
+  !/@media print \{[\s\S]*?html\[data-theme="dark"\][\s\S]*?--text:\s*#0a0a0a/.test(stylesCss) ||
+  !/@media print \{[\s\S]*?html:not\(\[data-theme="light"\]\)[\s\S]*?--bg:\s*#ffffff/.test(stylesCss)
+) {
+  console.error('validate-basic-html: print stylesheet must reset dark-theme tokens to dark ink on white');
+  process.exit(1);
+}
+if (!/\.gpt-send\s*\{[\s\S]*?width:\s*44px[\s\S]*?height:\s*44px[\s\S]*?touch-action:\s*manipulation/.test(stylesCss)) {
+  console.error('validate-basic-html: send button must be a 44px touch target');
+  process.exit(1);
+}
+if (
+  !/@media \(hover: none\) and \(pointer: coarse\)[\s\S]*?\.gpt-starter[\s\S]*?min-height:\s*44px/.test(stylesCss)
+) {
+  console.error('validate-basic-html: starter prompts need a coarse-pointer touch target');
+  process.exit(1);
+}
+if (
   !/\.ba-nav a\[aria-current='location'\][\s\S]*?text-decoration:\s*underline/.test(stylesCss) ||
   !stylesCss.includes('text-underline-offset')
 ) {
@@ -929,8 +946,8 @@ if (!gptJs.includes('clearBtn.setAttribute(\'aria-label\'') || !gptJs.includes('
   console.error('validate-basic-html: Clear button aria-label must reflect empty, busy, and restore states');
   process.exit(1);
 }
-if (!/emptyEl\.hidden = restorePending/.test(gptJs)) {
-  console.error('validate-basic-html: sidebar empty placeholder must hide during restore');
+if (!gptJs.includes('Loading history…') || !gptJs.includes('SIDEBAR_EMPTY_DEFAULT') || !/restorePending && !hasItems/.test(gptJs)) {
+  console.error('validate-basic-html: history sidebar must show loading copy during restore');
   process.exit(1);
 }
 if (!gptJs.includes('sidebarList.setAttribute(\'aria-busy\'') || !/restorePending \|\| clearBusy/.test(gptJs)) {
@@ -1165,6 +1182,15 @@ if (!gptJs.includes('window.confirm') || !gptJs.includes('clearAllHistory')) {
 }
 if (!gptJs.includes("addEventListener('online'")) {
   console.error('validate-basic-html: sandra-gpt.js must retry sync when back online');
+  process.exit(1);
+}
+if (
+  !gptJs.includes("addEventListener('offline'") ||
+  !gptJs.includes("detail === 'offline'") ||
+  !gptJs.includes('Offline; saved in browser only') ||
+  !gptJs.includes('function isBrowserOffline')
+) {
+  console.error('validate-basic-html: sandra-gpt.js must surface offline History status');
   process.exit(1);
 }
 if (!gptJs.includes("aria-label', 'You asked'") || !gptJs.includes("aria-label', 'SandraGPT replied'")) {
