@@ -1,5 +1,5 @@
 /**
- * cache-bust: 137
+ * cache-bust: 138
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1917,7 +1917,7 @@
     if (!starters) return;
     starters.hidden = Boolean(logEl && logEl.children.length > 0);
     document.querySelectorAll('.gpt-starter[data-q]').forEach((btn) => {
-      btn.disabled = restorePending || clearBusy;
+      btn.disabled = restorePending || clearBusy || submitBusy;
     });
   }
 
@@ -2095,14 +2095,29 @@
     updateClearState();
   }
 
+  function ensureSidebarItemVisible(el) {
+    if (!el) return;
+    try {
+      el.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'auto' });
+    } catch {
+      /* ignore */
+    }
+  }
+
   function setSidebarItemActive(turnId) {
     if (!sidebarList) return;
+    let active = null;
     sidebarList.querySelectorAll('.gpt-sidebar-item').forEach((n) => {
       const isMatch = n.dataset.turnId === turnId;
       n.classList.toggle('gpt-sidebar-item--active', isMatch);
-      if (isMatch) n.setAttribute('aria-current', 'true');
-      else n.removeAttribute('aria-current');
+      if (isMatch) {
+        n.setAttribute('aria-current', 'true');
+        active = n;
+      } else {
+        n.removeAttribute('aria-current');
+      }
     });
+    ensureSidebarItemVisible(active);
   }
 
   function addSidebarEntry(turnId, questionText) {
@@ -2128,6 +2143,7 @@
 
     li.appendChild(btn);
     sidebarList.appendChild(li);
+    ensureSidebarItemVisible(btn);
     updateClearState();
   }
 
@@ -2364,11 +2380,13 @@
     }
 
     submitBusy = true;
+    updateStartersVisibility();
     window.clearTimeout(submitBusyTimer);
     submitBusyTimer = window.setTimeout(() => {
       submitBusy = false;
       if (form) form.setAttribute('aria-busy', 'false');
       updateSendState();
+      updateStartersVisibility();
     }, SUBMIT_BUSY_MS);
 
     const turnId = newTurnId();
@@ -2540,6 +2558,7 @@
     submitBusy = false;
     if (form) form.setAttribute('aria-busy', 'false');
     updateSendState();
+    updateStartersVisibility();
   }
 
   function resetClearBusy() {

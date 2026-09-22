@@ -471,6 +471,19 @@ if (
   console.error('validate-basic-html: current nav link must use an underline affordance');
   process.exit(1);
 }
+if (!/\.ba-nav a\s*\{[\s\S]*?text-decoration:\s*none/.test(stylesCss)) {
+  console.error('validate-basic-html: non-current nav links must not inherit global underlines');
+  process.exit(1);
+}
+if (
+  !/@media \(forced-colors: active\)[\s\S]*?\.ba-nav a\[aria-current='location'\][\s\S]*?HighlightText/.test(
+    stylesCss
+  ) ||
+  !/@media \(forced-colors: active\)[\s\S]*?\.gpt-sidebar-item--active[\s\S]*?Highlight/.test(stylesCss)
+) {
+  console.error('validate-basic-html: forced-colors must highlight current nav and active History items');
+  process.exit(1);
+}
 if (!/@media \(hover: none\) and \(pointer: coarse\)[\s\S]*?\.gpt-slash-hint[\s\S]*?display:\s*none/.test(stylesCss)) {
   console.error('validate-basic-html: slash keyboard hint must hide on coarse touch pointers');
   process.exit(1);
@@ -1140,8 +1153,12 @@ if (!gptJs.includes('Array.isArray(remote)') || !gptJs.includes("mode: 'warn'"))
   console.error('validate-basic-html: restoreHistory must warn when remote fetch returns null');
   process.exit(1);
 }
-if (!gptJs.includes('btn.disabled = restorePending')) {
-  console.error('validate-basic-html: starter buttons must disable while restorePending');
+if (!gptJs.includes('btn.disabled = restorePending || clearBusy || submitBusy')) {
+  console.error('validate-basic-html: starter buttons must disable while restorePending, clearBusy, or submitBusy');
+  process.exit(1);
+}
+if (!gptJs.includes('function ensureSidebarItemVisible') || !gptJs.includes('ensureSidebarItemVisible(active)')) {
+  console.error('validate-basic-html: active History items must scroll into the sidebar scroller');
   process.exit(1);
 }
 if (!gptJs.includes('512×512') || !gptJs.includes('site.webmanifest names the site')) {
