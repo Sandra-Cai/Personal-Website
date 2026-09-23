@@ -474,6 +474,15 @@ if (
   process.exit(1);
 }
 if (
+  !/@media \(hover: none\) and \(pointer: coarse\)[\s\S]*?\.ba-nav a[\s\S]*?min-height:\s*44px/.test(stylesCss) ||
+  !/@media \(hover: none\) and \(pointer: coarse\)[\s\S]*?\.ba-footer-links a[\s\S]*?min-height:\s*44px/.test(
+    stylesCss
+  )
+) {
+  console.error('validate-basic-html: primary nav and footer links need coarse-pointer touch targets');
+  process.exit(1);
+}
+if (
   !/\.ba-nav a\[aria-current='location'\][\s\S]*?text-decoration:\s*underline/.test(stylesCss) ||
   !stylesCss.includes('text-underline-offset')
 ) {
