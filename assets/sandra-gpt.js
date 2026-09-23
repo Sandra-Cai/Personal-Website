@@ -1,5 +1,5 @@
 /**
- * cache-bust: 138
+ * cache-bust: 139
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -811,7 +811,7 @@
       ],
       priority: 18,
       reply:
-        'SandraGPT saves this session’s questions in your browser. If database sync is available, the status beside History says so; Clear removes the session locally and requests server deletion when sync is on.',
+        'SandraGPT saves this session’s questions in your browser and keeps open tabs in sync when history changes. If database sync is available, the status beside History says so; Clear removes the session locally and requests server deletion when sync is on.',
     },
     {
       keys: [
@@ -1493,6 +1493,7 @@
   /** Bumped on Clear / submit so in-flight restoreHistory results are ignored. */
   let historyEpoch = 0;
   let restorePending = false;
+  let pendingLocalRehydrate = false;
   let onlineSyncQueued = false;
   let pendingServerClear = false;
   let rateRetryTimer = 0;
@@ -2189,6 +2190,51 @@
     return false;
   }
 
+  function rehydrateLocalHistoryFromStorage() {
+    if (!logEl || !sidebarList) return;
+    if (restorePending || clearBusy || submitBusy) {
+      pendingLocalRehydrate = true;
+      return;
+    }
+    pendingLocalRehydrate = false;
+    // Invalidate in-flight restore/post so a late response cannot wipe this rebuild.
+    historyEpoch += 1;
+    const epoch = historyEpoch;
+    const livePrev = logEl.getAttribute('aria-live');
+    logEl.setAttribute('aria-live', 'off');
+    try {
+      logEl.innerHTML = '';
+      sidebarList.innerHTML = '';
+      const entries = normalizeTurns(loadHistory());
+      for (const row of entries) {
+        if (epoch !== historyEpoch) return;
+        if (!row || typeof row.id !== 'string' || typeof row.q !== 'string') continue;
+        const a = typeof row.a === 'string' ? row.a : '';
+        renderTurn(row.id, row.q, a, false);
+        addSidebarEntry(row.id, row.q);
+      }
+      if (epoch !== historyEpoch) return;
+      if (!entries.length) {
+        lastSubmittedCanonical = '';
+        lastSubmittedAt = 0;
+      }
+      recallIndex = -1;
+      draftBeforeRecall = '';
+      updateStartersVisibility();
+      updateClearState();
+      updateSendState();
+    } finally {
+      if (epoch === historyEpoch) {
+        if (livePrev) logEl.setAttribute('aria-live', livePrev);
+        else logEl.setAttribute('aria-live', 'polite');
+      }
+    }
+  }
+
+  function flushPendingLocalRehydrate() {
+    if (pendingLocalRehydrate) rehydrateLocalHistoryFromStorage();
+  }
+
   async function clearAllHistory() {
     if (clearBusy) return;
     const empty = !(logEl && logEl.children.length) && !(sidebarList && sidebarList.children.length);
@@ -2255,6 +2301,7 @@
       updateSendState();
       updateStartersVisibility();
       if (onlineSyncQueued) flushOnlineSync();
+      flushPendingLocalRehydrate();
     }
     if (input) {
       focusInputField();
@@ -2353,6 +2400,7 @@
       updateClearState();
       updateStartersVisibility();
       if (onlineSyncQueued) flushOnlineSync();
+      flushPendingLocalRehydrate();
     }
   }
 
@@ -2387,6 +2435,7 @@
       if (form) form.setAttribute('aria-busy', 'false');
       updateSendState();
       updateStartersVisibility();
+      flushPendingLocalRehydrate();
     }, SUBMIT_BUSY_MS);
 
     const turnId = newTurnId();
@@ -2559,6 +2608,7 @@
     if (form) form.setAttribute('aria-busy', 'false');
     updateSendState();
     updateStartersVisibility();
+    flushPendingLocalRehydrate();
   }
 
   function resetClearBusy() {
@@ -2566,6 +2616,7 @@
     updateClearState();
     updateSendState();
     updateStartersVisibility();
+    flushPendingLocalRehydrate();
   }
 
   window.addEventListener('pagehide', () => {
@@ -2578,11 +2629,18 @@
     resetClearBusy();
   });
 
+  window.addEventListener('storage', (event) => {
+    if (event.key === STORAGE_KEY || (event.key === null && event.newValue === null)) {
+      rehydrateLocalHistoryFromStorage();
+    }
+  });
+
   window.addEventListener('pageshow', (event) => {
     if (!event.persisted) return;
     resetSubmitBusy();
     resetClearBusy();
     resumeRateLimitedRetryOrFlush();
+    rehydrateLocalHistoryFromStorage();
   });
 
   function isTypingInField(el) {

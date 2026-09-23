@@ -1,4 +1,4 @@
-/* cache-bust: 125 */
+/* cache-bust: 126 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
    Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
@@ -497,6 +497,7 @@ a:focus-visible {
   max-height: min(52vh, 28rem);
   overflow-y: auto;
   overflow-x: hidden;
+  overscroll-behavior: contain;
   padding-right: 4px;
   margin-right: -4px;
   scrollbar-gutter: stable;
@@ -563,7 +564,16 @@ a:focus-visible {
   border: 1px solid transparent;
   border-radius: 8px;
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .gpt-sidebar-item {
+    min-height: 44px;
+    padding: 10px 12px;
+  }
 }
 
 .gpt-sidebar-item:hover {
@@ -1801,8 +1811,8 @@ html[data-theme="light"] {
   }
 
   .gpt-send:disabled {
-    background: #52525b;
-    color: #fafafa;
+    background: var(--text-faint);
+    color: var(--bg);
   }
 
   .ba-display-accent,

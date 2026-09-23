@@ -465,6 +465,15 @@ if (
   process.exit(1);
 }
 if (
+  !/@media \(hover: none\) and \(pointer: coarse\)[\s\S]*?\.gpt-sidebar-item[\s\S]*?min-height:\s*44px/.test(
+    stylesCss
+  ) ||
+  !/\.gpt-sidebar-scroll\s*\{[\s\S]*?overscroll-behavior:\s*contain/.test(stylesCss)
+) {
+  console.error('validate-basic-html: History sidebar needs touch targets and contained overscroll');
+  process.exit(1);
+}
+if (
   !/\.ba-nav a\[aria-current='location'\][\s\S]*?text-decoration:\s*underline/.test(stylesCss) ||
   !stylesCss.includes('text-underline-offset')
 ) {
@@ -1199,6 +1208,15 @@ if (!gptJs.includes('window.confirm') || !gptJs.includes('clearAllHistory')) {
 }
 if (!gptJs.includes("addEventListener('online'")) {
   console.error('validate-basic-html: sandra-gpt.js must retry sync when back online');
+  process.exit(1);
+}
+if (
+  !gptJs.includes('function rehydrateLocalHistoryFromStorage') ||
+  !gptJs.includes("addEventListener('storage'") ||
+  !gptJs.includes('flushPendingLocalRehydrate') ||
+  !/addEventListener\('pageshow'[\s\S]*?rehydrateLocalHistoryFromStorage\(\)/.test(gptJs)
+) {
+  console.error('validate-basic-html: sandra-gpt.js must rehydrate History across tabs and bfcache');
   process.exit(1);
 }
 if (
