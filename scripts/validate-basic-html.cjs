@@ -483,6 +483,20 @@ if (
   process.exit(1);
 }
 if (
+  !/@media \(hover: none\) and \(pointer: coarse\)[\s\S]*?\.ba-logo[\s\S]*?min-height:\s*44px/.test(stylesCss) ||
+  !/@media \(hover: none\) and \(pointer: coarse\)[\s\S]*?\.ba-skip[\s\S]*?min-height:\s*44px/.test(stylesCss)
+) {
+  console.error('validate-basic-html: logo and skip link need coarse-pointer touch targets');
+  process.exit(1);
+}
+if (
+  !/\.ba-skip:focus(?:-visible)?[\s\S]*?outline:\s*2px solid var\(--bg\)/.test(stylesCss) ||
+  !/\.ba-skip:focus(?:-visible)?[\s\S]*?box-shadow:\s*0 0 0 4px var\(--accent\)/.test(stylesCss)
+) {
+  console.error('validate-basic-html: skip link focus ring must contrast against the accent pill');
+  process.exit(1);
+}
+if (
   !/\.ba-nav a\[aria-current='location'\][\s\S]*?text-decoration:\s*underline/.test(stylesCss) ||
   !stylesCss.includes('text-underline-offset')
 ) {

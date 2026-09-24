@@ -1,4 +1,4 @@
-/* cache-bust: 127 */
+/* cache-bust: 128 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
    Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
@@ -112,8 +112,9 @@ main:focus-visible {
 .ba-skip:focus,
 .ba-skip:focus-visible {
   top: max(12px, env(safe-area-inset-top, 0px));
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
+  outline: 2px solid var(--bg);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--accent);
 }
 
 a {
@@ -279,13 +280,19 @@ a:focus-visible {
   .ba-nav a,
   .ba-footer-links a,
   .ba-strip-items a,
-  .ba-404-lead a {
+  .ba-404-lead a,
+  .ba-logo,
+  .ba-skip {
     display: inline-flex;
     align-items: center;
     min-height: 44px;
     padding: 10px 6px;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+  }
+
+  .ba-skip {
+    padding: 10px 14px;
   }
 }
 
