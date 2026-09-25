@@ -1,4 +1,4 @@
-/* cache-bust: 128 */
+/* cache-bust: 129 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
    Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
@@ -1190,10 +1190,12 @@ a:focus-visible {
   transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 }
 
-.ba-card:hover {
-  border-color: var(--line-hover);
-  background: var(--shade-045);
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .ba-card:hover {
+    border-color: var(--line-hover);
+    background: var(--shade-045);
+    transform: translateY(-1px);
+  }
 }
 
 .ba-card--lead {
@@ -1209,8 +1211,10 @@ a:focus-visible {
   background: transparent;
 }
 
-.ba-card--bare:hover {
-  background: var(--shade-025);
+@media (hover: hover) and (pointer: fine) {
+  .ba-card--bare:hover {
+    background: var(--shade-025);
+  }
 }
 
 .ba-phase {
@@ -1260,9 +1264,11 @@ a:focus-visible {
   transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-.ba-list li:hover {
-  border-color: var(--line-hover);
-  background: var(--shade-04);
+@media (hover: hover) and (pointer: fine) {
+  .ba-list li:hover {
+    border-color: var(--line-hover);
+    background: var(--shade-04);
+  }
 }
 
 .ba-list li::before {
@@ -1580,9 +1586,11 @@ html[data-theme="light"] {
   stroke-width: 2;
 }
 
-.ba-theme-mark:hover {
-  color: var(--text);
-  background: var(--shade-08);
+@media (hover: hover) and (pointer: fine) {
+  .ba-theme-mark:hover {
+    color: var(--text);
+    background: var(--shade-08);
+  }
 }
 
 .ba-theme-mark:focus-visible {
@@ -1620,6 +1628,17 @@ html[data-theme="light"] {
   .ba-theme-icon {
     width: 20px;
     height: 20px;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .ba-theme-mark {
+    width: 44px;
+    height: 44px;
+  }
+
+  .ba-header-inner {
+    align-items: center;
   }
 }
 

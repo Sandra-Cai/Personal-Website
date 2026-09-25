@@ -490,6 +490,20 @@ if (
   process.exit(1);
 }
 if (
+  !/@media \(hover: none\) and \(pointer: coarse\)[\s\S]*?\.ba-theme-mark[\s\S]*?width:\s*44px/.test(stylesCss) ||
+  !/@media \(hover: none\) and \(pointer: coarse\)[\s\S]*?\.ba-theme-mark[\s\S]*?height:\s*44px/.test(stylesCss)
+) {
+  console.error('validate-basic-html: theme marks need 44px coarse-pointer targets after the mobile shrink');
+  process.exit(1);
+}
+if (
+  !/@media \(hover: hover\) and \(pointer: fine\)[\s\S]*?\.ba-card:hover[\s\S]*?translateY\(-1px\)/.test(stylesCss) ||
+  !/@media \(hover: hover\) and \(pointer: fine\)[\s\S]*?\.ba-list li:hover/.test(stylesCss)
+) {
+  console.error('validate-basic-html: card/list hover lifts must require fine hover pointers');
+  process.exit(1);
+}
+if (
   !/\.ba-skip:focus(?:-visible)?[\s\S]*?outline:\s*2px solid var\(--bg\)/.test(stylesCss) ||
   !/\.ba-skip:focus(?:-visible)?[\s\S]*?box-shadow:\s*0 0 0 4px var\(--accent\)/.test(stylesCss)
 ) {
