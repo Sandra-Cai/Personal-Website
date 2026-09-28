@@ -1,4 +1,4 @@
-/* cache-bust: 129 */
+/* cache-bust: 130 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
    Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
@@ -497,9 +497,11 @@ a:focus-visible {
   inset: -6px -4px;
 }
 
-.gpt-sidebar-clear:hover:not(:disabled) {
-  color: var(--text-dim);
-  border-color: var(--line-hover);
+@media (hover: hover) and (pointer: fine) {
+  .gpt-sidebar-clear:hover:not(:disabled) {
+    color: var(--text-dim);
+    border-color: var(--line-hover);
+  }
 }
 
 .gpt-sidebar-clear:disabled {
@@ -597,9 +599,16 @@ a:focus-visible {
   }
 }
 
-.gpt-sidebar-item:hover {
-  background: var(--shade-08);
-  color: var(--text);
+@media (hover: hover) and (pointer: fine) {
+  .gpt-sidebar-item:hover:not(:disabled) {
+    background: var(--shade-08);
+    color: var(--text);
+  }
+}
+
+.gpt-sidebar-item:disabled {
+  opacity: 0.55;
+  cursor: default;
 }
 
 .gpt-sidebar-item:focus-visible {
@@ -792,8 +801,10 @@ a:focus-visible {
   transition: transform 0.15s ease, background-color 0.15s ease;
 }
 
-.gpt-send:hover {
-  background: var(--accent-bright);
+@media (hover: hover) and (pointer: fine) {
+  .gpt-send:hover:not(:disabled) {
+    background: var(--accent-bright);
+  }
 }
 
 .gpt-send:active {
@@ -864,8 +875,10 @@ a:focus-visible {
   }
 }
 
-.gpt-starter:hover {
-  color: var(--text);
+@media (hover: hover) and (pointer: fine) {
+  .gpt-starter:hover:not(:disabled) {
+    color: var(--text);
+  }
 }
 
 .gpt-starter:disabled {
@@ -1335,8 +1348,8 @@ a:focus-visible {
 .ba-footer {
   max-width: var(--max);
   margin: 0 auto;
-  padding: 2.25rem max(24px, env(safe-area-inset-right, 0px)) max(2.75rem, env(safe-area-inset-bottom, 0px))
-    max(24px, env(safe-area-inset-left, 0px));
+  padding: 2.25rem max(24px, env(safe-area-inset-right, 0px))
+    calc(2.75rem + env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
   border-top: 1px solid var(--line);
 }
 
@@ -2149,6 +2162,11 @@ html[data-theme="light"] {
   }
 
   .gpt-sidebar-clear:disabled {
+    background: ButtonFace;
+    color: GrayText;
+  }
+
+  .gpt-sidebar-item:disabled {
     background: ButtonFace;
     color: GrayText;
   }

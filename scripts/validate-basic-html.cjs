@@ -504,6 +504,19 @@ if (
   process.exit(1);
 }
 if (
+  !/@media \(hover: hover\) and \(pointer: fine\)[\s\S]*?\.gpt-sidebar-item:hover:not\(:disabled\)/.test(stylesCss) ||
+  !stylesCss.includes('.gpt-sidebar-item:disabled') ||
+  !/@media \(hover: hover\) and \(pointer: fine\)[\s\S]*?\.gpt-send:hover:not\(:disabled\)/.test(stylesCss) ||
+  !/@media \(hover: hover\) and \(pointer: fine\)[\s\S]*?\.gpt-starter:hover:not\(:disabled\)/.test(stylesCss)
+) {
+  console.error('validate-basic-html: GPT chrome hover must require fine pointers; History needs disabled styles');
+  process.exit(1);
+}
+if (!/\.ba-footer\s*\{[\s\S]*?calc\(2\.75rem \+ env\(safe-area-inset-bottom/.test(stylesCss)) {
+  console.error('validate-basic-html: footer must stack bottom padding with safe-area inset');
+  process.exit(1);
+}
+if (
   !/\.ba-skip:focus(?:-visible)?[\s\S]*?outline:\s*2px solid var\(--bg\)/.test(stylesCss) ||
   !/\.ba-skip:focus(?:-visible)?[\s\S]*?box-shadow:\s*0 0 0 4px var\(--accent\)/.test(stylesCss)
 ) {
@@ -1001,8 +1014,14 @@ if (!gptJs.includes('function updateClearState') || !gptJs.includes('clearBusy')
   console.error('validate-basic-html: Clear button must track empty/busy state');
   process.exit(1);
 }
-if (!gptJs.includes('clearBtn.setAttribute(\'aria-label\'') || !gptJs.includes('Nothing to clear') || !gptJs.includes('Clearing question history') || !/restorePending\) clearLabel = 'Loading history…'/.test(gptJs)) {
-  console.error('validate-basic-html: Clear button aria-label must reflect empty, busy, and restore states');
+if (
+  !gptJs.includes('clearBtn.setAttribute(\'aria-label\'') ||
+  !gptJs.includes('Nothing to clear') ||
+  !gptJs.includes('Clearing question history…') ||
+  !gptJs.includes('Confirm clear in the dialog…') ||
+  !/restorePending\) clearLabel = 'Loading history…'/.test(gptJs)
+) {
+  console.error('validate-basic-html: Clear button aria-label must reflect empty, confirm, busy, and restore states');
   process.exit(1);
 }
 if (!gptJs.includes('Loading history…') || !gptJs.includes('SIDEBAR_EMPTY_DEFAULT') || !/restorePending && !hasItems/.test(gptJs)) {

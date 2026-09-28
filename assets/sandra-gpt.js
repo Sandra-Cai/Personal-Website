@@ -1,5 +1,5 @@
 /**
- * cache-bust: 139
+ * cache-bust: 140
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -1930,8 +1930,14 @@
     clearBtn.disabled = clearBusy || empty || restorePending;
     clearBtn.setAttribute('aria-busy', clearBusy || restorePending ? 'true' : 'false');
     let clearLabel = 'Clear question history';
-    if (clearBusy) clearLabel = 'Clearing question history…';
-    else if (restorePending) clearLabel = 'Loading history…';
+    if (clearBusy) {
+      // Busy is set before confirm so a second click cannot stack dialogs;
+      // only say "Clearing…" once the wipe has actually started (form aria-busy).
+      clearLabel =
+        form?.getAttribute('aria-busy') === 'true'
+          ? 'Clearing question history…'
+          : 'Confirm clear in the dialog…';
+    } else if (restorePending) clearLabel = 'Loading history…';
     else if (empty) clearLabel = 'Nothing to clear';
     clearBtn.setAttribute('aria-label', clearLabel);
   }
