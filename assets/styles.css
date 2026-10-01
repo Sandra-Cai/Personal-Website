@@ -1,4 +1,4 @@
-/* cache-bust: 130 */
+/* cache-bust: 131 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
 /* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
    Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
@@ -85,6 +85,185 @@ main:focus,
 main:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 4px;
+}
+
+/* Gauss entry gate: blocks chrome until the integer answer verifies. */
+html.gauss-locked {
+  overflow: hidden;
+}
+
+html.gauss-locked body.bai-site > :not(#gauss-gate):not(script) {
+  visibility: hidden !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+html:not(.gauss-locked) #gauss-gate {
+  display: none !important;
+}
+
+.gauss-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  padding: max(24px, env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px))
+    max(24px, env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
+  background:
+    radial-gradient(ellipse 70vw 50vh at 80% 0%, var(--warm-glow), transparent 55%),
+    radial-gradient(ellipse 60vw 40vh at 10% 100%, var(--shade-035), transparent 65%),
+    var(--bg);
+  color: var(--text);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.gauss-gate-panel {
+  width: min(40rem, 100%);
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-warm);
+}
+
+.gauss-gate-kicker {
+  margin: 0 0 0.75rem;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--warm);
+}
+
+.gauss-gate-title {
+  margin: 0 0 1rem;
+  font-family: var(--font);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  color: var(--text);
+}
+
+.gauss-gate-problem {
+  margin: 0 0 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--text-dim);
+}
+
+.gauss-gate-problem strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.gauss-gate-list {
+  margin: 0 0 1.25rem;
+  padding-left: 1.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--text-dim);
+}
+
+.gauss-gate-list li {
+  margin-bottom: 0.5rem;
+}
+
+.gauss-gate-list li:last-child {
+  margin-bottom: 0;
+}
+
+.gauss-gate-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: stretch;
+  margin: 0 0 0.75rem;
+}
+
+.gauss-gate-input {
+  flex: 1 1 12rem;
+  min-width: 0;
+  padding: 12px 14px;
+  font-family: var(--font);
+  font-size: 16px;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  outline: none;
+}
+
+.gauss-gate-input:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-dim);
+}
+
+.gauss-gate-submit {
+  flex: 0 0 auto;
+  padding: 12px 18px;
+  font-family: var(--font);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--accent);
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gauss-gate-submit:hover {
+  background: var(--accent-bright);
+}
+
+.gauss-gate-submit:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.gauss-gate-status {
+  margin: 0;
+  min-height: 1.4em;
+  font-size: 0.875rem;
+  color: var(--text-faint);
+}
+
+.gauss-gate-status--err {
+  color: var(--warn-strong);
+  font-weight: 600;
+}
+
+.gauss-gate-status--ok {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.gauss-gate-note {
+  margin: 1rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--text-faint);
+}
+
+@media print {
+  html.gauss-locked .gauss-gate {
+    position: static;
+    inset: auto;
+    display: block !important;
+    min-height: auto;
+    background: #fff;
+    color: #0a0a0a;
+  }
+
+  html.gauss-locked body.bai-site > :not(#gauss-gate):not(script) {
+    display: none !important;
+    visibility: hidden !important;
+  }
 }
 
 /* Skip link: keyboard / screen reader first stop.

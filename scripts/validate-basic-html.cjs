@@ -21,7 +21,7 @@ function assertChecks(file, html, checks) {
 
 const checks404 = [
   ['doctype', /<!doctype html>/i],
-  ['html lang en-US', /<html lang="en-US">/],
+  ['html lang en-US', /<html lang="en-US"(?: class="gauss-locked")?>/],
   ['skip link', /class="ba-skip"/],
   ['main landmark', /\bid="main"/],
   ['404 main focusable', /<main id="main" tabindex="-1">/],
@@ -67,6 +67,9 @@ const checks404 = [
   ['404 primary nav', /<nav class="ba-nav" aria-label="Primary">/],
   ['404 color-scheme light dark', /<meta name="color-scheme" content="light dark"/],
   ['404 theme boot', /src="\/assets\/theme-boot\.js\?v=\d+"/],
+  ['404 gauss boot', /src="\/assets\/gauss-boot\.js\?v=\d+"/],
+  ['404 gauss gate', /id="gauss-gate"/],
+  ['404 gauss gate script', /src="\/assets\/gauss-gate\.js\?v=\d+"/],
   ['404 theme toggle', /id="theme-toggle"/],
   ['404 font preload crossorigin', /rel="preload"[^>]*Geist-Variable\.woff2[^>]*crossorigin/],
   ['404 apple-touch sizes', /rel="apple-touch-icon"[^>]*sizes="180x180"[^>]*apple-touch-icon\.png/],
@@ -74,7 +77,7 @@ const checks404 = [
 
 const checksIndex = [
   ['doctype', /<!doctype html>/i],
-  ['html lang en-US', /<html lang="en-US">/],
+  ['html lang en-US', /<html lang="en-US"(?: class="gauss-locked")?>/],
   ['skip link', /class="ba-skip"/],
   ['main landmark', /\bid="top"/],
   ['main focusable', /<main id="top" tabindex="-1">/],
@@ -111,6 +114,9 @@ const checksIndex = [
   ['theme-color light media', /<meta name="theme-color" media="\(prefers-color-scheme: light\)" content="#FFFDF7"/],
   ['theme-color dark media', /<meta name="theme-color" media="\(prefers-color-scheme: dark\)" content="#141210"/],
   ['theme boot', /src="\/assets\/theme-boot\.js\?v=\d+"/],
+  ['gauss boot', /src="\/assets\/gauss-boot\.js\?v=\d+"/],
+  ['gauss gate', /id="gauss-gate"[^>]*role="dialog"/],
+  ['gauss gate script', /src="\/assets\/gauss-gate\.js\?v=\d+"/],
   ['theme toggle', /id="theme-toggle"[^>]*class="ba-theme-toggle"|class="ba-theme-toggle"[^>]*id="theme-toggle"/],
   ['theme orientation', /id="theme-toggle"[^>]*aria-orientation="horizontal"/],
   ['theme sun mark', /class="ba-theme-icon ba-theme-icon--sun"/],
@@ -367,6 +373,39 @@ if (indexBootV[1] !== boot404V[1]) {
 assertCacheBust('theme-boot.js', indexBootV[1], themeBoot, /cache-bust:\s*(\d+)/);
 if (!themeBoot.includes("localStorage.getItem('ba-theme')") || !themeBoot.includes('data-theme')) {
   console.error('validate-basic-html: theme-boot.js must apply stored data-theme before paint');
+  process.exit(1);
+}
+
+const gaussBoot = read('assets/gauss-boot.js');
+const gaussGateJs = read('assets/gauss-gate.js');
+const indexGaussBootV = indexHtml.match(/src="\/assets\/gauss-boot\.js\?v=(\d+)"/);
+const gaussBoot404V = html404.match(/src="\/assets\/gauss-boot\.js\?v=(\d+)"/);
+const indexGaussGateV = indexHtml.match(/src="\/assets\/gauss-gate\.js\?v=(\d+)"/);
+const gaussGate404V = html404.match(/src="\/assets\/gauss-gate\.js\?v=(\d+)"/);
+if (!indexGaussBootV || !gaussBoot404V || !indexGaussGateV || !gaussGate404V) {
+  console.error('validate-basic-html: could not parse gauss-boot.js / gauss-gate.js cache versions');
+  process.exit(1);
+}
+if (indexGaussBootV[1] !== gaussBoot404V[1] || indexGaussGateV[1] !== gaussGate404V[1]) {
+  console.error('validate-basic-html: index.html and 404.html Gauss gate script versions must match');
+  process.exit(1);
+}
+assertCacheBust('gauss-boot.js', indexGaussBootV[1], gaussBoot, /cache-bust:\s*(\d+)/);
+assertCacheBust('gauss-gate.js', indexGaussGateV[1], gaussGateJs, /cache-bust:\s*(\d+)/);
+if (!gaussBoot.includes('ba-gauss-gate') || !gaussBoot.includes('gauss-locked')) {
+  console.error('validate-basic-html: gauss-boot.js must unlock from sessionStorage before paint');
+  process.exit(1);
+}
+if (
+  !gaussGateJs.includes('crypto.subtle.digest') ||
+  !gaussGateJs.includes('ANSWER_HASH') ||
+  !gaussGateJs.includes('ba-gauss-gate') ||
+  !indexHtml.includes('Gaussian integers') ||
+  !html404.includes('Gaussian integers') ||
+  !stylesCss.includes('html.gauss-locked') ||
+  !stylesCss.includes('.gauss-gate')
+) {
+  console.error('validate-basic-html: Gauss entry gate must hash-verify answers and lock the page');
   process.exit(1);
 }
 if (!themeBoot.includes("localStorage.removeItem('ba-theme')")) {

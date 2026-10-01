@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en-US">
+<html lang="en-US" class="gauss-locked">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -19,10 +19,60 @@
   <link rel="manifest" href="/site.webmanifest" />
 
   <link rel="preload" href="/assets/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="/assets/styles.css?v=130" />
+  <link rel="stylesheet" href="/assets/styles.css?v=131" />
   <script src="/assets/theme-boot.js?v=4"></script>
+  <script src="/assets/gauss-boot.js?v=1"></script>
 </head>
 <body class="bai-site">
+  <div
+    id="gauss-gate"
+    class="gauss-gate"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="gauss-gate-title"
+    aria-describedby="gauss-gate-desc"
+  >
+    <div class="gauss-gate-panel">
+      <p class="gauss-gate-kicker">Entry problem</p>
+      <h1 class="gauss-gate-title" id="gauss-gate-title">A gate from Gauss</h1>
+      <div id="gauss-gate-desc">
+        <p class="gauss-gate-problem">
+          Carl Friedrich Gauss gave the ring of <strong>Gaussian integers</strong> ℤ[i] its modern shape.
+          An odd prime <strong>p ∈ ℤ</strong> remains prime (inert) in ℤ[i] if and only if
+          <strong>p ≡ 3 (mod 4)</strong>; if <strong>p ≡ 1 (mod 4)</strong> it splits.
+        </p>
+        <p class="gauss-gate-problem">Let <strong>S</strong> be the set of all primes <strong>p</strong> satisfying
+          <strong>100 &lt; p &lt; 200</strong> that remain prime in ℤ[i], and let <strong>T</strong> be the set of all
+          primes <strong>q</strong> in the same open interval that split in ℤ[i].</p>
+        <ol class="gauss-gate-list">
+          <li>Let <strong>P</strong> be the product of every prime in <strong>S</strong> that is strictly greater than 150.</li>
+          <li>Compute <strong>P + |T|!</strong> (ordinary factorial of the cardinality of <strong>T</strong>).</li>
+          <li>Enter that integer below—digits only, no commas or spaces.</li>
+        </ol>
+      </div>
+      <form id="gauss-gate-form" class="gauss-gate-form" action="#" method="dialog" autocomplete="off" aria-busy="false">
+        <label class="visually-hidden" for="gauss-gate-answer">Integer answer</label>
+        <input
+          id="gauss-gate-answer"
+          class="gauss-gate-input"
+          name="gauss-answer"
+          type="text"
+          inputmode="numeric"
+          enterkeyhint="done"
+          spellcheck="false"
+          autocomplete="off"
+          autocapitalize="off"
+          autocorrect="off"
+          required
+          aria-describedby="gauss-gate-status"
+        />
+        <button type="submit" class="gauss-gate-submit">Unlock</button>
+      </form>
+      <p class="gauss-gate-status" id="gauss-gate-status" role="status" aria-live="polite"></p>
+      <p class="gauss-gate-note">Solve once per browser tab session. No hints on this page.</p>
+    </div>
+  </div>
+
   <a class="ba-skip" href="#main">Skip to content</a>
   <div class="ba-bg" aria-hidden="true"></div>
 
@@ -86,5 +136,6 @@
   </footer>
 
   <script src="/assets/script.js?v=41" defer></script>
+  <script src="/assets/gauss-gate.js?v=1" defer></script>
 </body>
 </html>
