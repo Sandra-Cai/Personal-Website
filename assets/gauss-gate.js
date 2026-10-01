@@ -104,7 +104,7 @@
           setStatus('Correct. Welcome in.', 'ok');
           unlock();
         } else {
-          setStatus('Not quite—check the range, the ℤ[i] criterion, and the final expression.', 'err');
+          setStatus('Not quite. Check the range, the ℤ[i] criterion, and the final expression.', 'err');
           input.select();
           input.focus();
         }
