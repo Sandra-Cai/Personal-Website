@@ -1,4 +1,4 @@
-/* cache-bust: 1 */
+/* cache-bust: 2 */
 (function () {
   const KEY = 'ba-gauss-gate';
   /** SHA-256 of the canonical decimal answer (no commas/spaces). */
