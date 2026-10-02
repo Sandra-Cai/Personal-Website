@@ -41,9 +41,9 @@ const checks404 = [
   ['manifest link', /rel="manifest"/],
   ['referrer policy', /<meta name="referrer" content="strict-origin-when-cross-origin"/],
   ['color-scheme light dark', /<meta name="color-scheme" content="light dark"/],
-  ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
-  ['theme-color light media', /<meta name="theme-color" media="\(prefers-color-scheme: light\)" content="#FFFDF7"/],
-  ['theme-color dark media', /<meta name="theme-color" media="\(prefers-color-scheme: dark\)" content="#141210"/],
+  ['theme-color', /<meta name="theme-color" content="#F0F4FF"/],
+  ['theme-color light media', /<meta name="theme-color" media="\(prefers-color-scheme: light\)" content="#F0F4FF"/],
+  ['theme-color dark media', /<meta name="theme-color" media="\(prefers-color-scheme: dark\)" content="#16182E"/],
   ['theme boot', /src="\/assets\/theme-boot\.js\?v=\d+"/],
   ['theme toggle', /id="theme-toggle"[^>]*class="ba-theme-toggle"|class="ba-theme-toggle"[^>]*id="theme-toggle"/],
   ['theme orientation', /id="theme-toggle"[^>]*aria-orientation="horizontal"/],
@@ -110,9 +110,9 @@ const checksIndex = [
   ['meta 4+ years', /4\+ years across industry, research, and founding/],
   ['og locale', /property="og:locale" content="en_US"/],
   ['color-scheme light dark', /<meta name="color-scheme" content="light dark"/],
-  ['theme-color', /<meta name="theme-color" content="#FFFDF7"/],
-  ['theme-color light media', /<meta name="theme-color" media="\(prefers-color-scheme: light\)" content="#FFFDF7"/],
-  ['theme-color dark media', /<meta name="theme-color" media="\(prefers-color-scheme: dark\)" content="#141210"/],
+  ['theme-color', /<meta name="theme-color" content="#F0F4FF"/],
+  ['theme-color light media', /<meta name="theme-color" media="\(prefers-color-scheme: light\)" content="#F0F4FF"/],
+  ['theme-color dark media', /<meta name="theme-color" media="\(prefers-color-scheme: dark\)" content="#16182E"/],
   ['theme boot', /src="\/assets\/theme-boot\.js\?v=\d+"/],
   ['gauss boot', /src="\/assets\/gauss-boot\.js\?v=\d+"/],
   ['gauss gate', /id="gauss-gate"[^>]*role="dialog"/],
@@ -267,7 +267,7 @@ const checksIndex = [
   ['og image type jpeg', /property="og:image:type" content="image\/jpeg"/],
   ['twitter image alt', /name="twitter:image:alt" content="[^"]*Plurall AI/],
   ['gpt clear confirm copy', /id="gpt-clear-history"[^>]*aria-label="Clear question history"/],
-  ['theme color', /<meta name="theme-color" content="#FFFDF7"/],
+  ['theme color', /<meta name="theme-color" content="#F0F4FF"/],
   ['sticky header', /class="ba-header"/],
   ['gpt shell layout', /class="ba-agent-card gpt-shell"/],
   ['jsonld knows systems', /"knowsAbout"[\s\S]*?"Systems engineering"/],
@@ -412,7 +412,7 @@ if (!themeBoot.includes("localStorage.removeItem('ba-theme')")) {
   console.error('validate-basic-html: theme-boot.js must clear corrupt theme values');
   process.exit(1);
 }
-if (!themeBoot.includes("meta[name=\"theme-color\"]") || !themeBoot.includes('#141210') || !themeBoot.includes('colorScheme')) {
+if (!themeBoot.includes("meta[name=\"theme-color\"]") || !themeBoot.includes('#16182E') || !themeBoot.includes('colorScheme')) {
   console.error('validate-basic-html: theme-boot.js must set theme-color and color-scheme before paint');
   process.exit(1);
 }
@@ -420,7 +420,7 @@ if (!siteJs.includes('function syncThemeColorMetas') || !siteJs.includes('functi
   console.error('validate-basic-html: script.js must sync all theme-color metas for light/dark/system');
   process.exit(1);
 }
-if (!siteJs.includes('THEME_LIGHT') || !siteJs.includes('THEME_DARK') || !siteJs.includes('#FFFDF7') || !siteJs.includes('#141210')) {
+if (!siteJs.includes('THEME_LIGHT') || !siteJs.includes('THEME_DARK') || !siteJs.includes('#F0F4FF') || !siteJs.includes('#16182E')) {
   console.error('validate-basic-html: script.js must pin light/dark theme-color constants');
   process.exit(1);
 }
@@ -648,8 +648,8 @@ if (!/@media\s*\(prefers-contrast:\s*more\)[\s\S]*?\.ba-logo-accent[\s\S]*?color
   process.exit(1);
 }
 if (
-  !/@media\s*\(prefers-contrast:\s*more\)[\s\S]*?html\[data-theme="dark"\][\s\S]*?--hcm-ink:\s*#f4efe6/.test(stylesCss) ||
-  !/@media\s*\(prefers-contrast:\s*more\)\s*and\s*\(prefers-color-scheme:\s*dark\)[\s\S]*?html:not\(\[data-theme="light"\]\)[\s\S]*?--hcm-header:\s*#141210/.test(
+  !/@media\s*\(prefers-contrast:\s*more\)[\s\S]*?html\[data-theme="dark"\][\s\S]*?--hcm-ink:\s*#E8EAFF/.test(stylesCss) ||
+  !/@media\s*\(prefers-contrast:\s*more\)\s*and\s*\(prefers-color-scheme:\s*dark\)[\s\S]*?html:not\(\[data-theme="light"\]\)[\s\S]*?--hcm-header:\s*#16182E/.test(
     stylesCss
   )
 ) {

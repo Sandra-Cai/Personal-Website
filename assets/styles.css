@@ -1,7 +1,7 @@
-/* cache-bust: 131 */
+/* cache-bust: 132 */
 /* Geist Sans: self-hosted (SIL OFL), github.com/vercel/geist-font */
-/* Visual system matched to b.ai: cream paper canvas, near-black ink, restrained warm accent.
-   Dark mode: warm charcoal paper + ivory ink; toggle via data-theme or prefers-color-scheme. */
+/* Visual system: light periwinkle paper + soft lilac accents; sky-blue atmosphere.
+   Dark mode: deep indigo night + pale lilac ink; toggle via data-theme or prefers-color-scheme. */
 
 @font-face {
   font-family: Geist;
@@ -12,48 +12,48 @@
 }
 
 :root {
-  /* b.ai cream/ink palette. Background hex sampled from b.ai's own CSS (#FFFDF7). */
-  --bg: #FFFDF7;
-  --bg-warm: #FEFBF3;
-  --text: #111111;
-  --text-dim: #3F3F46;
-  --text-faint: #71717a;
-  --line: rgba(0, 0, 0, 0.08);
-  --line-hover: rgba(0, 0, 0, 0.18);
-  /* Editorial: links read as ink, distinguished by underline; warm goldenrod
-     reserved for the wordmark accent and a couple of feature highlights. */
-  --accent: #111111;
-  --accent-bright: #000000;
-  --accent-dim: rgba(0, 0, 0, 0.06);
-  --accent-glow: rgba(0, 0, 0, 0.10);
-  --warm: #B8860B;
-  --warm-dim: rgba(184, 134, 11, 0.12);
-  --warm-glow: rgba(184, 134, 11, 0.05);
-  --header-bg: color-mix(in srgb, var(--bg) 85%, transparent);
-  --shade-025: rgba(0, 0, 0, 0.025);
-  --shade-035: rgba(0, 0, 0, 0.035);
-  --shade-04: rgba(0, 0, 0, 0.04);
-  --shade-045: rgba(0, 0, 0, 0.045);
-  --shade-05: rgba(0, 0, 0, 0.05);
-  --shade-06: rgba(0, 0, 0, 0.06);
-  --shade-08: rgba(0, 0, 0, 0.08);
-  --shade-09: rgba(0, 0, 0, 0.09);
-  --shade-10: rgba(0, 0, 0, 0.10);
-  --shade-12: rgba(0, 0, 0, 0.12);
-  --shade-14: rgba(0, 0, 0, 0.14);
-  --shade-22: rgba(0, 0, 0, 0.22);
-  --shade-25: rgba(0, 0, 0, 0.25);
-  --warn: #92400e;
+  /* Light purple + light blue paper. */
+  --bg: #F0F4FF;
+  --bg-warm: #F5F0FF;
+  --text: #1B1A2E;
+  --text-dim: #45435C;
+  --text-faint: #736F8A;
+  --line: rgba(70, 80, 160, 0.12);
+  --line-hover: rgba(70, 80, 160, 0.24);
+  /* Links and chrome lean cool blue; wordmark accent is soft lilac. */
+  --accent: #3B4BB8;
+  --accent-bright: #2A3899;
+  --accent-dim: rgba(59, 75, 184, 0.10);
+  --accent-glow: rgba(59, 75, 184, 0.16);
+  --warm: #8B7AE8;
+  --warm-dim: rgba(139, 122, 232, 0.16);
+  --warm-glow: rgba(139, 122, 232, 0.12);
+  --sky-glow: rgba(120, 180, 240, 0.18);
+  --header-bg: color-mix(in srgb, var(--bg) 82%, transparent);
+  --shade-025: rgba(70, 80, 160, 0.03);
+  --shade-035: rgba(70, 80, 160, 0.045);
+  --shade-04: rgba(70, 80, 160, 0.05);
+  --shade-045: rgba(70, 80, 160, 0.06);
+  --shade-05: rgba(70, 80, 160, 0.07);
+  --shade-06: rgba(70, 80, 160, 0.08);
+  --shade-08: rgba(70, 80, 160, 0.10);
+  --shade-09: rgba(70, 80, 160, 0.12);
+  --shade-10: rgba(70, 80, 160, 0.13);
+  --shade-12: rgba(70, 80, 160, 0.15);
+  --shade-14: rgba(70, 80, 160, 0.18);
+  --shade-22: rgba(70, 80, 160, 0.26);
+  --shade-25: rgba(70, 80, 160, 0.30);
+  --warn: #8B4518;
   --warn-strong: #7c2d12;
   --warn-soft: #b45309;
   --warn-ring: rgba(124, 45, 18, 0.35);
   --warn-ring-strong: rgba(124, 45, 18, 0.5);
   --warn-soft-ring: rgba(180, 83, 9, 0.25);
   --warn-soft-ring-strong: rgba(180, 83, 9, 0.35);
-  --theme-chrome: #FFFDF7;
+  --theme-chrome: #F0F4FF;
   --max: min(1080px, calc(100% - 48px));
   --narrow: 36rem;
-  --radius: 12px;
+  --radius: 14px;
   --radius-pill: 9999px;
   --font: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
@@ -317,15 +317,16 @@ a:focus-visible {
   border-radius: 2px;
 }
 
-/* Flat cream canvas with soft warm gradients in the corners (b.ai social-card vibe). */
+/* Soft lilac + sky atmosphere on periwinkle paper. */
 .ba-bg {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 70vw 50vh at 80% 10%, var(--warm-glow), transparent 60%),
-    radial-gradient(ellipse 60vw 40vh at 15% 85%, var(--shade-035), transparent 65%),
+    radial-gradient(ellipse 70vw 50vh at 85% 5%, var(--warm-glow), transparent 58%),
+    radial-gradient(ellipse 65vw 45vh at 10% 90%, var(--sky-glow), transparent 62%),
+    radial-gradient(ellipse 50vw 35vh at 50% 40%, var(--shade-025), transparent 70%),
     var(--bg);
 }
 
@@ -646,7 +647,7 @@ a:focus-visible {
 }
 
 .gpt-form[aria-busy='true'] .gpt-send {
-  /* Blanket opacity dimmed the cream arrow into mud on the cream page;
+  /* Blanket opacity dimmed the lilac arrow into mud on the periwinkle page;
      dim the background only and keep the icon legible. */
   background: var(--text-faint);
   pointer-events: none;
@@ -1647,34 +1648,35 @@ a:focus-visible {
 
 html[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #141210;
-  --bg-warm: #1c1915;
-  --text: #f4efe6;
-  --text-dim: #c9c0b4;
-  --text-faint: #9a9186;
-  --line: rgba(255, 255, 255, 0.10);
-  --line-hover: rgba(255, 255, 255, 0.22);
-  --accent: #f4efe6;
+  --bg: #16182E;
+  --bg-warm: #1E2038;
+  --text: #E8EAFF;
+  --text-dim: #B8BDE0;
+  --text-faint: #8E93B8;
+  --line: rgba(180, 190, 255, 0.12);
+  --line-hover: rgba(180, 190, 255, 0.26);
+  --accent: #C5CCFF;
   --accent-bright: #ffffff;
-  --accent-dim: rgba(255, 255, 255, 0.08);
-  --accent-glow: rgba(255, 255, 255, 0.14);
-  --warm: #d4a017;
-  --warm-dim: rgba(212, 160, 23, 0.18);
-  --warm-glow: rgba(212, 160, 23, 0.08);
+  --accent-dim: rgba(197, 204, 255, 0.10);
+  --accent-glow: rgba(197, 204, 255, 0.16);
+  --warm: #B4A6FF;
+  --warm-dim: rgba(180, 166, 255, 0.20);
+  --warm-glow: rgba(180, 166, 255, 0.12);
+  --sky-glow: rgba(100, 150, 230, 0.14);
   --header-bg: color-mix(in srgb, var(--bg) 88%, transparent);
-  --shade-025: rgba(255, 255, 255, 0.03);
-  --shade-035: rgba(255, 255, 255, 0.045);
-  --shade-04: rgba(255, 255, 255, 0.05);
-  --shade-045: rgba(255, 255, 255, 0.055);
-  --shade-05: rgba(255, 255, 255, 0.06);
-  --shade-06: rgba(255, 255, 255, 0.07);
-  --shade-08: rgba(255, 255, 255, 0.09);
-  --shade-09: rgba(255, 255, 255, 0.10);
-  --shade-10: rgba(255, 255, 255, 0.11);
-  --shade-12: rgba(255, 255, 255, 0.13);
-  --shade-14: rgba(255, 255, 255, 0.16);
-  --shade-22: rgba(255, 255, 255, 0.22);
-  --shade-25: rgba(255, 255, 255, 0.28);
+  --shade-025: rgba(200, 210, 255, 0.03);
+  --shade-035: rgba(200, 210, 255, 0.045);
+  --shade-04: rgba(200, 210, 255, 0.05);
+  --shade-045: rgba(200, 210, 255, 0.06);
+  --shade-05: rgba(200, 210, 255, 0.07);
+  --shade-06: rgba(200, 210, 255, 0.08);
+  --shade-08: rgba(200, 210, 255, 0.10);
+  --shade-09: rgba(200, 210, 255, 0.12);
+  --shade-10: rgba(200, 210, 255, 0.13);
+  --shade-12: rgba(200, 210, 255, 0.15);
+  --shade-14: rgba(200, 210, 255, 0.18);
+  --shade-22: rgba(200, 210, 255, 0.26);
+  --shade-25: rgba(200, 210, 255, 0.32);
   --warn: #fbbf24;
   --warn-strong: #fcd34d;
   --warn-soft: #f59e0b;
@@ -1682,40 +1684,41 @@ html[data-theme="dark"] {
   --warn-ring-strong: rgba(251, 191, 36, 0.5);
   --warn-soft-ring: rgba(245, 158, 11, 0.3);
   --warn-soft-ring-strong: rgba(245, 158, 11, 0.45);
-  --theme-chrome: #141210;
+  --theme-chrome: #16182E;
 }
 
 @media (prefers-color-scheme: dark) {
   html:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg: #141210;
-    --bg-warm: #1c1915;
-    --text: #f4efe6;
-    --text-dim: #c9c0b4;
-    --text-faint: #9a9186;
-    --line: rgba(255, 255, 255, 0.10);
-    --line-hover: rgba(255, 255, 255, 0.22);
-    --accent: #f4efe6;
+    --bg: #16182E;
+    --bg-warm: #1E2038;
+    --text: #E8EAFF;
+    --text-dim: #B8BDE0;
+    --text-faint: #8E93B8;
+    --line: rgba(180, 190, 255, 0.12);
+    --line-hover: rgba(180, 190, 255, 0.26);
+    --accent: #C5CCFF;
     --accent-bright: #ffffff;
-    --accent-dim: rgba(255, 255, 255, 0.08);
-    --accent-glow: rgba(255, 255, 255, 0.14);
-    --warm: #d4a017;
-    --warm-dim: rgba(212, 160, 23, 0.18);
-    --warm-glow: rgba(212, 160, 23, 0.08);
+    --accent-dim: rgba(197, 204, 255, 0.10);
+    --accent-glow: rgba(197, 204, 255, 0.16);
+    --warm: #B4A6FF;
+    --warm-dim: rgba(180, 166, 255, 0.20);
+    --warm-glow: rgba(180, 166, 255, 0.12);
+    --sky-glow: rgba(100, 150, 230, 0.14);
     --header-bg: color-mix(in srgb, var(--bg) 88%, transparent);
-    --shade-025: rgba(255, 255, 255, 0.03);
-    --shade-035: rgba(255, 255, 255, 0.045);
-    --shade-04: rgba(255, 255, 255, 0.05);
-    --shade-045: rgba(255, 255, 255, 0.055);
-    --shade-05: rgba(255, 255, 255, 0.06);
-    --shade-06: rgba(255, 255, 255, 0.07);
-    --shade-08: rgba(255, 255, 255, 0.09);
-    --shade-09: rgba(255, 255, 255, 0.10);
-    --shade-10: rgba(255, 255, 255, 0.11);
-    --shade-12: rgba(255, 255, 255, 0.13);
-    --shade-14: rgba(255, 255, 255, 0.16);
-    --shade-22: rgba(255, 255, 255, 0.22);
-    --shade-25: rgba(255, 255, 255, 0.28);
+    --shade-025: rgba(200, 210, 255, 0.03);
+    --shade-035: rgba(200, 210, 255, 0.045);
+    --shade-04: rgba(200, 210, 255, 0.05);
+    --shade-045: rgba(200, 210, 255, 0.06);
+    --shade-05: rgba(200, 210, 255, 0.07);
+    --shade-06: rgba(200, 210, 255, 0.08);
+    --shade-08: rgba(200, 210, 255, 0.10);
+    --shade-09: rgba(200, 210, 255, 0.12);
+    --shade-10: rgba(200, 210, 255, 0.13);
+    --shade-12: rgba(200, 210, 255, 0.15);
+    --shade-14: rgba(200, 210, 255, 0.18);
+    --shade-22: rgba(200, 210, 255, 0.26);
+    --shade-25: rgba(200, 210, 255, 0.32);
     --warn: #fbbf24;
     --warn-strong: #fcd34d;
     --warn-soft: #f59e0b;
@@ -1723,7 +1726,7 @@ html[data-theme="dark"] {
     --warn-ring-strong: rgba(251, 191, 36, 0.5);
     --warn-soft-ring: rgba(245, 158, 11, 0.3);
     --warn-soft-ring-strong: rgba(245, 158, 11, 0.45);
-    --theme-chrome: #141210;
+    --theme-chrome: #16182E;
   }
 }
 
@@ -1852,8 +1855,8 @@ html[data-theme="light"] {
     --hcm-border-strong: rgba(0, 0, 0, 0.35);
     --hcm-border-heavy: rgba(0, 0, 0, 0.45);
     --hcm-border-near: rgba(0, 0, 0, 0.55);
-    --hcm-ink: #0a0a0a;
-    --hcm-header: #fffdf7;
+    --hcm-ink: #1B1A2E;
+    --hcm-header: #F0F4FF;
   }
 
   .ba-theme-toggle {
@@ -2122,8 +2125,8 @@ html[data-theme="light"] {
 
   /* Dark paper + high contrast: keep ink light (light HCM tokens crush dark theme). */
   html[data-theme="dark"] {
-    --text-dim: #e8e0d4;
-    --text-faint: #d4cbbf;
+    --text-dim: #E8EAFF;
+    --text-faint: #C5CCFF;
     --line: rgba(255, 255, 255, 0.32);
     --line-hover: rgba(255, 255, 255, 0.5);
     --accent-dim: rgba(255, 255, 255, 0.24);
@@ -2138,15 +2141,15 @@ html[data-theme="light"] {
     --hcm-border-strong: rgba(255, 255, 255, 0.45);
     --hcm-border-heavy: rgba(255, 255, 255, 0.55);
     --hcm-border-near: rgba(255, 255, 255, 0.65);
-    --hcm-ink: #f4efe6;
-    --hcm-header: #141210;
+    --hcm-ink: #E8EAFF;
+    --hcm-header: #16182E;
   }
 }
 
 @media (prefers-contrast: more) and (prefers-color-scheme: dark) {
   html:not([data-theme="light"]) {
-    --text-dim: #e8e0d4;
-    --text-faint: #d4cbbf;
+    --text-dim: #E8EAFF;
+    --text-faint: #C5CCFF;
     --line: rgba(255, 255, 255, 0.32);
     --line-hover: rgba(255, 255, 255, 0.5);
     --accent-dim: rgba(255, 255, 255, 0.24);
@@ -2161,8 +2164,8 @@ html[data-theme="light"] {
     --hcm-border-strong: rgba(255, 255, 255, 0.45);
     --hcm-border-heavy: rgba(255, 255, 255, 0.55);
     --hcm-border-near: rgba(255, 255, 255, 0.65);
-    --hcm-ink: #f4efe6;
-    --hcm-header: #141210;
+    --hcm-ink: #E8EAFF;
+    --hcm-header: #16182E;
   }
 }
 
