@@ -41,9 +41,9 @@ const checks404 = [
   ['manifest link', /rel="manifest"/],
   ['referrer policy', /<meta name="referrer" content="strict-origin-when-cross-origin"/],
   ['color-scheme light dark', /<meta name="color-scheme" content="light dark"/],
-  ['theme-color', /<meta name="theme-color" content="#ffffff"/],
-  ['theme-color light media', /<meta name="theme-color" media="\(prefers-color-scheme: light\)" content="#ffffff"/],
-  ['theme-color dark media', /<meta name="theme-color" media="\(prefers-color-scheme: dark\)" content="#14171a"/],
+  ['theme-color', /<meta name="theme-color" content="#EEF1FA"/],
+  ['theme-color light media', /<meta name="theme-color" media="\(prefers-color-scheme: light\)" content="#EEF1FA"/],
+  ['theme-color dark media', /<meta name="theme-color" media="\(prefers-color-scheme: dark\)" content="#1A1C28"/],
   ['theme boot', /src="\/assets\/theme-boot\.js\?v=\d+"/],
   ['theme toggle', /id="theme-toggle"[^>]*class="ba-theme-toggle"|class="ba-theme-toggle"[^>]*id="theme-toggle"/],
   ['theme orientation', /id="theme-toggle"[^>]*aria-orientation="horizontal"/],
@@ -71,7 +71,7 @@ const checks404 = [
   ['404 gauss gate', /id="gauss-gate"/],
   ['404 gauss gate script', /src="\/assets\/gauss-gate\.js\?v=\d+"/],
   ['404 theme toggle', /id="theme-toggle"/],
-  ['404 font preload crossorigin', /rel="preload"[^>]*InstrumentSans-latin\.woff2[^>]*crossorigin/],
+  ['404 font preload crossorigin', /rel="preload"[^>]*DMSans-latin\.woff2[^>]*crossorigin/],
   ['404 apple-touch sizes', /rel="apple-touch-icon"[^>]*sizes="180x180"[^>]*apple-touch-icon\.png/],
 ];
 
@@ -110,9 +110,9 @@ const checksIndex = [
   ['meta 4+ years', /4\+ years across industry, research, and founding/],
   ['og locale', /property="og:locale" content="en_US"/],
   ['color-scheme light dark', /<meta name="color-scheme" content="light dark"/],
-  ['theme-color', /<meta name="theme-color" content="#ffffff"/],
-  ['theme-color light media', /<meta name="theme-color" media="\(prefers-color-scheme: light\)" content="#ffffff"/],
-  ['theme-color dark media', /<meta name="theme-color" media="\(prefers-color-scheme: dark\)" content="#14171a"/],
+  ['theme-color', /<meta name="theme-color" content="#EEF1FA"/],
+  ['theme-color light media', /<meta name="theme-color" media="\(prefers-color-scheme: light\)" content="#EEF1FA"/],
+  ['theme-color dark media', /<meta name="theme-color" media="\(prefers-color-scheme: dark\)" content="#1A1C28"/],
   ['theme boot', /src="\/assets\/theme-boot\.js\?v=\d+"/],
   ['gauss boot', /src="\/assets\/gauss-boot\.js\?v=\d+"/],
   ['gauss gate', /id="gauss-gate"[^>]*role="dialog"/],
@@ -246,7 +246,7 @@ const checksIndex = [
   ['JSON-LD founder person', /"founder":\s*\{\s*"@type":\s*"Person"/],
   ['gpt log relevant additions', /id="gpt-log"[^>]*aria-relevant="additions"/],
   ['gpt char count atomic', /id="gpt-char-count"[^>]*aria-atomic="true"/],
-  ['font preload crossorigin', /rel="preload"[^>]*InstrumentSans-latin\.woff2[^>]*crossorigin/],
+  ['font preload crossorigin', /rel="preload"[^>]*DMSans-latin\.woff2[^>]*crossorigin/],
   ['apple touch icon', /rel="apple-touch-icon"[^>]*sizes="180x180"[^>]*apple-touch-icon\.png/],
   ['footer current year fallback', /id="year">2026<\/span>/],
   ['favicon ico', /rel="icon"[^>]*favicon\.ico/],
@@ -267,7 +267,7 @@ const checksIndex = [
   ['og image type jpeg', /property="og:image:type" content="image\/jpeg"/],
   ['twitter image alt', /name="twitter:image:alt" content="[^"]*Plurall AI/],
   ['gpt clear confirm copy', /id="gpt-clear-history"[^>]*aria-label="Clear question history"/],
-  ['theme color', /<meta name="theme-color" content="#ffffff"/],
+  ['theme color', /<meta name="theme-color" content="#EEF1FA"/],
   ['sticky header', /class="ba-header"/],
   ['gpt shell layout', /class="ba-agent-card gpt-shell"/],
   ['jsonld knows systems', /"knowsAbout"[\s\S]*?"Systems engineering"/],
@@ -412,7 +412,7 @@ if (!themeBoot.includes("localStorage.removeItem('ba-theme')")) {
   console.error('validate-basic-html: theme-boot.js must clear corrupt theme values');
   process.exit(1);
 }
-if (!themeBoot.includes("meta[name=\"theme-color\"]") || !themeBoot.includes('#14171a') || !themeBoot.includes('colorScheme')) {
+if (!themeBoot.includes("meta[name=\"theme-color\"]") || !themeBoot.includes('#1A1C28') || !themeBoot.includes('colorScheme')) {
   console.error('validate-basic-html: theme-boot.js must set theme-color and color-scheme before paint');
   process.exit(1);
 }
@@ -420,7 +420,7 @@ if (!siteJs.includes('function syncThemeColorMetas') || !siteJs.includes('functi
   console.error('validate-basic-html: script.js must sync all theme-color metas for light/dark/system');
   process.exit(1);
 }
-if (!siteJs.includes('THEME_LIGHT') || !siteJs.includes('THEME_DARK') || !siteJs.includes('#ffffff') || !siteJs.includes('#14171a')) {
+if (!siteJs.includes('THEME_LIGHT') || !siteJs.includes('THEME_DARK') || !siteJs.includes('#EEF1FA') || !siteJs.includes('#1A1C28')) {
   console.error('validate-basic-html: script.js must pin light/dark theme-color constants');
   process.exit(1);
 }
@@ -648,8 +648,8 @@ if (!/@media\s*\(prefers-contrast:\s*more\)[\s\S]*?\.ba-logo-accent[\s\S]*?color
   process.exit(1);
 }
 if (
-  !/@media\s*\(prefers-contrast:\s*more\)[\s\S]*?html\[data-theme="dark"\][\s\S]*?--hcm-ink:\s*#f4f5f6/.test(stylesCss) ||
-  !/@media\s*\(prefers-contrast:\s*more\)\s*and\s*\(prefers-color-scheme:\s*dark\)[\s\S]*?html:not\(\[data-theme="light"\]\)[\s\S]*?--hcm-header:\s*#14171a/.test(
+  !/@media\s*\(prefers-contrast:\s*more\)[\s\S]*?html\[data-theme="dark"\][\s\S]*?--hcm-ink:\s*#E8EAF4/.test(stylesCss) ||
+  !/@media\s*\(prefers-contrast:\s*more\)\s*and\s*\(prefers-color-scheme:\s*dark\)[\s\S]*?html:not\(\[data-theme="light"\]\)[\s\S]*?--hcm-header:\s*#1A1C28/.test(
     stylesCss
   )
 ) {

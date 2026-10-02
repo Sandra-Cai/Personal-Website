@@ -1,10 +1,10 @@
-/* cache-bust: 134 */
-/* Plurall-aligned system: Newsreader (serif display) + Instrument Sans (UI/body),
-   paper white, graphite ink, lavender accent + teal wash. Self-hosted OFL fonts. */
+/* cache-bust: 135 */
+/* Sandra site system: Fraunces display + DM Sans UI; light periwinkle/lilac paper
+   with steel-blue accents (distinct from Plurall). Self-hosted OFL fonts. */
 
 @font-face {
-  font-family: "Instrument Sans";
-  src: url("/assets/fonts/InstrumentSans-latin.woff2") format("woff2");
+  font-family: "DM Sans";
+  src: url("/assets/fonts/DMSans-latin.woff2") format("woff2");
   font-weight: 400 600;
   font-style: normal;
   font-display: swap;
@@ -12,46 +12,45 @@
 }
 
 @font-face {
-  font-family: "Newsreader";
-  src: url("/assets/fonts/Newsreader-latin.woff2") format("woff2");
-  font-weight: 400 500;
+  font-family: "Fraunces";
+  src: url("/assets/fonts/Fraunces-latin.woff2") format("woff2");
+  font-weight: 400 600;
   font-style: normal;
   font-display: swap;
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 :root {
-  /* Plurall.ai tokens mapped into the existing site variables. */
-  --bg: #ffffff;
-  --bg-warm: #fbfbfc;
-  --text: #14171a;
-  --text-dim: #5b6168;
-  --text-faint: #5b6168;
-  --line: #e3e5e8;
-  --line-hover: #c8ccd1;
-  --accent: #6b5bd6;
-  --accent-bright: #5a4ac4;
-  --accent-dim: rgba(107, 91, 214, 0.14);
-  --accent-glow: rgba(107, 91, 214, 0.18);
-  --warm: #bb99e6;
-  --warm-dim: rgba(187, 153, 230, 0.22);
-  --warm-glow: rgba(187, 153, 230, 0.28);
-  --sky-glow: rgba(151, 222, 225, 0.35);
-  --brand-teal: #97dee1;
-  --header-bg: color-mix(in srgb, var(--bg) 86%, transparent);
-  --shade-025: rgba(20, 23, 26, 0.02);
-  --shade-035: rgba(20, 23, 26, 0.03);
-  --shade-04: rgba(20, 23, 26, 0.04);
-  --shade-045: rgba(20, 23, 26, 0.045);
-  --shade-05: rgba(20, 23, 26, 0.05);
-  --shade-06: rgba(20, 23, 26, 0.06);
-  --shade-08: rgba(20, 23, 26, 0.08);
-  --shade-09: rgba(20, 23, 26, 0.09);
-  --shade-10: rgba(20, 23, 26, 0.1);
-  --shade-12: rgba(20, 23, 26, 0.12);
-  --shade-14: rgba(20, 23, 26, 0.14);
-  --shade-22: rgba(20, 23, 26, 0.22);
-  --shade-25: rgba(20, 23, 26, 0.25);
+  /* Light purple + light blue, Sandra-specific (not Plurall tokens). */
+  --bg: #EEF1FA;
+  --bg-warm: #F3EEF8;
+  --text: #1C1F2E;
+  --text-dim: #4A4F66;
+  --text-faint: #6E738A;
+  --line: rgba(60, 70, 120, 0.14);
+  --line-hover: rgba(60, 70, 120, 0.28);
+  --accent: #3D5A9E;
+  --accent-bright: #2F4780;
+  --accent-dim: rgba(61, 90, 158, 0.14);
+  --accent-glow: rgba(61, 90, 158, 0.2);
+  --warm: #7A6BB5;
+  --warm-dim: rgba(122, 107, 181, 0.18);
+  --warm-glow: rgba(122, 107, 181, 0.22);
+  --sky-glow: rgba(130, 180, 230, 0.28);
+  --header-bg: color-mix(in srgb, var(--bg) 82%, transparent);
+  --shade-025: rgba(60, 70, 120, 0.03);
+  --shade-035: rgba(60, 70, 120, 0.045);
+  --shade-04: rgba(60, 70, 120, 0.05);
+  --shade-045: rgba(60, 70, 120, 0.06);
+  --shade-05: rgba(60, 70, 120, 0.07);
+  --shade-06: rgba(60, 70, 120, 0.08);
+  --shade-08: rgba(60, 70, 120, 0.1);
+  --shade-09: rgba(60, 70, 120, 0.12);
+  --shade-10: rgba(60, 70, 120, 0.13);
+  --shade-12: rgba(60, 70, 120, 0.15);
+  --shade-14: rgba(60, 70, 120, 0.18);
+  --shade-22: rgba(60, 70, 120, 0.26);
+  --shade-25: rgba(60, 70, 120, 0.3);
   --warn: #8B4518;
   --warn-strong: #7c2d12;
   --warn-soft: #b45309;
@@ -59,13 +58,13 @@
   --warn-ring-strong: rgba(124, 45, 18, 0.5);
   --warn-soft-ring: rgba(180, 83, 9, 0.25);
   --warn-soft-ring-strong: rgba(180, 83, 9, 0.35);
-  --theme-chrome: #ffffff;
-  --max: min(1120px, calc(100% - 48px));
+  --theme-chrome: #EEF1FA;
+  --max: min(1080px, calc(100% - 48px));
   --narrow: 36rem;
-  --radius: 8px;
+  --radius: 14px;
   --radius-pill: 9999px;
-  --font-sans: "Instrument Sans", system-ui, -apple-system, sans-serif;
-  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
+  --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
   --font: var(--font-sans);
 }
 
@@ -84,9 +83,9 @@ body.bai-site {
   color: var(--text);
   background: var(--bg);
   font-family: var(--font-sans);
-  font-size: 17px;
-  line-height: 1.55;
-  letter-spacing: -0.01em;
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: -0.011em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -123,8 +122,8 @@ html:not(.gauss-locked) #gauss-gate {
   padding: max(24px, env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px))
     max(24px, env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
   background:
-    radial-gradient(ellipse 70vw 45vh at 100% 0%, var(--warm-glow), transparent 60%),
-    radial-gradient(ellipse 65vw 50vh at 0% 100%, var(--sky-glow), transparent 62%),
+    radial-gradient(ellipse 70vw 50vh at 88% 0%, var(--warm-glow), transparent 58%),
+    radial-gradient(ellipse 65vw 48vh at 8% 100%, var(--sky-glow), transparent 60%),
     var(--bg);
   color: var(--text);
   overflow-y: auto;
@@ -151,9 +150,9 @@ html:not(.gauss-locked) #gauss-gate {
 .gauss-gate-title {
   margin: 0 0 1rem;
   font-family: var(--font-serif);
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
   line-height: 1.15;
   color: var(--text);
 }
@@ -329,15 +328,15 @@ a:focus-visible {
   border-radius: 2px;
 }
 
-/* Soft lavender + teal wash on white paper (Plurall brand colors). */
+/* Soft lilac + sky wash on periwinkle paper. */
 .ba-bg {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 70vw 45vh at 100% 0%, var(--warm-glow), transparent 60%),
-    radial-gradient(ellipse 65vw 50vh at 0% 100%, var(--sky-glow), transparent 62%),
+    radial-gradient(ellipse 70vw 50vh at 88% 0%, var(--warm-glow), transparent 58%),
+    radial-gradient(ellipse 65vw 48vh at 8% 100%, var(--sky-glow), transparent 60%),
     var(--bg);
 }
 
@@ -369,9 +368,9 @@ a:focus-visible {
   align-items: baseline;
   gap: 0.35rem;
   font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: 22px;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: 1.125rem;
+  letter-spacing: -0.02em;
   text-decoration: none;
   color: var(--text);
 }
@@ -383,23 +382,23 @@ a:focus-visible {
 
 .ba-logo-mark {
   color: var(--text);
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .ba-logo-accent {
-  color: var(--accent);
-  font-weight: 500;
+  color: var(--warm);
+  font-weight: 600;
 }
 
 .ba-nav {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px 28px;
-  font-size: 15px;
-  font-weight: 400;
-  letter-spacing: 0;
-  text-transform: none;
+  gap: 6px 18px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 @media (max-width: 640px) {
@@ -410,8 +409,8 @@ a:focus-visible {
 
   .ba-nav {
     flex-wrap: nowrap;
-    gap: 4px 16px;
-    font-size: 14px;
+    gap: 4px 12px;
+    font-size: 10px;
     max-width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -437,12 +436,12 @@ a:focus-visible {
 
 .ba-nav a {
   color: var(--text-faint);
-  font-weight: 400;
+  font-weight: 500;
   text-decoration: none;
 }
 
 .ba-nav a:hover {
-  color: var(--accent);
+  color: var(--text);
   text-decoration: none;
 }
 
@@ -464,7 +463,7 @@ a:focus-visible {
 }
 
 .ba-nav-external {
-  letter-spacing: 0;
+  letter-spacing: 0.12em;
 }
 
 @media (hover: none) and (pointer: coarse) {
@@ -496,21 +495,21 @@ a:focus-visible {
 }
 
 .ba-eyebrow {
-  font-size: 14px;
-  letter-spacing: 0;
-  text-transform: none;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   color: var(--text-faint);
   margin: 0 0 1.5rem;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .ba-display {
   margin: 0 0 1.75rem;
   font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(2.75rem, 10vw, 5.75rem);
-  line-height: 1.02;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: clamp(2.75rem, 11vw, 5.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
   color: var(--text);
   text-wrap: balance;
 }
@@ -519,21 +518,20 @@ a:focus-visible {
   display: block;
 }
 
-/* Plurall accent: lavender wordmark, not a heavy glow. */
 .ba-display-accent {
-  color: var(--accent);
-  font-weight: 400;
+  color: var(--warm);
+  font-weight: 600;
 }
 
 .ba-mission {
-  font-family: var(--font-serif);
-  font-size: clamp(1.15rem, 2.2vw, 1.4rem);
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--text-dim);
   margin: 0 0 1.5rem;
   max-width: 34rem;
-  line-height: 1.35;
+  line-height: 1.55;
 }
 
 .ba-lead {
@@ -878,9 +876,9 @@ a:focus-visible {
 
 .ba-agent-title {
   font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(1.5rem, 3.5vw, 2.125rem);
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: clamp(1.375rem, 3.5vw, 1.875rem);
+  letter-spacing: -0.025em;
   margin: 0 0 0.5rem;
   line-height: 1.15;
   color: var(--text);
@@ -1343,10 +1341,10 @@ a:focus-visible {
 
 .ba-h2 {
   font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  letter-spacing: -0.01em;
-  line-height: 1.15;
+  font-weight: 600;
+  font-size: clamp(1.75rem, 4.2vw, 2.75rem);
+  letter-spacing: -0.03em;
+  line-height: 1.08;
   margin: 0 0 1rem;
   color: var(--text);
   text-wrap: balance;
@@ -1432,10 +1430,10 @@ a:focus-visible {
 
 .ba-h3 {
   font-family: var(--font-serif);
-  font-size: 1.25rem;
-  font-weight: 400;
+  font-size: 1.0625rem;
+  font-weight: 600;
   margin: 0 0 0.5rem;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: var(--text);
   line-height: 1.3;
 }
@@ -1513,10 +1511,10 @@ a:focus-visible {
   align-items: center;
   margin-bottom: 1.25rem;
   font-family: var(--font-serif);
-  font-weight: 400;
+  font-weight: 600;
   font-size: clamp(2rem, 6.5vw, 3.5rem);
-  line-height: 1.08;
-  letter-spacing: -0.01em;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
 }
 
 .ba-split-a {
@@ -1524,7 +1522,7 @@ a:focus-visible {
 }
 
 .ba-split-b {
-  color: var(--accent);
+  color: var(--warm);
 }
 
 .ba-split-copy {
@@ -1605,12 +1603,12 @@ a:focus-visible {
 
 .ba-404-title {
   font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  letter-spacing: -0.025em;
   margin: 0 0 1.25rem;
   color: var(--text);
-  line-height: 1.15;
+  line-height: 1.2;
 }
 
 .ba-404-title:focus,
@@ -1659,36 +1657,35 @@ a:focus-visible {
 
 html[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #14171a;
-  --bg-warm: #1a1e22;
-  --text: #f4f5f6;
-  --text-dim: #a8adb3;
-  --text-faint: #8b9198;
-  --line: rgba(255, 255, 255, 0.12);
-  --line-hover: rgba(255, 255, 255, 0.24);
-  --accent: #bb99e6;
-  --accent-bright: #d0b8f0;
-  --accent-dim: rgba(187, 153, 230, 0.16);
-  --accent-glow: rgba(187, 153, 230, 0.22);
-  --warm: #bb99e6;
-  --warm-dim: rgba(187, 153, 230, 0.2);
-  --warm-glow: rgba(187, 153, 230, 0.18);
-  --sky-glow: rgba(151, 222, 225, 0.16);
-  --brand-teal: #97dee1;
+  --bg: #1A1C28;
+  --bg-warm: #222536;
+  --text: #E8EAF4;
+  --text-dim: #B0B5C8;
+  --text-faint: #8A90A8;
+  --line: rgba(180, 190, 230, 0.14);
+  --line-hover: rgba(180, 190, 230, 0.28);
+  --accent: #9BB0E0;
+  --accent-bright: #c5d0f0;
+  --accent-dim: rgba(155, 176, 224, 0.14);
+  --accent-glow: rgba(155, 176, 224, 0.2);
+  --warm: #B5A6E0;
+  --warm-dim: rgba(181, 166, 224, 0.2);
+  --warm-glow: rgba(181, 166, 224, 0.16);
+  --sky-glow: rgba(100, 150, 210, 0.14);
   --header-bg: color-mix(in srgb, var(--bg) 88%, transparent);
-  --shade-025: rgba(255, 255, 255, 0.025);
-  --shade-035: rgba(255, 255, 255, 0.035);
-  --shade-04: rgba(255, 255, 255, 0.04);
-  --shade-045: rgba(255, 255, 255, 0.05);
-  --shade-05: rgba(255, 255, 255, 0.06);
-  --shade-06: rgba(255, 255, 255, 0.07);
-  --shade-08: rgba(255, 255, 255, 0.09);
-  --shade-09: rgba(255, 255, 255, 0.1);
-  --shade-10: rgba(255, 255, 255, 0.11);
-  --shade-12: rgba(255, 255, 255, 0.13);
-  --shade-14: rgba(255, 255, 255, 0.16);
-  --shade-22: rgba(255, 255, 255, 0.24);
-  --shade-25: rgba(255, 255, 255, 0.28);
+  --shade-025: rgba(200, 210, 240, 0.03);
+  --shade-035: rgba(200, 210, 240, 0.045);
+  --shade-04: rgba(200, 210, 240, 0.05);
+  --shade-045: rgba(200, 210, 240, 0.06);
+  --shade-05: rgba(200, 210, 240, 0.07);
+  --shade-06: rgba(200, 210, 240, 0.08);
+  --shade-08: rgba(200, 210, 240, 0.1);
+  --shade-09: rgba(200, 210, 240, 0.12);
+  --shade-10: rgba(200, 210, 240, 0.13);
+  --shade-12: rgba(200, 210, 240, 0.15);
+  --shade-14: rgba(200, 210, 240, 0.18);
+  --shade-22: rgba(200, 210, 240, 0.26);
+  --shade-25: rgba(200, 210, 240, 0.3);
   --warn: #fbbf24;
   --warn-strong: #fcd34d;
   --warn-soft: #f59e0b;
@@ -1696,42 +1693,41 @@ html[data-theme="dark"] {
   --warn-ring-strong: rgba(251, 191, 36, 0.5);
   --warn-soft-ring: rgba(245, 158, 11, 0.3);
   --warn-soft-ring-strong: rgba(245, 158, 11, 0.45);
-  --theme-chrome: #14171a;
+  --theme-chrome: #1A1C28;
 }
 
 @media (prefers-color-scheme: dark) {
   html:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg: #14171a;
-    --bg-warm: #1a1e22;
-    --text: #f4f5f6;
-    --text-dim: #a8adb3;
-    --text-faint: #8b9198;
-    --line: rgba(255, 255, 255, 0.12);
-    --line-hover: rgba(255, 255, 255, 0.24);
-    --accent: #bb99e6;
-    --accent-bright: #d0b8f0;
-    --accent-dim: rgba(187, 153, 230, 0.16);
-    --accent-glow: rgba(187, 153, 230, 0.22);
-    --warm: #bb99e6;
-    --warm-dim: rgba(187, 153, 230, 0.2);
-    --warm-glow: rgba(187, 153, 230, 0.18);
-    --sky-glow: rgba(151, 222, 225, 0.16);
-    --brand-teal: #97dee1;
+    --bg: #1A1C28;
+    --bg-warm: #222536;
+    --text: #E8EAF4;
+    --text-dim: #B0B5C8;
+    --text-faint: #8A90A8;
+    --line: rgba(180, 190, 230, 0.14);
+    --line-hover: rgba(180, 190, 230, 0.28);
+    --accent: #9BB0E0;
+    --accent-bright: #c5d0f0;
+    --accent-dim: rgba(155, 176, 224, 0.14);
+    --accent-glow: rgba(155, 176, 224, 0.2);
+    --warm: #B5A6E0;
+    --warm-dim: rgba(181, 166, 224, 0.2);
+    --warm-glow: rgba(181, 166, 224, 0.16);
+    --sky-glow: rgba(100, 150, 210, 0.14);
     --header-bg: color-mix(in srgb, var(--bg) 88%, transparent);
-    --shade-025: rgba(255, 255, 255, 0.025);
-    --shade-035: rgba(255, 255, 255, 0.035);
-    --shade-04: rgba(255, 255, 255, 0.04);
-    --shade-045: rgba(255, 255, 255, 0.05);
-    --shade-05: rgba(255, 255, 255, 0.06);
-    --shade-06: rgba(255, 255, 255, 0.07);
-    --shade-08: rgba(255, 255, 255, 0.09);
-    --shade-09: rgba(255, 255, 255, 0.1);
-    --shade-10: rgba(255, 255, 255, 0.11);
-    --shade-12: rgba(255, 255, 255, 0.13);
-    --shade-14: rgba(255, 255, 255, 0.16);
-    --shade-22: rgba(255, 255, 255, 0.24);
-    --shade-25: rgba(255, 255, 255, 0.28);
+    --shade-025: rgba(200, 210, 240, 0.03);
+    --shade-035: rgba(200, 210, 240, 0.045);
+    --shade-04: rgba(200, 210, 240, 0.05);
+    --shade-045: rgba(200, 210, 240, 0.06);
+    --shade-05: rgba(200, 210, 240, 0.07);
+    --shade-06: rgba(200, 210, 240, 0.08);
+    --shade-08: rgba(200, 210, 240, 0.1);
+    --shade-09: rgba(200, 210, 240, 0.12);
+    --shade-10: rgba(200, 210, 240, 0.13);
+    --shade-12: rgba(200, 210, 240, 0.15);
+    --shade-14: rgba(200, 210, 240, 0.18);
+    --shade-22: rgba(200, 210, 240, 0.26);
+    --shade-25: rgba(200, 210, 240, 0.3);
     --warn: #fbbf24;
     --warn-strong: #fcd34d;
     --warn-soft: #f59e0b;
@@ -1739,7 +1735,7 @@ html[data-theme="dark"] {
     --warn-ring-strong: rgba(251, 191, 36, 0.5);
     --warn-soft-ring: rgba(245, 158, 11, 0.3);
     --warn-soft-ring-strong: rgba(245, 158, 11, 0.45);
-    --theme-chrome: #14171a;
+    --theme-chrome: #1A1C28;
   }
 }
 
@@ -1868,8 +1864,8 @@ html[data-theme="light"] {
     --hcm-border-strong: rgba(0, 0, 0, 0.35);
     --hcm-border-heavy: rgba(0, 0, 0, 0.45);
     --hcm-border-near: rgba(0, 0, 0, 0.55);
-    --hcm-ink: #14171a;
-    --hcm-header: #ffffff;
+    --hcm-ink: #1C1F2E;
+    --hcm-header: #EEF1FA;
   }
 
   .ba-theme-toggle {
@@ -2138,8 +2134,8 @@ html[data-theme="light"] {
 
   /* Dark paper + high contrast: keep ink light (light HCM tokens crush dark theme). */
   html[data-theme="dark"] {
-    --text-dim: #f4f5f6;
-    --text-faint: #d8dce0;
+    --text-dim: #E8EAF4;
+    --text-faint: #C5CAD8;
     --line: rgba(255, 255, 255, 0.32);
     --line-hover: rgba(255, 255, 255, 0.5);
     --accent-dim: rgba(255, 255, 255, 0.24);
@@ -2154,15 +2150,15 @@ html[data-theme="light"] {
     --hcm-border-strong: rgba(255, 255, 255, 0.45);
     --hcm-border-heavy: rgba(255, 255, 255, 0.55);
     --hcm-border-near: rgba(255, 255, 255, 0.65);
-    --hcm-ink: #f4f5f6;
-    --hcm-header: #14171a;
+    --hcm-ink: #E8EAF4;
+    --hcm-header: #1A1C28;
   }
 }
 
 @media (prefers-contrast: more) and (prefers-color-scheme: dark) {
   html:not([data-theme="light"]) {
-    --text-dim: #f4f5f6;
-    --text-faint: #d8dce0;
+    --text-dim: #E8EAF4;
+    --text-faint: #C5CAD8;
     --line: rgba(255, 255, 255, 0.32);
     --line-hover: rgba(255, 255, 255, 0.5);
     --accent-dim: rgba(255, 255, 255, 0.24);
@@ -2177,8 +2173,8 @@ html[data-theme="light"] {
     --hcm-border-strong: rgba(255, 255, 255, 0.45);
     --hcm-border-heavy: rgba(255, 255, 255, 0.55);
     --hcm-border-near: rgba(255, 255, 255, 0.65);
-    --hcm-ink: #f4f5f6;
-    --hcm-header: #14171a;
+    --hcm-ink: #E8EAF4;
+    --hcm-header: #1A1C28;
   }
 }
 

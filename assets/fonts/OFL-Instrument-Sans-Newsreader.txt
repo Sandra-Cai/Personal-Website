@@ -1,2 +1,0 @@
-Instrument Sans and Newsreader are licensed under the SIL Open Font License, Version 1.1.
-Source: Google Fonts (fonts.google.com). Self-hosted for CSP font-src 'self'.

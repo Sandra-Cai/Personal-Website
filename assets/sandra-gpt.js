@@ -1,5 +1,5 @@
 /**
- * cache-bust: 142
+ * cache-bust: 143
  * SandraGPT: answers from local notes (keyword + greeting rules).
  * Bot replies are plain text only (no URLs or links in the chat log).
  */
@@ -913,7 +913,7 @@
       ],
       priority: 13,
       reply:
-        'The site supports light and dark themes. The header shows a sun mark for light and a crescent moon for dark. An outline mark follows your system setting; a filled mark means you chose that theme. Choosing the filled mark again returns to system. The choice is saved in this browser. HTML includes light and dark theme-color metas for system preference, and a boot script aligns them before paint when you force a theme. Light matches Plurall AI: paper white #ffffff, Newsreader serif headlines, Instrument Sans body, lavender accent #6b5bd6 and teal wash #97dee1. Dark uses ink #14171a with the same lavender accent. The web app manifest keeps the light paper color for install splash.',
+        'The site supports light and dark themes. The header shows a sun mark for light and a crescent moon for dark. An outline mark follows your system setting; a filled mark means you chose that theme. Choosing the filled mark again returns to system. The choice is saved in this browser. HTML includes light and dark theme-color metas for system preference, and a boot script aligns them before paint when you force a theme. Light uses periwinkle paper #EEF1FA with lilac wash, Fraunces headlines, DM Sans body, steel-blue accent #3D5A9E and soft purple #7A6BB5. Dark uses #1A1C28 with the same accent family. The web app manifest keeps the light paper color for install splash.',
     },
     {
       keys: [
