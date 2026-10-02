@@ -1,12 +1,12 @@
-/* cache-bust: 42 */
+/* cache-bust: 43 */
 document.documentElement.classList.add('js');
 
 const y = document.getElementById('year');
 if (y) y.textContent = new Date().getFullYear();
 
 const THEME_KEY = 'ba-theme';
-const THEME_LIGHT = '#F0F4FF';
-const THEME_DARK = '#16182E';
+const THEME_LIGHT = '#ffffff';
+const THEME_DARK = '#14171a';
 
 function readStoredTheme() {
   try {
